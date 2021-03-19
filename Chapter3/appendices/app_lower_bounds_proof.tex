@@ -1,0 +1,56 @@
+%!TEX root = ../Chapter3.tex
+\section{Proofs of the Lower Bounds and Equivalent Formulations}\label{app:lgc.lower_bound}
+
+We start this section by proving the lower bound.
+
+\begin{proof}[Proof of Theorem~\ref{th:lb_genral}]
+Fix $\lambda\in\neg\istar(\theta)$ in the alternative of $\theta$. Thanks to the contraction of the entropy and the chain rule (see \citealt{garivier2018explore}), we have
+
+\[
+\kl\!\big(\P_\theta(\hi = \istar),\P_\lambda(\hi = \istar)\big) \leq \sum_{a\in\cA} \E_\theta\big[N_a(\tau_\delta)\big]\frac{\normm{\theta -\lambda^i}_{a a^\top}^2}{2}\,,
+\]
+where we denote by $\kl(p,q)$ the Kullback-Leibler divergence between two Bernoulli distributions $\Ber(p)$ and $\Ber(q)$
+\[
+\kl(p,q) = p \log\!\left(\frac{p}{q}\right) + (1-p) \log\!\left(\frac{1-p}{1-q}\right)\,.
+\]
+Since the algorithm is $\delta$-correct we know that
+\[
+\P_\lambda\big(\hi = \istar(\theta)\big) \leq \delta \leq \frac{1}{2} \leq  1-\delta \leq \P_\theta\big(\hi = \istar(\theta)\big)\,.
+\]
+Thanks to monotonic properties of the function $\kl(\cdot,\cdot)$ and the inequality $\kl(1-p,p) \geq -\log(2.4p)$, see \citet{garivier2018explore}, it yields
+\[
+\kl\big(\P_\theta(\hi = \istar(\theta)),\P_\lambda(\hi = \istar(\theta))\big) \geq \kl(1-\delta,\delta) \geq \log\left(\frac{1}{2.4\delta}\right)\,,
+\]
+thus
+\[
+\log\left(\frac{1}{2.4\delta}\right) \leq \sum_{a\in\cA} \E_\theta\big[N_a(\tau_\delta)\big]\frac{\normm{\theta -\lambda^i}_{a a^\top}^2}{2}\,.
+\]
+Using the previous inequality is true for all $\lambda\in\neg\istar(\theta)$ and that the vector of components $\E_\theta\big[N_a(\tau_\delta)\big]/\E_\theta\big[\tau_\delta\big]$ belongs to the probability simplex $\Sigma_A$ we get
+\begin{align*}
+\log\left(\frac{1}{2.4\delta}\right) &\leq \E_\theta[\tau_\delta] \inf_{\lambda\in\neg \istar(\theta)} \sum_{a=1}^K \frac{\E_\theta\big[N_a(\tau_\delta)\big]}{\E_\theta[\tau_\delta]}\frac{\normm{\theta -\lambda^i}_{a a^\top}^2}{2}\\ &\leq \E_\theta[\tau_\delta] \sup_{w\in\Sigma_K}
+\inf_{\lambda\in\neg \istar(\theta)} \sum_{a=1}^K w_a\frac{\normm{\theta -\lambda^i}_{a a^\top}^2}{2}\,.
+\end{align*}
+Dividing the previous inequality by $\log(1/\delta)$ and taking the limit inferior when $\delta$ goes to zero allows us to conclude.
+\end{proof}
+
+We restate and prove below Lemma~\ref{lem:sion_convexify}.
+\begin{lemma}
+  \label{lem:sion_convexify_extended} For all $\theta \in\cM$,
+\begin{align}
+  \Tstar(\theta)^{-1} &= \max_{i\in \cI} \max_{w \in \Sigma_A} \inf_{\lambda\in \neg i} \frac{\normm{\theta - \lambda}_{V_w}^2}{2}\label{eq:sion_base}\\
+  &=\max_{\tw \in \Sigma_{AI}} \inf_{\tlambda\in \prod_i (\neg i) }\frac{1}{2} \sum_{(a,i)\in\cA\times\cI}\tw^{a,i}\normm{\theta - \lambda^i}_{aa^\top}^2\label{eq:sion_nature_first}\\
+  & = \max_{\tw \in \Sigma_{AI}}\inf_{\tq\in \prod_i\cP(\neg i) }\!\sum_{(a,i)\in\cA\times\cI}\!\!\!\tw^{a,i}\E_{\lambda^i\sim \tq^i}\normm{\theta - \lambda^i}_{aa^\top}^2 \label{eq:sion_both}\\
+  &= \inf_{\tq\in \prod_i\cP(\neg i) } \frac{1}{2}\max_{(a,i)\in\cA\times\cB}\E_{\lambda^i\sim \tq^i}\normm{\theta - \lambda^i}_{aa^\top}^2\label{eq:sion_player_fisrt}\,.
+\end{align}
+
+\end{lemma}
+\begin{proof}
+  To go from \eqref{eq:sion_nature_first} to \eqref{eq:sion_both} just use the fact that the second player can use indifferently mixed or pure strategy. The equality between \eqref{eq:sion_both} and \eqref{eq:sion_player_fisrt} is just an application of the Sion lemma (see \citealt{degenne2019pure}).
+  It remains to prove \eqref{eq:sion_nature_first}. First note that we can replace the first maximum in \eqref{eq:sion_base} over $\istar(\theta)$ by a maximum over $\cI$ because when $i\notin \istar(\theta)$ we know that $\theta\in \neg i$. Since we can express the maximum over the answers as a maximum over the probability simplex $\Sigma_I$ we have
+\begin{align*}
+    \max_{i\in \cI} \sup_{w \in \Sigma_A} \inf_{\lambda\in \neg i} \frac{1}{2}\sum_{a\in\cA} w_a \normm{\theta - \lambda}_{aa^\top}^2 &= \max_{\rho \in \Sigma_I} \sum_{i\in\cI}\sup_{w \in \Sigma_A} \inf_{\lambda\in \neg i} \frac{1}{2}\sum_{a\in\cA} \rho_i w_a\normm{\theta - \lambda}_{aa^\top}^2\\
+     &= \max_{\rho\in \Sigma_I} \sum_{i\in \cI} \sup_{w^i \in \Sigma_A} \inf_{\lambda^i\in \neg i}\frac{1}{2} \sum_{a\in\cA} \rho_i w_a^i\normm{\theta - \lambda^i}_{aa^\top}^2\\
+     &= \sup_{\tw \in \Sigma_{A I}} \inf_{\tlambda \in \prod_{i\in\cI}\neg i} \frac{1}{2}\sum_{(a,i)\in \cA\times\cI}  \tw_a^i \normm{\theta - \tlambda^i}_{aa^\top}^2\,,
+\end{align*}
+ where in the last line we used that all $\tw \in \Sigma_{A I}$ can be written $\tw_a^i = \rho_i w_a^i $ with $\rho \in \Sigma_I$ and $w^i \in \Sigma_A$ for all $i \in \cI$.
+\end{proof}

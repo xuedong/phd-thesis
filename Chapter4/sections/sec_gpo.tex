@@ -1,0 +1,87 @@
+% !TEX root = ../Chapter4.tex
+\section{General Parallel Optimization}\label{sec:gpo.gpo}
+
+The analysis of $\POO(\cA)$ proposed in Proposition~\ref{prop:WrapperPOO} heavily relies on the fact that we control the \emph{cumulative regret} of algorithm $\cA$. $\POO$ indeed exploits this property when selecting $s^\star$ as the instance with largest empirical cumulative rewards. In this section, we propose a simple modification of $\POO(\cA)$ that allows using as base algorithms any hierarchical optimization algorithms that would only have \emph{simple regret} guarantees. 
+
+The $\GPO(\cA)$ algorithm (\textbf{g}eneral \textbf{p}arallel \textbf{o}ptimization), whose pseudocode is shown in Algorithm~\ref{alg:gpo},  mostly needs to modify the model selection strategy of \POO. There are two natural candidates: (i) Lepski's method which is a nested aggregation scheme~\citep{lepski1992,lepski1997,locatelli2017adaptivity,locatelli2018adaptivity} that requires a single optimum, thus not directly applicable to our case, and (ii) a cross-validation scheme that we use and detail in the next. Given a total budget of $n$ function evaluations, $\GPO(\cA)$ runs several instances of $\cA$ in parallel with parameters chosen in the same grid as that used by \POO, each using the same number of evaluations to output a recommendation~$\tilde{x}_i$. One half of the budget is then dedicated to estimating the function values at those points, and the one with the highest estimated value is kept. 
+
+\begin{algorithm}[ht]
+\centering
+\caption{General parallel optimization (\GPO)}
+\label{alg:gpo}
+\begin{algorithmic}[1]
+    \State {\bfseries Input:} base algorithm $\cA$, budget $n$, $\rho_{\max}, \nu_{\max}$, $K$
+    \State {\bfseries Initialization:} $D_{\max} \gets \ln K/\ln\left( 1/\rho_{\max}\right)$, number of function evaluations $n \gets 0$, current number of \HCT instances $N \gets 1$, $\mathcal{S} \gets \{(\nu_{\max},\rho_{\max})\}$
+
+    \State \texttt{compute} $N = \lceil (1/2)D_{\max}\ln((n/2)/\ln(n/2))\rceil$ (the number of instances)
+    \For{$i\gets 1, \dots, N$}
+    	\State $s \gets \left(\nu_{\max},{\rho_{\max}}^{2N/(2i+1)}\right)$
+		\State \texttt{run} $\cA(s)$ \texttt{for} $\lfloor n/(2N)\rfloor$ \texttt{time steps}
+		\State \texttt{recommend} $\tilde x_s$
+		\State \texttt{get} $\lfloor n/(2N)\rfloor$ \texttt{noisy evaluations of} $f(\tilde{x}_s)$
+		\State \texttt{compute their average} $V[s]$
+	\EndFor
+% \For{$j \gets 1, \dots, N$}{
+% 	$\tilde{x_{j}} \gets$ A point sampled u.a.r.\,from the points evaluated by \HCT{}($\nu_{\max},\rho_j$)\\
+% 	Evaluate $\tilde{x_{j}}$ by $n^+$ times\\
+% 	$\hat{\mu}_{n^+,j} \gets \frac{1}{n^+} \sum_{i=1}^{n^+} r_{i,j}$, where $r_{i,j}$ are i.i.d observations of $f(\tilde{x}_j)$\\
+% 	}
+    \State ${s^\star} \gets \argmax_{s} V[s]$
+    \State {\bfseries Return} $\tilde x_{s^\star}$
+\end{algorithmic}
+\end{algorithm}
+
+In Theorem~\ref{thm:gpo_wrapper}, we provide a general analysis of the \GPO algorithm, showing that it attains an (order)-optimal simple regret without knowing the parameter triple $(\nu^\star,C^\star,\rho^\star)$ provided that its base algorithm does. As a consequence \GPO{}(\HCT) is an alternative to \PCT with similar simple regret guarantees.
+
+\begin{theorem}\label{thm:gpo_wrapper}
+If for all $(\nu,\rho)$ the $\cA(\nu,\rho)$ algorithm has its \emph{simple regret} bounded as
+\begin{equation}\label{crucialHypothesis}
+    \mathbb{E}\left[S_n^{\cA(\nu,\rho)}\right] \leq \alpha C\left(\left(\log n /n\right)^{1/(d(\nu,C,\rho)+2)}\right),
+\end{equation}
+for any function $f$ satisfying Assumption~\ref{ass1} with parameters $(\nu,\rho)$, then there exists a constant $\beta$ that is independent of $\nu_{\max}$ and $\rho_{\max}$ such that 
+\[
+    \mathbb{E}\left[S_n^{\GPO(\cA)}\right]  \leq \beta D_{\max}(\nu_{\max}/\nu^\star)^{D_{\max}} \left( (\log^2 n)/n)^{1/(d(\nu^\star,C^\star,\rho^\star)+2)} \right)\!,
+\]
+for any function $f$ satisfying Assumption~\ref{ass1} with parameters $\nu^\star \leq \nu_{\max}$ and $\rho^\star\leq \rho_{\max}$.
+\end{theorem}
+
+\begin{proof} 
+We start by fixing some notation. Recall that $N$ (that depends on $n$) is the number of instances run in parallel. For $j \in \{1,\dots,N\},$ we let $\tilde{x}_j$ denote the point recommended by the instance $\cA(\nu_{\max},\rho_{j})$ with $\rho_j = \rho_{\max}^{2N/(2j+1)}$. Let $(r_{i,j})_{1 \leq i \leq n^+}$ be the i.i.d.\,evaluations of $f(\tilde{x}_j)$ used during the validation phase, with $n^+ \triangleq \lfloor n/(2N)\rfloor$ and $\hat{\mu}_{n^+,j} = \frac{1}{n^+}\sum_{i=1}^{n^+} r_{i,j}$ be the estimated value of $f(\tilde{x}_j)$ computed by the algorithm. We let \[\hat{\jmath} = \argmax_j \ \hat{\mu}_{n^+,j} \ \ \text{and} \ \ \ \tilde{\jmath} = \argmax_j \ f(\tilde{x}_j)\] 
+be the index of the empirical best and true best among the recommended point. 
+We notice that for any $j$, $\{r_{i,j}-f(\tilde{x}_{j})\}_{i=1}^{n^+}$ is a bounded i.i.d.\,sequence with zero mean (conditionally to $\tilde{x}_j$) thus using Hoeffding's inequality one can show that for all $\Delta > 0$,
+% \[
+%     \PP{\sum_{i=1}^{n^+}(r_{i,j}-f(\tilde{x_{j}})) > n^+\Delta} \leq \exp{\left(-\frac{2n^+\Delta^2\right)},
+% \]
+% therefore,
+% \[
+%     \PP{\hat{\mu}_{n^+,j}-f(\tilde{x_{j}}) > \Delta} \leq \exp{\left(-2n^+\Delta^2\right)},
+% \]
+% and we have immediately
+\[
+    \PP{\abs{\hat{\mu}_{n^+,j}-f(\tilde x_{j})} > \Delta} \leq 2\exp{\left(-2n^+\Delta^2\right)}.
+\]
+By integrating over $\Delta\in [0,1]$, we get
+\begin{equation}\label{eq:azuma}
+    \forall j\in \{1,\dots,N\}, \ \EE{\abs{\hat{\mu}_{n^+,j}-f(\tilde{x}_{j})}} \leq \frac{\sqrt{\pi/2}}{\sqrt{n^+}}\cdot
+\end{equation}
+As in the analysis of $\POO$, the instance $\overline{\jmath}$ defined as   
+\[
+	\bar{\jmath} \eqdef \underset{j \leq N : \rho_j\geq\rho^\star}{\argmin} \left[d(\nu_{\max},C^\star,\rho_j) - d(\nu^\star,C^\star,\rho^\star)\right]
+\]
+shall play a crucial role. Indeed, inequality \eqref{crucialHypothesis} is exactly what is needed in Appendix B.2 and Appendix B.3 of~\cite{grill2015poo} to control the simple regret of that instance in terms of $(\nu^\star,C^\star,\rho^\star)$. Following the exact same steps, we can show that for some constant $\alpha$, 
+\begin{equation}\label{eq:regretjbar}
+    \mathbb{E}\left[S_{(n/2N)}^{\cA(\nu_{\max},\rho_{\overline{\jmath}})}\right]  \leq \alpha D_{\max}(\nu_{\max}/\nu^\star)^{D_{\max}} \left( (\log^2 n)/n)^{1/(d(\nu^\star, C^\star,\rho^\star)+2)} \right)\!.
+\end{equation} 
+We now turn our attention to the simple regret of $\GPO{}(\cA)$ after $n$ function evaluations.
+\begin{equation}\label{eq:cv}
+    \EE{S_n^{\GPO}} = \EE{f^\star - f(\tilde{x}_{\hat\jmath})} = \EE{f^\star - f(\tilde{x}_{\bar{\jmath}})} + \EE{f(\tilde{x}_{\bar{\jmath}}) - f(\tilde{x}_{\tilde{\jmath}})} + \EE{f(\tilde{x}_{\tilde{\jmath}}) - f(\tilde{x}_{\hat{\jmath}})}\!.
+\end{equation}
+The first term in~\eqref{eq:cv} is equal to the simple regret of the instance $\overline{\jmath}$ that uses $n/N$ samples, which is upper bounded in \eqref{eq:regretjbar}. The second term in~\eqref{eq:cv} is always negative by definition of~$\tilde{\jmath}$ and the third term can be rewritten as
+\begin{equation}\label{AstuteDec}
+    \EE{f(\tilde{x}_{\tilde{\jmath}}) - f(\tilde{x}_{\hat{\jmath}})} = \EE{f(\tilde{x}_{\tilde{\jmath}}) - \hat{\mu}_{n^+,\tilde{\jmath}}} + \EE{\hat{\mu}_{n^+,\tilde{\jmath}} - \hat{\mu}_{n^+,\hat{\jmath}}} + \EE{\hat{\mu}_{n^+,\hat{\jmath}} - f(\tilde{x}_{\hat{\jmath}})}.
+\end{equation}
+where the first and the third term of~\eqref{AstuteDec} are both upper bounded by $(\sqrt{\pi/2})/\sqrt{n^+}$ using \eqref{eq:azuma}, and the second term is always negative by definition of $\hat{\jmath}$.
+Putting things together yields 
+\[    \EE{S_n^{\GPO}}  \leq \alpha D_{\max}(\nu_{\max}/\nu^\star)^{D_{\max}} \left( (\log^2 n)/n\right)^{1/(d(\nu^\star, C^\star,\rho^\star)+2)}+ O\left(\frac{\sqrt{N}}{\sqrt{n}}\right)\cdot\]
+The conclusion follows by observing that the second term in the right-hand side is negligible with respect to the first. 
+\end{proof}

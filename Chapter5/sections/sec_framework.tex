@@ -1,0 +1,20 @@
+\section{Hyper-parameter Optimization Framework}\label{sec:dttts.framework}
+
+In this paper, we view HPO as a particular \emph{global optimization} setting, for which the target function $f$ is a mapping from a hyper-parameter configuration to some measure of failure for the machine learning algorithm trained with these hyper-parameters. Formally, we aim at solving an optimization problem of the form $f^\star = \min \{f(\blambda):\blambda\in\Omega\}$, where $\blambda$ denotes a configuration of hyper-parameters chosen from a configuration space $\Omega$. A hyper-parameter optimizer is a sequential procedure, that at each round $t$, selects a configuration~$\blambda_t$ to evaluate using some sampling rule, after which a (costly and \emph{noisy}) evaluation of $f(\blambda_t)$ is observed. Besides, a hyper-parameter configuration $\hat{\blambda}^\star$ is recommended as a guess for a close-to-optimal configuration at the end. The hope is that $f(\hat{\blambda}^\star)$ is not far from $f^\star$.
+
+We restrict our presentation to hyper-parameter tuning for supervised learning algorithms. Given a training dataset $\cD_{\texttt{train}}$ containing $n$ labeled examples in $\cX \times \cY$ and a choice of hyper-parameter configuration $\blambda$, a supervised learning algorithm (neural network, \SVM, gradient boosting, \dots) produces a predictor $\hat{g}_{\bm\lambda}^{\,(n)}\!:\cX \rightarrow \cY$. Note that there can be some randomness in the training process (e.g., if stochastic gradient descent is used) so that $\hat{g}_{\blambda}^{\,(n)}$ may still be random for a given training set and hyper-parameters. The goal is to build a predictor that generalizes well. If we had access to the distribution $\bP$ that generated the data (i.e., assuming that data points in $\cD_{\texttt{train}}$ are i.i.d. from $\bP$), this generalization power would be measured by the risk $f(\bm\lambda) \triangleq \mathbb{E}\left[\ell\left(\bm Y,\hat g_{\blambda}^{\,(n)}(\bm X)\right) \right]$, where $\ell$ is some loss function measuring the distance between two predictions and the expectation is taken on $(\bm X , \bm Y) \sim \bP$ and the possible randomness in the training process. 
+
+
+% Given a set of hyper-parameters $\blambda$, the objective of a (supervised) learning process is to train a model $g_{\blambda}:\cX\lra\cY$ that minimizes the total empirical loss (could be regularized) over a training set $\cD_{\texttt{train}} = \{(\bx_i,\by_i)_{i=1, \ldots, |\cD_{\texttt{train}}|}\}$ where $(\bx_i,\by_i)\in\cX\times\cY$ are pairs of input and output,
+% \[
+% 	\cL_{\texttt{train}}(\blambda) \eqdef \sum_{i=1}^{|\cD_{\texttt{train}}|} \ell_1(g_{\blambda}(\bx_i),\by_i).
+% \]
+% Here the loss function $\ell_1$ should be neatly chosen for a specific task.
+% 
+% In the context of hyper-parameter tuning, our objective is then to minimize the following black-box function
+% \[
+%     f(\blambda) \eqdef \EE{\mathbb{P}_{\bx,\by\sim \cD_{\texttt{valid}}}\left[\by\neq\hat{g}_{\blambda}(\bx)\right]},
+% \]
+% where the randomness of the expectation comes eventually from the training set that we are using. 
+
+In practice, however, the explicit evaluation of $f$ is impossible, but there are several methods for \emph{noisy evaluations}. We can either compute the validation error of $\hat g_{\blambda}^{\,(n)}$ on a held-out validation set,  $1/|\cD_{\texttt{valid}}| \sum_{i=1}^{|\cD_{\texttt{valid}}|} \ell(\hat{g}^{\,(n)}_{\blambda}(\bx_i),\by_i)$, or a cross validation error over the training set as an approximation of the  objective. %We specify this loss function for real hyper-parameter optimization tasks in Section~\ref{sec:result}.

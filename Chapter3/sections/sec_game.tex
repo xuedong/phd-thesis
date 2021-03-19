@@ -1,0 +1,181 @@
+%!TEX root = ../Chapter3.tex
+\section{A Gamified Algorithm}\label{sec:lgc.game}
+
+We present two asymptotically optimal algorithms for the general pure-exploration problem. We also make the additional assumption that the set of parameter is bounded, that is we know $M>0$ such that for all $\theta\in\cM,\, \normm{\theta}\leq M$. This assumption is shared by most of the works on %\todo{rather usual? or used everywhere? Evrywhere i would say since they target minimax regret}
+linear bandits (e.g. \citealt{abbasi-yadkori2011linear, soare2014linear}).
+
+We describe primarily \LGC, detailed in Algorithm~\ref{alg:lgc}. The principle behind \LG, detailed in Algorithm~\ref{alg:lg}, is similar and significant differences will be highlighted.
+
+
+\subsection{Notations}
+\paragraph{Counts.} At each round $t$ the algorithms will play an arm $a_t$ and choose (fictitiously) an answer $i_t$. We denote by $N_t^{a,i} \eqdef\sum_{s=1}^t \ind_{\{(a_t,i_t)=(a,i)\}}$ the number of times the pair $(a,i)$ is chosen up to and including time $t$, and by $N_t^a =\sum_{i\in\cI} N_s^{a,i}$ and $N_t^i =\sum_{a\in\cI} N_s^{a,i}$ the partial sums. The vectors of counts at time $t$ is denoted by $N_t \eqdef (N_t^a)_{a\in\cA}$
+and when it is clear from the context we will also denote by $N_t^a = (N_t^{a,i})_{i\in\cI}$ and $N_t^i = (N_t^{a,i})_{i\in\cI}$ the vectors of partial counts.
+
+\paragraph{Regularized least square estimator.} We fix a regularization parameter $\eta > 0$. The regularized least square estimator for the parameter $\theta\in \mathcal M$ at time $t$ is
+\[
+\htheta_{t} = (V_{N_t} + \eta I_d)^{-1} \sum_{s=1}^t Y_s a_s\,,
+\]
+where $I_d$ is the identity matrix. By convention $\htheta_0 = 0$.
+
+
+\subsection{Algorithms}
+
+\begin{algorithm}[tb]
+\centering
+\caption{\LG}
+\label{alg:lg}
+\begin{algorithmic}[1]
+    \State {\bfseries Input:} Agent learners for each answers $(\cL^i_w)_{i\in\cI}$, threshold $\beta(\cdot,\delta)$
+    \For{t = 1 \ldots}
+        \State \textit{// Stopping rule}
+        \If{{$\max_{i\in\cI}\inf_{\lambda\in\neg i} \frac{1}{2}\normm{\htheta_{t-1}-\lambda}^2_{V_{N_{t-1}}}\geq\! \beta(t-1,\delta)$}}
+            \State \texttt{stop} 
+            \State {\bfseries Return} $\hi = \istar(\hat{\theta}_{t-1})$
+        \EndIf
+        \State \textit{// Best answer}
+        \State $i_{t} = \istar(\hat{\theta}_{t-1})$
+        \State \textit{// Agent plays first}
+        \State \texttt{get} $w_{t}$ \texttt{from} $\cL^{i_t}_w$
+        \State \texttt{update} $W_{t}=W_{t-1}+w_{t}$
+        \State \textit{// Best response for the nature}
+        \State $\lambda_{t} \in \argmin_{\lambda\in\neg i_t}\normm{\htheta_{t-1}-\lambda}^2_{V_{w_{t}}}$
+        \State \textit{// Feed optimistic gains}
+        \State \texttt{feed learner} $\cL_w^{i_{t}}$ \texttt{with} $g_{t}(w) = \sum_{a\in\cA}w^a U_t^a/2$
+        \State \textit{// Track the weights}
+        \State \texttt{pull} $a_{t}\in \argmin_{a\in \mathcal A } N_{t-1}^{a} - W_{t}^{a}$
+   \EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[tb]
+\centering
+\caption{\LGC}
+\label{alg:lgc}
+\begin{algorithmic}[1]
+    \State {\bfseries Input:} Agent learner $\cL_{\tw}$, threshold $\beta(\cdot,\delta)$
+    \For{t = 1 \ldots}
+        \State \textit{// Stopping rule}
+        \If{ {\small $\max_{i\in \cI} \inf_{\lambda\in\neg i} \frac{1}{2}\normm{\htheta_{t-1}-\lambda}^2_{V_{N_{t-1}}}\geq \beta(t-1,\delta)$}}
+            \State {\bfseries stop} and {\bfseries return} $\hi = \istar(\hat{\theta}_{t-1})$. 
+        \EndIf
+        \State \textit{// Agent plays first}
+        \State \texttt{get} $\tw_{t}$ \texttt{from} $\cL_{\tw}$ 
+        \State \texttt{update} $\tW_{t}=\tW_{t-1}+\tw_{t}$
+        \State \textit{// Best response for the nature}
+        \State $\forall i\in\cI$, $\tlambda^i_{t} \in \argmin_{\lambda\in\neg i}\normm{\htheta_{t-1}-\lambda}^2_{V_{\tw^i_{t}}}$
+        \State \textit{// Feed optimistic gains}
+        \State \texttt{feed learner} $\cL_{\tw}$ \texttt{with} {$g_{t}(\tw) =\sum_{(a,i)\in\cA\times\cI} \tw^{a,i} U_t^{a,i}/2$}
+        \State \textit{// Track the weights}
+        \State \texttt{pull} $(a_{t},i_{t})\in \argmin_{(a,i)\in \mathcal A \times \mathcal I} N_{t-1}^{a,i} - \tW_{t}^{a,i}$
+    \EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\paragraph{Stopping rule.}
+Our algorithms share the same stopping rule. Following \citet{garivier2016tracknstop}, our algorithms stop if a generalized likelihood ratio exceeds a threshold. It stops if
+\begin{align}
+\label{eq:def_chernoff_stopping}
+\max_{i\in \mathcal I} \inf_{\lambda_i \in \neg i}\frac{1}{2}\Vert \tilde{\theta}_t - \lambda_i \Vert^2_{V_{N_t}}
+> \beta(t,\delta)\,,
+\end{align}
+and return {\small $\displaystyle \istar_t\! \in\! \argmax_{i\in \mathcal I}\! \inf_{\lambda_i \in \neg i}\Vert \tilde{\theta}_t - \lambda_i \Vert^2_{V_{N_t}}/2$}.
+This stopping and decision rules ensures that the algorithms \LG and \LGC are $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.concentration}.
+\begin{lemma}
+\label{lem:chernoff_stopping rule_pac}
+Regardless of the sampling rule, the stopping rule~\eqref{eq:def_chernoff_stopping} with the threshold
+{\small\begin{equation} \label{eq:def_beta}
+\beta(t,\delta) =\left( \sqrt{\log\!\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\!\left(1+\frac{t L^2}{\eta d} \right)} +\sqrt{\frac{\eta}{2}}M\right)^2\!\!\!,
+\end{equation}}
+satisfy $ \P_{\theta}\big(\tau_{\delta} < \infty \wedge \istar_t \neq \istar(\theta)\big) \leq \delta$.
+\end{lemma}
+% This stopping and decision rules ensures that the algorithm is $\delta$-correct regardless of the sampling rule used (see \citealt{garivier2016tracknstop} for a proof), hence the following theorem is immediate.
+% \begin{theorem}
+% Algorithms~\ref{alg:lg} and~\ref{alg:lgc} are $\delta$-correct.
+% \end{theorem}
+Our contribution is a sampling rule that minimizes the sample complexity when combined with these stopping and decision rules.
+We now explain our sampling strategy to ensure that the stopping threshold is reached as soon as possible.
+
+\paragraph{Saddle point computation.}
+Suppose in this paragraph, for simplicity, that the parameter vector $\theta$ is known. By the definition of the stopping rule and the generalized likelihood ratio, as long as the algorithm does not stop,
+\begin{align*}
+\beta(t,\delta)
+&\ge \inf_{\lambda\in \neg i^\star(\theta)} \sum_{a\in \cA} N_t^a \Vert \theta - \lambda \Vert^2_{a a^\top}/2 \: .
+\end{align*}
+If we manage to have $N_t \approx t w^\star(\theta)$ (the optimal pulling proportions at $\theta$), then this leads to $\beta(t,\delta) \ge t T^\star(\theta)^{-1}$ and, solving that equation, we have asymptotic optimality.
+
+Since there is only one correct answer, the parameter $\theta$ belongs to all sets $\neg i$ for $i\neq \istar(\theta)$. Hence
+\begin{align*}
+&\inf_{\lambda\in \neg i^\star(\theta)}\frac{1}{2} \sum_{a\in \cA} N_t^a \Vert \theta - \lambda \Vert^2_{a a^\top}
+\\&\geq \inf_{\tlambda_t\in \prod_i (\neg i)}\frac{1}{2}\sum_{(a,i)\in \cA\times\cI}\!\!\!\!\! N_t^{a,i} \Vert \theta - \tlambda^i \Vert^2_{a a^\top}.
+\end{align*} Introducing the sum removes the dependence in the unknown $i^*(\theta)$. \LGC then uses an agent playing weights w in $\Sigma_{\cA\cI}$. \LG does not use that sum over answers, but uses a guess for $\istar(\theta)$. Its analysis involves proving that the guess is wrong only finitely many times in expectation.
+
+Our sampling rule implements the lower bound game between an agent, playing at each stage $s$ a weight vector $\tw_s$ in the probability simplex $\Sigma_{A\times I}$, and nature, who computes at each stage a point $\lambda_s^i \in \neg i$ for all $i\in \mathcal I$. We additionally ensure that $N_t^{a,i} \approx \sum_{s=1}^t \tw_s^{a,i}$. Suppose that the sampling rule is such that at stage $t$, a $\varepsilon_t$-approximate saddle point is reached for the lower bound game, see Lemma~\ref{lem:sion_convexify}. That is,
+\begin{align*}
+&\inf_{\tlambda \in \prod_{i}(\neg i)} \sum_{s=1}^t \sum_{(a,i)\in \cA\times\cI} \tw_s^{i,a} \Vert \theta - \tlambda^i \Vert^2_{a a^\top}/2 +\varepsilon_t
+\\
+&\ge \sum_{s=1}^t \sum_{(a,i)\in \cA\times\cI} \tw_s^{i,a} \Vert \theta - \tlambda_s^i \Vert^2_{a a^\top}/2
+\\
+&\ge\max_{(a,i)\in \cA\times\cI} \sum_{s=1}^t \Vert \theta - \tlambda_s^i \Vert^2_{a a^\top}/2 - \varepsilon_t \: .
+\end{align*}
+Then if the algorithm did not stop, it verifies, using Lemma~\ref{lem:sion_convexify},
+\begin{align*}
+\beta(t,\delta)
+&\ge t \max_{(a,i)\in \cA\times\cI} \frac{1}{t}\sum_{s=1}^t \Vert \theta - \tlambda_s^i \Vert^2_{a a^\top}/2 - 2\varepsilon_t
+\\
+&\ge t \inf_{\tq \in \mathcal \prod_{i\in \mathcal I}\cP(\neg i)} \! \max_{(a,i)\in \cA\times\cI} \!\!\!\! \mathbb{E}_{\lambda^i\sim q^i}\Vert \theta \! - \! \tlambda^i \Vert^2_{a a^\top}/2 \! - \! 2\varepsilon_t\\
+&= t T^\star(\theta)^{-1} - 2 \varepsilon_t \: .
+\end{align*}
+Solving that equation, we get asymptotically the wanted $t\lesssim T^\star(\theta) \log(1/\delta)$.
+
+We implement the saddle point algorithm by using AdaHedge for the agent (a regret minimizing algorithm of the exponential weights family), and using best-response for the nature, which plays after the agent. Precisely the learner $\cL_w$ for \LGC is AdaHedge on $\Sigma_{AI}$ with the gains
+\[
+g_t^\theta(\tw) = \frac{1}{2} \sum_{(a,i)\in\cA\times\cI}  \tw^{a,i} \Vert \theta - \tlambda_s^i \Vert^2_{a a^\top}\,.
+\]
+ Whereas \LG uses $I$ learners $\cL_w^i$, one for each possible guess of $\istar(\theta)$ with the gains. For $i\in\cI$, the learner $\cL_w^i$ is also AdaHedge but only on $\Sigma_A$ with the gains (when the guess is $i$)
+ \[
+ g_t^\theta(w) = \frac{1}{2} \sum_{a\in\cA}  w^{a} \Vert \theta - \lambda_s^i \Vert^2_{a a^\top}\,.
+ \]
+ $\varepsilon_t$ is then the sum of the regrets of the two players. Best-response has regret 0, while the regret of AdaHedge is $O(\sqrt{t})$ for bounded gains, as seen in the following lemma, taken from \citet{derooij2014hedge}.
+%\todo{define the learners $\cL_w^i$ here}
+\begin{lemma}\label{lem:adahedge}
+On the online learning problem with $K$ arms and gains $g_s(w) = \sum_{k\in[K]} w^k  U_s^k$ for $s\in[t]$, AdaHedge, predicting $(w_s)_{s\in[t]}$, has regret
+\begin{align*}
+%R_T &\le 2\sqrt{(\sigma L_T - \frac{L_T^2}{T})\log(K)} + \sigma(2+\log(K)16/3) \: ,\\
+R_t&:= \max_{w\in\Sigma_K}\sum_{s=1}^t g_s(w) -g_s(w_s) \\
+&\le 2\sigma\sqrt{t\log(K)} + 16\sigma(2+\log(K)/3) \: ,\\
+\text{where }
+\sigma &= \max_{s\le t}  (\max_{k\in[K]}U_s^{k}- \min_{k\in[K]}U_s^{k}) \:.\\
+%L_T &= \sum_{t=1}^T (\max_{k\in[K]}U_t^{k} - U_t^{\star}) \le T \sigma \: .
+\end{align*}
+\end{lemma}
+Other combinations of algorithms are possible, as long as the sum of their regrets is sufficiently small. At each stage $t\in\NN$, both algorithms advance only by one iteration and as time progresses, the quality of the saddle point approximation improves. This is in contrast with \Track \cite{garivier2016tracknstop}, in which an exact saddle point is computed at each stage, at a potentially much greater computational cost.
+
+\paragraph{Optimism.} The above saddle point argument would be correct for a known game, while our algorithm is confronted to a game depending on the unknown parameter $\theta$. Following a long tradition of stochastic bandit algorithms, we use the principle of Optimism in Face of Uncertainty. Given an estimate $\hat{\theta}_{t-1}$, we compute upper bounds for the gain of the agent at $\theta$, and feed these optimistic gains to the learner. Precisely, given the best response $\lambda_t^i \in \neg i$ we define,
+\begin{align*}
+U_t^{a,i} =\left\{
+\begin{array}{ll}
+\max_{\xi} \quad & \min\big(\Vert \xi - \lambda_t^i \Vert^2_{a a^\top},4L^2M^2\big)\\
+\text{s.t.}\quad & \Vert \hat{\theta}_{t-1} - \xi \Vert^2_{V_{N_{t-1}}+\eta I_d} \le 2h(t)
+\end{array}
+\right. \: ,
+\end{align*}
+where $h(t)=\beta(t, 1/t^3)$ is some exploration function. We clipped the values, using that $\cM$ and $\cA$ are bounded to ensure bounded gains for the learners. Under the event that the true parameter verifies $\Vert \hat{\theta}_{t-1} - \theta \Vert^2 \le 2 h(t)$, this is indeed an optimistic estimate of $\Vert \theta - \lambda_t^i \Vert^2_{a a^\top}$. Note that $U_t^{a,i}$ has a closed form expression, see Appendix~\ref{app:lgc.proof}. The optimistic gain is then, for \LGC (see Algorithm~\ref{alg:lg} for the one of \LG),
+\[
+g_t(\tw) = \frac{1}{2} \sum_{(a,i)\in\cA\times\cI}  \tw^{a,i} U_t^{a,i}\,.
+\]
+
+
+\paragraph{Tracking.} In both Algorithm~\ref{alg:lg} and~\ref{alg:lgc}, the agent plays weight vectors in a simplex. Since the bandit procedure allows only to pull one arm at each stage, our algorithm needs a procedure to transcribe weights into pulls. This is what we call tracking, following \citet{garivier2016tracknstop}. The choice of arm (or arm and answer) is
+\begin{align*}
+a_{t+1}          &\in \argmin_{a\in \mathcal A } N_{t}^{a} - W_{t+1}^{a} & \text{ for Algorithm~\ref{alg:lg},}\\
+(a_{t+1},i_{t+1})&\in \argmin_{(a,i)\in \mathcal A \times \mathcal I } N_{t}^{a,i} - \tW_{t+1}^{a,i} & \text{ for Algorithm~\ref{alg:lgc}.}
+\end{align*}
+This procedure guarantees that for all $t\in\NN, u \in \mathcal U$, with $\mathcal U = \mathcal A$ (resp. $\mathcal U =\cI\times\cA$) for Algo.~\ref{alg:lg} (resp. Algo.~\ref{alg:lgc}), $- \log (|\mathcal U|) \le N_t^{u} - W_t^{u} \le 1$. That result is due to~\citet{anon2020structure} and its proof is reproduced in Appendix~\ref{app:lgc.tracking}.
+
+\begin{theorem}\label{thm:sample_complexity}
+For a regularization parameter\footnote{This condition is a simple technical trick to simplify the analysis. An $\eta$ independent of $A$,$L$,$M$ will lead to the same results up to minor adaptations of the proof.} $\eta \geq 2(1+\log(A))AL^2+M^2$, for the threshold $\beta(t,\delta)$ given by~\eqref{eq:def_beta}, for an exploration function $h(t)=\beta(t,1/t^3)$, \LG and \LGC are $\delta$-correct and asymptotically optimal. That is, they verify for all $\theta\in \cM$,
+\begin{align*}
+\limsup_{\delta\to 0}\frac{\mathbb{E}_\theta[\tau_\delta]}{ \log 1/\delta} \le \Tstar(\theta) \: .
+\end{align*}
+\end{theorem}
+The main ideas used in the proof are explained above. The full proof is in appendix~\ref{app:lgc.proof} with finite $\delta$ upper bounds.

@@ -1,0 +1,73 @@
+%!TEX root = ../Chapter3.tex
+\DeclareBoldMathCommand{\zeros}{0}
+\DeclareBoldMathCommand{\v}{v}
+\DeclareBoldMathCommand{\w}{w}
+\DeclareBoldMathCommand{\e}{e}
+\DeclareBoldMathCommand{\u}{u}
+
+\section{Tracking}\label{app:lgc.tracking}
+
+We call tracking the following interaction. Starting from vectors $W_0 = N_0 = (0, \ldots, 0) \in \mathbb{R}^K$, for each stage $t=1,2,\ldots$
+\begin{itemize}
+	\item Nature reveals a vector $w_t$ in the simplex $\Sigma_K$ and updates $W_t = W_{t-1} + w_t$.
+	\item A tracking rule selects $k_t \in [K]$ based on $(w_1, \ldots, w_t)$ and forms $N_t = N_{t-1} + e_{k_t}$, where $(e_i)_{i\in [K]}$ is the canonical basis.
+\end{itemize}
+Note that $w_t$ is known to the tracking rule when choosing $k_t$.
+
+\begin{definition}
+We call C-Tracking any rule that, for all stages $t\ge 1$, selects
+\[
+    k_t \in \argmin_{k\in [K]} N_{t-1}^k - W_t^k\,.
+\]
+\end{definition}
+This defines C-tracking up to the choice of $k_t$ when the $\argmin$ is not unique. The name stands for cumulative tracking and is introduced by~\citet{garivier2016tracknstop}.
+
+\begin{lemma}\label{lem:tracking}
+The C-Tracking procedure described above ensures that for all $t\in \NN$, for all $k\in [K]$,
+\begin{align*}
+-\sum_{j=2}^K \frac{1}{j} \le N_t^k - W_t^k \le 1 \: .
+\end{align*}
+\end{lemma}
+The upper bound is given by~\citet{garivier2016tracknstop}. The lower bound is due to~\citet{anon2020structure} and is reproduced below.
+\begin{proof}
+Let $\mathcal S_0 = \{v \in \mathbb{R}^K \: : \: \sum_{k=1}^K v^k = 0\}$. The tracking procedure is such that for all stages $t\in\NN$, $N_t-W_t \in S_0$. Our proof strategy is to characterize the subset of $\mathcal S_0$ that can be reached during the tracking procedure, starting from $\v_0 = N_0-W_0 = \zeros$ .
+
+We define a move $\rightarrow_\w$ as function from $\mathcal{S}_0$ to itself parameterized by $\w$ that maps $\v$ to $\v - \w + \e_k$, where $k=\argmin_{j\in[K]} \v - \w$. If the value of that function at $\v$ is $\u$, we write $\v \rightarrow_\w \u$ .
+A vector $\u \in \mathcal{S}_0$ is said to be reachable in one move from $\v \in \mathcal{S}_0$ if there exists $\w \in \triangle_K$ such that $\v \rightarrow_\w \u$. We denote it by $\v \rightarrow \u$. It is said to be reachable from $\v$ if there is a finite sequence of such moves such that $\v \rightarrow \ldots \rightarrow \u$.
+
+A reverse move $\leftarrow_{k,\w}$ is a function from $\mathcal{S}_0$ to itself parametrized by $k$ and $\w$ that maps $\v$ to $\v + \w - \e_k$. A reverse move is said to be valid at $\v$ if $v^k \leq \min_j v^j + 1$. If the value of that function at $\v$ is $\u$, we write $\u \leftarrow_{k,\w} \v$ .
+A vector $\u \in \mathcal{S}_0$ is said to be reverse-reachable in one move from $\v \in \mathcal{S}_0$ if there exists $k\in[K]$ and $\w \in \triangle_K$ such that $\u \leftarrow_{k,\w} \v$ and such that this is a valid reverse move at $\v$. We denote it by $\u \leftarrow \v$.
+
+We now prove that $(\u \rightarrow \v) \Leftrightarrow (\u \leftarrow \v)$ . First, if $\u \rightarrow \v$ then let $\w$ be the parameter of a move $\u \rightarrow_\w \v$ and let $k = \argmin_{j\in[K]} \u - \w$. Then $\u \leftarrow_{k,\w} \v$ is a valid reverse move. Second, if $\u \leftarrow_{k,\w} \v$ is a valid reverse move, then $k = \argmin_{j\in[K]} \u - \w$ and we have $\u \rightarrow_\w \v$ .
+
+We characterize the elements $\v$ of $\mathcal S_0$ such that $\zeros \leftarrow \ldots \leftarrow \v$ .
+
+Let $\u,\v \in \mathcal{S}_0$ be such that $\u \leftarrow \v$. Let $M_\v = \{k\in[K]: v^k \le \min_j v^j + 1\}$. Then for any set $S\subseteq[K]$ such that $M_\v\subseteq S$, $\sum_{i\in S} u^i \le \sum_{i\in S} v^i$. Indeed, for the reverse move to be valid, one of the coordinates in $M_\v$ was decreased by 1, and they were added coordinates of a $\w\in \triangle_K$, that sum at most to 1.
+
+Let $S\subseteq [K]$ and $A_S = \{u\in\mathcal{S}_0 : \forall k \notin S, \: u^k > \frac{1}{|S|}\sum_{i\in S}u^i + 1\}$. We now prove that if $\u \leftarrow \v$ and $\v \in A_S$, then $\u \in A_S$ and as a consequence, that if $\u \leftarrow \ldots \leftarrow \v$ and $\v \in A_S$, then $\u \in A_S$. Indeed,
+\begin{itemize}[nosep]
+	\item Since $\v \in A_S$, we have $M_\v \subseteq S$, hence the previous remark proves $\frac{1}{|S|}\sum_{i\in S}u^i \leq \frac{1}{|S|}\sum_{i\in S}v^i$.
+	\item For $k\notin S$, then $k\notin M_\v$ and $u^k \geq v^k > \frac{1}{|S|}\sum_{i\in S}v^i + 1 \geq \frac{1}{|S|}\sum_{i\in S}u^i + 1$ .
+\end{itemize}
+
+Since $\zeros \notin \bigcup_{S \in \mathcal{P}([K])\setminus\{[K]\}} A_S$, we can now state that if $\zeros \leftarrow \ldots \leftarrow \v$, then $\v \notin \bigcup_{S \in \mathcal{P}([K])\setminus\{[K]\}} A_S$ .
+
+Let $j\in[2:K]$ and let $\v_{(j)} \in \mathcal{S}_0$ be such that $v_{(j)}^1 \ge \ldots \ge v_{(j)}^{j-1} > v_{(j)}^j = \ldots = v_{(j)}^K$. Then we will prove that one of the two following statements is true:
+\begin{enumerate}
+\item $v_{(j)}^{j-1} > v_{(j)}^j + 1$ and $\v_{(j)}$ is not reachable from $\zeros$,
+\item $v_{(j)}^{j-1} \le v_{(j)}^j + 1$. Then let $v_{j-1:K}$ be the mean of $v_{(j)}^{j-1},\ldots,v_{(j)}^K$ and let $\v_{(j-1)}$ be the vector with $v_{(j-1)}^1 = v_{(j)}^1$, ..., $v_{(j-1)}^{j-2} = v_{(j)}^{j-2}$ and $v_{(j-1)}^{j-1} = \ldots = v_{(j-1)}^K = v_{j-1:K}$. Then $\v_{(j-1)} \leftarrow \v_{(j)}$ .
+\end{enumerate}
+Case 1: $v_{(j)}^{j-1} > v_{(j)}^j + 1$. Let $S = [j:K]$. then $S\neq[K]$ and $\v\in A_S$. Hence $\v$ is not reachable from $\zeros$.
+
+Case 2: $v_{(j)}^{j-1} \le v_{(j)}^j + 1$. Let $\w$ be defined by $w^1 = \ldots = w^{j-2} = 0$, $w^{j-1} = 1 - (K-j+1)(v_{j-1:K} - v_{(j)}^j)$ and $w^j = \ldots = w^K = v_{j-1:K} - v_{(j)}^j$. Since $v_{(j)}^{j-1} \le v_{(j)}^j + 1$ and $\w\in\triangle_K$, the reverse move $\leftarrow_{j-1,\w}$ is valid at $\v_{(j)}$. Then the image of $\v_{(j)}$ by that reverse move is $\v_{(j-1)}$. Note that $w^{j-1} \ge w^j = \ldots = w^K$.
+
+We have now all the tools to state the characterization of the the elements $\v$ of $\mathcal S_0$ such that $\zeros \leftarrow \ldots \leftarrow \v$ . By a simple induction using the last case distinction, we have the following:
+let $\v \in \mathcal S_0$ and let $i_1, \ldots, i_K\in[K]$ be such that $v^{i_1} \ge \ldots \ge v^{i_K}$. If $\zeros \leftarrow \ldots \leftarrow \v$, then there exists $\u_1, \ldots, \u_{K-2}$ and $\w_1, \ldots, \w_{K-1}$ such that
+\begin{enumerate}
+\item $\zeros \leftarrow _{i_1,\w_1} \u_1 \leftarrow_{i_2,\w_2} \ldots \leftarrow_{i_{K-2},\w_{K-2}} \u_{K-2} \leftarrow_{i_{K-1}, \w_{K-1}} \v$,
+\item for all $j \in [K-2]$, $u_j^{i_1} \ge \ldots u_j^{i_j} \ge u_j^{i_{j+1}} = \ldots = u_j^{i_K} = \frac{1}{K-j}\sum_{k=j+1}^K v^{i_k}$ ,
+\item for all $j \in [K-1]$, $w_j^{i_1} = \ldots w_j^{i_{j-1}} = 0$ and $w_j^j \ge w_j^{i_{j+1}} = \ldots = w_j^{i_K}$. 
+\end{enumerate}
+In order to prove the theorem, we then only need a bound on $v^{i_K} = - \sum_{j=1}^{K-1} w_j^K$. The characterization of $\w_j$ implies that $w_j^K \leq 1/(K-j+1)$ . Hence $v^{i_K} \ge - \sum_{j=2}^{K} \frac{1}{j}$ .
+
+\end{proof}

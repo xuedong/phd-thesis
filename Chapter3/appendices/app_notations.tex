@@ -1,0 +1,28 @@
+%!TEX root = ../Chapter3.tex
+\section{Notation}\label{app:lgc.notations}
+
+\begin{table}[ht]
+	\centering
+	\caption{Table of notation for Chapter~\ref{chap:lgc}.}
+	\begin{tabular}{@{}l|l@{}}
+		\toprule
+		\thead{Notation} & \thead{Meaning} \\ \midrule
+		$\cM$ & set of parameters \\
+        $M$ & upper bound on the norm of $\theta$\\
+		$\cA$ & finite set or arms  \\
+        $A$ & number of arms \\
+        $\cB$ & transductive set \\
+        $B$ & number of elements in the transductive set \\
+        $\cI$ & finite set of answers \\
+        $I$ & number of answers \\
+        $L$ & upper bound on the norms of the arms\\
+        $\theta$ & parameter in $\cM$ \\
+        $a_t$ & arm pulled at time $t$ \\
+        $N_t^a = \sum_{s=1}^t \ind_{\{a_s = a\}}$ & number of draws of arm $a$ at time $t$\\
+        $N_t =(N_t^a)_{a\in\cA}$ & vector of number of draws\\
+        $N_t^{a,i} = \sum_{s=1}^t \ind_{\{a_s = a, i_t = i\}}$ & number of draws of arm $a$ for a given answer $i$\\
+        $\eta$ & regularization parameter\\
+        $\htheta_t$ & regularized least square estimate\\
+		\bottomrule
+	\end{tabular}
+\end{table}

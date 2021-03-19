@@ -1,0 +1,91 @@
+%!TEX root = ../Chapter3.tex
+\section{A Fair Comparison of Stopping Rules}\label{app:lgc.stopping}
+
+We investigate closely the stopping rules employed in existing linear BAI algorithm. We first make a synthesized table that resembles stopping rules and decision rules of all existing algorithms, including ours, in Table~\ref{tab:stopping_rules}. We denote by $\hat\cA_t$ the active arm set for elimination-based algorithms, and by $i_{\hat\cA_t}$ the only arm left in $\hat\cA_t$ when $|\hat\cA_t|=1$.
+
+We show that they are all the same up to the choice of the exploration rate. Note that in Table~\ref{tab:stopping_rules}, we have replaced all the exploration term by $\beta(t,\delta)$, and we have also listed the original terms (with their original notation, thus may be in conflict with notation of the current paper). In the following, we always use the same exploration rate $\beta(t,\delta)$ for all stopping rules.
+
+\begin{table}[ht]
+    \centering
+	\small
+	\begin{tabular}{@{}lll@{}}
+		\toprule
+		\thead{Algorithm} & \thead{Stopping rule} & \thead{Decision rule} \\
+		\midrule
+		\XYS & \makecell{$\exists a\in\cA, \forall a'\neq a, \normm{a-a'}_{V_{N_t}^{-1}}\sqrt{2\beta(t,\delta)}\leq \langle\hat\theta_t,a - a'\rangle$} & $\hi = i^\star(\hat{\theta}_{t})$ \\
+		\XYA & \makecell{$|\hat\cA_t|=1$, where all arms  $a\in\cA$ s.t. \\ $\exists a'\in\cA, \normm{a-a'}_{V_{N_t}^{-1}}\sqrt{2\beta(t,\delta)}\leq \langle\hat\theta_t,a' - a\rangle$ are discarded} & $\hi = i_{\hat\cA_t}$ \\
+		\ALBA & \makecell{$|\hat\cA_t|=1$, where all arms  $a\in\cA$ s.t. \\ $\dfrac{\normm{a^\star(\hat\theta_t)-a}_{V_{N_t}^{-1}}}{\sqrt{1/2\beta(t,\delta)}}\leq\langle\hat\theta_t,a^\star(\hat\theta_t)-a\rangle$ are discarded} & $\hi = i_{\hat\cA_t}$ \\
+		\RAGE & \makecell{$|\hat\cA_t|=1$, where all arms  $a\in\cA$ s.t. \\ $\exists a'\in\cA, 2^{-t-2}\leq\langle\hat\theta_t,a' - a\rangle$ are discarded} & $\hi = i_{\hat\cA_t}$ \\
+		\LGapE & \makecell{$\langle\hat\theta_t,a_{j_t}-a^\star(\hat\theta_t)\rangle + \normm{a^\star(\hat\theta_t) - a_{j_t}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)} < 0$ \\ with $j_t = \argmax_{j\in\cI} \langle\hat\theta_t,a_{j}-a^\star(\hat\theta_t)\rangle + \normm{a^\star(\hat\theta_t) - a_{j}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)} $} & $\hi = i^\star(\hat{\theta}_{t})$ \\
+		\GLGapE & \makecell{$\langle\hat\theta_t,a_{j_t}-a^\star(\hat\theta_t)\rangle + \normm{a^\star(\hat\theta_t) - a_{j_t}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)} < 0$ \\ with $j_t = \argmax_{j\in\cI}\langle\hat\theta_t,a_{j}-a^\star(\hat\theta_t)\rangle + \normm{a^\star(\hat\theta_t) - a_{j}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)} $} & $\hi = i^\star(\hat{\theta}_{t})$ \\
+		\GLUCB & \makecell{$\max_{i\in \cI} \inf_{\lambda\in\neg i} \dfrac{\normm{\htheta_t-\lambda}^2_{V_{N_t}}}{2}\geq \beta(t,\delta)$} & $\hi = i^\star(\hat{\theta}_{t})$ \\
+		\midrule
+		\LG & \makecell{$\max_{i\in \cI} \inf_{\lambda\in\neg i} \dfrac{\normm{\htheta_t-\lambda}^2_{V_{N_t}}}{2}\geq \beta(t,\delta)$} & $\hi = i_{t+1}$ \\
+		\LGC & \makecell{$\max_{i\in \cI} \inf_{\lambda\in\neg i} \dfrac{\normm{\htheta_t-\lambda}^2_{V_{N_t}}}{2}\geq \beta(t,\delta)$} & $\hi = i^\star(\hat{\theta}_{t})$ \\
+		\bottomrule
+	\end{tabular}
+	\caption{Stopping rules for different linear BAI algorithms.}
+	\label{tab:stopping_rules}
+\end{table}
+
+\paragraph{\LG and \LGC.}
+We first notice that using the same argument as the proves of Lemma~\ref{lem:lagrange_alternative} and Lemma~\ref{lem:complexity_bai}, the stopping rule of \LG and \LGC (and also the one of \GLUCB) can be rewritten as
+\[
+	\min_{i \neq i^\star(\hat{\theta}_{t})} \dfrac{\langle\hat\theta_t,a_{i}-a^\star(\hat\theta_t)\rangle^2}{2\normm{a_i - a^\star(\hat\theta_t)}_{{V_{N_t}^{-1}}}^2} \1\left\{a^\star(\hat\theta_t)^\top\hat\theta_t \geq a_i^\top\hat\theta_t\right\} > \beta(t,\delta)\,.
+\]
+Now we compare it with other stopping rules.
+
+\paragraph{\LGC and \LG $\Rightarrow$ \XYS.}
+If \LGC stops at time $t$, then for $a = a^\star(\hat\theta_t)$, we have
+\[
+    \forall a'\neq a, \normm{a-a'}_{V_{N_t}^{-1}}\sqrt{2\beta(t,\delta)}\leq \langle\hat\theta_t,a - a'\rangle\,,
+\]
+and \XYS stops as well.
+
+\paragraph{\XYS $\Rightarrow$ \XYA.}
+Suppose that \XYS stops at time $t$ under its stopping rule, then
+\[
+\exists a\in\cA, \forall a'\neq a, \normm{a-a'}_{V_{N_t}^{-1}}\sqrt{2\beta(t,\delta)}\leq \langle\hat\theta_t,a - a'\rangle\,.
+\]
+It is clear that if such $a$ exists, then it can only be the empirical best arm $a^\star(\hat\theta_t)$. Thus,
+\[
+    \forall a'\neq a^\star(\hat\theta_t), \normm{a^\star(\hat\theta_t)-a'}_{V_{N_t}^{-1}}\sqrt{2\beta(t,\delta)}\leq\langle\hat\theta_t,a^\star(\hat\theta_t)-a'\rangle\,,
+\]
+and all arms different from $a^\star(\hat\theta_t)$ would be discarded under $\XYA$. Furthermore, $a^\star(\hat\theta_t)$ would never be discarded since
+\[
+    \forall a'\neq a^\star(\hat\theta_t), \langle\hat\theta_t,a'-a^\star(\hat\theta_t)\rangle < 0 \le \normm{a^\star(\hat\theta_t)-a'}_{V_{N_t}^{-1}}\sqrt{2\beta(t,\delta)}\,,
+\]
+and \XYA stops.
+
+\paragraph{\XYA $\Rightarrow$ \ALBA}
+Now if \XYA stops at time $t$, then all arms but $a^\star(\hat\theta_t)$ are discarded, and
+\[
+    \forall a \neq a^\star(\hat\theta_t), \normm{a^\star(\hat\theta_t)-a'}_{V_{N_t}^{-1}}\sqrt{2\beta(t,\delta)} = \dfrac{\normm{a^\star(\hat\theta_t)-a}_{V_{N_t}^{-1}}}{\sqrt{1/2\beta(t,\delta)}} \le \langle\hat\theta_t,a^\star(\hat\theta_t)-a\rangle\,.
+\]
+Therefore, those arms would also be discarded under \ALBA, and \ALBA stops.
+
+\paragraph{\ALBA $\Rightarrow$ \LGapE and \GLGapE.}
+Next, suppose that \ALBA stops at time $t$ under its stopping rule, then the only arm left would be $a^\star(\hat\theta_t)$, and
+\[
+    \forall a \neq a^\star(\hat\theta_t), \dfrac{\normm{a^\star(\hat\theta_t)-a}_{V_{N_t}^{-1}}}{\sqrt{1/2\beta(t,\delta)}} \le \langle\hat\theta_t,a^\star(\hat\theta_t)-a\rangle\,.
+\]
+And in particular, we get
+\[
+    \langle\hat\theta_t,a_{j_t}-a^\star(\hat\theta_t)\rangle + \normm{a^\star(\hat\theta_t) - a_{j_t}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)} < 0\,.
+\]
+Thus \LGapE/\GLGapE stops under its stopping rule.
+
+\paragraph{\LGapE $\Rightarrow$ \LGC and \LG}
+Finally, we suppose that \LGapE stops at time $t$, then it comes
+\begin{align*}
+    j_t &= \argmax_{j\in\cI} \langle\hat\theta_t,a_{j}-a^\star(\hat\theta_t)\rangle + \normm{a^\star(\hat\theta_t) - a_{j}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)} \\
+    &= \argmin_{j\in\cI} \langle\hat\theta_t,a^\star(\hat\theta_t)-a_{j}\rangle - \normm{a^\star(\hat\theta_t) - a_{j}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)}\,.
+\end{align*}
+By consequence,
+\begin{align*}
+	\min_{i \neq i^\star(\hat{\theta}_{t})} \dfrac{\langle\hat\theta_t,a_{i}-a^\star(\hat\theta_t)\rangle^2}{2\normm{a_i - a^\star(\hat\theta_t)}_{{V_{N_t}^{-1}}}^2} \1\left\{a^\star(\hat\theta_t)^\top\hat\theta_t \geq a_i^\top\hat\theta_t\right\} &= \dfrac{\langle\hat\theta_t,a_{j_t}-a^\star(\hat\theta_t)\rangle^2}{2\normm{a_{j_t} - a^\star(\hat\theta_t)}_{{V_{N_t}^{-1}}}^2}\\
+	&\geq \beta(t,\delta)\,,
+\end{align*}
+and \LGC stops as well.
+
+In conclusion, all the stopping rules are equivalent if we set their exploration term to the same, though formulated in different manners.

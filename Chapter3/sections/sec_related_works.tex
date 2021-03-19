@@ -1,0 +1,18 @@
+%!TEX root = ../Chapter3.tex
+\section{Related Work}\label{sec:lgc.related_work}
+
+We survey previous work on linear BAI. The major focus is put on sampling rules in this section. We stress that all the stopping rules employed in the linear BAI literature are equivalent up to the choice of their exploration rate (More discussion given in Appendix~\ref{app:lgc.stopping}). As aforementioned, existing sampling rules are either based on \SE or \UGapE. Elimination-based sampling rules usually operate in phases and progressively discard sub-optimal directions. Gap-based sampling rules always play the most informative arm that reduces the uncertainty of the gaps between the empirical best arm and the others.
+
+\paragraph{\XYS and \XYA.} \citet{soare2014linear} first propose a static allocation design \XYS that aims at reducing the uncertainty of the gaps of all arms. More precisely, it requires to either solve the $\xyopt$-complexity or use a \emph{greedy} version that pulls the arm $\argmin_{a\in\cA} \max_{b\in\cB_{\texttt{dir}}} \normm{b}_{V_w^{-1}}^2$ at the cost of having no guarantees. An elimination-like alternative called \XYA is proposed then to overcome that issue. We say elimination-like since \XYA does not discard arms once and for all, but reset the active arm set at each phase. \XYA and \XYS are the first algorithms being linked to $\gopt$-optimality, but are not asymptotically optimal.
+
+
+\vspace{-0.2cm}
+\paragraph{\ALBA.} \ALBA is also an eliminations-based algorithm designed by~\citet{tao2018alba} that improves over \XYA by a factor of $d$ in the sample complexity using a tighter elimination criterion.
+\vspace{-0.2cm}
+
+\paragraph{\RAGE.} \citet{fiez2019transductive} extend \XYS and \XYA to a more general transductive bandits setting. \RAGE is also elimination-based and requires the computation of $\xyopt$-complexity at each phase.
+\vspace{-0.2cm}
+
+\paragraph{\LGapE and variants.} \LGapE~\citep{xu2018linear} is the first gap-based sampling rule for linear BAI. \LGapE is inspired by \UGapE~\citep{gabillon2012ugape}. It is, however, not clear whether \LGapE is asymptotically optimal or not. Similar to \XYS, \LGapE either requires to solve a time-consuming optimization problem at each step, or can use a greedy version that pulls arm $\argmin_{a\in\cA} \normm{a_{i_t}-a_{j_t}}_{(V_w+aa^\top)^{-1}}^2$ instead, again at the cost of losing guarantees. Here $i_t = i^\star(\hat\theta_t)$ and $a_{j_t}$ is the most ambiguous arm w.r.t. $a_{i_t}$, i.e. $\argmax_{j\neq i_t}\langle\hat\theta_t,a_{j}-a^\star(\hat\theta_t)\rangle + \normm{a^\star(\hat\theta_t) - a_{j_t}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)}$. On the other hand,~\citet{zaki2019maxoverlap} propose a new algorithm based on \LUCB. With a careful examination, we note that the sampling rule of \GLUCB is equivalent to that of the greedy \LGapE using the Sherman-Morrison formula. Later, \citet{kazerouni2019glb} provide a natural extension of \LGapE to the \emph{generalized linear bandits} setting, where the rewards depend on a strictly increasing \emph{inverse link function}. \GLGapE reduces to \LGapE when the inverse link function is the identity function.
+
+Note that all the sampling rules presented here depend on $\delta$ (except \XYS), while our sampling rules have a $\delta$-free property which is appealing for applications as argued by~\citet{jun2016atlucb}.  Also all the guarantees in the literature are of the form $C\log(\delta) + O\big(\log(1/\delta)\big)$ for a constant $C$ that is strictly larger than $\Tstar(\theta)^{-1}$.

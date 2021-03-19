@@ -1,0 +1,12 @@
+%!TEX root = ../Chapter2.tex
+\section{Discussion}\label{sec:t3c.discussion}
+
+We have advocated the use of a Bayesian sampling rule for BAI. In particular, we proved that \TTTS and a computationally advantageous approach \TCC, are both $\beta$-optimal in the fixed-confidence setting, for Gaussian bandits. 
+%Our analysis applies to Gaussian bandits, but could be extended to more distributions for which posterior tails bounds are available. 
+We further extended the Bayesian optimality properties established by \cite{russo2016ttts} to more practical choices of models and prior distributions. 
+
+
+In order to be optimal, the sampling rules studied in this paper would need to use the oracle tuning $\beta^\star =\argmax_{\beta \in [0,1]} \Gamma_\beta^\star$, which is not feasible. In future work, we will investigate an efficient online tuning of~$\beta$ to circumvent this issue. We also plan to investigate the extension of \TCC to more general pure exploration problems, as an alternative to approaches recently proposed by~\citet{menard2019lma,degenne2019game}.
+
+Finally, it is also important to study Bayesian sampling rules in the fixed-budget setting which is more plausible in many application scenarios such as applying BAI for automated machine learning~\citep{hoffman2014bayesgap,li2017hyperband,shang2019dttts}.
+\vfil

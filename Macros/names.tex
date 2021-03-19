@@ -1,0 +1,169 @@
+%% from single papers, but merged here
+% algo names
+\usepackage{xspace}
+\renewcommand{\ttdefault}{lmtt}
+%stochastic bandits
+\newcommand{\UCB}{\texttt{UCB}\xspace}
+\newcommand{\UCBOne}{\texttt{UCB1}\xspace}
+\newcommand{\UCBTwo}{\texttt{UCB2}\xspace}
+\newcommand{\KLUCB}{\texttt{KL-UCB}\xspace}
+%adversarial bandits
+\newcommand{\MOSS}{\texttt{MOSS}\xspace}
+\newcommand{\EXP}{\texttt{Exp3}\xspace}
+%best arm identification
+\newcommand{\EBA}{\texttt{EBA}\xspace}
+\newcommand{\MPA}{\texttt{MPA}\xspace}
+\newcommand{\EDP}{\texttt{EDP}\xspace}
+%%fixed-confidence
+\newcommand{\SE}{\texttt{SuccessiveElimination}\xspace}
+\newcommand{\ME}{\texttt{MedianElimination}\xspace}
+\newcommand{\Racing}{\texttt{Racing}\xspace}
+\newcommand{\LUCB}{\texttt{LUCB}\xspace}
+\newcommand{\KLRacing}{\texttt{KL-Racing}\xspace}
+\newcommand{\KLLUCB}{\texttt{KL-LUCB}\xspace}
+\newcommand{\Track}{\texttt{Track-and-Stop}\xspace}
+\newcommand{\DT}{\texttt{D-Tracking}\xspace}
+\newcommand{\CT}{\texttt{C-Tracking}\xspace}
+\newcommand{\EGE}{\texttt{ExponentialGapElimination}\xspace}
+\newcommand{\LIL}{\texttt{lil'UCB}\xspace}
+%%fixed-budget
+\newcommand{\UCBE}{\texttt{UCB-E}\xspace}
+\newcommand{\SR}{\texttt{SuccessiveReject}\xspace}
+\newcommand{\SHA}{\texttt{SequentialHalving}\xspace}
+\newcommand{\ISHA}{\texttt{ISHA}\xspace}
+\newcommand{\UGapE}{\texttt{UGapE}\xspace}
+%%anytime
+\newcommand{\ATLUCB}{\texttt{AT-LUCB}\xspace}
+\newcommand{\TTTS}{\texttt{TTTS}\xspace}
+\newcommand{\TCS}{\texttt{T3S}\xspace}
+\newcommand{\HTTTS}{\hyperref[alg:httts]{\textcolor{red}{\texttt{H-TTTS}}}\xspace}
+\newcommand{\DTTTS}{\hyperref[alg:dttts]{\textcolor{red}{\texttt{D-TTTS}}}\xspace}
+%\newcommand{\TCC}{\hyperref[alg:t3c_sampling_rule]{\textcolor{red}{\texttt{T3C}}}\xspace}
+\newcommand{\TCC}{\texttt{T3C}\xspace}
+\newcommand{\TCCG}{\texttt{T3C-Greedy}\xspace}
+\newcommand{\TTPS}{\texttt{TTPS}\xspace}
+\newcommand{\TTVS}{\texttt{TTVS}\xspace}
+\newcommand{\TTEI}{\texttt{TTEI}\xspace}
+\newcommand{\BC}{\texttt{BC}\xspace}
+%contextual bandits
+\newcommand{\LinUCB}{\texttt{LinUCB}\xspace}
+\newcommand{\LOVECON}{\texttt{ILOVETOCONBANDITS}\xspace}
+\newcommand{\EpochGreedy}{\texttt{Epoch-Greedy}\xspace}
+%bai for contextual bandits
+\newcommand{\LTCC}{\textcolor{red}{\texttt{L-T3C}}\xspace}
+\newcommand{\LTCCG}{\hyperref[alg:lt3cg]{\textcolor{red}{\texttt{L-T3C-Greedy}}}\xspace}
+\newcommand{\SLTCC}{\hyperref[alg:slt3c]{\textcolor{red}{\texttt{SL-T3C}}}\xspace}
+\newcommand{\LTCS}{\textcolor{red}{\texttt{L-T3S}}\xspace}
+\newcommand{\LGapE}{\texttt{LinGapE}\xspace}
+\newcommand{\SLGapE}{\hyperref[alg:slgape]{\textcolor{red}{\texttt{SLinGapE}}}\xspace}
+\newcommand{\GLGapE}{\texttt{GLGapE}\xspace}
+\newcommand{\GLUCB}{\texttt{GLUCB}\xspace}
+\newcommand{\RAGE}{\texttt{RAGE}\xspace}
+\newcommand{\ALBA}{\texttt{ALBA}\xspace}
+\newcommand{\XYA}{\texttt{$\cX\cY$-Adaptive}\xspace}
+\newcommand{\XYS}{\texttt{$\cX\cY$-Static}\xspace}
+\newcommand{\LG}{\hyperref[alg:lg]{\textcolor{red}{\texttt{LinGame}}}\xspace}
+\newcommand{\LGC}{\hyperref[alg:lgc]{\textcolor{red}{\texttt{LinGame-C}}}\xspace}
+%complexities
+%complexity
+\newcommand{\gopt}{\cA\cA}
+\newcommand{\xyopt}{\cA\cB_{\texttt{dir}}}
+\newcommand{\DeltaMin}{\Delta_\text{min}}
+%bayesian optimization
+\newcommand{\GPUCB}{\texttt{GP-UCB}\xspace}
+\newcommand{\TS}{\texttt{ThompsonSampling}\xspace}
+\newcommand{\EI}{\texttt{EI}\xspace}
+\newcommand{\PI}{\texttt{PI}\xspace}
+%continuous bandits
+\newcommand{\StoSOO}{\texttt{StoSOO}\xspace}
+\newcommand{\GPO}{\hyperref[alg:gpo]{\textcolor{red}{\texttt{GPO}}}\xspace}
+\newcommand{\POO}{\texttt{POO}\xspace}
+\newcommand{\PCT}{\hyperref[alg:pct]{\textcolor{red}{\texttt{PCT}}}\xspace}
+\newcommand{\DOO}{\texttt{DOO}\xspace}
+\newcommand{\SOO}{\texttt{SOO}\xspace}
+\newcommand{\Zooming}{\texttt{Zooming}\xspace}
+\newcommand{\UCT}{\texttt{UCT}\xspace}
+\newcommand{\HCT}{\texttt{HCT}\xspace}
+\newcommand{\SHOO}{\POO}
+\newcommand{\HOO}{\texttt{HOO}\xspace}
+\newcommand{\ATB}{\texttt{ATB}\xspace}
+\newcommand{\TZ}{\texttt{TaxonomyZoom}\xspace}
+%other variants
+\newcommand{\Fire}{\texttt{FiringUCB}\xspace}
+%global optimization
+\newcommand{\Direct}{\texttt{DiRect}\xspace}
+\newcommand{\LBFGS}{\texttt{L-BFGS}\xspace}
+%local optimization
+\newcommand{\SGD}{\texttt{SGD}\xspace}
+%infinitely many-armed bandits
+\newcommand{\fail}{\texttt{1-failure}\xspace}
+\newcommand{\rate}{\texttt{$\alpha$-rate}\xspace}
+\newcommand{\run}{\texttt{m-run}\xspace}
+\newcommand{\learning}{\texttt{m-learning}\xspace}
+\newcommand{\SiRI}{\texttt{SiRI}\xspace}
+%online learning
+\newcommand{\FPL}{\texttt{FPL}\xspace}
+%hyper-parameter optimization
+\newcommand{\Hyperband}{\texttt{Hyperband}\xspace}
+\newcommand{\TPE}{\texttt{TPE}\xspace}
+\newcommand{\Random}{\texttt{RandomSearch}\xspace}
+\newcommand{\Grid}{\texttt{GridSearch}\xspace}
+\newcommand{\SMAC}{\texttt{SMAC}\xspace}
+\newcommand{\BOHB}{\texttt{BOHB}\xspace}
+%deep learning
+\newcommand{\CNN}{\texttt{CNN}\xspace}
+%classic machine learning
+\newcommand{\MLP}{\texttt{MLP}\xspace}
+\newcommand{\SVM}{\texttt{SVM}\xspace}
+\newcommand{\Ada}{\texttt{AdaBoost}\xspace}
+\newcommand{\KNN}{\texttt{KNN}\xspace}
+\newcommand{\GBM}{\texttt{GBM}\xspace}
+\newcommand{\Tree}{\texttt{DecisionTree}\xspace}
+\newcommand{\RF}{\texttt{RandomForest}\xspace}
+%model-based
+\newcommand{\POI}{\texttt{PolicyIteration}\xspace}
+\newcommand{\VAI}{\texttt{ValueIteration}\xspace}
+%model-free
+\newcommand{\ACC}{\texttt{Actor-Critic}\xspace}
+\newcommand{\QL}{\texttt{Q-learning}\xspace}
+\newcommand{\PS}{\texttt{PolicySearch}\xspace}
+%discrepancies
+\newcommand{\f}{\texttt{f-divergence}\xspace}
+\newcommand{\KL}{\texttt{KL}\xspace}
+\newcommand{\OT}{\texttt{Wasserstein}\xspace}
+\newcommand{\EMD}{\texttt{Wasserstein-1}\xspace}
+\newcommand{\IPM}{\texttt{IPM}\xspace}
+\newcommand{\MMD}{\texttt{MMD}\xspace}
+%language
+\newcommand{\BOW}{\texttt{BOW}\xspace}
+\newcommand{\CBOW}{\texttt{CBOW}\xspace}
+\newcommand{\Glove}{\texttt{GloVe}\xspace}
+\newcommand{\wv}{\texttt{word2vec}\xspace}
+\newcommand{\skipg}{\texttt{skip-gram}\xspace}
+\newcommand{\ngram}{\texttt{n-gram}\xspace}
+
+%% dataset names
+\newcommand{\MNIST}{\texttt{MNIST}\xspace}
+\newcommand{\CIFARten}{\texttt{CIFAR-10}\xspace}
+\newcommand{\UCI}{\texttt{UCI}\xspace}
+
+
+%% library names
+\newcommand{\LIBSVM}{\texttt{LIBSVM}\xspace}
+\newcommand{\Scikit}{\texttt{scikit-learn}\xspace}
+\newcommand{\TensorFlow}{\texttt{TensorFlow}\xspace}
+\newcommand{\Theano}{\texttt{Theano}\xspace}
+\newcommand{\PyTorch}{\texttt{PyTorch}\xspace}
+\newcommand{\Spearmint}{\texttt{Spearmint}\xspace}
+\newcommand{\BoTorch}{\texttt{BoTorch}\xspace}
+\newcommand{\RoBO}{\texttt{RoBO}\xspace}
+\newcommand{\flow}{\texttt{GPflowOpt}\xspace}
+
+
+%% proba & stats
+\newcommand{\pdf}{\texttt{pdf}\xspace}
+\newcommand{\cdf}{\texttt{cdf}\xspace}
+\newcommand{\erf}{\texttt{erf}\xspace}
+\newcommand{\MLE}{\texttt{MLE}\xspace}
+\newcommand{\MAP}{\texttt{MAP}\xspace}
+

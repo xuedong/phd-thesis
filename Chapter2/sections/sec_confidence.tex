@@ -1,0 +1,208 @@
+%!TEX root = ../Chapter2.tex
+\section{Fixed-Confidence Analysis}\label{sec:t3c.confidence}
+
+In this section, we consider Gaussian bandits and the Bayesian rules using an improper prior on the means.
+We state our main result below, showing that \TTTS and \TCC are asymptotically $\beta$-optimal in the fixed confidence setting, when coupled with appropriate stopping and recommendation rules. 
+
+\begin{theorem}\label{thm:confidence_main} With $\cC^{g_G}$ the function defined by \cite{kaufmann2018mixture}, which satisfies $\cC^{g_G}(x) \simeq x+\ln(x)$, we introduce the threshold
+\begin{equation}d_{n,\delta} = 4\ln(4+\ln(n)) + 2 \cC^{g_G}\left(\frac{\ln((K-1)/\delta)}{2}\right).\label{def:thresholdD}\end{equation}
+The \TTTS and \TCC sampling rules coupled with either   
+\begin{itemize}
+ \item the Bayesian stopping rule \eqref{eq:stopping} with threshold \[c_{n,\delta} = 1 - \frac{1}{\sqrt{2\pi}} e^{-\left(\sqrt{d_{n,\delta}} + \frac{1}{\sqrt{2}}\right)^2}\]
+ and the recommendation rule $J_t = \argmax_{i} a_{n,i}$
+  \item or the Chernoff stopping rule \eqref{eq:chernoffstoppingtime} with threshold $d_{n,\delta}$
+ and recommendation rule $J_t = \argmax_i \mu_{n,i}$,
+\end{itemize}
+form a $\delta$-correct BAI strategy. Moreover, if all the arms means are distinct, it satisfies  
+    \[
+        \limsup_{\delta\rightarrow{0}} \frac{\EE{\tau_{\delta}}}{\log(1/\delta)} \leq \frac{1}{\Gamma_{\beta}^\star}.
+    \]
+\end{theorem}
+
+%\emilie{I added the restriction of the means being distinct in the theorem, maybe it was already somewhere, I didn't find it}
+%\rh{OK; it was not needed/stated before indeed}
+We now give the proof of Theorem~\ref{thm:confidence_main}, which is divided into three parts. The \textbf{first step} of the analysis is to prove the $\delta$-correctness of the studied BAI strategies.
+
+\begin{restatable}{theorem}{restatepac}\label{thm:pac_gaussian}
+    Regardless of the sampling rule, the stopping rule~(\ref{eq:stopping}) with the threshold $c_{n,\delta}$ and the Chernoff stopping rule with threshold $d_{n,\delta}$ defined in Theorem~\ref{thm:confidence_main} satisfy $        \PP{\tau_{\delta} < \infty \wedge J_{\tau_{\delta}} \neq I^\star} \leq \delta$.
+\end{restatable}
+
+To prove that \TTTS and \TCC allow to reach a $\beta$-optimal sample complexity, one needs to quantify how fast the measurement effort for each arm is concentrating to its corresponding optimal weight. For this purpose,  we introduce the random variable
+\[
+    T_{\beta}^\epsilon \eqdef \inf \left\{ N\in\NN: \max_{i\in\cA} \vert T_{n,i}/n-\omega_i^\beta \vert \leq \epsilon, \forall n \geq N \right\}.
+\]
+The \textbf{second step} of our analysis is a sufficient condition for $\beta$-optimality, stated in Lemma~\ref{lemma:confidence}. Its proof is given in Appendix~\ref{app:t3c.confidence}. The same result was proven for the Chernoff stopping rule by \cite{qin2017ttei}.
+
+\begin{restatable}{lemma}{restatefixedconfidence}\label{lemma:confidence}
+    Let $\delta,\beta\in (0,1)$. For any sampling rule which satisfies $\EE{T_{\beta}^\epsilon} < \infty$ for all $\epsilon > 0$, we have
+    \[
+        \limsup_{\delta\rightarrow{0}} \frac{\EE{\tau_{\delta}}}{\log(1/\delta)} \leq \frac{1}{\Gamma_{\beta}^\star},
+    \]
+    if the sampling rule is coupled with stopping rule~(\ref{eq:stopping}), 
+\end{restatable}
+
+Finally, it remains to show that \TTTS and \TCC meet the sufficient condition, and therefore the \textbf{last step}, which is the core component and the most technical part our analysis, consists of showing the following.
+
+\begin{theorem}\label{thm:sufficient_condition}
+    Under \TTTS or \TCC, $\EE{T_{\beta}^\epsilon} < +\infty$.
+\end{theorem}
+
+%Theorem~\ref{thm:confidence_main} is then straightforward combining the previous three steps. 
+
+In the rest of this section, we prove Theorem~\ref{thm:pac_gaussian} and sketch the proof of Theorem~\ref{thm:sufficient_condition}. But we first highlight some important ingredients for these proofs.
+
+\subsection{Core ingredients}
+
+Our analysis hinges on properties of the Gaussian posteriors, in particular on the following tails bounds, which follow from Lemma 1 of \cite{qin2017ttei}.
+
+\begin{lemma}\label{lemma:gaussiantails}
+For any $i,j\in\cA$, if $\mu_{n,i}\leq \mu_{n,j}$
+{\small
+\begin{flalign}
+    \Pi_n\left[\theta_i\geq \theta_j\right] &\leq \frac{1}{2} \expp{-\frac{\left( \mu_{n,j}-\mu_{n,i} \right)^2}{2\sigma_{n,i,j}^2}},\label{gaussian_upper}\\
+    \Pi_n\left[\theta_i\geq\theta_j\right] &\geq \frac{1}{\sqrt{2\pi}} \exp \left\{-\frac{\left(\mu_{n,j}-\mu_{n,i} +  \sigma_{n,i,j}\right)^2}{2\sigma_{n,i,j}^2}\right\}, \label{gaussian_lower}
+\end{flalign}
+}%
+ %\begin{eqnarray}
+ %     \Pi_n\left[\theta_i\geq \theta_j\right]\!\!\!\! &\leq & \!\!\!\!\frac{1}{2} \expp{\!-\frac{\left( \mu_{n,j}\!-\mu_{n,i} \right)^2}{2\sigma_{n,i,j}^2}\!},\label{gaussian_upper}\\
+ %     \Pi_n\left[\theta_i\geq\theta_j\right]\!\!\!\! &\geq& \!\!\!\!\frac{1}{\sqrt{2\pi}}\! \exp\! \left\{\!-\frac{\left(\mu_{n,j}\!-\mu_{n,i}\! + \! \sigma_{n,i,j}\right)^2}{2\sigma_{n,i,j}^2}\!\!\right\}, \label{gaussian_lower} \hspace{0.2cm}
+ %\end{eqnarray}
+where $\sigma_{n,i,j}^2 \eqdef \sigma^2/T_{n,i} + \sigma^2/T_{n,j}$.
+\end{lemma}
+
+This lemma is crucial to control $a_{n,i}$ and $\psi_{n,i}$, the optimal action and selection probabilities. 
+
+\subsection{Proof of Theorem~\ref{thm:pac_gaussian}} \label{subsec:proofPAC}
+
+We upper bound the desired probability as follows
+\begin{flalign*}
+&\PP{\tau_{\delta} < \infty \wedge J_{\tau_{\delta}} \neq I^\star}  \leq  \sum_{i\neq I^\star} \PP{\exists n \in \NN : a_{n,i} > c_{n,\delta}} \\
+&\leq  \sum_{i\neq I^\star}\!\PP{\exists n \in \NN : \Pi_n(\theta_i \geq \theta_{I_\star}) > c_{n,\delta}, \mu_{n,I^\star} \!\leq \mu_{n,i}}\\
+&\leq  \sum_{i\neq I^\star}\!\PP{\exists n \in \NN : 1-c_{n,\delta} > \Pi_n(\theta_{I^\star}\!\! > \theta_i), \mu_{n,I^\star} \!\leq \mu_{n,i}}.
+\end{flalign*}
+
+The second step uses the fact that as $c_{n,\delta}\geq 1/2$, a necessary condition for $\Pi_n(\theta_i \geq \theta_{I_\star}) \geq c_{n,\delta}$ is that $\mu_{n,i} \geq \mu_{n,I_\star}$. Now using the lower bound \eqref{gaussian_lower}, if $ \mu_{n,I^\star}\leq \mu_{n,i}$, the inequality  $1-c_{n,\delta} > \Pi_n(\theta_{I^\star} > \theta_i)$  implies
+\[
+    \displaystyle \frac{(\mu_{n,i}-\mu_{n,I^\star}\!)^2}{2\sigma_{n,i,I^\star}^2} \! \geq \! \left(\sqrt{\ln{\frac{1}{\sqrt{2\pi}(1-c_{n,\delta})}}}\! - \frac{1}{\sqrt{2}}\! \right)^2 = d_{n,\delta},
+\]
+where the equality follows from the expression of $c_{n,\delta}$ as function of $d_{n,\delta}$. Hence to conclude the proof it remains to check that 
+\begin{flalign}\label{ToProveDef}
+   \PP{\exists n \! \in \!\NN: \!\mu_{n,i} \geq \mu_{n,I^\star}\!,\!\frac{(\mu_{n,i}\!-\!\mu_{n,I^\star}\!)^2}{2\sigma_{n,i,I^\star}^2} \! \geq \! d_{n,\delta}}\! \leq \!\frac{\delta}{K\!-\!1}.\!\!
+\end{flalign}
+% {\small
+% \begin{flalign}
+%     &\PP{\exists n \in \NN: \mu_{n,i} \geq \mu_{n,I^\star},\frac{(\mu_{n,i}-\mu_{n,I^\star})^2}{2\sigma_{n,i,I^\star}^2}  \geq d_{n,\delta}}\notag\\
+%     &\leq \frac{\delta}{K-1}.\label{ToProveDef}
+% \end{flalign}
+% }%
+To prove this, we observe that for $\mu_{n,i} \geq \mu_{n,I^\star}$, 
+%\begin{small}
+%\begin{eqnarray*}\frac{(\mu_{n,i}-\mu_{n,I^\star}\!)^2}{2\sigma_{n,i,I^\star}^2}\!\!\!\! &=&\!\!\!\!
+%    \inf_{\theta_i<\theta_{I^\star}} T_{n,i}d(\mu_{n,i};\theta_i) + T_{n,I^\star}d(\mu_{n,I^\star}\!;\theta_{I^\star}\!)\\
+%    &\leq &
+%    T_{n,i}d(\mu_{n,i};\mu_i) + T_{n,I^\star}d(\mu_{n,I^\star}\!;\mu_{I^\star}\!).
+%\end{eqnarray*}
+%\end{small}
+\begin{align*}
+\frac{(\mu_{n,i}-\mu_{n,I^\star}\!)^2}{2\sigma_{n,i,I^\star}^2} &= \inf_{\theta_i<\theta_{I^\star}} T_{n,i}d(\mu_{n,i};\theta_i) + T_{n,I^\star}d(\mu_{n,I^\star}\!;\theta_{I^\star}\!)\\
+&\leq T_{n,i}d(\mu_{n,i};\mu_i) + T_{n,I^\star}d(\mu_{n,I^\star}\!;\mu_{I^\star}\!).
+\end{align*}
+
+Corollary 10 of~\cite{kaufmann2018mixture} then allows us to upper bound the probability
+\[
+    \PP{\exists n \in \NN: T_{n,i}d(\mu_{n,i};\mu_i) + T_{n,I^\star}d(\mu_{n,I^\star},\mu_{I^\star}) \geq d_{n,\delta}} 
+\]
+by $\delta/(K-1)$ for the choice of threshold given in \eqref{def:thresholdD},
+which completes the proof that the stopping rule \eqref{eq:stopping} is $\delta$-correct. The fact that the Chernoff stopping rule with the above threshold $d_{n,\delta}$ given above is $\delta$-correct straightforwardly follows from \eqref{ToProveDef}.  
+
+% One may notice that at the end, the above analysis brings us back to the Chernoff stopping rule by bounding the GLR term. It is hence easy to show that Theorem~\ref{thm:pac_gaussian} is also correct when we bind \TTTS or \TCC with the common Chernoff stopping rule.
+% 
+% Note that the present analysis actually endorses the general use of Chernoff stopping rule in practice. In fact, the advantage of stopping rule~(\ref{eq:stopping}) over Chernoff stopping rule is only up to a constant factor in theory. However, a huge computation burden is incurred while computing numerically the optimal action probability presented in our stopping rule.
+
+\subsection{Sketch of the proof of Theorem~\ref{thm:sufficient_condition}}
+
+We present a unified proof sketch of Theorem~\ref{thm:sufficient_condition} for \TTTS and \TCC. While the two analyses follow the same steps, some of the lemmas given below have different proofs for \TTTS and \TCC, which can be found in Appendix~\ref{app:confidence_ttts} and Appendix~\ref{app:confidence_t3c} respectively.
+
+We first state two important concentration results, that hold under any sampling rule. 
+
+\begin{restatable}{lemma}{restatewone}[Lemma 5 of~\citealt{qin2017ttei}]\label{lemma:means}
+    There exists a random variable $W_1$, such that for all $i\in\cA$,
+    \[
+        \forall n\in\NN, \quad |\mu_{n,i} - \mu_{i}| \leq \sigma W_1 \sqrt{\frac{\log(e+T_{n,i})}{1+T_{n,i}}} \text{ a.s.},
+    \]
+    and $\EE{e^{\lambda W_1}} < \infty$ for all $\lambda > 0$.
+\end{restatable}
+
+\begin{restatable}{lemma}{restatewtwo}\label{lemma:link}
+%\begin{enumerate}
+%    \item For all $\delta \in (0,1]$,
+%        \begin{align*}
+%            &\PP{\forall n, \left|\frac{T_{n,i}-\Psi_{n,i}}{n}\right| \leq \sqrt{\frac{2\left(1 + \frac{1}{n}\right)}{n}\ln\left(\frac{\sqrt{1+n}}{\delta}\right)}} \\
+%            &\geq 1 - \delta.
+%        \end{align*}
+There exists a random variable $W_2$, such that for all $i\in\cA$,
+    \[
+        \forall n\in\NN, |T_{n,i}-\Psi_{n,i}| \leq W_2\sqrt{(n+1)\log(e^2+n)} \text{ a.s.},
+    \]
+and $\EE{e^{\lambda W_2}} < \infty$ for any $\lambda > 0$.
+%\end{enumerate}
+\end{restatable}
+
+Lemma~\ref{lemma:means} controls the concentration of the posterior means towards the true means and Lemma~\ref{lemma:link} establishes that $T_{n,i}$ and $\Psi_{n,i}$ are close. Both results rely on uniform deviation inequalities for martingales.
+%\footnote{Lemma~\ref{lemma:link} is a modified version of Lemma 6 of~\citet{qin2017ttei}. Note that although the original lemma is true for any top-two sampling rules with improper Gaussian priors, it is not directly applicable in this paper since we do not have an explicit expression under \TTTS or \TCC for $\beta_{\min}$ that is defined as $\min\{\beta,1-\beta\}$.}
+
+
+Our analysis uses the same principle as that of \TTEI: We establish that $T_\beta^\epsilon$ is upper bounded by some random variable $N$ which is a polynomial of the random variables $W_1$ and $W_2$ introduced in the above lemmas, denoted by $\text{Poly}(W_1,W_2) \eqdef \cO(W_1^{c_1}W_2^{c_2})$, where $c_1$ and $c_2$ are two constants (that may depend on arms' means and the constant hidden in the $\cO$). As all exponential moments of $W_1$ and $W_2$ are finite, $N$ has a finite expectation as well, which concludes the proof.
+
+The first step to exhibit such an upper bound $N$ is to establish that every arm is pulled sufficiently often. 
+
+\begin{restatable}{lemma}{restatesuffexploration}\label{lemma:sufficient_exploration}
+Under \TTTS or \TCC, there exists $N_1 = \text{Poly}(W_1,W_2)$ s.t. $\forall n \geq N_1$, for all $i$, $\ T_{n,i} \geq \sqrt{{n}/{K}}$, almost surely.
+\end{restatable}
+
+Due to the randomized nature of \TTTS and \TCC, the proof of Lemma~\ref{lemma:sufficient_exploration} is significantly more involved than for a deterministic rule like \TTEI. Intuitively, the posterior of each arm would be well concentrated once the arm is sufficiently pulled. If the optimal arm is under-sampled, then it would be chosen as the first candidate with large probability. If a sub-optimal arm is under-sampled, then its posterior distribution would possess a relatively wide tail that overlaps with or cover the somehow narrow tails of other overly-sampled arms. The probability of that sub-optimal arm being chosen as the challenger would be large enough then.
+
+%The intuition behind it is the following. We show that if, at one round $n$, there exists a non-empty set of under-sampled arms, then one of the two candidates must be part of this set. Consequently, there must exist some under-sampled arm $i$ whose measurement effort $\psi_{n,i}$ is lower bounded by a positive constant. And then by a sophisticated induction argument, we can show that for an $n$ large enough, the under-sampled arm set would be empty. 
+
+Combining Lemma~\ref{lemma:sufficient_exploration} with Lemma~\ref{lemma:means} straightforwardly leads to the following result.
+
+\begin{restatable}{lemma}{restatemeans}\label{lemma:tracking_means}
+    Under \TTTS or \TCC, fix a constant $\epsilon > 0$, there exists $N_2 = \text{Poly}(1/\epsilon,W_1,W_2)$ s.t. $\forall n \geq N_2$,
+    \[
+        \forall i \in \cA, \quad |\mu_{n,i}-\mu_i| \leq \epsilon.
+    \]
+\end{restatable}
+
+We can then deduce a very nice property about the optimal action probability for sub-optimal arms from the previous two lemmas. Indeed, we can show that
+\[
+    \forall i\neq I^\star, \quad a_{n,i} \leq \expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}}
+\]
+for $n$ larger than some $\text{Poly}(W_1,W_2)$. In the previous inequality, $\Delta_{\text{min}}$ is the smallest mean difference among all the arms.
+
+Plugging this in the expression of $\psi_{n,i}$, one can easily quantify how fast $\psi_{n,I^\star}$ converges to $\beta$, which eventually yields the following result. 
+
+\begin{restatable}{lemma}{restatetrackingbest}\label{lemma:tracking_best}
+    Under \TTTS or \TCC, fix $\epsilon > 0$, then there exists $N_3 = \text{Poly}(1/\epsilon,W_1,W_2)$ s.t. $\forall n \geq N_3$,
+    \[
+        \left|\frac{T_{n,I^\star}}{n} - \beta\right| \leq \epsilon. 
+    \]
+\end{restatable}
+
+The last, more involved, step is to establish that the fraction of measurement allocation to every sub-optimal arm $i$ is indeed similarly close to its optimal proportion $\omega_i^\beta$.
+
+\begin{restatable}{lemma}{restatetrackingother}\label{lemma:tracking_other}
+    Under \TTTS or \TCC, fix a constant $\epsilon > 0$, there exists $N_4 = \text{Poly}(1/\epsilon,W_1,W_2)$ s.t. $\forall n \geq N_4$,
+    \[
+        \forall i\neq I^\star, \quad \left|\frac{T_{n,i}}{n} - \omega_i^\beta\right| \leq \epsilon. 
+    \]
+\end{restatable}
+
+The major step in the proof of Lemma~\ref{lemma:tracking_other} for each sampling rule, is to establish that if some arm is over-sampled, then its probability to be selected is exponentially small. Formally, we show that for $n$ larger than some $\text{Poly}(1/\epsilon,W_1,W_2)$,
+\[
+    \frac{\Psi_{n,i}}{n} \geq \omega_{i}^\beta + \xi \ \ \ \Rightarrow \ \ \ \psi_{n,i} \leq \expp{- f(n,\xi)},
+\]
+for some function $f(n,\xi)$ to be specified for each sampling rule, satisfying $f(n)\geq C_\xi\sqrt{n}$ (a.s.). This result leads to the concentration of $\Psi_{n,i}/n$, thus can be easily converted to the concentration of $T_{n,i}/n$ by Lemma~\ref{lemma:link}.
+
+%\emilie{See if we want to give more details}
+
+Finally, Lemma~\ref{lemma:tracking_best} and Lemma~\ref{lemma:tracking_other} show that $T_\beta^\epsilon$ is upper bounded by $N \eqdef \max(N_3,N_4)$, which yields $\mathbb{E}[{T_\beta^\epsilon}] \leq \max(\EE{N_3},\EE{N_4}) < \infty$.

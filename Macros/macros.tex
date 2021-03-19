@@ -1,0 +1,314 @@
+\newcommand{\itref}[1]{Item~\ref{#1}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\thmref}[1]{Theorem~\ref{#1}}
+\newcommand{\secref}[1]{Section~\ref{#1}}
+\newcommand{\lemref}[1]{Lemma~\ref{#1}}
+\newcommand{\defref}[1]{Definition~\ref{#1}}
+
+\newcommand{\dif}{\,\textnormal{d}}
+\newcommand{\half}{\tfrac{1}{2}}
+\newcommand{\intl}{\int\limits}
+
+% infix minimum (glb) and maximum (lub)
+\newcommand{\glb}{\wedge}
+\newcommand{\lub}{\vee}
+
+\newcommand{\wfrac}[2]{\left.#1\middle/#2\right.}
+
+
+% non-linebreaking := with colon centered on math axis
+\newcommand{\df}{\vcentcolon\nolinebreak\mkern-1.2mu=}
+\newcommand{\fd}{=\nolinebreak\mkern-1.2mu\vcentcolon}
+
+% used to mark the new part of a definition
+\newcommand{\markdef}[1]{\emph{#1}}
+
+
+
+% undo commath's delimiters ...
+% \let\del\undef
+% \let\set\undef
+% \let\sbr\undef
+% \let\intoo\undef
+% \let\intoc\undef
+% \let\intco\undef
+% \let\intcc\undef
+
+% .. and redo delimiters mathtools style, which looks much better
+\DeclarePairedDelimiter\del{\lparen}{\rparen}
+\DeclarePairedDelimiter\card{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\DeclarePairedDelimiter\set{\lbrace}{\rbrace}
+\DeclarePairedDelimiter\sbr{\lbrack}{\rbrack}
+\DeclarePairedDelimiter\tuple{\langle}{\rangle}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+
+\DeclarePairedDelimiter\intoo{\lparen}{\rparen}
+\DeclarePairedDelimiter\intoc{\lparen}{\rbrack}
+\DeclarePairedDelimiter\intco{\lbrack}{\rparen}
+\DeclarePairedDelimiter\intcc{\lbrack}{\rbrack}
+
+
+%\DeclareTripledDelimiter\delc{\lparen}{\vert}{\rparen}{\mathord}
+%\DeclareTripledDelimiter\delcc{\lparen}{\Vert}{\rparen}{\mathord}
+%\DeclareTripledDelimiter\setc{\lbrace}{\vert}{\rbrace}{\mathrel}
+%\DeclareTripledDelimiter\sbrc{\lbrack}{\vert}{\rbrack}{\mathord}
+%\DeclareTripledDelimiter\tuplec{\langle}{\vert}{\rangle}{\mathord}
+%\DeclareTripledDelimiter\wdfrac{\lparen}{/}{\rparen}{\mathord}
+%\newcommand{\wdfrac}[2]{\left(#1\middle/#2\right)}
+% now that they're defined, define abbreviations
+\let\abs=\card
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\arginf}{arg\,inf}
+\DeclareMathOperator*{\sgn}{sgn}
+\DeclareMathOperator{\kl}{\mathrm{kl}}
+%\DeclareMathOperator{\regret}{regret}
+\DeclareMathOperator{\polylog}{polylog}
+\DeclareMathOperator{\logloglog}{logloglog}
+\DeclareMathOperator{\polyloglog}{polyloglog}
+
+\newcommand\ddfrac[2]{\frac{\displaystyle #1}{\displaystyle #2}}
+
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand*\Diff[1]{\mathop{}\!\mathrm{d^#1}}
+\renewcommand{\d}[1]{\ensuremath{\operatorname{d}\!{#1}}}
+\newcommand{\inner}[2]{\langle#1,#2\rangle}
+\renewcommand{\top}{\mathsf{\scriptscriptstyle T}}
+%\DeclareMathOperator{\det}{\mathrm{det}}
+\DeclareMathOperator{\Tr}{\mathrm{Tr}}
+
+%\newcommand{\ceil}[1]{\lceil#1\rceil}
+
+\newcommand{\II}[1]{\mathds{1}_{\left\{#1\right\}}}
+\newcommand{\I}{{\mathds{1}}}
+
+
+%arrows
+\newcommand{\ra}{\rightarrow}
+\newcommand{\lra}{\longrightarrow}
+\newcommand{\mt}{\mapsto}
+\newcommand{\lmt}{\longmapsto}
+
+%function
+\newcommand{\func}[5]{
+	\[
+		\begin{array}{l|rcl}
+			#1: & #2 & \longrightarrow & #3 \\
+				& #4 & \longmapsto & #5 
+		\end{array}
+	\]
+}
+
+%topology
+\newcommand{\interior}[1]{\overset{\circ}{#1}}
+
+%distributions
+\newcommand{\Bernoulli}{\mathrm{Bernoulli}}
+\DeclareMathOperator{\Ber}{\mathcal{B}er}
+
+\newcommand{\specialcell}[2][c]{%
+ \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+%\newtheorem{assumption}{Assumption}
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{definition}{Definition}
+%\newtheorem{corollary}{Corollary}
+%\newtheorem{remark}{Remark}
+
+
+% \newcommand{\R}{I\!\! R}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\realset}{\mathbb{R}}
+
+\newcommand{\NN}{{\mathbb N}}
+\newcommand{\1}{\mathds{1}}
+\newcommand{\bOne}{{\bf 1}}
+\newcommand{\bZero}{{\bf 0}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\EE}[1]{\mathbb{E}\left[#1\right]}
+\newcommand{\EEt}[1]{\mathbb{E}_t\left[#1\right]}
+\newcommand{\EEs}[2]{\mathbb{E}_{#1}\left[#2\right]}
+\newcommand{\EEc}[2]{\mathbb{E}\left[#1\left|#2\right.\right]}
+\newcommand{\EEcc}[2]{\mathbb{E}\left[\left.#1\right|#2\right]}
+\newcommand{\EEcct}[2]{\mathbb{E}_t\left[\left.#1\right|#2\right]}
+\newcommand{\PP}[1]{\mathbb{P}\left[#1\right]}
+\newcommand{\PPt}[1]{\mathbb{P}_t\left[#1\right]}
+\newcommand{\PPc}[2]{\mathbb{P}\left[#1\left|#2\right.\right]}
+\newcommand{\PPcc}[2]{\mathbb{P}\left[\left.#1\right|#2\right]}
+\newcommand{\PPct}[2]{\mathbb{P}_t\left[#1\left|#2\right.\right]}
+\newcommand{\PPcct}[2]{\mathbb{P}_t\left[\left.#1\right|#2\right]}
+%parens
+\newcommand{\pa}[1]{\left(#1\right)}
+\newcommand{\sqpa}[1]{\left[#1\right]}
+\newcommand{\ac}[1]{\left\{#1\right\}}
+\newcommand{\ev}[1]{\left\{#1\right\}}
+
+%tilde shorthands
+\newcommand{\ttheta}{\tilde{\theta}}
+\newcommand{\tw}{\widetilde{w}}
+\newcommand{\tlambda}{\widetilde{\lambda}}
+\newcommand{\tcB}{\widetilde{\cB}}
+\newcommand{\tcL}{\widetilde{\cL}}
+\newcommand{\tW}{\widetilde{W}}
+\newcommand{\tq}{\widetilde{q}}
+\newcommand{\ta}{\widetilde{a}}
+\newcommand{\tb}{\widetilde{b}}
+\newcommand{\tx}{\widetilde{x}}
+\newcommand{\ty}{\widetilde{y}}
+\newcommand{\tU}{\widetilde{U}}
+\newcommand{\tV}{\widetilde{V}}
+\newcommand{\tLambda}{\widetilde{\Lambda}}
+
+%hat shorthands
+\newcommand{\hi}{\hat{\imath}}
+\newcommand{\htheta}{\hat{\theta}}
+\newcommand{\hmu}{\widehat{\mu}}
+\newcommand{\ihat}{\hat \imath}
+\newcommand{\op}[1]{\operatorname{#1}}
+
+%star shorthands
+\newcommand{\istar}{i^\star}
+\newcommand{\Tstar}{T^{\star}}
+\newcommand{\astar}{a^\star}
+\newcommand{\cBstar}{\cB^\star}
+\newcommand{\wstar}{w^\star}
+
+\newcommand{\ind}{\mathds{1}}
+
+\newcommand{\normtwo}[1]{\|#1\|_2}
+\newcommand{\onenorm}[1]{\norm{#1}_1}
+\newcommand{\infnorm}[1]{\norm{#1}_\infty}
+\newcommand{\norminf}[1]{\infnorm{#1}}
+\newcommand{\normm}[1]{\left\lVert#1\right\rVert}
+
+\newcommand{\expp}[1]{\exp\left\{#1\right\}}
+
+\newcommand{\CommaBin}{\mathbin{\raisebox{0.5ex}{,}}}
+\newcommand*{\MyDef}{\mathrm{\tiny def}}
+\newcommand*{\eqdefU}{\ensuremath{\mathop{\overset{\MyDef}{=}}}}% Unscaled version
+%\newcommand*{\eqdef}{\mathop{\overset{\MyDef}{\resizebox{\widthof{\eqdefU}}{\heightof{=}}{=}}}}
+\newcommand*{\eqdef}{\triangleq}
+%\newcommand{\eqdef}{\stackrel{{\rm def}}{=}}
+%\newcommand{\eqdef}{\stackrel{{\rm \tiny def}}{=}}
+\newcommand{\transpose}{^\mathsf{\scriptscriptstyle T}}
+\newcommand{\eqlog}{\overset{.}{=}}
+
+%Calligraphic Shorthands
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cJ}{\mathcal{J}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\calL}{\cL}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\tcO}{\widetilde{\cO}}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\tOO}{\wt{\OO}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\Sw}{\mathcal{S}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\T}{\cT}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cV}{\mathcal{V}}
+\newcommand{\cW}{\mathcal{W}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\X}{\cX}
+\newcommand{\cY}{\mathcal{Y}}
+\newcommand{\cZ}{\mathcal{Z}}
+
+%Bolds Shorthands
+\newcommand{\ba}{{\bf a}}
+\newcommand{\bA}{{\bf A}}
+\newcommand{\bb}{{\bf b}}
+\newcommand{\bB}{{\bf B}}
+\newcommand{\bc}{{\bf c}}
+\newcommand{\bC}{{\bf C}}
+\newcommand{\bD}{{\bf D}}
+\newcommand{\bg}{{\bf g}}
+\newcommand{\bG}{{\bf G}}
+\newcommand{\bI}{{\bf I}}
+\newcommand{\bM}{{\bf M}}
+\newcommand{\bO}{\boldsymbol{O}}
+\newcommand{\bp}{\boldsymbol{p}}
+\newcommand{\bP}{{\bf P}}
+\newcommand{\br}{{\bf r}}
+\newcommand{\bR}{{\bf R}}
+\newcommand{\bQ}{{\bf Q}}
+\newcommand{\be}{{\bf e}}
+\newcommand{\bff}{{\bf f}}
+\newcommand{\bi}{{\bf i}}
+\newcommand{\bk}{{\bf k}}
+\newcommand{\bK}{{\bf K}}
+\newcommand{\bL}{{\bf L}}
+\newcommand{\bs}{{\bf s}}
+\newcommand{\bT}{{\bf T}}
+\newcommand{\bq}{{\bf q}}
+\newcommand{\bu}{{\bf u}}
+\newcommand{\bU}{{\bf U}}
+\newcommand{\bv}{{\bf v}}
+\newcommand{\bV}{{\bf V}}
+\newcommand{\bw}{{\bf w}}
+\newcommand{\bW}{{\bf W}}
+\newcommand{\by}{{\bf y}}
+\newcommand{\bY}{{\bf Y}}
+\newcommand{\bx}{{\bf x}}
+\newcommand{\bX}{{\bf X}}
+\newcommand{\bz}{{\bf z}}
+\newcommand{\bZ}{{\bf Z}}
+
+\newcommand{\eps}{\varepsilon}
+\renewcommand{\epsilon}{\varepsilon}
+\renewcommand{\hat}{\widehat}
+\renewcommand{\tilde}{\widetilde}
+\renewcommand{\bar}{\overline}
+
+\newcommand{\balpha}{{\boldsymbol \alpha}}
+\newcommand{\talpha}{\widetilde{\alpha}}
+\newcommand{\btheta}{{\boldsymbol \theta}}
+\newcommand{\tTheta}{{\widetilde\Theta}}
+\newcommand{\bdelta}{{\boldsymbol \delta}}
+\newcommand{\bDelta}{{\boldsymbol \Delta}}
+\newcommand{\blambda}{{\boldsymbol \lambda}}
+\newcommand{\bLambda}{{\boldsymbol \Lambda}}
+\newcommand{\bsigma}{{\boldsymbol \sigma}}
+\newcommand{\bSigma}{{\boldsymbol \Sigma}}
+\newcommand{\bphi}{{\boldsymbol \phi}}
+\newcommand{\bmu}{{\boldsymbol \mu}}
+\newcommand{\bxi}{{\boldsymbol \xi}}
+\newcommand{\bpsi}{{\boldsymbol \psi}}
+\newcommand{\bomega}{{\boldsymbol \omega}}
+%\newcommand{\bell}{\boldsymbol \ell}
+
+\newcommand{\nothere}[1]{}
+\newcommand{\moveb}{\\ \bigskip}
+\newcommand{\movebb}{\\[-0.25em]}
+\newcommand{\moves}{\\ \smallskip}
+\newcommand{\movess}{\\[-0.5em]}
+\newcommand{\movesss}{\smallskip}
+
+% bandits
+\newcommand{\hloss}{\hat\ell}
+\newcommand{\bloss}{\boldsymbol  \ell}
+\newcommand{\hbl}{\hat{\bloss}}
+\newcommand{\hbL}{\wh{\bL}}
+\newcommand{\wh}{\widehat}
+\newcommand{\ti}{_{t,i}}
+\newcommand{\wt}{\widetilde}

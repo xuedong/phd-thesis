@@ -1,0 +1,214 @@
+%!TEX root = ../Chapter3.tex
+\section{Concentration Results}\label{app:lgc.concentration}
+
+We restate here the Theorem~20.4 (in combination with the Equation~20.10) by \citet{lattimore2018}.
+\begin{theorem}
+\label{th:confidence_beta}
+For all $\eta >0$ and $\delta\in(0,1)$,
+\[
+\P_{\theta}\!\!\left(\exists t\in\NN,\, \frac{1}{2}\normm{\htheta_t-\theta}^2_{V_{N_t}+\eta I_d} \geq \beta(t,\delta)\right) \leq \delta\,,
+ \]
+ where
+ \begin{align*}
+\beta(t,\delta) &\eqdef  \left( \sqrt{\log\!\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\!\left(1+\frac{t L^2}{\eta d} \right)} +\sqrt{\frac{\eta}{2}}M\right)^2\\
+&=\log\!\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\!\left(1+\frac{t L^2}{\eta d} \right) +  M\sqrt{\eta}\sqrt{2\log\!\left( \frac{1}{\delta}\right)+d\log\!\left(1+\frac{t L^2}{\eta d} \right)}+\frac{\eta M^2}{2}\,.
+%\left(\sqrt{\log\!\left(\frac{1}{\delta}\right) + \frac{d}{2}\log\!\left(1+ \frac{tL^2}{\eta d}\right)}   +\sqrt{\frac{\eta}{2}}M\right)^2\,.
+\end{align*}
+\end{theorem}
+
+
+\iffalse
+Let $W_{-1}$ be the negative branch of the Lambert W function and for $x>1$, let $\overline{W}(x) = -W_{-1}(-e^{-x})$. It verifies $\overline{W}(x) \le x + \log(x) + \min\{\frac{1}{2}, \frac{1}{\sqrt{x}}\}$.
+
+Let $\zeta$ be the Riemann function defined by $\zeta(x) = \sum_{n=1}^{+\infty}\frac{1}{n^x}$ .
+
+\begin{theorem}\label{thm:maximal_concentration_inequality}
+For all $\alpha>1$ and $\gamma>1$, with probability $1-\delta$, for all $t\in \N$,
+\begin{align*}
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert_{V_t}^2
+&\le \frac{d}{2} \overline{W}\left( 1 + \frac{2}{d}\log \frac{\gamma^{d/2}\zeta(\alpha)^K\prod_{k=1}^K(\log_\gamma(\gamma N_t^k))^\alpha}{\delta} \right)
+\end{align*}
+\end{theorem}
+
+\todo[inline]{That result would be much better if there was no $K$, but only $d$.
+
+TODO: the proof uses $N_t^k \ge 1$. It should be in the hypotheses.}
+
+%Another concentration result:
+%\begin{theorem}
+%Let $L = \max_a \Vert a \Vert$ . With probability $1- \delta$, for all $t\in \N$,
+%\begin{align*}
+%\frac{1}{2}\Vert \theta - \hat{\theta}_t \Vert_{(V_t^{-1} + I_d/t)^{-1}}^2
+%\le \log\frac{1}{\delta} + \frac{d}{2}\log\left( 1 + e\frac{t^2 L^2}{d} \right) + \log(\zeta(\alpha)(1+\log t)^\alpha) \: .
+%\end{align*}
+%\end{theorem}
+%\todo[inline]{TODO proof. Same as the other one, but with $M_0 = \eta I_d$ and grid over that $\eta$ to have $\eta\approx 1/t$}
+
+Another concentration result:
+\begin{theorem}
+Let $A = \sum_{k=1}^K a_k a_k^\top$. Let $L = \max_a \Vert a \Vert$ . With probability $1- \delta$, for all $t\in \N$,
+\begin{align*}
+\frac{1}{2}\Vert \theta - \hat{\theta}_t \Vert_{V_t}^2
+\le (1+\eta)\left(
+	\log\frac{1}{\delta}
+	+ \frac{d}{2}\log\left( 1 + e\frac{t L^2}{d \lambda_{\min}(A) \eta} \right)
+\right) \: .
+\end{align*}
+With probability $1- \delta$, for all $t\in \N$,
+\begin{align*}
+\frac{1}{2}\Vert \theta - \hat{\theta}_t \Vert_{V_t}^2
+\le \frac{d}{2}\overline{W}\left(
+	1 + \frac{2}{d}\log\frac{1}{\delta}
+	+ \log \frac{t e L^2}{d \lambda_{\min}(A) }
+	+ \frac{2}{d}\log(\zeta(\alpha)\log(et)^\alpha)
+ \right) \: .
+\end{align*}
+For all $t\in\N$, with probability $1- \delta$, for all $s\le t$,
+\begin{align*}
+\frac{1}{2}\Vert \theta - \hat{\theta}_s \Vert_{V_s}^2
+\le \frac{d}{2}\overline{W}\left(
+	1 + \frac{2}{d}\log\frac{1}{\delta}
+	+ \log \frac{s e L^2}{d \lambda_{\min}(A) }
+	+ \frac{2}{d}\log\log(et)
+ \right) \: .
+\end{align*}
+\end{theorem}
+\todo[inline]{TODO proof. Take $M_0 = \eta \lambda_{\min}(A) I_d$ and optimize over that $\eta$}
+
+We first prove the following Lemma.
+
+\begin{lemma}\label{lem:concentration}
+For all stopping times $t$, for all positive definite matrices $M_0$, with probability $1- \delta$,
+\begin{align*}
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
+&\le \log\frac{1}{\delta} + \frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert_{(V_t^{-1} + M_0^{-1})^{-1}}^2 + \frac{1}{2} \log \det (I_d + V_t M_0^{-1})
+\end{align*}
+As a consequence, using $\Vert \theta - \hat{\theta}_t \Vert_{(V_t^{-1} + M_0^{-1})^{-1}}^2 \le \Vert \theta - \hat{\theta}_t \Vert_{V_t}^2 \Vert (I + V_t^{1/2} M_0^{-1}V_t^{1/2})^{-1} \Vert$, with probability $1- \delta$,
+\begin{align*}
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
+&\le \frac{1}{1 - \Vert (I + V_t^{1/2} M_0^{-1}V_t^{1/2})^{-1} \Vert}\left( \log\frac{1}{\delta} + \frac{1}{2} \log \det (I_d + V_t M_0^{-1})\right)
+\\
+&= \left( 1 + \frac{1}{\lambda_{\min} (V_t^{1/2} M_0^{-1}V_t^{1/2})}\right) \left( \log\frac{1}{\delta} + \frac{1}{2} \log \det (I_d + V_t M_0^{-1})\right)
+\end{align*}
+\end{lemma}
+
+For a matrix $V_t$ fixed in advance and $\eta>0$, we could take $M_0 = \eta V_t$ in this lemma to obtain
+\begin{align*}
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
+&\le (1+\eta)\left(\log\frac{1}{\delta} + \frac{d}{2} \log (1 + \frac{1}{\eta})\right)
+\end{align*}
+We could then optimize over $\eta>0$. We are however interested in random $V_t$.
+
+\begin{proof}[Proof of Lemma~\ref{lem:concentration}]
+We first prove that for all distributions $\rho_0$, the following quantity $W_t(\rho_0)$ is such that $e^{W_t(\rho_0)}$ a martingale.
+\begin{align*}
+W_t(\rho_0) &= \sup_\rho \left( \int \left[y^\top \sum_{s=1}^t X_s a_s - \sum_{s=1}^t \log \mathbb{E}_{X\sim \theta^\top a_s+\varepsilon}e^{y^\top X a_s} \right] \rho(dy) - \KL(\rho,\rho_0) \right)
+\end{align*}
+
+Indeed
+\begin{align*}
+\mathbb{E}[ e^{W_t(\rho_0)}| \mathcal F_{t-1}]
+&= \mathbb{E}_{|\mathcal F_{t-1}}\exp \sup_\rho \left( \int \left[y^\top \sum_{s=1}^t X_s a_s - \sum_{s=1}^t \log \mathbb{E}_{X\sim \theta^\top a_s+\varepsilon}e^{y^\top X a_s} \right]  \rho(dy) - \KL(\rho,\rho_0) \right)
+\\
+&= \mathbb{E}_{|\mathcal F_{t-1}} \int \exp \left[y^\top \sum_{s=1}^t X_s a_s - \sum_{s=1}^t \log \mathbb{E}_{X\sim \theta^\top a_s+\varepsilon}e^{y^\top X a_s} \right] \rho_0(dy)
+\\
+&=  \int \mathbb{E}_{|\mathcal F_{t-1}} \exp \left[y^\top \sum_{s=1}^t X_s a_s - \sum_{s=1}^t \log \mathbb{E}_{X\sim \theta^\top a_s+\varepsilon}e^{y^\top X a_s} \right] \rho_0(dy)
+\\
+&=  \int \exp \left[y^\top \sum_{s=1}^{t-1} X_s a_s - \sum_{s=1}^{t-1} \log \mathbb{E}_{X\sim \theta^\top a_s+\varepsilon}e^{y^\top X a_s} \right]\mathbb{E}_{|\mathcal F_{t-1}} \exp \left[y^\top  X_t a_t - \log \mathbb{E}_{X\sim \theta^\top a_t+\varepsilon}e^{y^\top X a_t} \right] \rho_0(dy)
+\\
+&=  \int \exp \left[y^\top \sum_{s=1}^{t-1} X_s a_s - \sum_{s=1}^{t-1} \log \mathbb{E}_{X\sim \theta^\top a_s+\varepsilon}e^{y^\top X a_s} \right] \rho_0(dy)
+\\
+&=   \exp \sup_\rho \left(\int\left[y^\top \sum_{s=1}^{t-1} X_s a_s - \sum_{s=1}^{t-1} \log \mathbb{E}_{X\sim \theta^\top a_s+\varepsilon}e^{y^\top X a_s} \right] \rho(dy) - \KL(\rho, \rho_0) \right)
+\\
+&= e^{W_{t-1}(\rho_0)} \: .
+\end{align*}
+
+Similar computations show that $\mathbb{E}[e^{W_1(\rho_0)}] = 1$. We apply Doob's inequality to obtain that for all stopping times $t$, with probability $1- \delta$, $e^{W_{t}(\rho_0)} \le \frac{1}{\delta}$, i.e. for all distributions $\rho$,
+\begin{align*}
+\int \left[y^\top \sum_{s=1}^t X_s a_s - \sum_{s=1}^t \log \mathbb{E}_{X\sim \theta^\top a_s+\varepsilon}e^{y^\top X a_s} \right] \rho(dy)
+\le \log\frac{1}{\delta} + \KL(\rho,\rho_0)
+\end{align*}
+
+In our setting, $\log \mathbb{E}_{X\sim \theta^\top a_s+\varepsilon}e^{y^\top X a_s} = \theta^\top a_s y^\top a_s+\frac{1}{2} (y^\top a_s)^2$ . Hence for all stopping times $t$, with probability $1- \delta$, for all distributions $\rho$,
+\begin{align*}
+\int \left[y^\top \sum_{s=1}^t X_s a_s - \theta^\top V_t y -\frac{1}{2} y^\top V_t y \right] \rho(dy)
+\le \log\frac{1}{\delta} + \KL(\rho,\rho_0)
+\end{align*}
+Let $\hat{\theta}_t = V_t^{-1}\sum_{s=1}^t X_s a_s$.
+\begin{align*}
+\int \left[y^\top V_t (\hat{\theta}_t - \theta) - \frac{1}{2} y^\top V_t y \right] \rho(dy)
+&\le \log\frac{1}{\delta} + \KL(\rho,\rho_0)
+\\
+\Rightarrow \int \left[(z - \theta)^\top V_t (\hat{\theta}_t - \theta) - \frac{1}{2} (z - \theta)^\top V_t (z - \theta) \right] \rho(d(z - \theta))
+&\le \log\frac{1}{\delta} + \KL(\rho,\rho_0)
+\end{align*}
+The fact that this is valid for all $\rho$ is equivalent to the following being true for all $\rho$,
+\begin{align*}
+\int \left[(z - \theta)^\top V_t (\hat{\theta}_t - \theta) - \frac{1}{2} (z - \theta)^\top V_t (z - \theta) \right] \rho(dz)
+&\le \log\frac{1}{\delta} + \KL(\rho,\rho_0)
+\\
+\Leftrightarrow
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
+&\le \int  \frac{1}{2} \Vert y - \hat{\theta}_t \Vert_{V_t}^2  \rho(dy)  + \log\frac{1}{\delta} + \KL(\rho,\rho_0)
+\end{align*}
+
+For a given $\rho_0$, the minimum of the right hand side is
+\begin{align*}
+\inf_\rho \int \frac{1}{2} \Vert y - \hat{\theta}_t \Vert_{V_t}^2  \rho(dy) + \KL(\rho,\rho_0)
+&= - \sup_\rho \left(\mathbb{E}_{y\sim\rho}[\frac{1}{2} \Vert y - \hat{\theta}_t \Vert_{V_t}^2] - \KL(\rho, \rho_0)\right)
+\\
+&= - \log \mathbb{E}_{y \sim \rho_0} e^{- \frac{1}{2} \Vert y - \hat{\theta}_t \Vert_{V_t}^2}
+\end{align*}
+
+We have proved that for all stopping times $t$, with probability $1- \delta$,
+\begin{align*}
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
+&\le \log\frac{1}{\delta} - \log \mathbb{E}_{y \sim \rho_0} e^{- \frac{1}{2} \Vert y - \hat{\theta}_t \Vert_{V_t}^2}
+\end{align*}
+
+For $\rho_0 = \mathcal N(\theta, M_0^{-1})$ , this is
+\begin{align*}
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
+&\le \log\frac{1}{\delta} + \frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert_{(V_t^{-1} + M_0^{-1})^{-1}}^2 + \frac{1}{2} \log \det (I_d + V_t M_0^{-1})
+\end{align*}
+
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:maximal_concentration_inequality}]
+Let $\gamma > 1$, $\alpha > 1$. Let $\zeta$ be the Riemann function defined by $\zeta(x) = \sum_{n=1}^{+\infty}\frac{1}{n^x}$ . For $i\in \N$, let $w_i = \frac{1}{\zeta(\alpha)(1+i)^\alpha}$. For a tuple $I=(i_1,\ldots,i_K)\in \N^K$, let $W_I = \prod_{k=1}^K w_{i_k}$. Note that $\sum_{I \in \N^K} W_I = 1$ .
+
+Let $M_{0,I} = \eta_I \sum_{k=1}^K \gamma^i a_k a_k^\top$ where $\eta_I > 0$ will be defined later.
+
+With probability $1- \delta W_I$,
+\begin{align*}
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
+&\le \log\frac{1}{W_I \delta} + \frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert_{(V_t^{-1} + M_{0,I}^{-1})^{-1}}^2 + \frac{1}{2} \log \det (I_d + V_t M_{0,I}^{-1})
+\end{align*}
+
+With probability $1- \delta$ this is true for all $I \in \N^K$. In particular, it is true for $I=(i_1,\ldots,i_K)$ such that for all $k \in [K]$, $\gamma^{i_k} \le N_t^k < \gamma^{i_k+1}$ . For that $I$, we get that $\eta_I V_t \frac{1}{\gamma} \preceq M_{0,I} \preceq \eta_I V_t$ (where $A\preceq B$ means that $B-A$ is positive semi-definite) and
+\begin{align*}
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
+&\le \log\frac{\zeta(\alpha)^K\prod_{k=1}^K(1+i_k)^\alpha}{\delta} + \frac{1}{2} \frac{\eta_I}{1+\eta_I} \Vert \theta - \hat{\theta}_t \Vert_{V_t}^2 + \frac{d}{2} \log (\gamma(1 + \frac{1}{\eta_I}))
+\\
+\Rightarrow
+\frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
+&\le (1 + \eta_I)\left(\log\frac{\zeta(\alpha)^K\prod_{k=1}^K(1+i_k)^\alpha}{\delta} + \frac{d}{2} \log (\gamma(1 + \frac{1}{\eta_I})) \right)
+\end{align*}
+
+The minimal value of the r.h.s. over $\eta_I$ is
+\begin{align*}
+\frac{d}{2} \overline{W}\left( 1 + \frac{2}{d}\log \frac{\gamma^{d/2}\zeta(\alpha)^K\prod_{k=1}^K(1+i_k)^\alpha}{\delta} \right)
+\end{align*}
+We make that choice for $\eta_I$ and remark that $(1+i_k)^\alpha \le (1+\log_\gamma N_t^k)^\alpha$ to get the result of the theorem.
+
+
+\end{proof}
+
+\begin{lemma}
+For $a>1$, the minimal value over $\eta>0$ of $f(\eta) = (1+\eta)(a+\log(1+1/\eta))$ is $\overline{W}(1+a)$.
+\end{lemma}
+\begin{proof}
+Solve the equation $f'(\eta)=0$ and remark that the point obtained is a minimum.
+\end{proof}
+
+\fi

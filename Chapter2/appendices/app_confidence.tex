@@ -1,0 +1,107 @@
+\section{Proof of Lemma~\ref{lemma:confidence}}\label{app:t3c.confidence}
+
+Finally, it remains to prove Lemma~\ref{lemma:confidence} under the Gaussian case before we can conclude for Theorem~\ref{thm:confidence_main} for \TTTS or \TCC.
+
+\restatefixedconfidence*
+
+For the clarity, we recall the definition of generalized likelihood ratio. For any pair of arms $i, j$, We first define a weighted average of their empirical means,
+\[
+    \hat{\mu}_{n,i,j} \eqdef \frac{T_{n,i}}{T_{n,i}+T_{n,j}} \hat{\mu}_{n,i} + \frac{T_{n,j}}{T_{n,i}+T_{n,j}} \hat{\mu}_{n,j}.
+\]
+And if $\hat{\mu}_{n,i}\geq\hat{\mu}_{n,j}$, then the generalized likelihood ratio $Z_{n,i,j}$ for Gaussian noise distributions has the following analytic expression,
+\[
+    Z_{n,i,j} \eqdef T_{n,i}d(\hat{\mu}_{n,i};\hat{\mu}_{n,i,j}) + T_{n,j}d(\hat{\mu}_{n,j};\hat{\mu}_{n,i,j}).
+\]
+We further define a statistic $Z_n$ as
+\[
+    Z_n \eqdef \max_{i\in\cA}\min_{j\in\cA\backslash\left\{i\right\}} Z_{n,i,j}.
+\]
+
+The following lemma stated by~\citet{qin2017ttei} is needed in our proof.
+
+\begin{lemma}\label{lemma:ttei}
+    For any $\zeta > 0$, there exists $\epsilon$ s.t. $\forall n\geq T_{\beta}^\epsilon$, $Z_n\geq (\Gamma_{\beta}^\star-\zeta)n$.
+\end{lemma}
+
+To prove Lemma~\ref{lemma:confidence}, we need the Gaussian tail inequality (\ref{gaussian_upper}) of Lemma~\ref{lemma:gaussiantails}.
+
+\begin{proof}
+    We know that
+    \begin{align*}
+    \begin{split}
+        1 - a_{n,I^\star} &= \sum_{i\neq I^\star} a_{n,i} \\
+        &\leq \sum_{i\neq I^\star} \Pi_n\left[\theta_i > \theta_{I^\star}\right] \\
+        &= \sum_{i\neq I^\star} \Pi_n\left[\theta_i - \theta_{I^\star} > 0 \right] \\
+        &\leq (K-1)\max_{i\neq I^\star} \Pi_n\left[\theta_i - \theta_{I^\star} > 0 \right].
+    \end{split}
+    \end{align*}
+    
+    We can further rewrite $\Pi_n\left[\theta_i - \theta_{I^\star} > 0 \right]$ as
+    \[
+        \Pi_n\left[\theta_i - \theta_{I^\star} > \mu_{n,i} - \mu_{n,I^\star} + \mu_{n,I^\star} - \mu_{n,i} \right].
+    \]
+    We choose $\epsilon$ sufficiently small such that the empirical best arm $I_n^\star = I^\star$. Then, for all $n \geq T_{\beta}^n$ and for any $i\neq I^\star$, $\mu_{n,I^\star} \geq \mu_{n,i}$. Thus, fix any $\zeta\in (0,\Gamma_{\beta}^\star/2)$ and apply inequality (\ref{gaussian_upper}) of Lemma~\ref{lemma:gaussiantails} with $\mu_{n,I^\star}$ and $\mu_{n,i}$, we have for any $n \geq T_{\beta}^\epsilon$,
+    \begin{align*}
+    \begin{split}
+        1 - a_{n,I^\star} &\leq (K-1)\max_{i\neq I^\star}\frac{1}{2} \expp{-\frac{\left(\mu_{n,I^\star}-\mu_{n,i} \right)^2}{2\sigma_{n,i,I^\star}^2}} \\
+        &= \frac{(K-1)\expp{-Z_n}}{2} \\
+        &\leq \frac{(K-1)\expp{-(\Gamma_{\beta}^\star-\zeta)n}}{2}.
+    \end{split}
+    \end{align*}
+    
+    The last inequality is deduced from Lemma~\ref{lemma:ttei}. By consequence,
+    \[
+        \forall n \geq T_{\beta}^\epsilon, \ln\left(1 - a_{n,I^\star}\right) \leq \ln{\frac{K-1}{2}} - (\Gamma_{\beta}^\star-\zeta)n.
+    \]
+    
+    On the other hand, we have for any $n$,
+    \[
+        1 - c_{n,\delta} = \ddfrac{\delta}{2n(K-1)\sqrt{2\pi e}\expp{\sqrt{2\ln{\frac{2n(K-1)}{\delta}}}}}.
+    \]
+    Thus, there exists a deterministic time $N$ s.t. $\forall n\geq N$,
+    \begin{align*}
+    \begin{split}
+        \ln\left(1 - c_{n,\delta}\right) &= \ln{\frac{\delta}{(K-1)\sqrt{8\pi e}}} - \ln{n} - \sqrt{2\ln{\frac{2n(K-1)}{\delta}}} \\
+        &\geq \ln{\frac{\delta}{2(K-1)\sqrt{2\pi e}}} - \zeta n.
+    \end{split}
+    \end{align*}
+    
+    Let $C_3 \eqdef (K-1)^2\sqrt{2\pi e}$, we have for any $n \geq N_0 \eqdef T_{\beta}^\epsilon + N$,
+    \begin{equation}\label{eq:intermediate}
+        \ln\left(1 - a_{n,I^\star}\right) - \ln\left(1 - c_{n,\delta}\right) \leq \ln{\frac{C_3}{\delta}} - (\Gamma_{\beta}^\star-2\zeta)n,
+    \end{equation}
+    and it is clear that $\EE{N_0}<\infty$.
+    
+    Let us consider the following two cases:
+    \paragraph{Case 1}
+    There exists $n\in \left[1,N_0\right]$ s.t. $a_{n,I^\star} \geq c_{n,\delta}$, then by definition,
+    \[
+        \tau_{\delta} \leq n \leq N_1.
+    \]
+    \paragraph{Case 2}
+    For any $n\in \left[1,N_0\right]$, we have $a_{n,I^\star} < c_{n,\delta}$, then $\tau_{\delta} \geq N_0+1$, thus by Equation~\ref{eq:intermediate},
+    \begin{align*}
+    \begin{split}
+        0 &\leq \ln\left(1 - a_{\tau_{\delta}-1,I^\star}\right) - \ln\left(1 - c_{\tau_{\delta}-1,\delta}\right) \\
+        &\leq \ln{\frac{C_3}{\delta}} - (\Gamma_{\beta}^\star-2\zeta)(\tau_{\delta}-1),
+    \end{split}
+    \end{align*}
+    and we obtain
+    \[
+        \tau_{\delta} \leq \frac{\ln(C_3/\delta)}{\Gamma_{\beta}^\star-2\zeta}+1.
+    \]
+    
+    Combining the two cases, and we have for any $\zeta\in (0,\Gamma_{\beta}^\star/2)$,
+    \begin{align*}
+    \begin{split}
+        \tau_{\delta} &\leq \max\left\{ N_0,\frac{\ln(C_3/\delta)}{\Gamma_{\beta}^\star-2\zeta}+1 \right\} \\
+        &\leq N_0+1+\frac{\ln(C_3)}{\Gamma_{\beta}^\star-2\zeta}+\frac{\ln(1/\delta)}{\Gamma_{\beta}^\star-2\zeta}.
+    \end{split}
+    \end{align*}
+    
+    Since $\EE{N_1}<\infty$, therefore
+    \[
+        \limsup_{\delta}\frac{\EE{\tau_{\delta}}}{\log(1/\delta)} \leq \frac{1}{\Gamma_{\beta}^\star-2\zeta}, \forall\zeta\in (0,\Gamma_{\beta}^\star/2),
+    \]
+    which concludes the proof.
+\end{proof}

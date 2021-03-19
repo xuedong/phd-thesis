@@ -1,0 +1,64 @@
+% !TEX root = ../Chapter4.tex
+\section{Smoothness Assumptions for Black-Box Optimization}\label{sec:gpo.pre}
+
+%We introduce notions and assumptions related to our instantiation of \POO.
+%\subsection{Problem formulation of black-box optimization}
+Let $\mathcal{X}$ be a measurable space. Our goal is to find the maximum of an unknown noisy function $f:\mathcal{X}\rightarrow\mathbb{R}$ of which the cost of evaluation is high, given a total budget of $n$ evaluations. At each round~$t$, a learner selects a point $x_t\in\mathcal{X}$ and observes a reward $r_t\triangleq f(x_t)+\epsilon_t$, bounded by $[0,1]$, from the environment where the noise $\epsilon_t$ is assumed to be independent from previous observations and such that $\mathbb{E}[\epsilon_t|x_t] = 0$.
+%\footnote{our analysis can be easily extended to cover centered sub-Gaussian noise}.
+After~$n$ evaluations, the algorithm outputs a guess for the maximizer, denoted by $x(n)$. We assume that there exists at least one $x^\star \in \mathcal{X}$ s.t.\,$f(x^\star) \triangleq \sup_{x\in\mathcal{X}} f(x)$, denoted by $f^\star$ in the following. We measure the performance by the \emph{simple regret}, also called the \textit{optimization error},
+\[
+	S_n \triangleq f^\star - f(x(n)).
+\]
+Another related notion is the cumulative regret, defined as
+\[
+	R_n \triangleq nf^\star - \sum_{t=1}^n f(x_t).
+\]
+As observed by~\cite{bubeck2009pure}, a good cumulative regret naturally implies a good simple regret: If we  recommend $x(n)$ according to the distribution of previous plays, we immediately get $\mathbb{E}[S_n]=\mathbb{E}[R_n]/n$.
+
+\subsection{Covering tree that guides the optimization}
+
+Hierarchical bandits rely on the existence of hierarchical partitioning $\mathcal{P}\triangleq\{\mathcal{P}_{h,i}\}_{h,i}$ defined recursively, where
+\[
+	\mathcal{P}_{0,1} = \mathcal{X},  \ \ \ \
+	\mathcal{P}_{h,i} = \bigcup_{j=0}^{K-1} \mathcal{P}_{h+1,Ki-j}.
+\]
+Such a partition can be naturally represented by a tree, where $K$ denotes the maximum number of children of a node in that tree. Many of known algorithms depend on a metric/dissimilarity over the search space to define the regularity assumptions that link the partitioning to some near-optimality dimension, that is independent of the partitioning. However, this was shown to be artificial~\citep{grill2015poo}, since (i) the metric is not fully exploited by the algorithms and (ii) the notion of near-optimality dimension independent of partitioning is ill-defined.
+Hence, it is natural to make smoothness assumptions directly related only to the partitioning.
+
+We now present \emph{the only regularity assumption} on the target function $f$ that is expressed in terms of the partitioning $\cP$. We stress again that requiring only local smoothness assumptions is an improvement since (i) it covers a larger class of functions, (ii) it only constrains~$f$ along the optimal path of the covering tree which is a plausible property in an optimization scenario, and (iii) shows that the optimization is actually easier than it was previously believed.
+\begin{assumption}[local smoothness w.r.t.\,$\cP$]\label{ass1}
+For $x^\star$ be a global maximizer, we denote by $i_h^\star$ be the index of the only cell at depth~$h$ that contains $x^\star$.
+Then, there exist a global maximizer $x^\star$ and two constants $\nu > 0,$ $\rho\in (0,1)$ s.t.,
+\[
+	\forall h\geq 0, \forall x\in\mathcal{P}_{h,i_h^\star}, \ \  f(x)\geq f^\star - \nu\rho^h.
+\]
+\end{assumption}
+Note that this assumption is the same as the one of~\cite{grill2015poo}. Multiple maximizers may exist, but this assumption  needs to be satisfied only by one of them.
+
+As first observed by~\cite{auer2007improved}, the difficulty of a GO  should depend on the size of near-optimal regions and on how fast they shrink. \citet{auer2007improved} use a margin condition that quantifies this difficulty by the volume of near-optimal regions. In this work, we use a similar notion of near-optimality dimension instead. This notion is directly related to the partitioning.
+%\begin{definition}[near-optimality dimension w.r.t.\,$\cP$]\label{defNearOpt} We define the near-optimality dimension of~f with respect to \,$\cP$ as
+%\[
+%	d(\nu,\rho) \triangleq \inf\{d'\in\mathbb{R}^+ : \exists C > 0,\forall h \geq 0, \mathcal{N}_h(3\nu\rho^h) \leq C\rho^{-d'h}\},\footnote{This definition is slightly different from the original \POO paper, where a coefficient 3 is present instead of 2 due to a technical detail.}
+%\]
+%where $\mathcal{N}_h(\epsilon)$ is the number of cells $\mathcal{P}_{h,i}$ s.t.\,$\sup_{x\in\mathcal{P}_{h,i}}f(x) \geq f^\star - \epsilon$.
+%\end{definition}
+%$\mathcal{N}_h(3\nu\rho^h)$ can be thought as the number of cells that any algorithm needs to sample in order to find the maximum. A smaller $d(\nu,\rho)$ implies an easier optimization problem. In addition, we define a set $\cC$ depending on $\nu$ and $\rho$,
+%\[
+%	\cC(\nu,\rho) \eqdef \left\{C>0: \forall h \geq 0, \mathcal{N}_h(3\nu\rho^h) \leq C\rho^{-d(\nu,\rho)h} \right\}\!,
+%\]
+%and we let $C(\nu,\rho) \eqdef \inf\cC(\nu,\rho)$.
+
+\begin{definition}[near-optimality dimension w.r.t.\,$\cP$]\label{defNearOpt} 
+For any $\nu > 0$, $C>1$, and $\rho \in (0,1)$, we define the near-optimality dimension of~f with respect to \,$\cP$ as
+\[
+	d(\nu,C, \rho) \triangleq \inf\left\{d'\in\mathbb{R}^+ : \forall h \geq 0, \mathcal{N}_h(3\nu\rho^h) \leq C\rho^{-d'h}\right\}\!\CommaBin\!\footnote{This definition is slightly different from the original \POO paper, where a coefficient 3 is present instead of 2 due to a technical detail.}
+\]
+where $\mathcal{N}_h(\epsilon)$ is the number of cells $\mathcal{P}_{h,i}$ such that $\sup_{x\in\mathcal{P}_{h,i}}f(x) \geq f^\star - \epsilon$.
+\end{definition}
+$\mathcal{N}_h(3\nu\rho^h)$ can be thought as the number of cells that any algorithm needs to sample in order to find the maximum. A smaller $d(\nu,C,\rho)$ implies an easier optimization problem.
+% In addition, we define a set $\cC$ depending on $\nu$ and $\rho$,
+%\[
+%	\cC(\nu,\rho) \eqdef \left\{C>0: \forall h \geq 0, \mathcal{N}_h(3\nu\rho^h) \leq C\rho^{-d(\nu,\rho)h} \right\}\!,
+%\]
+%and we let $C(\nu,\rho) \eqdef \inf\cC(\nu,\rho)$.
+

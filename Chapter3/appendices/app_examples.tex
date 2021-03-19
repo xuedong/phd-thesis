@@ -1,0 +1,161 @@
+%!TEX root = ../Chapter3.tex
+\section{Examples}\label{app:lgc.examples}
+
+We gather in this Appendix several pure exploration problems in linear bandits. We first state a useful lemma.
+
+\begin{lemma}\label{lem:lagrange_alternative}
+For $\theta, \lambda \in \R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$, $y\in\R^d\,$, $x\in\R$ then
+\[
+\inf_{\lambda:\ \langle \lambda,y\rangle \geq x} \frac{\normm{\theta-\lambda}^2_{V_w}}{2} = \begin{cases}
+\frac{(x - \langle\theta,y\rangle)^2}{2 \normm{y}_{V_w^{-1}}^2} &\text{if } x \geq \langle\theta,y\rangle \\
+0 &\text{otherwise}
+\end{cases}\,.
+\]
+\end{lemma}
+\begin{proof}
+We will consider the Lagrangian of the problem. We have
+\begin{align*}
+  \inf_{\lambda:\ \langle \lambda,y \rangle \geq x} \frac{\normm{\theta-\lambda}^2_{V_w}}{2}
+  &= \sup_{\alpha \geq 0}\inf_{\lambda \in \R^d} \frac{\normm{\theta-\lambda}^2_{V_w}}{2}+ \alpha (x-\langle\lambda,y\rangle)\\
+  &=  \sup_{\alpha \geq 0} \alpha (x-\langle\theta,y\rangle) - \alpha^2 \frac{\normm{y}^2_{V_w^{-1}}}{2}\\
+  &= \begin{cases}
+  \frac{(x - \langle\lambda,y\rangle)^2}{2 \normm{y}_{V_w^{-1}}^2} &\text{if } x \geq \langle\theta,y\rangle \\
+  0 &\text{else}
+  \end{cases}\,,
+\end{align*}
+where in the first inequality the infimum is reached at $\lambda = \theta + \alpha V_w^{-1} y$ and in the last equality the supremum is reached at $\alpha = (x- \langle\theta,y\rangle)/\normm{y}_{V_w^{-1}}^2$ if $x \geq \langle\theta,y\rangle$ and at $\alpha = 0$ else.
+\end{proof}
+
+\subsection{Best-arm identification}\label{app:lgc.examples.bai}
+
+In this example the goal is to identify the arm with the highest mean. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{a\in\cA} \langle\theta,a\rangle|>1\}$, the set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
+\begin{lemma}
+\label{lem:complexity_bai}
+For all $\theta\in \cM$,
+\[
+\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{V_w^{-1}}^2}\,,
+\]
+and
+\[
+\Tstar(\theta) = \min_{w\in\Sigma_A} \max_{a\neq \astar(\theta)} \frac{2\normm{\astar(\theta)-a}_{V_w^{-1}}^2}{\big\langle \theta, \astar(\theta)-a\big\rangle^2}\,.
+\]
+\end{lemma}
+\begin{proof}
+Recall that the characteristic time is given by
+\[
+\Tstar(\theta)^{-1} = \max_{w \in \Delta_A} \inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{V_w}^2}{2}
+\]
+We just express the set $\neg \astar(\theta)$ as a union of convex sets then compute the infimum for each ones. Using Lemma~\ref{lem:lagrange_alternative}, it yields
+\begin{align*}
+  \Tstar(\theta)^{-1} &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \inf_{\lambda: \langle\lambda,a\rangle > \langle\lambda,\astar(\theta)\rangle} \frac{\normm{\theta - \lambda}_{V_w}^2}{2}\\
+  &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{V_w^{-1}}^2}\,.
+\end{align*}
+The formula for $\Tstar(\theta)$ is then straightforward given the one for  $\Tstar(\theta)^{-1}$.
+
+\end{proof}
+In fact the characteristic time is just a particular case of optimal transductive design. Indeed if we set
+\[
+\cBstar(\theta) \eqdef \left\{ \frac{1}{\left|\big\langle \theta, \astar(\theta)-a\big\rangle\right|}\big(\astar(\theta)- a\big): a\in\cA/\big\{\astar(\theta)\big\}  \right\}\,,
+\]
+then we have $\Tstar(\theta) = 2 \cA\cBstar(\theta)$ where
+\[
+\cA\cBstar(\theta) \eqdef  \min_{w\in\Sigma_A} \max_{b\in \cBstar} \normm{b}_{V_w^{-1}}^2\,.
+\]
+
+\paragraph{Best response}
+
+
+\subsubsection{Bounded BAI}
+\label{app:bounded_bai}
+One straightforward extension of this setting is to consider the \emph{bounded} BAI. In this case, the set of parameters is $\cM=\{\theta \in \R^d:\ |\argmax_{a\in\cA} \langle\theta,a\rangle|=1 \text{ and } \normm{\theta}\leq M\}$ for some $M>0$. The set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
+This additional assumption reduces the characteristic time to
+\[
+\Tstar_b(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \inf_{\substack{\langle \lambda,a-\astar(\theta)\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 \,.
+\]
+But the best response is less easy to compute, in particular there is no closed formula as in BAI, see Lemma~\ref{lem:lagrange_bounded_BAI}.
+\begin{lemma}
+  \label{lem:lagrange_bounded_BAI}
+For $\theta, \lambda \in \R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$,
+\[
+\inf_{\substack{\langle \lambda,a-\astar(\theta)\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 = \sup_{\gamma\geq 0} \frac{\max\left(\langle \theta, (V_w+\gamma I_d)^{-1} V_w (\astar(\theta)-a)\rangle,0\right)^2 }{2\normm{\astar(\theta)-a}^2_{(V_w+\gamma I_d)^{-1}}}- \frac{\gamma}{2}\left(\normm{\theta}^2-M^2\right)\,,
+\]
+and if $\gamma$ attains the supremum in the right hand term above then
+\[
+\lambda = \theta - \frac{\max\left(\langle \theta, (V_w+\gamma I_d)^{-1} V_w (\astar(\theta)-a)\rangle,0\right)}{\normm{\astar(\theta)-a}^2_{(V_w+\gamma I_d)^{-1}}} (V_w+\gamma I_d)^{-1}(a^\star - a)\,.
+\]
+attains the infimum of left hand term above.
+\end{lemma}
+\begin{proof}
+We set $\astar(\theta) = \astar$. We introduce the Lagrangian
+\[
+ \inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 = \sup_{\gamma\geq 0, \alpha\geq 0} \inf_{\substack{\langle \lambda,a-\astar\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 +\alpha \langle \theta, \astar-a\rangle + \frac{\gamma}{2}\left(\normm{\lambda}^2-M^2 \right)\,.
+\]
+The infimum above is attained for
+\[
+\lambda = \theta - \alpha (V_w + \gamma I_d)^{-1}(\astar-a)\,.
+\]
+Thus the Lagrangian reduces to
+\[
+\inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 = \sup_{\gamma\geq 0, \alpha\geq 0}
+-\frac{\alpha^2}{2} \normm{\astar-a}^2_{V_w+\gamma I_d} + \alpha \langle \theta, (V_w+\gamma I_d)^{-1}V_w (\astar-a)\rangle +\frac{\gamma}{2}\left(\normm{\theta}^2-M^2 \right)\,.
+\]
+The supremum in $\alpha$ is reached for
+\[
+\alpha =\frac{\max\left(\langle \theta, (V_w+\gamma I_d)^{-1} V_w (\astar-a)\rangle,0\right)}{\normm{\astar-a}^2_{(V_w+\gamma I_d)^{-1}}}\,.
+\]
+Using this particular $\alpha$ in the definition of $\lambda$ and in the Lagrangian allows us to conclude.
+\end{proof}
+
+\subsubsection{Transudctive BAI}
+
+
+\subsection{Thresholding bandits}
+\label{app:threshold_bandits}
+In this example the goal is to identify the set of arms whose mean is above a threshold $\iota\in \R$ know by the agent. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\ \exists a\in \cA,\, \langle \theta,a\rangle = \iota\}$, the set of possible answers is $\cI = \cP(\cA)$ the power set of the set of arms and the correct answer is given by $\istar(\theta)=\{a\in\cA:\ \langle \theta,a\rangle \geq \iota\}$.
+ We can also express in this example the characteristic time in a more explicit way.
+\begin{lemma}
+\label{lem:complexity_threshold_bandits}
+For all $\theta\in \cM$,
+\[
+\Tstar(\theta)^{-1} =  \max_{w\in\Sigma_A} \min_{a\in\cA} \frac{\big(\iota -\langle \theta,a\rangle\big)^2}{2 \normm{a}_{V_w^{-1}}^2}\,,
+\]
+and $\Tstar(\theta)= 2\cA\cA(\iota)$, where we defined $\cA(\iota)\eqdef \{ |\iota- \langle\theta,a\rangle|^{-1} a:\ a\in\cA\}$ and
+\[
+\cA\cA(\iota) \eqdef  \min_{w\in\Sigma_A} \max_{a\in\cA(\iota)}\normm{a}_{V_w^{-1}}^2\,.
+\]
+\end{lemma}
+\begin{proof}
+We proceed as in the proof of Lemma~\ref{lem:complexity_bai}. We have using Lemma~\ref{lem:lagrange_alternative},
+\begin{align*}
+  \Tstar(\theta)^{-1} &= \max_{w \in \Delta_A} \min_{a\in\cA} \inf_{\lambda:\ \text{sign}(\iota-\langle\lambda,a\rangle)\langle\lambda,a\rangle > \iota} \frac{\normm{\theta - \lambda}_{V_w}^2}{2}\\
+  &= \max_{w \in \Delta_A} \min_{a\in\cA}  \frac{\big(\iota -\langle \theta,a\rangle\big)^2}{2 \normm{a}_{V_w^{-1}}^2}\,.
+\end{align*}
+\end{proof}
+Note that we recover in this example a weighted version of the G-complexity defined in Section~\ref{sec:lgc.lower_bound}. In particular if $\theta=0$ and $\iota=1$ then
+\[
+\Tstar(\theta) =2\gopt = 2d\,.
+\]
+This makes sens since in this case one should to estimate \emph{uniformly} the mean of each arms.
+
+
+\subsubsection{Transductive thresholding bandits}
+\label{app:transductive_threshold_bandits}
+We can generalize the previous example to any set of arms. Indeed if we fix a finite set of vector $\cB\in\R^d$ the goal is then to identify all the elements $b$ of this set such that $\langle \theta, b \rangle \geq \iota$ for a known threshold $\tau \in \R$. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\ \exists b\in \cB,\, \langle \theta,b\rangle = \iota\}$, the set of possible answers is $\cI = \cP(\cB)$ and the correct answer is given by
+$\istar(\theta)=\{b\in\cB:\ \langle \theta,b\rangle \geq \iota\}$. The characteristic time makes appear, unsurprisingly, in this case, the transductive optimal design \citep{yu2006active}.
+\begin{lemma} For all $\theta \in\cM$,
+  \label{lem:complexity_transductive_threshold_bandits}
+  \[
+  \Tstar(\theta)^{-1} =  \max_{w\in\Sigma_A} \min_{b\in\cB} \frac{\big(\iota -\langle \theta,b\rangle\big)^2}{2 \normm{b}_{V_w^{-1}}^2}\,,
+  \]
+  and $\Tstar(\theta)= 2\cA\cB(\iota)$, where we defined $\cB(\iota)\eqdef \{ |\iota- \langle\theta,b\rangle|^{-1} b:\ b\in\cB\}$ and
+  \[
+  \cA\cB(\iota) \eqdef  \min_{w\in\Sigma_A} \max_{b\in\cB(\iota)}\normm{b}_{V_w^{-1}}^2\,.
+  \]
+\end{lemma}
+\begin{proof}
+  Simple adaptation of the proof of Lemma~\ref{lem:complexity_threshold_bandits}.
+\end{proof}
+Again, in particular, if $\theta=0$ and $\tau=1$ we recover the complexity of the optimal tranductive design
+\[
+\Tstar(\theta)^{-1} = 2 \cA\cB\,.
+\]

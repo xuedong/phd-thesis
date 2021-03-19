@@ -1,0 +1,104 @@
+%!TEX root = ../Chapter3.tex
+\section{Asymptotic Optimality}\label{sec:lgc.lower_bound}
+
+In this section we extend the lower bound of \citet{garivier2016tracknstop}, to hold for \emph{pure exploration in finite-armed linear bandit} problems.
+
+\paragraph{Alternative.}
+For any answer $i\in\cI$ we define \emph{the alternative to i}, denoted by $\neg i$ the set of parameters where the answer $i$ is not correct, i.e.
+$%\[
+\neg i \eqdef \{\theta\in\cM:\ i\neq\istar(\theta)\}\,.
+$%\]
+
+We also define, for any $w\in(\R^+)^A$, the design matrix
+\[V_w \eqdef \sum_{a\in \cA} w^a a a^\top\,.\]
+Further, we define $\normm{x}_V\eqdef \sqrt{x^\top Vx}$ for $x\in\R^d$ and a symmetric positive matrix $V\in\R^{d\times d}$. Note that it is a norm only if $V$ is positive definite. We also denote by $\Sigma_K$ the probability simplex of dimension $K-1$ for all $K\ge 2$.
+
+\paragraph{Lower bound.}
+We have the following non-asymptotic lower bound, proved in Appendix~\ref{app:lgc.lower_bound}, on the sample complexity of any $\delta$-correct algorithm. This bound was already proved by \citet{soare2014linear} for the BAI example.
+\begin{theorem}
+\label{th:lb_genral}
+For all $\delta$-correct algorithms, for all $\theta\in \cM$,
+\begin{equation*}
+  \label{eq:lb_general}
+  \liminf_{\delta\to 0}\frac{\E_\theta[\tau_{\delta}]}{\log(1/\delta)} \geq \Tstar(\theta) \,,
+\end{equation*}
+where the \emph{characteristic time} $\Tstar(\theta)$ is defined by
+\[
+\Tstar(\theta)^{-1} \eqdef \max_{w \in \Sigma_A} \inf_{\lambda\in \neg \istar(\theta)} \frac{1}{2}\normm{\theta - \lambda}_{V_w}^2\,.
+\]
+\end{theorem}
+In particular, we say that a $\delta$-correct algorithm is asymptotically optimal if for all $\theta\in\cM,$
+\[
+\limsup_{\delta\to 0}\frac{\E_\theta[\tau_{\delta}]}{\log(1/\delta)} \leq \Tstar(\theta)\,.
+\]
+As noted in the seminal work of \citet{chernoff1959}, the complexity $\Tstar(\theta)^{-1}$ is the value of a fictitious zero-sum game between the agent choosing an optimal proportion of allocation of pulls $w$ and a second player, the nature, that tries to fool the agent by choosing the most confusing alternative $\lambda$ leading to an incorrect answer.
+%In fact using the Sion's minimax theorem we can rewrite the characteristic times in various ways which will be useful to prove the lower bound of Theorem~\ref{th:lb_genral}.
+
+\paragraph{Minimax theorems.} Using Sion's minimax theorem we can invert the order of the players if we allow nature to play mixed strategies
+\begin{align}
+\Tstar(\theta)^{-1} &= \max_{w \in \Sigma_A} \inf_{\lambda\in \neg \istar(\theta)} \frac{1}{2} \normm{\theta - \lambda}_{V_w}^2 \label{eq:sion} \\
+%&= \max_{w \in \Sigma_A} \inf_{q\in \cP(\neg \istar(\theta))} \frac{1}{2} \E_{\lambda\sim q}\normm{\theta - \lambda}_{V_w}^2\nonumber\\
+&= \inf_{q\in \cP(\neg \istar(\theta))} \max_{a\in\cA}\frac{1}{2}\E_{\lambda\sim q}\normm{\theta - \lambda}_{aa^\top}^2\nonumber\,,
+\end{align}
+where $\cP(\cX)$ denotes the set of probability distributions over the set $\cX$. The annoying part in this formulation of the characteristic time is that the set $\neg \istar(\theta)$ where the nature plays is a priori unknown (as the parameter is unknown to the agent). Indeed, to find an asymptotically optimal algorithm one should somehow solve this minimax game. But it is easy to remove this dependency noting that $\inf_{\lambda\in\neg i}\normm{\theta -\lambda}=0$ for all $i\neq \istar(\theta)$,
+\[
+\Tstar(\theta)^{-1} = \max_{i\in\cI}\max_{w \in \Sigma_A} \inf_{\lambda\in \neg i } \frac{1}{2}\normm{\theta - \lambda}_{V_w}^2\,.
+\]
+Now we can see the characteristic time $\Tstar(\theta)^{-1}$ as the value of an other game where the agent plays a proportion of allocation of pulls $w$ \emph{and} an answer $i$. The agent could also use mixed strategies for the answer which leads to
+\begin{align*}
+\Tstar(\theta)^{-1} &= \max_{\rho\in\Sigma_I}\max_{w \in \Sigma_A}  \frac{1}{2}\sum_{i\in \cI }\inf_{\lambda^i\in\neg i}\rho_i\normm{\theta - \lambda^i}_{V_w}^2\\
+& =\max_{\rho\in\Sigma_I}\max_{w \in \Sigma_A}\inf_{\tlambda\in\prod_i(\neg i)}  \frac{1}{2}\sum_{i\in \cI }\rho_i\normm{\theta - \tlambda^i}_{V_w}^2\,,
+\end{align*}
+where $\prod_{i\in\cI}(\neg i)$ denotes the Cartesian product of the alternative sets $\neg i$. But the function that appears in the value of the new game is not anymore convex in $(w,\rho)$ and Sion's minimax theorem does not apply anymore. We can however convexify the problem by letting the agent to play a distribution $\tw\in\Sigma_{AI}$ over the arm-answer pairs $(a,i)$, see Lemma~\ref{lem:sion_convexify} below proved in Appendix~\ref{app:lgc.lower_bound}.
+\begin{lemma}
+\label{lem:sion_convexify} For all $\theta\in\cM$,
+\begin{align*}
+  \Tstar(\theta)^{-1} &= \max_{\tw \in \Sigma_{AI}} \inf_{\tlambda\in \prod_i (\neg i) }\frac{1}{2} \sum_{(a,i)\in\cA\times\cI}\tw^{a,i}\normm{\theta - \tlambda^i}_{aa^\top}^2\\
+   %&= \max_{\tw \in \Sigma_{AI}}\inf_{\tq\in \prod_i\cP(\neg i) }\!\sum_{(a,i)\in\cA\times\cI}\!\!\!\tw^{a,i}\E_{\lambda^i\sim \tq^i}\normm{\theta - \lambda^i}_{aa^\top}^2\\
+   &= \inf_{\tq\in \prod_i\cP(\neg i) } \frac{1}{2}\max_{(a,i)\in\cA\times\cB}\E_{\tlambda^i\sim \tq^i}\normm{\theta - \tlambda^i}_{aa^\top}^2\,.
+\end{align*}
+\end{lemma}
+Thus in this formulation the characteristic time is the value of a fictitious zero-sum game where the agent plays a distribution $\tw\in\Sigma_{AI}$ over the arm-answer pairs $(a,i)\in\cA\times\cI$ and nature chooses an alternative $\tlambda^i\in\neg i$ for all the answers $i\in\cI$. The algorithm \LGC that we propose in Section~\ref{sec:lgc.game} is based on this formulation of the characteristic time whereas algorithm \LG is based on the formulation of Theorem~\ref{th:lb_genral}.
+
+\paragraph{Best-arm identification complexity.}
+The inverse of the characteristic time of Theorem~\ref{th:lb_genral} specializes to
+\[
+\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{V_w^{-1}}^2}
+\]
+for BAI (see Appendix~\ref{app:lgc.examples.bai} for a proof). It is also possible to explicit the characteristic time
+\[
+\Tstar(\theta) = \min_{w\in\Sigma_A} \max_{a\neq \astar(\theta)} \frac{2\normm{\astar(\theta)-a}_{V_w^{-1}}^2}{\big\langle \theta, \astar(\theta)-a\big\rangle^2}\,.
+\]
+Since the characteristic time involves many problem dependent quantities that are unknown to the agent, previous papers target loose problem-independent upper bounds on the characteristic time. \citet{soare2014linear} (see also \citealt{tao2018alba}, \citealt{fiez2019transductive}) introduce the G-complexity (denoted by $\gopt$) which coincides with the G-optimal design of experimental design theory (see \citealt{pukelsheim2006optimal}) and the $\xyopt$-complexity\footnote{This complexity is denoted as $\cX\cY$ by \citet{soare2014linear}.} (denoted by $\xyopt$) inspired by the transductive experimental design theory  \citep{yu2006active},
+\begin{align*}
+\gopt &=\min_{w\in\Sigma_A} \max_{a\in\cA} \normm{a}_{V_w^{-1}}^2\,,\\
+\xyopt &=\min_{w\in\Sigma_A} \max_{b\in\cB} \normm{b}_{V_w^{-1}}^2\,,
+\end{align*}
+where $\cB_{\texttt{dir}}\eqdef\{a-a':\ (a,a')\in\cA\times\cA\}$. For the G-optimal complexity we seek for a proportion of pulls $w$ that explores \emph{uniformly} the means of the arms, since the statistical uncertainty for estimating $\langle \theta,a\rangle$ scales roughly with $\normm{a}_{V_w^{-1}}$. In the $\cA\cB$-complexity we try to estimate \emph{uniformly} all the \emph{directions} $a-a'$. On the contrary in this paper we try to maximize directly the characteristic times, that is try to estimate all the \emph{directions} $\astar(\theta) - a$ scaled by the squared gaps $\langle\theta,\astar(\theta)-a\rangle$.
+Note that the characteristic time can also be seen as a particular optimal transductive design. Indeed for $\cBstar \eqdef \left\{ (\astar(\theta)- a)/\left|\big\langle \theta, \astar(\theta)-a\big\rangle\right|: a\in\cA/\big\{\astar(\theta)\big\}  \right\}$, it holds
+\[
+\Tstar(\theta) = 2 \cA\cBstar(\theta) \eqdef 2 \min_{w\in\Sigma_A} \max_{b\in\cBstar(\theta)} \normm{b}_{V_w^{-1}}^2\,.
+\]
+We have the following ordering on the complexities
+\begin{align}\label{eq:complexities}
+\Tstar(\theta) \leq 2 \frac{\xyopt}{\DeltaMin(\theta)^2}\leq 8 \frac{\gopt}{\DeltaMin(\theta)^2} = \frac{8d}{\DeltaMin(\theta)^2}\,\CommaBin
+\end{align}
+where $\DeltaMin = \min_{a\neq\astar(\theta)}\langle\theta,\astar(\theta)-a\rangle$ and  the last equality follows from the Kiefer-Wolfowitz equivalence theorem~\citep{kiefer1959}. Conversely the $\gopt$-complexity and the $\xyopt$-complexity are linked to an \emph{other} pure exploration problem, the thresholding bandits (see Appendix~\ref{app:threshold_bandits}).
+
+\begin{remark}
+In order to compute all these complexities, it is sufficient to solve the following generic optimal transductive design problem: for $\cB$ a finite set of elements in $\R^d$,
+\[
+\cA\cB=\min_{w\in\Sigma_K}\max_{b\in\cB}\normm{b}^2_{V_w^{-1}}\,.
+\]
+When $\cB=\cA$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956algorithm} which possesses convergence guarantees~\citep{atwood1969optimal,ahipasaoglu2008fw}. But in the general case, up to our knowledge, there is no algorithm with the same kind of guarantees. Previous works used an heuristic based on a straightforward adaptation of the aforementioned algorithm for general sets $\cB$ but it seems to not converge on particular instances, see Appendix~\ref{app:lgc.implem}. We instead propose in the same appendix an algorithm based on Saddle point Frank-Wolfe algorithm that seems to converge on the different instances we tested.
+\end{remark}
+
+% TODO:
+% \begin{itemize}
+%   \item compare the three complexity on the problem $\theta = [1,0], a_1 = [1,0 ], a_2 =[1,\epsilon], a_3 = [0,1]$
+%   \item compare also on the same problem
+%   \[
+%   \inf_{\lambda\in \neg \istar(\theta)} \frac{\normm{\theta - \lambda}_{V_w}^2}{2}\,,
+%   \]
+%   for $w = w^\star(\theta), w^G, w^{\cX\cY}$.
+% \end{itemize}

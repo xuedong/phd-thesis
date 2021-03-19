@@ -1,0 +1,321 @@
+\section{Proof of Posterior Convergence for the Bernoulli Bandit}\label{app:posterior_beta}
+
+\subsection{Preliminaries}\label{app:posterior_beta.pre}
+
+We first introduce a crucial Beta tail bound inequality. Let $F^{\text{Beta}}_{a,b}$ denote the cdf of a Beta distribution with parameters $a$ and $b$, and $F^{\text{B}}_{c,d}$ the cdf of a Binomial distribution with parameters $c$ and $d$, then we have the following relationship, often called the `Beta-Binomial trick',
+\begin{align*}
+F^{\text{Beta}}_{a,b}(y) = 1 - F^{\text{B}}_{a+b-1, y} (a-1), 
+\end{align*}
+so that we have
+\begin{align*}
+\PP{X \geq x} = \PP{B_{a+b-1,x}  \leq a-1 } = \PP{B_{a+b-1,1-x} \geq b}.
+\end{align*}
+
+We can bound Binomial tails with Sanov's inequality:
+\begin{align*}
+    \frac{ e^{-n d \left( k / n, x \right)}  }{n+1} \leq \PP{B_{n,x} \geq k} \leq e^{-n d \left( k / n, x \right)},
+\end{align*}
+where the last inequalities hold when $k \geq nx$.
+
+\begin{lemma}\label{lemma:binomial_tail}
+Let $X \sim \cB eta(a, b)$ and $Y\sim \cB eta(c, d)$ with $0 < \frac{a-1}{a+b-1} < \frac{c-1}{c+d-1}$. Then we have $\PP{X > Y} \leq D e^{-C}$ where
+\[
+    C = \inf_{\frac{a-1}{a+b-1} \leq y \leq \frac{c-1}{c+d-1}} C_{a,b}(y)+C_{c,d}(y),
+\]
+and
+\[
+    D = 3 + \min \left( C_{a,b}\left(\frac{c-1}{c+d-1}\right), C_{c,d}\left(\frac{a-1}{a+b-1}\right) \right)\,.
+\]
+\end{lemma}
+Note that this lemma is the Bernoulli version of Lemma~\ref{lemma:gaussiantails}.
+\begin{restatable}{theorem}{restatebernoullilowerbound}\label{thm:bernoulli_lower_bound}
+	Consider the Beta-Bernoulli setting. For $\beta \in (0,1)$, under any allocation rule satisfying 
+	$T_{n, I^\star} / n \rightarrow \omega_{I^\star}^\beta$,
+	\begin{align*}
+	\lim_{n \rightarrow \infty} - \frac{1}{n} \log(1 - a_{n,I^\star}) \leq \Gamma_{\beta}^\star,
+	\end{align*}
+	and under any allocation rule satisfying $T_{n, i} / n \rightarrow \omega_i^\beta$ for each $i \in \cA$,
+	\begin{align*}
+		\lim_{n \rightarrow \infty} - \frac{1}{n} \log(1 - a_{n,I^\star}) = \Gamma_{\beta}^\star.
+	\end{align*}
+\end{restatable}
+
+\begin{proof}
+	Denote again with $\overline{\cI}$ again the set of arms sampled only finitely many times. For $\overline{\cI}$ empty, we thus have $\mu_{\infty, i} \triangleq \lim_{n \rightarrow \infty} \mu_{n,i} = \mu_i$. The posterior variance is
+	\begin{align*}
+	\sigma_{n,i}^2 &= \frac{\alpha_{n,i}\beta_{n,i}}{(\alpha_{n,i}+ \beta_{n,i})^2 (\alpha_{n,i} + \beta_{n,i} + 1)}
+	= \frac{(1 + \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}}) (1 + T_{n,i} - \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}})  }{ (2 + T_{n,i})^2 (2 + T_{n,i} +1)}.
+	\end{align*}
+	We see that when $\overline{\cI}$ is empty, we have $\sigma_{\infty, i}^2 \triangleq \lim_{n \rightarrow \infty} \sigma_{n,i}^2 = 0$, i.e., the posterior is concentrated. 
+	
+\paragraph*{Step 1: A lower bound when some arms are sampled only finitely often.}
+First, note that when $T_{n,i} = 0$ for some $i \in \cA$, the empirical mean for that arm equals the prior mean $\mu_{n,i} = \alpha_{0,i} / (\alpha_{0,i} + \beta_{0,i})$, and the variance is strictly positive:
+\[
+    \sigma^2_{n,i} = (\alpha_{0,i}\beta_{0,i}) / \left( (\alpha_{0,i}+ \beta_{0,i})^2 (\alpha_{0,i} + \beta_{0,i} + 1)\right) > 0\,.
+\] 
+When $\overline{\cI}$ is not empty, then for every $i \in \overline{\cI}$ we have $\sigma_{\infty, i}^2 > 0$, and $a_{\infty, i} \in (0,1)$, implying $a_{\infty, I^\star} < 1$, and thus
+\begin{align*}
+\lim_{n \rightarrow \infty} - \frac{1}{n} \log \left( 1- a_{n,I^\star} \right) = - \frac{1}{n} \log \left( 1- a_{\infty,I^\star} \right) = 0.
+\end{align*}
+
+\paragraph*{Step 2: A lower bound when every arm is sampled infinitely often.}
+	Suppose now that $\overline{\cI}$ is empty, then we have
+	\begin{align*}
+	\max_{i \neq I^\star} \Pi_{n}  (\theta_i \geq \theta_{I^\star} ) \leq 1 - a_{n,I^\star} \leq \sum_{i \neq I^\star} \Pi_{n}(\theta_i \geq \theta_{I^\star}) \leq (k-1) \max_{i \neq I^\star} \Pi_{n}(\theta_i \geq \theta_{I^\star}).
+	\end{align*}
+	Thus, we have $1 - a_{n,I^\star} \leq (k-1) \max_{i \neq I^\star} \Pi_{n}(\theta_i \geq \theta_{I^\star})$ and also $1 - a_{n,I^\star} \doteq \max_{i \neq I^\star} \Pi_{n}(\theta_i \geq \theta_{I^\star})$.	We have 
+	\begin{align*}
+	\Gamma^\star &= \max_{w \in W} \min_{i \neq I^\star} C_i(\omega_{I^\star}, \omega_i),\\
+	\Gamma_{\beta}^\star &= \max_{w \in W;\omega_{I^\star} = \beta} \min_{i \neq I^\star} C_i(\beta, \omega_i), \text{   with}\\
+	C_i(\omega_{I^\star}, \omega_i) &= \min_{x \in \mathbb{R}} \omega_{I^\star} d(\theta_{I^\star} ; x) + \omega_i d(\theta_{i} ; x)
+	= \omega_{I^\star} d(\theta_{I^\star} ; \overline{\theta} ) + \omega_i d(\theta_{i} ; \overline{\theta} ),
+	\end{align*}
+	where $\overline{\theta} \in [ \theta_i, \theta_{I^\star}]$ is the solution to 
+	\begin{align*}
+	A'(\overline{\theta}) = \frac{\omega_{I^\star} A'(\theta_{I^\star}) + \omega_i A'(\theta_i)}{\omega_{I^\star} + \omega_i}.
+	\end{align*}
+Since every arm is sampled infinitely often, when $n$ is large, we have $\mu_{n,I^\star} > \mu_{n,i}$. Define $S_{n,i} \triangleq \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}}$. Recall that the posterior is a Beta distribution with parameters $a_{n,i} = S_{n,i} +1$ and $\beta_{n,i} = T_{n,i} - S_{n,i} + 1$. Let $\tau \in \mathbb{N}$ be such that for every $n \geq \tau$, we have $S_{n, i} / (T_{n,i} + 1) < S_{n, I^\star} / (T_{n,I^\star} + 1)$. For the sake of simplicity, we define for any $i\in\cA$ the interval
+\[
+    I_{i,I^\star}\eqdef \left[ \frac{S_{n,i}}{T_{n,i} + 1},  \frac{S_{n, I^\star}}{T_{n,I^\star} + 1} \right].
+\] 
+Then using Lemma~\ref{lemma:binomial_tail} with $a=S_{n,i}+1, b=T_{n,i}-S_{n,i}+1, c=S_{n,I^\star}+1, d=T_{n,I^\star}-S_{n,I^\star}+1$, we have
+	\begin{align*}
+	\Pi_{n}(\theta_i - \theta_{I^\star} \geq 0) &\leq D \expp{- \inf_{y \in I_{i,I^\star} } C_{S_{n,i}+1,T_{n,i}-S_{n,i}+1}(y)+C_{S_{n,I^\star}+1,T_{n,I^\star}-S_{n,I^\star}+1}(y)}.
+	\end{align*}
+This implies
+	\begin{align*}
+	\frac{1}{n} \log \left( \frac{\Pi_{n}(\theta_i \geq \theta_{I^\star})}{\expp{ - \inf_{y \in I_{i,I^\star} } C_{S_{n,i}+1,T_{n,i}-S_{n,i}+1}(y)+C_{S_{n,I^\star}+1,T_{n,I^\star}-S_{n,I^\star}+1}(y) }} \right) \leq \frac{1}{n} \log(D),
+	\end{align*}
+% \todo[inline]{TODO bound $D$ in terms of $n$, we also have TODO CHECK}
+	which goes to zero as $n$ goes to infinity. Indeed replacing $a,b,c,d$ by their values in the definition of $D$ we get
+	\begin{align*}
+	    D&\leq 3 + (T_{n,i}-1) kl \left( \frac{S_{n,i}}{T_{n,i}+1};   \frac{S_{n,I^\star}}{T_{n,I^\star}+1}\right)\\
+	    &\leq 3 + (n+1) kl\left(0; \frac{n}{n+1} \right) = (n+1)\log(n+1)\,. 
+	\end{align*}
+% It holds that
+% \begin{align*}
+% \lim_{n \rightarrow \infty} \frac{1}{n} \left( \inf_{y \in I_{i,I^\star} } C_{S_{n,i}+1,T_{n,i}-S_{n,i}+1}(y)+C_{S_{n,I^\star}+1,T_{n,I^\star}-S_{n,I^\star}+1}(y) \right) < \infty,
+% \end{align*}
+% and thus
+% \begin{align*}
+% \lim_{n \rightarrow \infty} \frac{1}{n} \log \left( \inf_{y \in I_{i,I^\star} }  C_{S_{n,i}+1,T_{n,i}-S_{n,i}+1}(y)+C_{S_{n,I^\star}+1,T_{n,I^\star}-S_{n,I^\star}+1}(y) \right) = 0.
+% \end{align*}
+Hence,
+\[
+\Pi_{n}(\theta_i \geq \theta_{I^\star}) \doteq \expp{ - \inf_{y \in I_{i,I^\star}}  C_{S_{n,i}+1,T_{n,i}-S_{n,i}+1}(y)+C_{S_{n,I^\star}+1,T_{n,I^\star}-S_{n,I^\star}+1}(y) }.
+\]
+We thus have for any $i$,
+\begin{align*}
+1 - a_{n,i} &\doteq \max_{j \neq I^\star} \Pi_{n}\left[\theta_j \geq \theta_{I^\star}\right] \\
+&\doteq \max_{j \neq I^\star} \expp{ - \inf_{y \in I_{j,I^\star} } C_{S_{n,j}+1,T_{n,j}-S_{n,j}+1}(y)+C_{S_{n,I^\star}+1,T_{n,I^\star}-S_{n,I^\star}+1}(y)}\\
+&\doteq  \expp{ - n \min_{j \neq I^\star} \inf_{y \in I_{j,I^\star} } \frac{T_{n,j} +1}{n} kl\left(\frac{S_{n,j}}{T_{n,j}+1}; y\right) + \frac{T_{n,I^\star} +1}{n} kl\left(\frac{S_{n,I^\star}}{T_{n,I^\star}+1} ; y\right) }\\
+&\geq \expp{ - n \max_{\bomega} \min_{j \neq I^\star} \inf_{y \in I_{j,I^\star} } \omega_i kl\left (\frac{S_{n,j}}{T_{n,j}+1}; y\right) + \omega_{I^\star} kl \left(\frac{S_{n,I^\star}}{T_{n,j}+1} ; y\right) }.
+\end{align*}
+Fix some $\epsilon > 0$, then there exists some $n_0(\epsilon)$ such that for all $n \geq n_0(\epsilon)$, we have for any $j$, 
+\begin{align*}
+I_{j,I^\star} = \left[\frac{S_{n,j}}{T_{n,j} + 1}, \frac{S_{n,I^\star}}{T_{n,I^\star} + 1}, \right] \subset \left[ \mu_j + \epsilon, \mu_{I^\star} - \epsilon \right] \triangleq I^\star_{j,\epsilon},  
+\end{align*}
+and because \texttt{KL}-divergence is uniformly continuous on the compact interval $I^\star_{j,\epsilon}$, there exists an $n_1$ such that for every $n \geq n_1$ we have 
+\begin{align*}
+kl\left(\frac{S_{n,j}}{T_{n,j} + 1}; y  \right) \geq (1-\epsilon) kl \left( \mu_j ; y \right),
+\end{align*}
+for any $y$ and for all $j \in \cA$. Therefore, we have
+\begin{align*}
+1 - a_{n,i} &\doteq \expp{ - n \max_{\bomega} \min_{j \neq I^\star} \inf_{y \in I_{j,I^\star} } \omega_j kl\left(\frac{S_{n,j}}{T_{n,j}+1}; y\right) + \omega_{I^\star} kl\left(\frac{S_{n,I^\star}}{T_{n,I^\star}+1} ; y\right) }\\
+&\geq \expp{ - n \max_{\bomega} \min_{i \neq I^\star} \inf_{y \in I^\star_{j,\epsilon}} \omega_i kl (\mu_j; y) + \omega_{I^\star} kl (\mu_{I^\star} ; y) }.
+\end{align*}
+Therefore, we have
+\begin{align*}
+\limsup_{n \rightarrow \infty} - \frac{1}{n} \log (1 - a_{n,i}) \leq \Gamma^\star.
+\end{align*}
+If $T_{n,i} / n \rightarrow \omega_i^\star$ for each $i \in \cA$, we have
+\begin{align*}
+    &\lim_{n \rightarrow \infty} \inf_{y \in I_{i,I^\star} } \frac{T_{n,i} + 1}{n} kl\left(\frac{S_{n,i}}{T_{n,i}+1}; y\right)+ \frac{T_{n,I^\star}  + 1}{n} kl\left(\frac{S_{n,I^\star}}{T_{n,i}+1} ; y\right)\\
+    &= \inf_{y \in \left[ \mu_i, \, \mu_{I^\star} \right] } \omega_i^\star kl (\mu_{i}; y) + \omega_{I^\star}^\star kl (\mu_{I^\star} ; y) \\
+    &= \Gamma^\star,
+\end{align*}
+and thus
+\begin{align*}
+1 - a_{n,i} &\doteq \expp{ - n \max_{\bomega} \min_{j \neq I^\star} \inf_{y \in I^\star_\epsilon} \omega_i kl (\mu_j; y) + \omega_{I^\star} kl (\mu_{I^\star} ; y) } \\
+&\doteq \expp{ - n \Gamma^\star },
+\end{align*}
+implying
+\begin{align*}
+\lim_{n \rightarrow \infty} - \frac{1}{n} \log \left( 1 - a_{n,i} \right) = \Gamma^\star.
+\end{align*}
+
+Everything goes similarly when $\omega_{I^\star} = \beta \in (0,1)$, so under any sampling rule satisfying $T_{n,I^\star} / n \rightarrow \beta$ we have
+\begin{align*}
+\limsup_{n \rightarrow \infty} - \frac{1}{n} \log (1 - a_{n,i}) \leq \Gamma_{\beta}^\star
+\end{align*}
+and under any sampling rule satisfying $T_{n,i} / n \rightarrow \omega_i^\beta$ for each $i \in \cA$, we have
+\begin{align*}
+\lim_{n \rightarrow \infty} - \frac{1}{n} \log (1 - a_{n,i}) = \Gamma_{\beta}^\star.
+\end{align*}
+
+\end{proof}
+
+\subsection{Proof of Theorem~\ref{thm:posterior_bernoulli}}\label{app:posterior_beta.main}
+
+\restateposteriorbernoulli*
+
+From Theorem~\ref{thm:bernoulli_lower_bound} we know that under any allocation rule satisfying $T_{n,i} / n \rightarrow \omega_i^\beta$ for every $i \in \cA$, we have
+	\begin{align*}
+		\lim_{n \rightarrow \infty} - \frac{1}{n} \log \left( 1 - a_{n,I^\star} \right) = \Gamma_{\beta}^\star.
+	\end{align*}
+Thus, we only need to prove that under \TTTS, for all $i \in \cA$, we have
+	\begin{align*}
+		\lim_{n \rightarrow \infty} \frac{T_{n,i}}{n} \overset{a.s}{=} \omega_i^\beta.
+	\end{align*}
+Just as for the proof of the Gaussian case, we can use Lemma~\ref{lemma:link} (proof in Appendix~\ref{app:posterior_gaussian.aux}), which implies 
+\[
+    \lim_{n\rightarrow \infty} \frac{T_{n,i}}{n}  \overset{a.s}{=} \omega_i^\beta \ \ \Leftrightarrow \ \ \ \lim_{n\rightarrow \infty} \frac{\Psi_{n,i}}{n}  \overset{a.s}{=} \omega_i^\beta.
+\]
+Therefore, it suffices to show convergence for $\overline{\psi}_{n,i} = \Psi_{n,i}/n$ to $\omega_i^\beta$, which we will do next, following the same steps as in the proof for the Gaussian case. 
+	
+\paragraph{Step 1: \TTTS draws all arms infinitely often and satisfies $T_{n,I^\star}/n \rightarrow \beta$.} We prove the following lemma. 
+	
+\begin{lemma}\label{lemma:optimal_prop_istar_bernoulli}
+	Under \TTTS, it holds almost surely that
+	\begin{enumerate}
+		\item for all $i \in \cA$, $\lim_{n\rightarrow \infty} T_{n,i} = \infty.$
+		\item $a_{n,I^\star} \rightarrow 1.$
+		\item $\frac{T_{n,I^\star}}{n} \rightarrow \beta$.
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+First, we give a lemma showing the implications of finite measurement, and consistency when all arms are sampled infinitely often, which provides a proof for $2.$ The proof of this lemma follows from the proof of Theorem~\ref{thm:bernoulli_lower_bound}, and is given in Appendix~\ref{app:posterior_beta.aux}. 
+
+\begin{lemma}[Consistency and implications of finite measurement]\label{lemma:consistency_bernoulli}\ \\
+	Denote with $\overline{\mathcal{I}}$ the arms that are sampled only a finite amount of times:
+	\begin{align*}
+	\overline{\mathcal{I}} = \{ i \in \{ 1, \ldots, k \} : \forall n, T_{n,i} < \infty \}.
+	\end{align*}
+	If $\overline{\mathcal{I}}$ is empty, $a_{n,i}$ converges almost surely to $1$ when $i = I^\star$ and to $0$ when $i \neq I^\star$. If $\overline{\mathcal{I}}$ is non-empty, then for every $i \in \overline{\mathcal{I}}$, we have $\liminf_{n \rightarrow \infty} a_{n,i} > 0$ a.s.
+\end{lemma}
+
+Now we can show $1.$ of Lemma~\ref{lemma:optimal_prop_istar_bernoulli}: we show that under \TTTS, for each $j \in A$, we have $\sum_{n \in \NN} T_{n,j} = \infty$. The proof is exactly equal to the proof for Gaussian arms. 
+
+Under \TTTS, we have
+\begin{align*}
+\psi_{n,i} = a_{n,i} \left( \beta + (1-\beta) \sum_{j \neq i} \frac{a_{n,j}}{1- a_{n,j}} \right),
+\end{align*}
+so $ \psi_{n,i}  \geq \beta a_{n,i}$, therefore, by Lemma~\ref{lemma:consistency_gaussian}, if $i \in \overline{\mathcal{I}}$, then $\liminf a_{n,i} > 0$ implies that $\sum_n \psi_{n,i} = \infty$. By Lemma~\ref{lemma:link}, we then must have that $\lim_{n \rightarrow \infty} T_{n,i} = \infty$ as well: contradiction.  Thus, $\lim_{n \rightarrow \infty} T_{n,i} = \infty$ for all $i$, and we conclude that $a_{n,I^\star} \rightarrow 1$, by Lemma~\ref{lemma:consistency_gaussian}. 
+
+Lastly we prove point $3.$ of Lemma~\ref{lemma:optimal_prop_istar_bernoulli}. For \TTTS with parameter $\beta$, the above implies that $\overline{\psi}_{n, I^\star} \rightarrow \beta$, and since we have a bound on $| T_{n,i} / n - \overline{\psi}_{n, i} |$ in Lemma~\ref{lemma:link}, we have $T_{n, I^\star} / n \rightarrow \beta$ as well.
+
+\end{proof}
+
+\paragraph{Step 2: Controlling the over-allocation of sub-optimal arms.}
+Following the proof for the Gaussian case again, we can establish a consequence of the convergence of $T_{n,I^\star} / n$ to $\beta$ : if an arm is sampled more often than its optimal proportion, the posterior probability of this arm to be optimal is reduced compared to that of other sub-optimal arms. We can prove this by using ingredients from the proof of the lower bound in Theorem~\ref{thm:bernoulli_lower_bound}.
+
+\begin{lemma}[Over-allocation implies negligible probability]\label{lemma:over_allocation_bernoulli}\footnote{analogue of Lemma 13 of \cite{russo2016ttts}}\ \\
+	Fix any $\xi > 0$ and $j \neq I^\star$. With probability 1, under any allocation rule, if $T_{n,I^\star}/n \rightarrow \beta$, there exist $\xi' > 0$ and a sequence $\epsilon_n$ with $\epsilon_n \rightarrow 0$ such that for any $n \in \mathbb{N}$, 
+	\begin{align*}
+	\frac{T_{n,j}}{n} \geq \omega_j^\beta + \xi \implies \frac{a_{n,j}}{\max_{i \neq I^\star} a_{n,i}} \leq e^{-n (\xi' + \epsilon_n)}.
+	\end{align*}
+\end{lemma}
+
+\begin{proof}
+By Theorem~\ref{thm:bernoulli_lower_bound}, we have, as $T_{n, I^\star} / n \rightarrow \beta$, 
+\begin{align*}
+\limsup_{n \rightarrow \infty} - \frac{1}{n} \log \left(\max_{i \neq I^\star} a_{n,i} \right) \leq \Gamma_{\beta}^\star,
+\end{align*}
+since $\max_{i \neq I^\star} a_{n,i} \leq 1 - a_{n,I^\star}$. We also have from Lemma~\ref{lemma:binomial_tail} a deviation inequality, so that we can establish the following logarithmic equivalence:
+\begin{align*}
+a_{n,j} \leq \Pi_{n}(\theta_j \geq \theta_{I^\star} ) \doteq \exp \left\lbrace - n C_{j} \left(w_{n, I^\star}, \omega_{n,j} \right) \right\rbrace \doteq \exp \left\lbrace - n C_{j} \left(\beta, \omega_{n,j} \right) \right\rbrace,
+\end{align*}
+where we denote $\omega_{n,j} \triangleq \frac{T_{n,j}}{n}$.
+We can combine these results, which implies that there exists a non-negative sequence $\epsilon_n \rightarrow 0$ such that
+\begin{align*}
+\frac{a_{n,j}}{\max_{i \neq I^\star} a_{n,i}} \leq \frac{ \exp \left\lbrace -n C_{j} \left(\beta, \omega_{n,j} \right) - \epsilon_n / 2 \right\rbrace}{\exp \left \lbrace - n ( \Gamma_{\beta}^\star + \epsilon / 2 ) \right\rbrace} 
+= \exp \left\lbrace -n \left( C_{j} \left(\beta, \omega_{n,j} \right) - \Gamma_{\beta}^\star \right) - \epsilon_n \right\rbrace.
+\end{align*}
+We know that $C_{j} \left(\beta, \omega_j^\beta \right)$ is strictly increasing in $\omega^\beta_j$, and $C_{j} \left(\beta, \omega_j^\beta \right) = \Gamma_{\beta}^\star$, thus, there exists some $\xi' > 0$ such that 
+\begin{align*}
+\omega_{n,j} \geq \omega_j^\beta + \xi \implies C_{j} \left(\beta, \omega_{n,j} \right) - \Gamma_{\beta}^\star > \xi'.
+\end{align*}
+\end{proof}
+
+\paragraph{Step 3: $\overline{\psi}_{n,i}$ converges to $\omega_i^\beta$ for all arms.} To establish the convergence of the allocation effort of all arms, we rely on the same sufficient condition used in the analysis of~\cite{russo2016ttts}, restated above in Lemma~\ref{lemma:sufficient_optimality}, and we will restate it here again for convenience.
+	
+\begin{lemma}[Sufficient condition for optimality]\ \\
+	Consider any adaptive allocation rule. If 
+		\begin{align}
+		&\overline{\psi}_{n, I^\star} \rightarrow \beta, \,\,\, \text{ and } \,\,\,
+		\sum_{n \in \mathbb{N}} \psi_{n,j} \bm{1} \left\lbrace \overline{\psi}_{n,j} \geq \omega_j^\beta + \xi \right\rbrace < \infty, \,\, \forall j \neq I^\star, \xi > 0,
+		\end{align}
+	then $\overline{\psi}_{n} \rightarrow \psi^\beta$.
+\end{lemma}
+
+First, note that from Lemma~\ref{lemma:optimal_prop_istar_bernoulli} we know that $\frac{T_{n,I^\star}}{n} \rightarrow \beta$, and by Lemma~\ref{lemma:link} this implies $\overline{\psi}_{n, I^\star} \rightarrow \beta$, hence we can use the lemma above to prove convergence to the optimal proportions. This proof is already given in Step~3 of the proof for the Gaussian case, and since it does not depend on the specifics of the Gaussian case, except for invoking Lemma~\ref{lemma:consistency_gaussian} (consistency), which for the Bernoulli case we replace by Lemma~\ref{lemma:consistency_bernoulli}, it gives a proof for the Bernoulli case as well. We conclude that \eqref{eq:sufficient condition for optimality} holds, and the convergence to the optimal proportions follows by Lemma~\ref{lemma:sufficient_optimality}.
+
+\subsection{Proof of auxiliary lemmas}\label{app:posterior_beta.aux}
+
+\paragraph{Proof of Lemma~\ref{lemma:binomial_tail}}
+
+	\begin{align*}
+		\PP{X > Y} = \EE{ \PP{X > Y | Y}}
+		&\leq \EE{\1{\{ Y < \frac{a-1}{a+b-1}  \} } + \1{\{ Y \geq \frac{a-1}{a+b-1} \} } \PP{X > Y | Y}  } \\
+		&\leq \expp{- (c+d-1) kl\left(\frac{c-1}{c+d-1}; \frac{a-1}{a+b-1}\right) } \\
+		&+ \EE{ \expp{-(a + b -1) kl\left(\frac{a-1}{a+b-1}; Y\right)}\1{\{ Y \geq \frac{a-1}{a+b-1} \} } },
+	\end{align*}
+	Using the Beta-Binomial trick in the second inequality.	Then we have (call the second half A)
+	\begin{align*}
+	A &\leq \EE{\1{\{ \frac{a-1}{a+b-1} \leq Y \leq \frac{c-1}{c+d-1}\}}}  \expp{-(a + b -1) kl\left(\frac{a-1}{a+b-1}; Y\right)}\\
+	&+ \expp{-(a+b-1) kl\left( \frac{a-1}{a+b-1} ; \frac{c-1}{c+d-1} \right)}\\
+	\end{align*}
+	(call the first half B). Denote with $f$ the density of $Y$, then
+	\begin{align*}
+	B &= \int_{\frac{a-1}{a+b-1}}^{\frac{c-1}{c+d-1}} \expp{-(a+b-1) kl\left( \frac{a-1}{a+b-1}; y\right)} f(y) \diff{y}.
+	\end{align*}
+	Via integration by parts we obtain
+	\begin{align*}
+	B &= \left[ \expp{-(a+b-1) kl\left( \frac{a-1}{a+b-1}; y\right)} \PP{Y \leq y} \right]_{\frac{a-1}{a+b-1}}^{\frac{c-1}{c+d-1}}\\
+	&+ \int_{\frac{a-1}{a+b-1}}^{\frac{c-1}{c+d-1}} (a+b-1) \frac{\d{}}{\d{y}} kl\left(\frac{a-1}{a+b-1} ; y\right) \expp{-C_{a,b}(y) } P(Y \leq y) \diff{y}\\
+	&\leq \int_{\frac{a-1}{a+b-1}}^{\frac{c-1}{c+d-1}} (a+b-1) \frac{\d{}}{\d{y}} kl\left(\frac{a-1}{a+b-1} ; y\right)
+	\expp{-(C_{a,b}(y)+C_{c,d}(y)) } \diff{y}\\
+	&+ \expp{-(a+b-1)kl\left(\frac{a-1}{a+b-1}; \frac{c-1}{c+d-1}\right)},
+	\end{align*}
+	where the first inequality uses the Binomial trick again. Let
+	\begin{align*}
+	C &= \inf_{\frac{a-1}{a+b-1} \leq y \leq \frac{c-1}{c+d-1}} (a+b-1) kl\left(\frac{a-1}{a+b-1}; y\right) + (c+d-1) kl\left(\frac{c-1}{c+d-1} ; y\right)  = \inf_{\frac{a-1}{a+b-1} \leq y \leq \frac{c-1}{c+d-1}} C_{a,b}(y)+C_{c,d}(y),
+	\end{align*}
+	then note that in particular we have
+	\begin{align*}
+	C &\leq \min \left( (a+b-1) kl\left(\frac{a-1}{a+b-1}; \frac{c-1}{c+d-1}\right), (c+d-1) kl \left(\frac{c-1}{c+d-1} ; \frac{a-1}{a+b-1}\right) \right)\\
+	  &= \min \left(C_{a,b}\left(\frac{c-1}{c+d-1}\right), C_{c,d}\left(\frac{a-1}{a+b-1}\right)\right).
+	\end{align*}
+	Then
+	\begin{align*}
+	B &\leq e^{-C} \int_{\frac{a-1}{a+b-1}}^{\frac{c-1}{c+d-1}} (a+b-1) \frac{\diff{}}{\diff{y}} kl (\frac{a-1}{a+b-1}; y) \diff{y}  + e^{-C}
+	= \left[ (a+b-1) kl\left(\frac{a-1}{a+b-1}; \frac{c-1}{c+d-1}\right)  + 1 \right] e^{-C}.
+	\end{align*}
+	Thus we have
+	\begin{align*}
+	\PP{X > Y} \leq \left( 3 + (a+b-1) kl\left(\frac{a-1}{a+b-1}; \frac{c-1}{c+d-1}\right)  \right) e^{-C}.
+	\end{align*}
+	By symmetry, we have
+	\begin{align*}
+	\PP{X > Y} \leq \left(3 + \min \left(C_{a,b}\left(\frac{c-1}{c+d-1}\right), C_{c,d}\left(\frac{a-1}{a+b-1}\right)\right)\right) e^{-C},
+	\end{align*}
+	where
+	\[
+	    C = \inf_{\frac{a-1}{a+b-1} \leq y \leq \frac{c-1}{c+d-1}} (a+b-1) kl\left(\frac{a-1}{a+b-1}; y\right) + (c+d-1) kl\left(\frac{c-1}{c+d-1} ; y\right).
+	\]
+
+\hfill\BlackBox\\[2mm]
+
+\paragraph{Proof of Lemma~\ref{lemma:consistency_bernoulli}} 
+
+Let $\overline{\cI}$ be empty, then we have $\mu_{\infty, i} \triangleq \lim_{n \rightarrow \infty} \mu_{n,i} = \mu_i$. The posterior variance is
+\begin{align*}
+\sigma_{n,i}^2 &= \frac{\alpha_{n,i}\beta_{n,i}}{(\alpha_{n,i}+ \beta_{n,i})^2 (\alpha_{n,i} + \beta_{n,i} + 1)} 
+= \frac{(1 + \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}}) (1 + T_{n,i} - \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}})  }{ (2 + T_{n,i})^2 (2 + T_{n,i} +1 )   },
+\end{align*}
+We see that when $\overline{\cI}$ is empty, we have $\sigma_{\infty, i}^2 \triangleq \lim_{n \rightarrow \infty} \sigma_{n,i}^2 = 0$, i.e., the posterior is concentrated. \\
+
+When $T_{n,i} = 0$ for some $i \in \cA$, the empirical mean for that arm equals to the prior mean $\mu_{n,i} = \alpha_{1,i} / (\alpha_{1,i} + \beta_{1,i})$, and the variance is strictly positive: $\sigma^2_{n,i} = (\alpha_{n,i}\beta_{n,i}) / \left((\alpha_{1,i}+ \beta_{1,i})^2 (\alpha_{1,i} + \beta_{1,i} + 1) \right) > 0$. When $\overline{\cI}$ is not empty, then for every $i \in \overline{\cI}$ we have $\sigma_{\infty, i}^2 > 0$, and $\alpha_{\infty, i} \in (0,1)$, implying $\alpha_{\infty, I^\star} < 1$, hence the posterior is not concentrated. 
+
+\hfill\BlackBox\\[2mm]

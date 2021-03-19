@@ -1,0 +1,108 @@
+%% Copyright (C) 2014 Dorian Depriester
+%% http://blog.dorian-depriester.fr
+%%
+%% This file may be distributed and/or modified under the conditions
+%% of the LaTeX Project Public License, either version 1.3c of this
+%% license or (at your option) any later version. The latest version
+%% of this license is in:
+%%
+%%    http://www.latex-project.org/lppl.txt
+%%
+%% and version 1.3c or later is part of all distributions of LaTeX
+%% version 2006/05/20 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%%
+%% The Current Maintainer of this work is Dorian Depriester
+%% <contact [at] dorian [-] depriester [dot] fr>.
+%%
+%% This is main.tex for French PhD Thesis.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           Fichier maitre				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,12pt,twoside,openright]{report}
+\input{Preamble}		% Liste des packages et de leurs options
+\input{Macros/Commands}	% Commandes et environnements perso
+\input{Macros/names}
+\input{Macros/macros}
+\input{Macros/todos}
+\input{Front/Front}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%   			Liste des fichiers à compiler					%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\includeonly{Chapter0,Chapter1,Appendices}
+
+
+
+% Infos de la page de garde
+\author{Xuedong \scshape{Shang}}
+\title{M\'ethodes Adaptatives pour l'Optimisation \\ dans un Environnement Stochastique}
+\specialite{Informatique}
+\directeur{Michal \scshape{Valko}}
+\encadrant{Emilie \scshape{Kaufmann}}
+\date\today
+\jurya{Mme Emilie \scshape{Kaufmann}}{Charg\'ee de recherche, CNRS, SequeL}{Co-encadrante de Th\`ese}
+\juryb{B}{Professeur}{Rapporteur}
+\juryc{C}{Professeur}{Examinateur}
+\juryd{M. Michal \scshape{Valko}}{Charg\'e de recherche, Inria, SequeL}{Directeur de Th\`ese}
+\ecole{Universit\'e des Sciences et des Technologies de Lille}
+
+% Méta-données du PDF
+\hypersetup{
+    pdfauthor={Xuedong Shang},
+    pdfsubject={Manuscrit de thèse de doctorat},
+    pdftitle={Adaptive methods for optimization in stochastic environments},
+    pdfkeywords={bandits, optimization, hyper-parameter optimization, reinforcement learning, machine learning}
+}
+
+
+
+\begin{document}
+% Préambule
+	\pagenumbering{roman}
+	\pagedegarde
+
+    \input{Chapter0/Abstract}
+    %\input{Chapter0/Ack}
+
+	\cleardoublepage
+		% Table des matières
+			\setcounter{tocdepth}{1}	% Pas besoin de trop détailler le sommaire ici (chapitres/sections)
+			\dominitoc						% Génération des mini-toc	\pagenumbering{arabic}
+			\tableofcontents
+		% Liste des figures
+			\renewcommand*\listfigurename{List of Figures}
+			\listoffigures
+		% Liste des tableaux
+		\listoftables
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%        Contenu du document        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\setcounter{mtc}{3}	% "Corrige" les minitocs décallés à cause des chapter* (ex : table des matières)
+	\pagenumbering{arabic}
+	\input{Chapter1/Chapter1}
+	\input{Chapter2/Chapter2}
+	\input{Chapter3/Chapter3}
+	\input{Chapter4/Chapter4}
+	\input{Chapter5/Chapter5}
+
+
+	% Annexes
+	\begin{appendix}
+		\pagenumbering{Roman}
+		\input{Appendices/Appendices}				% Figures en annexe
+
+		% Liste des acronymes, glossaire et liste des symboles (dans l'ordre)
+		\printglossary[type=\acronymtype , title={Acronyms}, toctitle={Acronyms}]
+		\printglossary[title=Glossary,toctitle=Glossary]
+		\printglossary[type=notation,title={Notations}, toctitle={Notations}]
+
+	\end{appendix}
+
+\end{document}

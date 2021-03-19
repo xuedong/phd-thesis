@@ -1,0 +1,519 @@
+\section{Fixed-Confidence Analysis for \TTTS}\label{app:confidence_ttts}
+
+This section is entirely dedicated to \TTTS.
+
+\subsection{Sufficient exploration of all arms}\label{app:confidence_ttts.exploration}
+
+We prove Lemma~\ref{lemma:sufficient_exploration} for \TTTS. To prove this lemma, we introduce the two following sets of indices for a given $L>0$: $\forall n\in\NN$ we define
+\[
+    U_n^L \eqdef \{i: T_{n,i} < \sqrt{L}\},
+\]
+\[
+    V_n^L \eqdef \{i: T_{n,i} < L^{3/4}\}.
+\]
+It is seemingly non trivial to manipulate directly \TTTS's candidate arms, we thus start by connecting \TTTS with \TTPS (top two probability sampling). \TTPS is another sampling rule presented by~\cite{russo2016ttts} for which the two candidate samples are defined as in Appendix~\ref{app:notation}, we recall them in the following.
+\[
+    J_n^{(1)} \eqdef \argmax_{j} a_{n,j}, J_n^{(2)} \eqdef \argmax_{j\neq J_n^{(1)}} a_{n,j}.
+\]
+Lemma~\ref{lemma:sufficient_exploration} is proved via the following sequence of lemmas.
+
+\begin{lemma}\label{lemma:link_ttps}
+    There exists $L_1 = \text{Poly}(W_1)$ s.t. if $L > L_1$, for all $n$, $U_n^L \neq \emptyset$ implies $J_n^{(1)} \in V_n^L$ or $J_n^{(2)} \in V_n^L$.
+\end{lemma}
+
+\begin{proof}
+    If $J_n^{(1)} \in V_n^L$, then the proof is finished. Now we assume that $J_n^{(1)} \in \bar{V_n^L}$, and we prove that $J_n^{(2)} \in V_n^L$.
+    \paragraph{Step 1} According to Lemma~\ref{lemma:means}, there exists $L_2 = \text{Poly}(W_1)$ s.t. $\forall L > L_2, \forall i \in \bar{U_n^L}$,
+    \begin{align*}
+        |\mu_{n,i} - \mu_{i}| &\leq \sigma W_1 \sqrt{\frac{\log(e+T_{n,i})}{1+T_{n,i}}}\\
+                              &\leq \sigma W_1 \sqrt{\frac{\log(e+\sqrt{L})}{1+\sqrt{L}}}\\
+                              &\leq \sigma W_1 \frac{\Delta_{\text{min}}}{4\sigma W_1} = \frac{\Delta_{\text{min}}}{4}.
+    \end{align*}
+    The second inequality holds since $x\mapsto \frac{\log(e+x)}{1+x}$ is a decreasing function. The third inequality holds for a large $L>L_2$ with $L_2 = \ldots$.
+    
+    \paragraph{Step 2} We now assume that $L > L_2$, and we define 
+    \[
+        \bar{J_n^\star} \eqdef \argmax_{j\in\bar{U_n^L}} \mu_{n,j} = \argmax_{j\in\bar{U_n^L}} \mu_j.
+    \]
+    The last equality holds since $\forall j \in \bar{U_n^L}$, $|\mu_{n,i}-\mu_i| \leq \Delta_{\text{min}}/4$. We show that there exists $L_3 = \text{Poly}(W_1)$ s.t. $\forall L > L_3$, 
+    \[
+        \bar{J_n^\star} = J_n^{(1)}.
+    \] We proceed by contradiction, and suppose that $\bar{J_n^\star} \neq J_n^{(1)}$, then $\mu_{n,J_n^{(1)}} < \mu_{n,\bar{J_n^\star}}$, since $J_n^{(1)} \in \bar{V_n^L} \subset \bar{U_n^L}$. However, we have
+    %\compi{Something is missing (below also): 
+    %\[\PP{\theta_{J_n^{(1)}} > \max_{j\neq J_n^{(1)}}\theta_j|\cF_{n-1}}\,\]
+    %note that the notations are inconsistent in h draft (sometimes $\Pi_{n}(\cdot)$)
+    %}
+    \begin{align*}
+        a_{n,J_n^{(1)}} &= \Pi_{n}\left[\theta_{J_n^{(1)}} > \max_{j\neq J_n^{(1)}}\theta_j\right]\\
+                             &\leq \Pi_{n}\left[\theta_{J_n^{(1)}} > \theta_{\bar{J_n^\star}}\right]\\
+                             &\leq \frac{1}{2}\expp{-\frac{(\mu_{n,J_n^{(1)}}-\mu_{n,\bar{J_n^\star}})^2}{2\sigma^2(1/T_{n,J_n^{(1)}}+1/T_{n,\bar{J_n^\star}})}}.
+    \end{align*}
+    The last inequality uses the Gaussian tail inequality (\ref{gaussian_upper}) of Lemma~\ref{lemma:gaussiantails}. On the other hand,
+    \begin{align*}
+        |\mu_{n,J_n^{(1)}} - \mu_{n,\bar{J_n^\star}}| &= |\mu_{n,J_n^{(1)}} - \mu_{J_n^{(1)}} + \mu_{J_n^{(1)}} - \mu_{\bar{J_n^\star}} + \mu_{\bar{J_n^\star}} -\mu_{n,\bar{J_n^\star}}|\\
+                                                      &\geq
+        |\mu_{J_n^{(1)}} - \mu_{\bar{J_n^\star}}| - |\mu_{n,J_n^{(1)}} - \mu_{J_n^{(1)}} + \mu_{\bar{J_n^\star}} -\mu_{n,\bar{J_n^\star}}|\\
+                                                      &\geq
+        \Delta_{\text{min}} - (\frac{\Delta_{\text{min}}}{4} + \frac{\Delta_{\text{min}}}{4})\\
+                                                      &=
+        \frac{\Delta_{\text{min}}}{2},
+    \end{align*}
+    and
+    \[
+        \frac{1}{T_{n,J_n^{(1)}}}+\frac{1}{T_{n,\bar{J_n^\star}}} \leq \frac{2}{\sqrt{L}}.
+    \]
+    Thus, if we take $L_3$ s.t. 
+    \[
+        \expp{-\frac{\sqrt{L_3}\Delta_{\text{min}}^2}{16\sigma^2}} \leq \frac{1}{2K},
+    \]
+    then for any $L > L_3$, we have
+    \[
+        a_{n,J_n^{(1)}} \leq \frac{1}{2K} < \frac{1}{K},
+    \]
+    which contradicts the definition of $J_n^{(1)}$. We now assume that $L > L_3$, thus $J_n^{(1)}=\bar{J_n^\star}$.
+    
+    \paragraph{Step 3} We finally show that for $L$ large enough, $J_n^{(2)} \in V_n^L$. First note that $\forall j \in \bar{V_n^L}$, we have
+    \begin{equation}
+                a_{n,j} \leq \Pi_{n}\left[\theta_j \geq \theta_{\bar{J_n^{\star}}}\right] \leq \expp{-\frac{L^{3/4}\Delta_{\text{min}}^2}{16\sigma^2}}. \label{eq:upper_bound_anj_explo}
+    \end{equation}
+
+    This last inequality can be proved using the same argument as Step 2. Now we define another index $J_n^\star \eqdef \argmax_{j\in U_n^L}\mu_{n,j}$ and the quantity $c_n \eqdef \max(\mu_{n,J_n^\star},\mu_{n,\bar{J_n^\star}})$. We can lower bound $a_{n,J_n^\star}$ as follows:
+    \begin{align*}
+        a_{n,J_n^\star} &\geq \Pi_{n}\left[\theta_{J_n^\star}\geq c_n\right]\prod_{j\neq J_n^\star}\Pi_{n}\left[\theta_j\leq c_n\right]\\
+                             &= \Pi_{n}\left[\theta_{J_n^\star}\geq c_n\right]\prod_{j\neq J_n^\star;j\in U_n^L}\Pi_{n}\left[\theta_j\leq c_n\right]\prod_{j\in \bar{U_n^L}}\Pi_{n}\left[\theta_j\leq c_n\right]\\
+                             &\geq \Pi_{n}\left[\theta_{J_n^\star}\geq c_n\right] \frac{1}{2^{K-1}}.
+    \end{align*}
+    Now there are two cases:
+    \begin{itemize}
+        \item If $\mu_{n,J_n^\star} > \mu_{n,\bar{J_n^\star}}$, then we have
+        \[
+            \Pi_{n}\left[\theta_{J_n^\star}\geq c_n\right] = \Pi_{n}\left[\theta_{J_n^\star}\geq \mu_{n,J_n^\star}\right] \geq \frac{1}{2}.
+        \]
+        \item If $\mu_{n,J_n^\star} < \mu_{n,\bar{J_n^\star}}$, then we can apply the Gaussian tail bound (\ref{gaussian_lower}) of Lemma~\ref{lemma:gaussiantails}, and we obtain
+        \begin{align*}
+            \Pi_{n}\left[\theta_{J_n^\star}\geq c_n\right] &= \Pi_{n}\left[\theta_{J_n^\star}\geq \mu_{n,\bar{J_n^\star}}\right] =
+            \Pi_{n}\left[\theta_{J_n^\star}\geq \mu_{n,J_n^\star} + (\mu_{n,\bar{J_n^\star}}-\mu_{n,J_n^\star})\right]\\
+                                            &\geq
+            \frac{1}{\sqrt{2\pi}} \expp{-\frac{1}{2}\left( 1-\frac{\sqrt{T_{n,J_n^\star}}}{\sigma}(\mu_{n,J_n^\star}-\mu_{n,\bar{J_n^\star}}) \right)^2}\\
+                                            &=
+            \frac{1}{\sqrt{2\pi}} \expp{-\frac{1}{2}\left( 1+\frac{\sqrt{T_{n,J_n^\star}}}{\sigma}(\mu_{n,\bar{J_n^\star}}-\mu_{n,J_n^\star}) \right)^2}.
+        \end{align*}
+        On the other hand, by Lemma~\ref{lemma:means}, we know that
+        \begin{align*}
+            |\mu_{n,J_n^\star} - \mu_{n,\bar{J_n^\star}}| &= |\mu_{n,J_n^\star} - \mu_{J_n^\star} + \mu_{J_n^\star} - \mu_{\bar{J_n^\star}} + \mu_{\bar{J_n^\star}} - \mu_{n,\bar{J_n^\star}}|\\
+                                                          &\leq
+            |\mu_{J_n^\star} - \mu_{\bar{J_n^\star}}| + \sigma W_1 \sqrt{\frac{\log(e+T_{n,J_n^\star})}{1+T_{n,J_n^\star}}} + \sigma W_1 \sqrt{\frac{\log(e+T_{n,\bar{J_n^\star}})}{1+T_{n,\bar{J_n^\star}}}}\\
+                                                          &\leq
+            |\mu_{J_n^\star} - \mu_{\bar{J_n^\star}}| + 2\sigma W_1 \sqrt{\frac{\log(e+T_{n,J_n^\star})}{1+T_{n,J_n^\star}}}\\
+                                                          &\leq
+            \Delta_{\max} + 2\sigma W_1 \sqrt{\frac{\log(e+T_{n,J_n^\star})}{1+T_{n,J_n^\star}}}.
+        \end{align*}
+        Therefore,
+        \begin{align*}
+            \Pi_{n}\left[\theta_{J_n^\star}\geq c_n\right] &\geq \frac{1}{\sqrt{2\pi}} \expp{-\frac{1}{2}\left( 1+\frac{\sqrt{T_{n,J_n^\star}}}{\sigma}\left(\Delta_{\max} + 2\sigma W_1 \sqrt{\frac{\log(e+T_{n,J_n^\star})}{1+T_{n,J_n^\star}}}\right) \right)^2}\\
+                                            &\geq
+            \frac{1}{\sqrt{2\pi}} \expp{-\frac{1}{2}\left( 1+\frac{\sqrt{\sqrt{L}}}{\sigma}\left(\Delta_{\max} + 2\sigma W_1 \sqrt{\frac{\log(e+\sqrt{L})}{1+\sqrt{L}}}\right) \right)^2}\\
+                                            &\geq
+            \frac{1}{\sqrt{2\pi}} \expp{-\frac{1}{2}\left( 1+\frac{L^{1/4}\Delta_{\max}}{\sigma} + 2 W_1 \sqrt{\log(e+\sqrt{L})} \right)^2}.
+        \end{align*}
+    \end{itemize}
+    Now we have
+    \[
+        a_{n,J_n^\star} \geq \max\left( \left(\frac{1}{2}\right)^K, \left(\frac{1}{2}\right)^{K-1}\frac{1}{\sqrt{2\pi}}\expp{-\frac{1}{2}\left( 1+\frac{L^{1/4}\Delta_{\max}}{\sigma} + 2 W_1 \sqrt{\log(e+\sqrt{L})} \right)^2} \right),
+    \]
+    and we have $\forall j\in \bar{V_n^L}$, $a_{n,j}\leq \expp{-L^{3/4}\Delta_{\text{min}}^2/(16\sigma^2)}$, thus there exists $L_4 = \text{Poly}(W_1)$ s.t. $\forall L > L_4$, $\forall j \in \bar{V_n^L}$,
+    \[
+        a_{n,j} \leq \frac{a_{n,J_n^\star}}{2},
+    \]
+    and by consequence, $J_n^{(2)}\in V_n^L$.
+    
+    Finally, taking $L_1 = \max(L_2, L_3, L_4)$, we have $\forall L > L_1$, either $J_n^{(1)} \in V_n^L$ or $J_n^{(2)} \in V_n^L$.
+\end{proof}
+
+Next we show that there exists at least one arm in $V_n^L$ for whom the probability of being pulled is large enough. More precisely, we prove the following lemma.
+
+\begin{lemma}\label{lemma:psi_min_ttts}
+    There exists $L_1 = \text{Poly}(W_1)$ s.t. for $L > L_1$ and for all $n$ s.t. $U_n^L \neq \emptyset$, then there exists $J_n \in V_n^L$ s.t.
+    \[
+        \psi_{n,J_n} \geq \frac{\min(\beta,1-\beta)}{K^2} \eqdef \psi_{\min}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    Using Lemma~\ref{lemma:link_ttps}, we know that $J_n^{(1)}$ or $J_n^{(2)} \in V_n^L$. On the other hand, we know that
+    \[
+        \forall i\in\cA, \psi_{n,i} = a_{n,i} \left(\beta + (1-\beta) \sum_{j\neq i} \frac{a_{n,j}}{1-a_{n,j}}\right).
+    \]
+    Therefore we have
+    \[
+        \psi_{n,J_n^{(1)}} \geq \beta a_{n,J_n^{(1)}} \geq \frac{\beta}{K},
+    \]
+    since $\sum_{i\in\cA} a_{n,i} = 1$, and
+    \begin{align*}
+        \psi_{n,J_n^{(2)}} &\geq (1-\beta) a_{n,J_n^{(2)}} \frac{a_{n,J_n^{(1)}}}{1-a_{n,J_n^{(1)}}}\\
+                           &= (1-\beta) a_{n,J_n^{(1)}} \frac{a_{n,J_n^{(2)}}}{1-a_{n,J_n^{(1)}}}\\
+                           &\geq \frac{1-\beta}{K^2},
+    \end{align*}
+    since $a_{n,J_n^{(1)}} \geq 1/K$ and $\sum_{i\neq J_n^{(1)}} a_{n,i}/(1-a_{n,J_n^{(1)}}) = 1 $, thus $a_{n,J_n^{(2)}}/(1-a_{n,J_n^{(1)}}) \geq 1/K$.
+\end{proof}
+
+The rest of this subsection is quite similar to that of~\cite{qin2017ttei}. Indeed, with the above lemma, we can show that the set of poorly explored arms $U_n^L$ is empty when $n$ is large enough.
+
+\begin{lemma}\label{lemma:poorly_explored_ttts}
+    Under \TTTS, there exists $L_0 = \text{Poly}(W_1,W_2)$ s.t. $\forall L > L_0$, $U_{\floor{KL}}^L = \emptyset$.
+\end{lemma}
+
+\begin{proof}
+    We proceed by contradiction, and we assume that $U_{\floor{KL}}^L$ is not empty. Then for any $1 \leq \ell \leq \floor{KL}$, $U_{\ell}^L$ and $V_{\ell}^L$ are non empty as well.
+    
+    There exists a deterministic $L_5$ s.t. $\forall L > L_5$,
+    \[
+        \floor{L} \geq KL^{3/4}.
+    \]
+    Using the pigeonhole principle, there exists some $i \in \cA$ s.t. $T_{\floor{L},i} \geq L^{3/4}$. Thus, we have $|V_{\floor{L}}^L| \leq K-1$.
+    
+    Next, we prove $|V_{\floor{2L}}^L| \leq K-2$. Otherwise, since $U_{\ell}^L$ is non-empty for any $\floor{L}+1 \leq \ell \leq \floor{2L}$, thus by Lemma~\ref{lemma:psi_min_ttts}, there exists $J_{\ell}\in V_\ell^L$ s.t. $\psi_{\ell,J_{\ell}} \geq \psi_{\min}$. Therefore,
+    \[
+        \sum_{i\in V_{\ell}^L} \psi_{\ell,i} \geq \psi_{\min},
+    \]
+    and
+    \[
+        \sum_{i\in V_{\floor{L}}^L} \psi_{\ell,i} \geq \psi_{\min}
+    \]
+    since $V_{\ell}^L \subset V_{\floor{L}}^L$. Hence, we have
+    \[
+        \sum_{i\in V_{\floor{L}}^L} (\Psi_{\floor{2L},i} - \Psi_{\floor{L},i}) = \sum_{\ell = \floor{L}+1}^{\floor{2L}} \sum_{i\in V_{\floor{L}}^L} \psi_{\ell,i} \geq \psi_{\min}\floor{L}.
+    \]
+    Then, using Lemma~\ref{lemma:link}, there exists $L_6 = \text{Poly}(W_2)$ s.t. $\forall L > L_6$, we have
+    \begin{align*}
+        \sum_{i\in V_{\floor{L}}^L} (T_{\floor{2L},i} - T_{\floor{L},i}) &\geq \sum_{i\in V_{\floor{L}}^L} (\Psi_{\floor{2L},i} - \Psi_{\floor{L},i} - 2W_2\sqrt{\floor{2L}\log(e^2+\floor{2L})})\\
+                          &\geq 
+        \sum_{i\in V_{\floor{L}}^L} (\Psi_{\floor{2L},i} - \Psi_{\floor{L},i}) - 2KW_2\sqrt{\floor{2L}\log(e^2+\floor{2L})}\\
+                          &\geq \psi_{\min}\floor{L} - 2KW_2C_2\floor{L}^{3/4}\\
+                          &\geq KL^{3/4},
+    \end{align*}
+    where $C_2$ is some absolute constant. Thus, we have one arm in $V_{\floor{L}}^L$ that is pulled at least $L^{3/4}$ times between $\floor{L}+1$ and $\floor{2L}$, thus $|V_{\floor{2L}}^L| \leq K-2$.
+    
+    By induction, for any $1 \leq k \leq K$, we have $|V_{\floor{kL}}^L| \leq K-k$, and finally if we take $L_0=\max(L_1,L_5,L_6)$, then $\forall L > L_0$, $U_{\floor{KL}}^L = \emptyset$.
+\end{proof}
+
+We can finally conclude the proof of Lemma~\ref{lemma:sufficient_exploration} for \TTTS.
+
+\paragraph{Proof of Lemma~\ref{lemma:sufficient_exploration}}
+Let $N_1 = KL_0$ where $L_0 = \text{Poly}(W_1,W_2)$ is chosen according to Lemma~\ref{lemma:poorly_explored_ttts}. For all $n > N_1$, we let $L=n/K$, then by Lemma~\ref{lemma:poorly_explored_ttts}, we have $U_{\floor{KL}}^L = U_n^{n/K}$ is empty, which concludes the proof.
+
+\hfill\BlackBox\\[2mm]
+
+\subsection{Concentration of the empirical means}\label{app:confidence_ttts.means}
+
+We prove Lemma~\ref{lemma:tracking_means} for \TTTS. As a corollary of the previous section, we can show the concentration of $\mu_{n,i}$ to $\mu_i$ for \TTTS\footnote{this proof is the same as Proposition 3 of~\cite{qin2017ttei}}.
+
+By Lemma~\ref{lemma:means}, we know that $\forall i\in\cA$ and $n\in\NN$,
+\[
+    |\mu_{n,i}-\mu_i| \leq \sigma W_1 \sqrt{\frac{\log(e+T_{n,i})}{T_{n,i}+1}}.
+\]
+According to the previous section, there exists $N_1 = \text{Poly}(W_1,W_2)$ s.t. $\forall n \geq N_1$ and $\forall i\in\cA$, $T_{n,i} \geq \sqrt{n/K}$. Therefore,
+\[
+    |\mu_{n,i}-\mu_i| \leq \sqrt{\frac{\log(e+\sqrt{n/K})}{\sqrt{n/K}+1}},
+\]
+since $x \mapsto \log(e+x)/(x+1)$ is a decreasing function. There exists $N_2' = \text{Poly}(\epsilon,W_1)$ s.t. $\forall n \geq N_2'$,
+\[
+    \sqrt{\frac{\log(e+\sqrt{n/K})}{\sqrt{n/K}+1}} \leq \sqrt{\frac{2(n/K)^{1/4}}{\sqrt{n/K}+1}} \leq \frac{\epsilon}{\sigma W_1}.
+\]
+Therefore, $\forall n \geq N_2 \eqdef \max\{N_1,N_2'\}$, we have
+\[
+    |\mu_{n,i}-\mu_i| \leq \sigma W_1 \frac{\epsilon}{\sigma W_1}.
+\]
+
+\subsection{Measurement effort concentration of the optimal arm}\label{app:confidence_ttts.best_arm}
+
+In this section we show that the empirical arm draws proportion of the true best arm for \TTTS concentrates to $\beta$ when the total number of arm draws is sufficiently large. We prove Lemma~\ref{lemma:tracking_best} for \TTTS.
+
+The proof is established upon the following lemmas. First, we prove that the empirical best arm coincides with the true best arm when the total number of arm draws goes sufficiently large.
+
+\begin{lemma}\label{lemma:empirical_best}
+    Under \TTTS, there exists $M_1 = \text{Poly}(W_1,W_2)$ s.t. $\forall n > M_1$, we have $I_n^\star = I^\star = J_n^{(1)}$ and $\forall i \neq I^\star$,
+    \[
+        a_{n,i} \leq \expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    Using Lemma~\ref{lemma:tracking_means} with $\epsilon = \Delta_{\min}/4$, there exists $N_1' = \text{Poly}(4/\Delta_{\min},W_1,W_2)$ s.t. $\forall n > N_1'$,
+    \[
+        \forall i\in\cA, |\mu_{n,i} - \mu_i| \leq \frac{\Delta_{\min}}{4}, 
+    \]
+    which implies that starting from a known moment, $\mu_{n,I^\star} > \mu_{n,i}$ for all $i\neq I^\star$, hence $I_n^\star = I^\star$. Thus, $\forall i \neq I^\star$,
+    \begin{align*}
+        a_{n,i} &= \Pi_{n}\left[\theta_i > \max_{j\neq i} \theta_j\right]\\
+                             &\leq \Pi_{n}\left[\theta_i > \theta_{I^\star}\right]\\
+                             &\leq \frac{1}{2}\expp{-\frac{(\mu_{n,i}-\mu_{n,I^\star})^2}{2\sigma^2(1/T_{n,i}+1/T_{n,I^\star})}}.
+    \end{align*}
+    The last inequality uses the Gaussian tail inequality of (\ref{gaussian_upper}) Lemma~\ref{lemma:gaussiantails}. Furthermore,
+    \begin{align*}
+        (\mu_{n,i} - \mu_{n,I^\star})^2 &= (|\mu_{n,i} - \mu_{n,I^\star}|)^2\\
+                                        &= (|\mu_{n,i} - \mu_i + \mu_i - \mu_{I^\star} + \mu_{I^\star} -\mu_{n,I^\star}|)^2\\
+                                        &\geq (|\mu_i - \mu_{I^\star}| - |\mu_{n,i} - \mu_i + \mu_{I^\star} -\mu_{n,I^\star}|)^2\\
+                                        &\geq \left(\Delta_{\text{min}} - \left(\frac{\Delta_{\text{min}}}{4} + \frac{\Delta_{\text{min}}}{4}\right)\right)^2 = \frac{\Delta_{\text{min}}^2}{4},
+    \end{align*}
+    and according to Lemma~\ref{lemma:sufficient_exploration}, we know that there exists $M_2 = \text{Poly}(W_1,W_2)$ s.t. $\forall n > M_2$,
+    \[
+        \frac{1}{T_{n,i}}+\frac{1}{T_{n,I^\star}} \leq \frac{2}{\sqrt{n/K}}.
+    \]
+    Thus, $\forall n > \max\{N_1',M_2\}$, we have
+    \[
+        \forall i\neq I^\star, a_{n,i} \leq \expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}}.
+    \]
+    Then, we have
+    \[
+        a_{n,I^\star} = 1 - \sum_{i\neq I^\star} a_{n,i} \geq 1-(K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}}.
+    \]
+    There exists $M_2'$ s.t. $\forall n > M_2'$, $a_{n,I^\star}>1/2$, and by consequence $I^\star = J_n^{(1)}$. Finally taking $M_1 \eqdef \max\{N_1', M_2, M_2'\}$ concludes the proof.
+\end{proof}
+
+Before we prove Lemma~\ref{lemma:tracking_best}, we first show that $\Psi_{n,I^\star}/n$ concentrates to $\beta$.
+
+\begin{lemma}\label{lemma:psi_best}
+    Under \TTTS, fix a constant $\epsilon>0$, there exists $M_3 = \text{Poly}(\epsilon,W_1,W_2)$ s.t. $\forall n > M_3$, we have
+    \[
+        \left| \frac{\Psi_{n,I^\star}}{n}-\beta \right| \leq \epsilon.
+    \]
+\end{lemma}
+
+\begin{proof}
+    By Lemma~\ref{lemma:empirical_best}, we know that there exists $M_1' = \text{Poly}(W_1,W_2)$ s.t. $\forall n > M_1'$, we have $I_n^\star = I^\star = J_n^{(1)}$ and $\forall i \neq I^\star$,
+    \[
+        a_{n,i} \leq \expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}}.
+    \]
+    Note also that $\forall n\in\NN$, we have
+    \[
+        \psi_{n,I^\star} = a_{n,I^\star} \left(\beta + (1-\beta) \sum_{j\neq I^\star} \frac{a_{n,j}}{1-a_{n,j}}\right).
+    \]
+    We proceed the proof with the following two steps.
+    
+    \paragraph{Step 1} We first lower bound $\Psi_{n,I^\star}$ for a given $\epsilon$. Take $M_4 > M_1'$ that we decide later, we have $\forall n > M_4$,
+    \begin{align*}
+        \frac{\Psi_{n,I^\star}}{n} &= \frac{1}{n}\sum_{l=1}^{n}\psi_{l,I^\star} = \frac{1}{n}\sum_{l=I^\star}^{M_4}\psi_{l,I^\star} + \frac{1}{n}\sum_{l=M_4+1}^{n}\psi_{l,I^\star}\\
+                             &\geq \frac{1}{n}\sum_{l=M_4+1}^{n}\psi_{l,I^\star} \geq \frac{1}{n}\sum_{l=M_4+1}^{n} a_{l,I^\star}\beta\\
+                             &= \frac{\beta}{n}\sum_{l=M_4+1}^{n} \left(1-\sum_{j\neq I^\star}a_{l,j}\right)\\
+                             &\geq \frac{\beta}{n}\sum_{l=M_4+1}^{n} \left(1-(K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}\right)\\
+                             &= \beta - \frac{M_4}{n}\beta - \frac{\beta}{n}\sum_{l=M_4+1}^{n} (K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}\\
+                             &\geq \beta - \frac{M_4}{n}\beta - \frac{(n-M_4)}{n}\beta(K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{M_4}{K}}}\\
+                             &\geq \beta - \frac{M_4}{n}\beta - \beta(K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{M_4}{K}}}.
+    \end{align*}
+    For a given constant $\epsilon>0$, there exists $M_5$ s.t. $\forall n > M_5$,
+    \[
+        \beta(K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}} < \frac{\epsilon}{2}.
+    \]
+    Furthermore, there exists $M_6 = \text{Poly}(\epsilon/2,M_5)$ s.t. $\forall n > M_6$,
+    \[
+        \frac{M_5}{n}\beta < \frac{\epsilon}{2}.
+    \]
+    Therefore, if we take $M_4 \eqdef \max\{M_1', M_5, M_6\}$, we have $\forall n > M_4$,
+    \[
+        \frac{\Psi_{n,I^\star}}{n} \geq \beta - \epsilon.
+    \]
+    
+    \paragraph{Step 2} On the other hand, we can also upper bound $\Psi_{n,I^\star}$. We have $\forall n > M_3$,
+    \begin{align*}
+        \frac{\Psi_{n,I^\star}}{n} &= \frac{1}{n}\sum_{l=1}^{n}\psi_{l,I^\star}\\
+                             &= \frac{1}{n}\sum_{l=1}^{n}a_{l,I^\star}\left( \beta + (1-\beta)\sum_{j\neq I^\star}\frac{a_{l,j}}{1-a_{l,j}} \right)\\
+                             &\leq \frac{1}{n}\sum_{l=1}^{n}a_{l,I^\star}\beta + \frac{1}{n}\sum_{l=1}^{n}a_{l,I^\star}(1-\beta)\sum_{j\neq I^\star}\frac{a_{l,j}}{1-a_{l,j}}\\
+                             &\leq \beta + \frac{1}{n}\sum_{l=1}^{n}(1-\beta)\sum_{j\neq I^\star}\frac{a_{l,j}}{1-a_{l,j}}\\
+                             &\leq \beta + \frac{1}{n}\sum_{l=1}^{n}(1-\beta)\sum_{j\neq I^\star}\frac{\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}}{1-\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}}.
+    \end{align*}
+    Since, for a given $\epsilon > 0$, there exists $M_8$ s.t. $\forall n > M_8$,
+    \[
+        \expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}} < \frac{1}{2},
+    \]
+    and there exists $M_9$ s.t. $\forall n > M_9$,
+    \[
+        (1-\beta)(K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}} < \frac{\epsilon}{4}.
+    \]
+    Thus, $\forall n > M_{10} \eqdef \max\{M_8,M_9\}$,
+    \begin{align*}
+        \frac{\Psi_{n,I^\star}}{n} &\leq \beta + \frac{1-\beta}{n}\left(\sum_{l=1}^{M_{10}}\sum_{j\neq I^\star}\frac{\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}}{1-\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}} + \sum_{l=M_{10}+1}^{n}\sum_{j\neq I^\star}\frac{\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}}{1-\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}}\right)\\
+                             &\leq \beta + \frac{1-\beta}{n}\sum_{l=1}^{M_{10}}\sum_{j\neq I^\star}\frac{\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}}{1-\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}} + 2(1-\beta)(K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{M_{10}}{K}}}\\
+                             &\leq \beta + \frac{1-\beta}{n}\sum_{l=1}^{M_{10}}\sum_{j\neq I^\star}\frac{\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}}{1-\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}} + \frac{\epsilon}{2}.
+    \end{align*}
+    There exists $M_{11} = \text{Poly}(\epsilon/2,M_{10})$ s.t. $\forall n > M_{11}$,
+    \[
+        \frac{1-\beta}{n}\sum_{l=1}^{M_{10}}\sum_{j\neq I^\star}\frac{\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}}{1-\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{l}{K}}}} < \frac{\epsilon}{2}.
+    \]
+    Therefore, $\forall n > M_7 \eqdef \max\{M_3,M_{11}\}$, we have
+    \[
+        \frac{\Psi_{n,I^\star}}{n} \leq \beta + \epsilon.
+    \]
+    
+    \paragraph{Conclusion} Finally, combining the two steps and define $M_3 \eqdef \max\{M_4,M_7\}$, we have $\forall n > M_3$,
+    \[
+        \left|\frac{\Psi_{n,I^\star}}{n}-\beta\right| \leq \epsilon.
+    \]
+\end{proof}
+
+With the help of the previous lemma and Lemma~\ref{lemma:link}, we can finally prove Lemma~\ref{lemma:tracking_best}.
+
+\paragraph{Proof of Lemma~\ref{lemma:tracking_best}}
+Fix an $\epsilon > 0$. Using Lemma~\ref{lemma:link}, we have $\forall n\in\NN$,
+\[
+    \left|\frac{T_{n,I^\star}}{n}-\frac{\Psi_{n,I^\star}}{n}\right| \leq \frac{W_2\sqrt{(n+1)\log(e^2+n)}}{n}.
+\]
+Thus there exists $M_{12}$ s.t. $\forall n > M_{12}$,
+\[
+    \left|\frac{T_{n,I^\star}}{n}-\frac{\Psi_{n,I^\star}}{n}\right| \leq \frac{\epsilon}{2}.
+\]
+And using Lemma~\ref{lemma:psi_best}, there exists $M_3' = \text{Poly}(\epsilon/2,W_1,W_2)$ s.t. $\forall n > M_3'$,
+\[
+    \left|\frac{\Psi_{n,I^\star}}{n}-\beta\right| \leq \frac{\epsilon}{2}.
+\]
+Again, according to Lemma~\ref{lemma:psi_min_ttts}, there exists $M_3'$ s.t. $\forall n > M_3'$,
+\[
+    \frac{\Psi_{n,I^\star}}{n} \leq \beta+\frac{\epsilon}{2}.
+\]
+Thus, if we take $N_3 \eqdef \max\{M_3',M_{12}\}$, then $\forall n > N_3$, we have
+\[
+    \left| \frac{T_{n,I^\star}}{n}-\beta \right| \leq \epsilon.
+\]
+
+\hfill\BlackBox\\[2mm]
+
+\subsection{Measurement effort concentration of other arms}\label{app:confidence_ttts.other_arms}
+
+In this section, we show that, for \TTTS, the empirical measurement effort concentration also holds for other arms than the true best arm. We prove Lemma~\ref{lemma:tracking_other} for \TTTS.
+
+%We first establish the following lemma that is a \emph{non-asymptotic} version of Lemma~\ref{lemma:over_allocation}. 
+We first show that if some arm is overly sampled at time $n$, then its probability of being picked is reduced exponentially.
+
+\begin{lemma}\label{lemma:over_allocation_finite_ttts} 
+    Under \TTTS, for every $\xi \in (0,1)$, there exists $S_1 = \text{Poly}(1/\xi,W_1,W_2)$ such that for all $n > S_1$, for all $i\neq I^\star$, 
+    \[
+        \frac{\Psi_{n,i}}{n} \geq \omega_{i}^\beta + \xi  \ \ \Rightarrow \ \ \psi_{n,i} \leq \expp{-\epsilon_0(\xi) n}\,,
+    \]
+    where $\epsilon_0$ is defined in~\eqref{eq:def_epsilon0} below.
+\end{lemma}
+
+\begin{proof}
+First, by Lemma~\ref{lemma:empirical_best}, there exists $M_1'' = \text{Poly}(W_1,W_2)$ s.t. $\forall n > M_1''$, 
+\[
+    I^\star = I_n^\star = J_n^{(1)}.
+\]
+Then, following the similar argument as in Lemma~\ref{lemma:sufficient_optimality}, one can show that for all $i\neq I^\star$ and for all $n > M_1''$,
+\begin{align*}
+	\psi_{n,i} &=a_{n,i} \left( \beta  + (1-\beta) \sum_{j \neq i} \frac{a_{n,j}}{1-a_{n,j}} \right)\\
+	           &\leq a_{n,i} \beta  + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{1-a_{n,J_n^{(1)}}}\\
+	           &= a_{n,i} \beta  + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{1-a_{n,I^\star}}\\
+	           &\leq a_{n,i}\beta  + a_{n,i} (1-\beta) \frac{1}{1-a_{n,I^\star}}\\
+	           &\leq \frac{a_{n,i}}{1-a_{n,I^\star}}\\
+	           &\leq \frac{\Pi_{n}\left[ \theta_i\geq\theta_{I^\star} \right]}{\Pi_{n}\left[ \cup_{j\neq I^\star}\theta_j\geq\theta_{I^\star} \right]}\\
+	           &\leq \frac{\Pi_{n}\left[ \theta_i\geq\theta_{I^\star} \right]}{\max_{j\neq I^\star} \Pi_{n}\left[ \theta_j\geq\theta_{I^\star} \right]}.
+\end{align*}
+
+Using the upper and lower Gaussian tail bounds from Lemma~\ref{lemma:gaussiantails}, we have
+\begin{align*}
+    \psi_{n,i} &\leq \ddfrac{\expp{- \frac{(\mu_{n,I^\star} - \mu_{n,i})^2}{2\sigma^2\left(1/T_{n,I^\star} + 1/T_{n,i}\right)}}}{\expp{- \min_{j\neq I^\star} \frac{1}{2}\left(\frac{(\mu_{n,I^\star} - \mu_{n,j})}{\sigma\sqrt{\left(1/T_{n,I^\star} + 1/T_{n,j}\right)}} -1\right)^2}}\\ 
+               &=  \ddfrac{\expp{- n\frac{(\mu_{n,I^\star} - \mu_{n,i})^2}{2\sigma^2\left(n/T_{n,I^\star} + n/T_{n,i}\right)}}}{\expp{- {n}\left(\min_{j\neq I^\star} \frac{(\mu_{n,I^\star} - \mu_{n,j})}{\sqrt{2\sigma^2\left(n/T_{n,I^\star} + n/T_{n,j}\right)}} -\frac{1}{\sqrt{2n}}\right)^2}},
+\end{align*}
+
+where we assume that $n > S_2 = \text{Poly}(W_1,W_2)$ for which 
+\[
+    \frac{(\mu_{n,I^\star} - \mu_{n,i})^2}{\sigma^2\left(1/T_{n,I^\star} + 1/T_{n,i}\right)} \geq 1
+\]
+according to Lemma~\ref{lemma:sufficient_exploration}. From there we take a supremum over the possible allocations to lower bound the denominator and write  
+\begin{align*}
+    \psi_{n,i} &\leq \ddfrac{\expp{-n\frac{(\mu_{n,I^\star} - \mu_{n,i})^2}{2\sigma^2\left(n/T_{n,I^\star} + n/T_{n,i}\right)}}}{\expp{-n\left(\underset{\bomega : \omega_{I^\star} = T_{n,I^\star}/n}{\sup} \min_{j\neq I^\star}\frac{(\mu_{n,I^\star} - \mu_{n,i})}{\sqrt{2\sigma^2\left(1/\omega_{I^\star} + 1/\omega_{j}\right)}} -\frac{1}{\sqrt{2n}}\right)^2}} \\
+               &= \ddfrac{\expp{- n\frac{(\mu_{n,I^\star} - \mu_{n,i})^2}{2\sigma^2\left(n/T_{n,I^\star} + n/T_{n,i}\right)}}}{\expp{-n\left( \sqrt{\Gamma^\star_{T_{n,I^\star}/n}\left(\bmu_n\right)} -\frac{1}{\sqrt{2n}}\right)^2}},
+\end{align*}
+where $\bmu_n \eqdef (\mu_{n,1},\cdots,\mu_{n,K})$, and $(\beta,\bmu)\mapsto \Gamma_{\beta}^\star(\bmu)$ represents a function that maps $\beta$ and $\bmu$ to the parameterized optimal error decay that any allocation rule can reach given parameter $\beta$ and a set of arms with means $\bmu$. Note that this function is continuous with respect to $\beta$ and $\bmu$ respectively.
+
+Now, assuming $\Psi_{n,i}/n \geq \omega_{i}^\beta + \xi$ yields that there exists $S_2'\eqdef\text{Poly}(2/\xi,W_2)$ s.t. for all $n>S_2'$, $T_{n,i}/n \geq \omega_{i}^\beta + \xi/2$, and by consequence,
+\[
+    \psi_{n,i} \leq \expp{-n\underbrace{\left(\frac{(\mu_{n,I^\star} - \mu_{n,i})^2}{2\sigma^2\left(n/T_{n,I^\star} + 1/(\omega_i^\beta + \xi/2)\right)} -\Gamma^\star_{T_{n,I^\star}/n}\left(\bmu_{n}\right) - \frac{1}{2n} + \sqrt{\frac{2\Gamma^\star_{T_{n,I^\star}/n}\left(\bmu_{n}\right)}{n}}\right)}_{\epsilon_n(\xi)}}.
+\]
+Using Lemma~\ref{lemma:tracking_best}, we know that for any $\epsilon$, there exists $S_3 = \text{Poly}(1/\epsilon,W_1,W_2)$ s.t. $\forall n > S_3$, $|T_{n,I^\star}/n - \beta| \leq \epsilon$, and $\forall j\in\cA, |\mu_{n,j}-\mu_j| \leq \epsilon$. Furthermore, $(\beta,\bmu)\mapsto \Gamma_{\beta}^\star(\bmu)$ is continuous with respect to $\beta$ and $\bmu$, thus for a given $\epsilon_0$, there exists $S_3' = \text{Poly}(1/\epsilon_0,W_1,W_2)$ s.t. $\forall n > S_3'$, we have
+\[
+    \left|\epsilon_n(\xi) - \left(\frac{(\mu_{I^\star} - \mu_{i})^2}{2\sigma^2\left(1/\beta + 1/(\omega_i^\beta + \xi/2)\right)} - \Gamma_{\beta}^\star\right)\right| \leq \epsilon_0.
+\]
+
+Finally, define $S_1 \eqdef \max\{S_2,S_2',S_3'\}$, we have $\forall n > S_1$,
+\[
+    \psi_{n,i} \leq \expp{-\epsilon_0(\xi) n},
+\]
+where
+\begin{equation}
+    \label{eq:def_epsilon0}
+    \epsilon_0(\xi) = \frac{(\mu_{I^\star} - \mu_{i})^2}{2\sigma^2\left(1/\beta + 1/(\omega_i^\beta + \xi/2)\right)} - \Gamma_{\beta}^\star + \epsilon_0\,.
+\end{equation}
+
+
+\end{proof}
+
+Next, starting from some known moment, no arm is overly allocated. More precisely, we show the following lemma.
+
+\begin{lemma}\label{lemma:psi_other_ttts}
+    Under \TTTS, for every $\xi$, there exists $S_4 = \text{Poly}(1/\xi,W_1,W_2)$ s.t. $\forall n > S_4$,
+    \[
+        \forall i \in \cA, \ \ \frac{\Psi_{n,i}}{n} \leq \omega_{i}^\beta + \xi.
+    \]
+\end{lemma}
+
+\begin{proof}
+    From Lemma~\ref{lemma:over_allocation_finite_ttts}, there exists $S_1' = \text{Poly}(2/\xi,W_1,W_2)$ such that for all $n > S_1'$ and for all $i\neq I^\star$, 
+    \[
+        \frac{\Psi_{n,i}}{n} \geq \omega_{i}^\beta + \frac{\xi}{2}  \ \ \Rightarrow \ \ \psi_{n,i} \leq \expp{-\epsilon_0(\xi/2) n}.
+    \] 
+    Thus, for all $i \neq I^\star$,
+    \begin{align*}
+        \frac{\Psi_{n,i}}{n} 
+        &\leq \frac{S_1'}{n} + \ddfrac{\sum_{\ell=S_1'+1}^n \psi_{\ell,i}\1{\left(\frac{\Psi_{\ell,i}}{n} \geq \omega_{i}^\beta+\frac{\xi}{2}\right)}}{n} + \ddfrac{\sum_{\ell=S_1'+1}^n \psi_{\ell,i}\1{\left(\frac{\Psi_{\ell,i}}{n} \leq \omega_{i}^\beta + \frac{\xi}{2}\right)}}{n} \\
+        &\leq \frac{S_1'}{n} + \ddfrac{\sum_{\ell=1}^n \expp{-\epsilon_0(\xi/2) n}}{n} + \ddfrac{\sum_{\ell=S_1'+1}^{\ell_n(\xi)}\ \psi_{\ell,i}\1{\left(\frac{\Psi_{\ell,i}}{n} \leq \omega_{i}^\beta + \frac{\xi}{2}\right)}}{n},
+    \end{align*}
+    where we let $\ell_n(\xi) = \max\left\{ \ell \leq n : \Psi_{\ell,i}/n \leq \omega_{i}^\beta + \xi/2\right\}$. Then
+    \begin{align*}
+        \frac{\Psi_{n,i}}{n} 
+        &\leq \frac{S_1'}{n} + \ddfrac{\sum_{\ell=1}^n \expp{-\epsilon_0(\xi/2) n}}{n} + \Psi_{\ell_n(\xi),i}\\
+        &\leq \frac{S_1' + (1 - \exp(-\epsilon_0(\xi/2))^{-1}}{n}+ \omega_{i}^\beta + \frac{\xi}{2}
+    \end{align*}
+    Then, there exists $S_5$ such that for all $n \geq S_5$,
+    \[
+        \frac{S_1' + (1 - \exp(-\epsilon_0(\xi/2))^{-1}}{n} \leq \frac{\xi}{2}.
+    \]
+    Therefore, for any $n > S_4 \eqdef \max\{S_1',S_5\}$, $\Psi_{n,i} \leq \omega_i^\beta + \xi$ holds for all $i\neq I^\star$. For $i = I^\star$, it is already proved for the optimal arm.
+\end{proof}
+
+We now prove Lemma~\ref{lemma:tracking_other} under \TTTS.
+
+\paragraph{Proof of Lemma~\ref{lemma:tracking_other}} 
+
+From Lemma~\ref{lemma:psi_other_ttts}, there exists $S_4' = \text{Poly}((K-1)/\xi,W_1,W_2)$ such that for all $n > S_4'$,
+\[
+    \forall i\in\cA, \frac{\Psi_{n,i}}{n} \leq \omega_i^\beta + \frac{\xi}{K-1}.
+\]
+Using the fact that $\Psi_{n,i}/n$ and $\omega_{i}^\beta$ all sum to 1, we have $\forall i \in \cA$,
+\begin{align*}
+    \frac{\Psi_{n,i}}{n} &= 1 - \sum_{j\neq i} \frac{\Psi_{n,j}}{n}\\
+                         &\geq 1 - \sum_{j\neq i} \left(\omega_j^\beta + \frac{\xi}{K-1}\right)\\
+                         &= \omega_i^\beta - \xi.
+\end{align*}
+
+Thus, for all $n > S_4'$, we have
+\[
+    \forall i\in\cA, \left| \frac{\Psi_{n,i}}{n} - \omega_i^\beta \right| \leq \xi.
+\]
+And finally we use the same reasoning as the proof of Lemma~\ref{lemma:tracking_best} to link $T_{n,i}$ and $\Psi_{n,i}$. Fix an $\epsilon > 0$. Using Lemma~\ref{lemma:link}, we have $\forall n\in\NN$,
+\[
+    \forall i\in\cA, \left|\frac{T_{n,i}}{n}-\frac{\Psi_{n,i}}{n}\right| \leq \frac{W_2\sqrt{(n+1)\log(e^2+n)}}{n}.
+\]
+Thus there exists $S_5$ s.t. $\forall n > S_5$,
+\[
+    \left|\frac{T_{n,I^\star}}{n}-\frac{\Psi_{n,I^\star}}{n}\right| \leq \frac{\epsilon}{2}.
+\]
+And using the above result, there exists $S_4'' = \text{Poly}(2/\epsilon,W_1,W_2)$ s.t. $\forall n > S_4''$,
+\[
+    \left|\frac{\Psi_{n,i}}{n} - \omega_i^\beta\right| \leq \frac{\epsilon}{2}.
+\]
+Thus, if we take $N_4 \eqdef \max\{S_4'',S_5\}$, then $\forall n > N_4$, we have
+\[
+    \forall i\in\cA, \left|\frac{T_{n,i}}{n} - \omega_i^\beta\right| \leq \epsilon.
+\]
+
+\hfill\BlackBox\\[2mm]

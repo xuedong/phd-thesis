@@ -1,0 +1,175 @@
+\section{Proof of Posterior Convergence for the Gaussian Bandit}\label{app:posterior_gaussian}
+
+\subsection{Proof of Theorem~\ref{thm:posterior_gaussian}}\label{app:posterior_gaussian.main}
+
+\restateposteriorgaussian*
+
+From Theorem 2 in \cite{qin2017ttei}, any allocation rule satisfying $T_{n, i} / n \rightarrow \omega_i^\beta$ for each $i \in \cA$, satisfies 
+\begin{align*}
+    \lim_{n \rightarrow \infty} - \frac{1}{n} \log(1 - a_{n,I^\star}) = \Gamma_{\beta}^\star.
+\end{align*}
+Therefore, to prove Theorem~\ref{thm:posterior_gaussian}, it is sufficient to prove that under \TTTS,
+\begin{equation}
+    \forall i \in \{1,\dots,K\}, \ \ \     \lim_{n\rightarrow\infty} \frac{T_{n,i}}{n}  \overset{a.s}{=} \omega_i^\beta\label{ToProveGaussian}.
+\end{equation}
+Due to the concentration result in Lemma~\ref{lemma:link} that we restate below (and proved in Appendix~\ref{app:confidence_ttts}), which will be useful at several places in the proof, observe that 
+\[
+    \lim_{n\rightarrow \infty} \frac{T_{n,i}}{n}  \overset{a.s}{=} \omega_i^\beta \ \ \Leftrightarrow \ \ \ \lim_{n\rightarrow \infty} \frac{\Psi_{n,i}}{n}  \overset{a.s}{=} \omega_i^\beta,
+\]
+therefore it suffices to establish the convergence of $\overline{\psi}_{n,i} = \Psi_{n,i}/n$ to $\omega_i^\beta$, which we do next. For that purpose, we need again the following maximality inequality lemma.
+
+\restatewtwo*
+
+\paragraph{Step 1: \TTTS draws all arms infinitely often and satisfies $T_{n,I^\star}/n \rightarrow \beta$.} More precisely, we prove the following lemma. 
+
+\begin{lemma}\label{lemma:optimal_prop_istar_gaussian}
+	Under \TTTS, it holds almost surely that
+	\begin{enumerate}
+	    \item for all $i \in \cA$, $\lim_{n\rightarrow \infty} T_{n,i} = \infty.$
+	    \item $a_{n,I^\star} \rightarrow 1.$
+	    \item $T_{n,I^\star}/n \rightarrow \beta$.
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof} Our first ingredient is a lemma showing the implications of finite measurement, and consistency when all arms are sampled infinitely often. Its proof follows standard posterior concentration arguments and is given in Appendix~\ref{app:posterior_gaussian.aux}.
+
+\begin{lemma}[Consistency and implications of finite measurement]\label{lemma:consistency_gaussian}\ \\
+	Denote with $\overline{\mathcal{I}}$ the arms that are sampled only a finite amount of times:
+	\begin{align*}
+	\overline{\mathcal{I}} = \{ i \in \{ 1, \ldots, k \} : \forall n, T_{n,i} < \infty \}.
+	\end{align*}
+	If $\overline{\mathcal{I}}$ is empty, $a_{n,i}$ converges almost surely to $1$ when $i = I^\star$ and to $0$ when $i \neq I^\star$. If $\overline{\mathcal{I}}$ is non-empty, then for every $i \in \overline{\mathcal{I}}$, we have $\liminf_{n \rightarrow \infty} a_{n,i} > 0$ a.s.
+\end{lemma}
+
+	First we show that $\sum_{n \in \mathbb{N}} T_{n,j} = \infty$ for each arm $j$. Suppose otherwise. Let $\overline{\mathcal{I}}$ again be the set of arms to which only finite measurement effort is allocated. Under \TTTS, we have
+	\begin{align*}
+	\psi_{n,i} = a_{n,i} \left( \beta + (1-\beta) \sum_{j \neq i} \frac{a_{n,j}}{1- a_{n,j}} \right),
+	\end{align*}
+	so $ \psi_{n,i}  \geq \beta a_{n,i}$. Therefore, by Lemma~\ref{lemma:consistency_gaussian}, if $i \in \overline{\mathcal{I}}$, then $\liminf a_{n,i} > 0$ implies that $\sum_n \psi_{n,i} = \infty$. By Lemma~\ref{lemma:link}, we then must have that $\lim_{n \rightarrow \infty} T_{n,i} = \infty$ as well: contradiction.  Thus, $\lim_{n \rightarrow \infty} T_{n,i} = \infty$ for all $i$, and we conclude that $a_{n,I^\star} \rightarrow 1$, by Lemma~\ref{lemma:consistency_gaussian}. 
+	
+	For \TTTS with parameter $\beta$ this implies that $\overline{\psi}_{n, I^\star} \rightarrow \beta$, and since we have a bound on $| T_{n,i} / n - \overline{\psi}_{n, i} |$ in Lemma~\ref{lemma:link}, we have $T_{n, I^\star} / n \rightarrow \beta$ as well.
+\end{proof}
+
+\paragraph{Step 2:  Controlling the over-allocation of sub-optimal arms.}
+The convergence of $T_{n,I^\star}/n$ to $\beta$ leads to following interesting consequence, expressed in Lemma~\ref{lemma:over_allocation}: if an arm is sampled more often than its optimal proportion, the posterior probability of this arm to be optimal is reduced compared to that of other sub-optimal arms.
+
+\begin{lemma}[Over-allocation implies negligible probability]\label{lemma:over_allocation}\footnote{analogue of Lemma 13 of \cite{russo2016ttts}}
+Fix any $\xi > 0$ and $j \neq I^\star$. With probability 1, under any allocation rule, if $T_{n,I^\star}/n \rightarrow \beta$, there exist $\xi' > 0$ and a sequence $\epsilon_n$ with $\epsilon_n \rightarrow 0$ such that for any $n \in \mathbb{N}$, 
+	\begin{align*}
+	\frac{T_{n,j}}{n} \geq \omega_j^\beta + \xi \Rightarrow \frac{a_{n,j}}{\max_{i \neq I^\star} a_{n,i}} \leq e^{-n (\xi' + \epsilon_n)}.
+	\end{align*}
+\end{lemma}
+
+%\todo[inline]{This proof uses repeatedly the consistency Lemma~\ref{lemma:optimal_prop_istar_gaussian} without mentioning it}
+%\todo[inline]{R: I think I mentioned it now in the right place --- or do I still miss something?}
+
+\begin{proof}
+	We have $\Pi_{n}(\Theta_{\cup i \neq I^\star}) = \sum_{i \neq I^\star} a_{n,i} = 1 - a_{n,I^\star}$, therefore $ \max_{i \neq I^\star} a_{n,i} \leq 1 - a_{n,I^\star}$. By Theorem~2 of \cite{qin2017ttei} we have, as $T_{n,I^\star}/n \rightarrow \beta$, 
+	\begin{align*}
+	\limsup_{n \rightarrow \infty} - \frac{1}{n} \log\left(\max_{i \neq I^\star} a_{n,i}\right) \leq \Gamma_{\beta}^\star.
+	\end{align*}
+	We also have the following from the standard Gaussian tail inequality, for $n \geq \tau$ after which $\mu_{n, I^\star} \geq \mu_{n, i}$, using that $\theta_i - \theta_{I^\star} \sim \mathcal{N}(\mu_{n,i} - \mu_{n, I^\star} , \sigma^2_{n,i} + \sigma^2_{n, I^\star} )$ and $\sigma^2_{n,i} + \sigma^2_{n, I^\star} = \sigma^2 (1/ T_{n,i} + 1/T_{n,I^\star})$,
+	\begin{align*}
+	a_{n,i} \leq \Pi_{n}(\theta_i \geq \theta_{I^\star})  \leq \exp \left( \frac{- (\mu_{n,i} - \mu_{n,I^\star})^2}{2\sigma^2 (1/T_{n,I^\star} +1/T_{n,i})} \right)
+	= \exp \left(-n \, \frac{(\mu_{n,i} - \mu_{n,1})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,i})} \right).
+	\end{align*}
+	
+	Thus, there exists a sequence $\epsilon_n \rightarrow 0$, for which 
+	\begin{align*}
+	    \frac{a_{n,j}}{\max_{i \neq I^\star} a_{n,i}} 
+	    \leq \ddfrac{\expp{-n \left( \frac{ (\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} - \epsilon_n/2 \right) }}{\expp{-n \left( \Gamma_{\beta}^\star + \epsilon_n/2 \right)})}
+	    = \expp{-n \left(\frac{(\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} - \Gamma_{\beta}^\star  - \epsilon_n \right)}.
+	\end{align*}
+	Now we take a look at the two terms in the middle:
+	\begin{align*}
+	\frac{(\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} - \Gamma_{\beta}^\star.
+	\end{align*}
+	Note that the first term is increasing in $T_{n,j} / n$. We have the definition from \cite{qin2017ttei}, for any $j \neq I^\star$,
+	\begin{align*}
+	\Gamma_{\beta}^\star = \frac{(\mu_{j} - \mu_{I^\star})^2}{2\sigma^2 \left(1/ \omega_{I^\star}^\beta +1/\omega_j^\beta\right)}, 
+	\end{align*}
+	and we have the premise
+	\begin{align*}
+	\frac{T_{n,j}}{n} \geq \omega_j^\beta + \xi.
+	\end{align*}
+	Combining these with the convergence of the empirical means to the true means (consistency, see Lemma~\ref{lemma:consistency_gaussian}), we can conclude that for all $\epsilon > 0$, there exists a time $n_0$ such that for all later times $n \geq n_0$, we have
+	\begin{align*}
+	\frac{(\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} \geq   \frac{(\mu_{j} - \mu_{I^\star})^2}{2\sigma^2 \left(1/\beta +n/T_{n,j} \right)} - \epsilon 
+	\geq  \frac{(\mu_{j} - \mu_{I^\star})^2}{2\sigma^2 \left(1/\beta +1/(\omega_j^\beta + \xi)\right)} - \epsilon
+	> \Gamma_{\beta}^\star,
+	\end{align*}
+	where the first inequality follows from consistency, the second from monotonicity in $T_{n,j} / n$. That means that there exist a $\xi' > 0$ such that
+	\begin{align*}
+	\frac{(\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} - \Gamma_{\beta}^\star > \xi',
+	\end{align*}
+	and thus the claim follows that when $\frac{T_{n,j}}{n} \geq \omega_j^\beta + \xi$, we have
+	\begin{align*}
+	\frac{a_{n,j}}{\max_{i \neq I^\star} a_{n,i}} \leq \exp \left\lbrace - n \left(\frac{(\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} - \Gamma_{\beta}^\star  - \epsilon_n \right) \right\rbrace 
+	\leq e^{-n (\xi' + \epsilon_n)}.
+	\end{align*}
+\end{proof}
+
+
+\paragraph{Step 3: $\overline{\psi}_{n,i}$ converges to $\omega_i^\beta$ for all arms.} To establish the convergence of the allocation effort of all arms, we rely on the same sufficient condition used in the analysis of \cite{russo2016ttts}, that we recall below. 
+
+\begin{lemma}[Sufficient condition for optimality]\label{lemma:sufficient_optimality}\footnote{Lemma 12 of \cite{russo2016ttts}}
+Consider any adaptive allocation rule. If we have
+	\begin{align}\label{eq:sufficient condition for optimality}
+		&\overline{\psi}_{n, I^\star} \rightarrow \beta, \quad \text{ and } \quad
+		\sum_{n \in \mathbb{N}} \psi_{n,j} \bm{1} \left\lbrace \overline{\psi}_{n,j} \geq \omega_j^\beta + \xi \right\rbrace < \infty, \quad \forall j \neq I^\star, \xi > 0,
+	\end{align}
+then $\overline{\psi}_{n} \rightarrow \psi^\beta$.
+\end{lemma}
+
+First, note that from Lemma~\ref{lemma:optimal_prop_istar_gaussian} we know that $T_{n,I^\star}/n \rightarrow \beta$, an by Lemma~\ref{lemma:link} this implies $\overline{\psi}_{n, I^\star} \rightarrow \beta$, hence we can use Lemma~\ref{lemma:sufficient_optimality} to prove convergence to the optimal proportions. Thus, we now show that \eqref{eq:sufficient condition for optimality} holds under \TTTS. Recall that $J_n^{(1)} = \argmax_{j} a_{n,j}$ and $J_n^{(2)} = \argmax_{j\neq J_n^{(1)}} a_{n,j}$. Since $a_{n,I^\star} \rightarrow 1$ by Lemma~\ref{lemma:optimal_prop_istar_gaussian}, there is some finite time $\tau$ after which for all $n > \tau$, $J_n^{(1)} = I^\star$. Under \TTTS, 
+	\begin{align*}
+	\psi_{n,i} =a_{n,i} \left( \beta  + (1-\beta) \sum_{j \neq i} \frac{a_{n,j}}{1-a_{n,j}} \right)
+	           \leq a_{n,i} \beta  + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{1-a_{n,J_n^{(1)}}}
+	           \leq  a_{n,i} \beta + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{a_{n,J_n^{(2)}}}\\
+	           \leq a_{n,i}\beta  + a_{n,i} (1-\beta) \frac{1}{a_{n,J_n^{(2)}}}
+	           \leq \frac{a_{n,i}}{a_{n,J_n^{(2)}}},
+	\end{align*}
+where we use the fact that for $j \neq J_n^{(1)}$, we have $a_{n,J_n^{(1)}} \geq a_{n,j}$ and $a_{n,J_n^{(2)}} \leq 1- a_{n,J_n^{(1)}}$. For $n \geq \tau$ this means that $\psi_{n, i} \leq a_{n,i} / \max_{j \neq I^\star} a_{n,i}$ for any $i \neq I^\star$.
+	
+By Lemma~\ref{lemma:over_allocation}, there is a constant $\xi' > 0$ such and a sequence $\epsilon_n \rightarrow 0$ such that
+	\begin{align*}
+	T_{n, i} / n \geq w_{i}^\beta + \xi \Rightarrow \frac{a_{n,i}}{\max_{j \neq I^\star} a_{n,j}} \leq e^{-n(\xi' - \epsilon_n)}.
+	\end{align*}
+Now take a time $\tau$ large enough, such that for $n \geq \tau$ we have $| T_{n,j} / n - \overline{\psi}_{n,j} | \leq \xi$ (which can be found by Lemma~\ref{lemma:link}). Then we have
+	\begin{align*}
+	    \1{\left\lbrace \overline{\psi}_{n,j} \geq \psi_j^{\beta} + \xi \right\rbrace } \leq \1{\left\lbrace \frac{T_{n,j}}{n} \geq \omega_j^\beta + 2\xi \right\rbrace }
+	\end{align*}
+Therefore, for all $i \neq I^\star$, we have
+	\begin{align*}
+	    \sum_{n \geq \tau} \psi_{n, i} 	\1{\left\lbrace \overline{\psi}_{n,j} \geq \psi_j^{\beta} + \xi \right\rbrace }
+	    \leq \sum_{n \geq \tau} \psi_{n, i} \1{\left\lbrace \frac{T_{n,j}}{n} \geq \omega_j^\beta + 2\xi \right\rbrace }
+	    \leq \sum_{n \geq \tau} e^{-n(\xi' - \epsilon_n)} < \infty.
+	\end{align*}
+Thus \eqref{eq:sufficient condition for optimality} holds and the convergence to the optimal proportions follows by Lemma~\ref{lemma:sufficient_optimality}.
+
+\subsection{Proof of auxiliary lemmas}\label{app:posterior_gaussian.aux}
+
+\paragraph{Proof of Lemma~\ref{lemma:consistency_gaussian}}
+	
+Let  $\overline{\mathcal{I}}$ be nonempty. Define
+	\begin{align*}
+	\mu_{\infty, n} \triangleq \lim_{n \rightarrow \infty} \mu_{n, i}, &\text{     and    } \sigma_{\infty, i}^2  \triangleq \lim_{n \rightarrow \infty} \sigma^2_{n,i},
+	\end{align*}
+and recall that for $i \in \cA$ for which $T_{n,i} = 0$, we have $\mu_{n_i} = \mu_{1,i} = 0$ and $\sigma^2_{n,i} = \sigma^2_{1, i} = \infty$, and if $T_{n,i} > 0$, we have
+	\begin{align*}
+	\mu_{n,i} = \frac{1}{T_{n,i}} \sum_{\ell = 1}^{n-1} \1{\{ I_\ell = i \}} Y_{\ell, I_\ell}, &\text{     and    } \sigma^2_{n,i} = \frac{\sigma^2}{T_{n,i}}.
+	\end{align*}
+For all arms that are sampled infinitely often, we therefore have $\mu_{\infty, i} = \mu_i$ and $\sigma_{\infty, i}^2 = 0$. For all arms that are sampled only a finite number of times, i.e.\ $i \in \overline{\cI}$, we have $\sigma_{\infty, i}^2 > 0$, and there exists a time $n_0$ after which for all $n \geq n_0$ and $i \in \overline{\cI}$, we have $T_{n,i} = T_{n_0,i}$. Define
+	\begin{align*}
+	\Pi_\infty \triangleq \cN(\mu_{\infty, 1}, \sigma_{\infty, 1}^2) \otimes \cN(\mu_{\infty, 2}, \sigma_{\infty, 2}^2) \otimes \ldots \otimes \cN(\mu_{\infty, k}, \sigma_{\infty, k}^2)
+	= \bigotimes_{i \not\in \overline{\cI}} \delta_{\mu_i} \otimes \bigotimes_{i \in \overline{\cI}} \Pi_{n_0}.
+	\end{align*}
+Then for each $i \in \cA$ we define
+	\begin{align*}
+	a_{\infty, i} \triangleq \Pi_\infty \left( \theta_i > \max_{j \neq i} \theta_j \right). 
+	\end{align*}
+Then we have for all $i \in \overline{\mathcal{I}}$, $a_{\infty, i} \in (0,1)$, since $\sigma_{\infty, i}^2 > 0$, and thus $a_{\infty, I^\star} < 1$. 
+
+When $\overline{\cI}$ is empty, we have $ a_{n,I^\star} = \Pi_{n} (\theta_{I^\star} > \max_{i \neq I^\star} \theta_i) $, but since $\Pi_\infty = \bigotimes_{i \in \cA} \delta_{\mu_i}$, we have $a_{\infty, I^\star} = 1$ and $a_{\infty, i} = 0$ for all $i \neq I^\star$.
+ 	
+\hfill\BlackBox\\[2mm]

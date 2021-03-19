@@ -1,0 +1,533 @@
+%!TEX root = ../Chapter3.tex
+\section{Proof for the Sample Complexity: Convexified Algorithm}\label{app:lgc.proof}
+
+In this section we prove the asymptotic optimality of \LGC.
+\subsection{Events}\label{app:proof.events}
+We fix a constant $\alpha>2$ and define the event where the least square estimator is concentrated around the true parameter,
+\[
+\cE_t = \left\{\forall s \leq  t:\ \frac{1}{2}\normm{\htheta_s-\theta}^2_{V_{N_s}+\eta I_d} \leq h(t)\eqdef \beta(t,1/t^\alpha)\right\}\,.
+\]
+This event holds with high probability
+\begin{lemma}
+\label{lem:prb_Et}
+For all $t \geq 1$
+\[
+\P_\theta\left(\cE_t^c\right)\leq \frac{1}{t^{\alpha-1}}\,.
+\]
+\end{lemma}
+
+\paragraph{Optimistic loss} We need to build an upper confidence bound for all $w\in\Sigma_{AI}$ on the true gain at time $s$
+\[
+g_{s}^{\theta}(w) = \frac{1}{2} \sum_{(a,i)\in\cA\times\cI} w^{a,i} \normm{\theta - \lambda_t^i}_{V_{w}}^2\,.
+\]
+For that, we just build confidence bound for each terms that appear in the right hand sum.
+\begin{lemma}
+\label{lem:confidence_bound_general}
+On the event $\cE_t$, for all $a\in\cA\times\cI$ and $\lambda\in\cM$, for all $s\leq t$,
+\[
+\normm{\theta-\lambda}^2_{aa^\top} \leq \min\left(\max_\pm \left( \langle \htheta_{s} - \lambda,a\rangle \pm \sqrt{2 h(t)} \normm{a}_{(V_{N_s}+ \eta I_d)^{-1}} \right)^2,4L^2 M^2\right)
+\]
+\end{lemma}
+\begin{proof}
+First, note that since $\theta,\lambda\in\cM$ their norms is bounded by $M$, thus it holds
+\[
+\normm{\theta-\lambda}^2_{aa^\top} = \langle\theta-\lambda,a \rangle^2 \leq \normm{\theta-\lambda}^2 \normm{\lambda}^2 \leq 4M^2L^2\,.
+\]
+Furthermore on $\cE_t$ we have
+\begin{align*}
+\normm{\theta-\lambda}^2_{aa^\top} = \langle\theta-\lambda,a \rangle^2 &\leq \sup_{\big\{\theta':\ \normm{\htheta_s-\theta'}^2_{(V_{N_s} + \eta I_d)^{-1} } \leq 2h(t)\big\}} \langle\theta'-\lambda,a \rangle^2\\
+&=\max_\pm \left( \langle \htheta_{s} - \lambda,a\rangle \pm \sqrt{2 h(t)} \normm{a}_{(V_{N_s}+ \eta I_d)^{-1}} \right)^2\,.
+\end{align*}
+Combining the two inequalities above allows us to conclude.
+\end{proof}
+Thus we define the upper confidence $U_s^{a,i}$ on the coordinate $(a,i)$ of the loss at time $s\leq t$ by
+\begin{equation}
+\label{eq:def_ucb_br_general}
+U_s^{a,i} = \min\left(\max_\pm \left( \langle \htheta_{s-1} - \lambda,a\rangle \pm \sqrt{2 h(t)} \normm{a}_{(V_{N_{s-1}}+ \eta I_d)^{-1}} \right)^2,4L^2 M^2\right)\,,
+\end{equation}
+and the optimistic loss: $\ell_s(w) = (1/2)\sum_{(a,i)\in\cA\times\cI} w^{a,i} U_s^{a,i}$.
+
+
+
+\paragraph{Analysis} The first step of our analysis is to restrict it to the event $\mathcal E_t$, as is done by \citet{garivier2016tracknstop,degenne2019game}.
+\begin{lemma}
+Let $\mathcal E_t$ be an event and $T_0(\delta) \in \NN$ be such that for $t\geq T_0(\delta)$, $\cE_t \subseteq \{\tau_\delta \leq t\}$. Then
+\begin{align*}
+\mathbb{E}[\tau_\delta]
+&T_0(\delta) + 1 + \frac{2^{\alpha-2}}{\alpha-2}
+\end{align*}
+\end{lemma}
+\begin{proof}
+We have using Lemma~\ref{lem:prb_Et},
+\begin{align*}
+\E_\theta[\tau_\delta] &= \sum_{t=0}^{+\infty} \P(\tau_\delta \leq t) = T_0(\delta) + \sum_{t=T_0(\delta)}^{+\infty} \P(\cE_t^c)\\
+&\leq T_0(\delta) + \sum_{t=1}^{+\infty} \frac{1}{t^{\alpha-1}} \leq  T_0(\delta) + 1 + \frac{2^{\alpha-2}}{\alpha-2}\,,
+\end{align*}
+where in the last inequality we used a integral-sum comparison.
+\end{proof}
+
+
+We need to prove that if $\mathcal E_t$ holds, there exists such a time $T_0(\delta)$.
+
+
+\subsection{Analysis under concentration}
+
+
+% \hrule
+% Check this:
+% \begin{align*}
+% \sum_{i\in \mathcal I} \inf_{\lambda_i\in \neg i} \frac{1}{2}\Vert \hat{\theta}_t - \lambda_i \Vert^2_{V_{N_t^i}}
+% &\leq\inf_{\lambda\in \neg i^*} \frac{1}{2}\Vert \hat{\theta}_t - \lambda \Vert^2_{V_{N_t^{i^*}}}
+% 	 + \sum_{i\neq i^*} \frac{1}{2}\Vert \hat{\theta}_t - \theta \Vert^2_{V_{N_t^i}}
+% \\
+% &\leq\inf_{\lambda\in \neg i^*} \frac{1}{2}\Vert \hat{\theta}_t - \lambda \Vert^2_{V_{N_t}}
+% 	 + \frac{1}{2}\Vert \hat{\theta}_t - \theta \Vert^2_{V_{N_t}}
+% \\
+% &\leq\max_i \inf_{\lambda\in \neg i} \frac{1}{2}\Vert \hat{\theta}_t - \lambda \Vert^2_{V_{N_t}}
+% 	 + \frac{1}{2}\Vert \hat{\theta}_t - \theta \Vert^2_{V_{N_t}}
+% \\
+% &\leq\max_i \inf_{\lambda\in \neg i} \frac{1}{2}\Vert \hat{\theta}_t - \lambda \Vert^2_{V_{N_t}}
+% 	 + h(t)
+% \: .
+% \end{align*}
+% \todo[inline]{Todo: insert that into the flow of the proof.}
+% \hrule
+We assume in this section that the event $\cE_t$ holds. If the algorithm does not stop at stage $t$, then it holds
+\begin{align*}
+\beta(t,\delta)
+\ge\max_{i\in\cI} \inf_{\lambda_i \in \neg i}\frac{1}{2} \Vert \hat{\theta}_t - \lambda_i \Vert_{V_{N_t}}^2
+%= \frac{1}{2} \inf_{\lambda \in \neg i_t}\Vert \hat{\theta}_t - \lambda \Vert_{V_{N_t}}^2
+%\geq\frac{1}{2}\sum_{i\in\cI} \inf_{\lambda_i \in \neg i}\Vert \hat{\theta}_t - \lambda_i \Vert_{V_{N_t^i}}^2
+\,.
+\end{align*}
+But by definition of the event $\cE_t$ we have
+\begin{align*}
+\sum_{i\in \mathcal I} \inf_{\lambda_i\in \neg i} \frac{1}{2}\Vert \hat{\theta}_t - \lambda_i \Vert^2_{V_{N_t^i}}
+&\leq\inf_{\lambda\in \neg \istar(\theta)} \frac{1}{2}\Vert \hat{\theta}_t - \lambda \Vert^2_{V_{N_t^{\istar(\theta)}}}
+	 + \sum_{i\neq \istar(\theta)} \frac{1}{2}\Vert \hat{\theta}_t - \theta \Vert^2_{V_{N_t^i}}
+\\
+&\leq\inf_{\lambda\in \neg i^*} \frac{1}{2}\Vert \hat{\theta}_t - \lambda \Vert^2_{V_{N_t}}
+	 + \frac{1}{2}\Vert \hat{\theta}_t - \theta \Vert^2_{V_{N_t}}
+\\
+&\leq\max_i \inf_{\lambda\in \neg i} \frac{1}{2}\Vert \hat{\theta}_t - \lambda \Vert^2_{V_{N_t}}
+	 + \frac{1}{2}\Vert \hat{\theta}_t - \theta \Vert^2_{V_{N_t}}
+\\
+&\leq\max_i \inf_{\lambda\in \neg i} \frac{1}{2}\Vert \hat{\theta}_t - \lambda \Vert^2_{V_{N_t}}
+	 + h(t)
+\:,
+\end{align*}
+thus one obtains
+\[
+\beta(t,\delta) + h(t) \geq\sum_{i\in \mathcal I} \inf_{\lambda_i\in \neg i} \frac{1}{2}\Vert \hat{\theta}_t - \lambda_i \Vert^2_{V_{N_t^i}}\,.
+\]
+% where the equality is due to the fact that all the terms of the sum are 0 ($\lambda_i = \hat{\theta}_t$) except for one $i\in \mathcal I$. The last inequality is simply $N_t^a \geq N_t^{i,a}$ for all $a\in \mathcal A$.
+Hence we need to find a lower bound for the right hand sum.
+Let $\lambda_{i,w}(\theta) \in \argmin_{\lambda \in \neg i} \Vert \theta - \lambda \Vert_{V_{w}}$ . %First remark that $\Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}} \geq\Vert \theta - \lambda_{i,N_t^i}(\theta) \Vert_{V_{N_t^i}}$ by definition.
+Using the triangular inequality,
+\begin{align*}
+\Vert \theta - \hat{\theta}_t \Vert_{V_{N_t^i}} + \Vert \hat{\theta}_t - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}
+\geq\Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}
+%\geq\Vert \theta - \lambda_{i,N_t^i}(\theta) \Vert_{V_{N_t^i}}
+\:,
+\end{align*}
+and the Cauchy-Schwarz inequality, we obtain
+\begin{align*}
+\sum_{i\in\cI}\frac{1}{2}\Vert \hat{\theta}_t - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}^2
+&\geq\sum_{i\in\cI}\frac{1}{2} \left(\Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t}^i} -\Vert \hat{\theta}_t -\theta \Vert_{V_{N_t^\mathit{}}} \right)^2\\
+&\geq\sum_{i\in\cI}\frac{1}{2}\Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}^2
+	-  \sum_{i\in\cI} \Vert \hat{\theta}_t -\theta \Vert_{V_{N_t^i}} \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}\\
+&\leq  \sum_{i\in\cI}\frac{1}{2}\Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}^2
+	-  \sqrt{\sum_{i\in\cI} \Vert \hat{\theta}_t -\theta \Vert_{V_{N_t^i}}^2}\sqrt{\sum_{i\in\cI} \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}^2}
+\,.
+\end{align*}
+
+Using again that $\frac{1}{2}\Vert \hat{\theta}_t -\theta \Vert_{V_{N_t}}^2 \leq h(t)$ on $\cE_t$ we get
+\begin{align*}
+\beta(t,\delta) &\geq\sum_{i\in\cI}\frac{1}{2} \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}^2 - \sqrt{4 h(t) \sum_{i\in\cI}\frac{1}{2}\Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}^2}\,,
+\end{align*}
+which leads to, using Lemma~\ref{lem:inq_revert_sqrt},
+\begin{equation}
+\label{eq:to_theta_cvx}
+\beta(t,\delta) + \sqrt{4 h(t) \beta(t,\delta)} +4h(t) \geq \frac{1}{2}\sum_{i\in\cI}  \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}^2 \,.
+\end{equation}
+We now continue the proof by finding a lower bound for the right hand sum. Using the tracking property, see Lemma~..., to state that for all $(a,i)\in\cA\times\cI$, $- \log(AI) \leq N_t^{a,i} - W_t^{a,i}\leq 1$, which implies
+\begin{align*}
+    \frac{1}{2}\sum_{i\in\cI} \Vert \theta - \lambda_{i,N_t^i}(\htheta_t) \Vert_{V_{N_t^i}}^2
+    &\geq\frac{1}{2}\sum_{i\in\cI} \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{W_t}}^2- \frac{\log(AI)}{2} \sum_{(a,i)\in\cA\times\cI} \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{a a^\top}^2\\
+    &\geq\frac{1}{2}\sum_{i\in\cI} \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{W_t^i}}^2\\
+    &- \frac{\log(AI)}{2} \sqrt{\sum_{(a,i)\in\cA\times\cI} N_t^{a,i}\Vert \theta - \lambda_{i_t,N_t}(\hat{\theta}_t) \Vert_{a a^\top}^2\sum_{(a,i):N_t^{a,i}\geq1} \frac{1}{N_t^a}}\\
+    &= \sum_{i\in\cI}\frac{1}{2} \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{W_t^i}}^2\\
+ 	&- \frac{\log(AI)}{2}
+ 	\sqrt{\sum_{i\in\cI}\Vert \theta -
+ 	\lambda_{i,N_t^i}(\hat{\theta}_t)
+ 	\Vert_{V_{N_t^i}}^2\sum_{a:N_t^a\geq1}
+ 	\frac{1}{N_t^a}}\\
+    &\geq\frac{1}{2}\sum_{i\in\cI} \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{W_t}}^2
+	-\frac{\log(AI)}{2} \sqrt{ \sum_{i\in\cI} \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{N_t^i}}^2  AI}\,.
+\end{align*}
+% \todo[inline]{TODO: it seems that we introduce a $\sqrt{t}$ factor that should not be there when the $N$ are introduced and then lower bounded by 1.}
+Combining the last inequality with \eqref{eq:to_theta_cvx} yields
+\begin{align*}
+    &\beta(t,\delta) + \sqrt{4 h(t) \beta(t,\delta)} +4h(t)+\frac{\log(AI)}{2} \sqrt{2 AI}\sqrt{\beta(t,\delta) + \sqrt{4 h(t) \beta(t,\delta)} +4h(t)}\\
+    &\geq \frac{1}{2} \sum_{i\in\cI}\Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{W_t^i}}^2\,.
+\end{align*}
+Some simplifications, using the fact that $h(t)\geq 1 $, give us%\todo{Where does the $I$ come from?}
+\begin{equation}
+  \label{eq:to_W_cvx}
+  \beta(t,\delta)+5AI\left( \sqrt{h(t)\beta(t,\delta)}+2h(t)\right)
+  \geq  \frac{1}{2} \sum_{i\in\cI}\Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{W_t^i}}^2\,.
+\end{equation}
+
+We now go from $\theta$ to each $\hat{\theta}_s$ for $s \leq t$ in the right hand term of the inequality above
+\begin{align}
+\frac{1}{2} \sum_{i\in\cI}\Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{W_t^i}}^2
+&=   \frac{1}{2}\sum_{i\in\cI} \sum_{s=1}^t  \Vert \theta - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{w^i_s}}^2
+\nonumber\\
+&\geq\frac{1}{2} \sum_{i\in\cI} \sum_{s=1}^t \left(\Vert \hat{\theta}_{s-1} - \lambda_{i,N_t^i}(\hat{\theta}_t)\Vert_{V_{w^i_s}}^2 - 2\Vert \theta - \hat{\theta}_{s-1} \Vert_{V_{w^i_s}} \Vert \hat{\theta}_{s-1} - \lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{w^i_s}}\right)
+\nonumber\\
+&\geq\frac{1}{2} \sum_{i\in\cI}\sum_{s=1}^t \Vert \hat{\theta}_{s-1} - \lambda_{i,N_t^i}(\htheta_t) \Vert_{V_{w^i_s}}^2
+\nonumber\\
+&\ - \sqrt{ \sum_{i\in\cI}\sum_{s=1}^t \Vert \theta - \htheta_{s-1} \Vert_{V_{w^i_s}}^2  \sum_{i\in\cI}\sum_{s=1}^t\Vert \hat{\theta}_{s-1} -\lambda_{i,N_t^i}(\hat{\theta}_t) \Vert_{V_{w_s^i}}^2}
+\: .\label{eq:tempW_cvx}
+\end{align}
+We need to upper bound the quantity $ \sum_{i\in\cI}\sum_{s=1}^t \Vert \theta - \htheta_{s-1} \Vert_{w_s^i}^2$. By definition of the event $\cE_t$ we have
+\begin{align*}
+  \Vert \theta - \hat{\theta}_{s-1} \Vert_{a a^\top}^2 &=  \langle \theta - \hat{\theta}_{s-1} ,a\rangle^2\\
+  &\leq\normm{ \theta - \hat{\theta}_{s-1}}_{V_{N_{s-1}}+\eta I_d}^2 \normm{ a}_{(V_{N_{s-1}}+\eta I_d)^{-1}}^2\\
+  &\leq 2 h(t) \normm{ a }_{(V_{N_{s-1}}+\eta I_d)^{-1}}^2\,.
+\end{align*}
+Thus thanks to Lemma~\ref{lem:computation_sum_w_a_N} we get
+\begin{align*}
+    \sum_{i\in\cI}\sum_{s=1}^t \Vert \theta - \htheta_{s-1} \Vert_{w_s^i}^2 &= \sum_{s=1}^t \sum_{(a,i)\in\cA\times\cI} w_s^{a,i}\Vert \theta - \hat{\theta}_{s-1} \Vert_{a a^\top}^2\\
+    &\leq 2h(t)\sum_{s=1}^t \sum_{a\in\cA} w_s^{a} \normm{ a }_{(V_{N_{s-1}}+\eta I_d)^{-1}}^2 \leq 2h(t)g(t)\,.
+\end{align*}
+% But thanks to the tracking we know that $N_{s-1}^a \geq W_{s-1}^a -\log(A)$. Thus, in combination with the choice of $\eta$  we can exchange counts and weights
+% \begin{align*}
+%   V_{N_{s-1}} + \eta I_d \geq V_{W_{s}} - V_{w_s} - \log(A) V_{\bOne_A} +\eta I_d \geq  V_{W_{s}} - (\log(A)+1) V_{\bOne_A} +\eta I_d \geq V_{W_{s}}+ \frac{\eta}{2} I_d\,.
+% \end{align*}
+% Hence we obtain
+% \[
+% \Vert \theta - \hat{\theta}_{s-1} \Vert_{a a^\top}^2 \leq 2 h(t) \normm{ a }_{(V_{W_{s}}+(\eta/2) I_d)^{-1}}^2\,,
+% \]
+% and applying Lemma~\ref{lem:sum_w_norm_a} we get
+% \[
+% \sum_{s=1}^t \sum_{a\in\cA} w_s^{a}\Vert \theta - \hat{\theta}_{s-1} \Vert_{a a^\top}^2 \leq 2 h(t) g(t,\eta/2)\,.
+%\]
+Going back to \eqref{eq:tempW_cvx} in combination with \eqref{eq:to_W_cvx} and Lemma~\ref{lem:inq_revert_sqrt} leads to
+\begin{align}
+\label{eq:to_hteta_cvx}
+\beta(t,\delta) + 20 AI \left(\sqrt{h(t)g(t) \beta(t,\delta)}+ 2h(t)g(t)\right)   \geq
+\frac{1}{2}\sum_{i\in\cI}\sum_{s=1}^t \Vert \hat{\theta}_{s-1} - \lambda_{i,N_t^i}(\hat{\theta}_t)\Vert_{V_{w_s^i}}^2\,.
+\end{align}
+% TODO: prove that there exists a quantity $C'_t$ of adequate size such that $\sum_s \sum_{i,a} w_s^{i,a}\Vert \theta - \hat{\theta}_{s-1} \Vert_{a a^\top}^2 \leqC'_t$. With that fact, we get
+% \begin{align*}
+% &\frac{1}{2} \sum_s \sum_{i,a} w_s^{i,a}\Vert \theta - \lambda_{i,N_t^i}(\theta) \Vert_{a a^\top}^2
+% \\
+% &\geq\frac{1}{2}\sum_s \sum_{i,a} w_s^{i,a}\Vert \hat{\theta}_{s-1} - \lambda_{i,N_t^{i}}(\theta)\Vert_{a a^\top}^2
+% - \sqrt{C'_t \sum_s \sum_{i,a} w_s^{i,a}\Vert \hat{\theta}_{s-1} - \lambda_{i,N_t^{i}}(\theta)\Vert_{a a^\top}^2}
+% \end{align*}
+%
+% Let $f(x) = \frac{1}{2}x - \sqrt{Cx}$. $f'(x) = \frac{1}{2} - \frac{\sqrt{C}}{2\sqrt{x}}$. this is greater than 0 iff $x \geqC$.
+%
+% Either $\sum_s \sum_{i,a} w_s^{i,a}\Vert \hat{\theta}_{s-1} - \lambda_{i,N_t^{i}}(\theta)\Vert_{a a^\top}^2 \leqC'_t$, or any lower bound for that quantity gives us a lower bound on the value of $f$ at that point.
+
+By definition of the best response $\lambda_s^i = \inf_{\lambda \in \neg i} \Vert \hat{\theta}_{s-1} - \lambda \Vert_{w_s^i}^2$, we have
+\begin{align}
+\frac{1}{2}\sum_{i\in\cI} \sum_{s=1}^t  \Vert \hat{\theta}_{s-1} - \lambda_{i,N_t^i}(\hat{\theta}_t)\Vert_{V_{w_s^i}}^2
+&\geq\frac{1}{2}\sum_{i\in\cI} \inf_{\lambda_i \in \neg i} \sum_{s=1}^t \Vert \hat{\theta}_{s-1} - \lambda_i\Vert_{V_{w_s^i}}^2
+\nonumber\\
+\nonumber\\
+&=\frac{1}{2} \sum_{s=1}^t \sum_{(a,i)\in\cA\times\cI} w_s^{i,a}\Vert \hat{\theta}_{s-1} - \lambda_s^i\Vert_{a a^\top}^2\,.\label{eq:to_br_cvx}
+\end{align}
+
+We now recall, see~\eqref{eq:def_ucb_br_general}, the upper confidence bounds
+\[U_s^{i,a} = \min\left(\max_\pm \left( \langle \htheta_{s-1} - \lambda^{i}_s), a\rangle \pm \sqrt{2 h(t)} \norm{a}_{(V_{N_{s-1}}+\eta I_d)^{-1}} \right)^2,4L^2M^2\right)\,,\]
+
+% \begin{align*}
+% \sum_{s=1}^t \sum_{(a,i)\in\cA\times\cI} w_s^{i,a} \Vert \hat{\theta}_{s-1} - \tlambda_s^i\Vert_{a a^\top}^2
+% &= \sum_{s=1}^t \sum_{(a,i)\in\cA\times\cI} w_s^{i,a} U_s^{i,a} - w_s^{i,a}\left(\Vert \hat{\theta}_{s-1} - \tlambda_s^i \Vert_{a a^\top}^2 - U_s^{i,a}\right)\,.
+% \end{align*}
+% We deal with the last term in the sum,
+
+thus, it holds
+\begin{align*}
+U_s^{i,a} -\Vert \htheta_{s-1} - \tlambda_s^i\Vert_{a a^\top}^2
+&\leq   \max_\pm \left( \langle \htheta_{s-1} - \lambda^i_s,a\rangle \pm \sqrt{2 h(t)} \normm{a}_{(V_{N_{s-1}}+ \eta I_d)^{-1}} \right)^2-\Vert \htheta_{s-1} - \lambda_s^i\Vert_{a a^\top}^2\\
+&\leq  2h(t)\normm{a}^2_{(V_{N_{s-1}}+ \eta I_d)^{-1}} + 2\sqrt{2 h(t)} \normm{a}_{(V_{N_{s-1}}+ \eta I_d)^{-1}}| \langle \htheta_{s-1} - \lambda_s^i,a\rangle|\,.\\
+\end{align*}
+Hence summing over times and using the Cauchy-Schwarz inequality we obtain
+\begin{align*}
+&\frac{1}{2}\sum_{s=1}^t\sum_{(a,i)\in\cA\times\cI} w_s^{a,i}\left(U_s^{i,a} -\Vert \hat{\theta}_{s-1} - \lambda_s^i\Vert_{a a^\top}^2\right)
+\\
+&\leq\sum_{s=1}^t \sum_{(a,i)\in\cA\times\cI} w_s^{a,i}h(t)\normm{a}^2_{(V_{N_{s-1}}+ \eta I_d)^{-1}} +w_s^{i,a} \sqrt{2 h(t)} \normm{a}_{(V_{N_{s-1}}+ \eta I_d)^{-1}}| \langle \htheta_{s-1} - \lambda,a\rangle|
+\\
+&\leq h(t) \sum_{(a,i)\in\cA\times\cI} \sum_{s=1}^t w_s^{a,i}\normm{a}^2_{(V_{N_{s-1}}+ \eta I_d)^{-1}}\\
+&+ \sqrt{2 h(t)} \sqrt{\sum_{(a,i)\in\cA\times\cI} \sum_{s=1}^t w_s^{a,i}\normm{a}^2_{(V_{N_{s-1}}+ \eta I_d)^{-1}}}  \sqrt{\sum_{s=1}^t \sum_{(a,i)\in\cA\times\cI} w_s^{a,i}\Vert \htheta_{s-1} - \tlambda_s^i \Vert_{a a^\top}^2} \\
+&\leq h(t)g(t) +2\sqrt{ h(t) g(t)}  \sqrt{\frac{1}{2}\sum_{s=1}^t \sum_{(a,i)\in\cA\times\cI} w_s^{i,a}\Vert \htheta_{s-1} - \tlambda_s^i \Vert_{a a^\top}^2}\,,
+% &\leq2 C_t \sum_s \sum_{i,a} w_s^{i,a} a^\top V_{N_s^i}^{-1}a + 2\sqrt{2 C_t}\sqrt{\sum_s \sum_{i,a} w_s^{i,a}a^\top V_{N_s^i}^{-1}a }\sqrt{\sum_s \sum_{i,a} w_s^{i,a}\Vert \hat{\theta}_{s-1} - \lambda_{s,i}\Vert_{a a^\top}^2}
+\end{align*}
+where in the last inequality we used Lemma~\ref{lem:computation_sum_w_a_N}. Thus combining the previous inequality with \eqref{eq:to_theta_cvx} and \ref{eq:to_br_cvx} with some simplifications leads to
+\begin{equation}
+\beta(t,\delta) + ?? AI \left(\sqrt{h(t)g(t) \beta(t,\delta)}+ 2h(t)g(t)\right)  \geq \frac{1}{2}\sum_{s=1}^t\sum_{(a,i)\in\cA\times\cI} w_s^{i,a}U_s^{i,a}\,.\label{eq:to_UCB_cvx}
+\end{equation}
+
+
+%  we have
+% \[
+%  \sum_{s=1}^t\sum_{(a,i)\in\cA\times\cI} w_s^{i,a}\Vert \hat{\theta}_{s-1} - \lambda_s^i\Vert_{a a^\top}^2 \geq \sum_{s=1}^t\sum_{(a,i)\in\cA\times\cI} w_s^{i,a}U_s^{i,a} + 2h(t)g(t)+2\sqrt{g(t)h(t)}  \sqrt{\sum_{s=1}^t \sum_{(a,i)\in\cA\times\cI} w_s^{i,a}\Vert \htheta_{s-1} - \tlambda_s^i \Vert_{a a^\top}^2}
+% \]
+% Let $C''_t$ be an upper bound for $\sum_s \sum_{i,a} w_s^{i,a} a^\top V_{N_s^i}^{-1}a$ . Then
+% \begin{align*}
+% \sum_s \sum_{i,a} w_s^{i,a}\Vert \hat{\theta}_{s-1} - \lambda_{s,i}\Vert_{a a^\top}^2
+% &\geq\sum_s \sum_{i,a} w_s^{i,a}U_s^{i,a}
+% - 2 C_t C''_t - 2\sqrt{2 C_t C''_t }\sqrt{\sum_s \sum_{i,a} w_s^{i,a}\Vert \hat{\theta}_{s-1} - \lambda_{s,i}\Vert_{a a^\top}^2}
+% \end{align*}
+% That is, $x=\sum_s \sum_{i,a} w_s^{i,a}\Vert \hat{\theta}_{s-1} - \lambda_{s,i}\Vert_{a a^\top}^2$ verifies the inequality $(\sqrt{x} + \sqrt{2C_tC''_t})^2 \geq\sum_{i,a} w_s^{i,a}U_s^{i,a}$ . We get $x \geq(\sqrt{\sum_{i,a} w_s^{i,a}U_s^{i,a}} - \sqrt{2C_tC''_t})^2$ .
+%
+Thanks to Proposition~\ref{lem:adahedge} for the algorithm AdaHedge we have the following regret bound for the $\cL_w$-learner
+\[
+\max{w\in \Sigma_{AI}}\frac{1}{2}\sum_{s=1}^t\sum_{(a,i)\in\cA\times\cI} w \ind_{\{(a_s,i_s)=(a,i)\}}U_s^{i,a}- \frac{1}{2}\sum_{s=1}^t\sum_{(a,i)\in\cA\times\cI} w_s^{i,a}U_s^{i,a}\leq C'\sqrt{W^{a,i}_t}\leq C'\sqrt{t}\,.
+\]
+Finally using this inequality in combination with the fact that the losses are optimistic we obtain
+\begin{align*}
+  \beta(t,\delta) + ?? AI\left(\sqrt{h(t)g(t) \beta(t,\delta)}+ 2h(t)g(t)\right) +C'\sqrt{t} &\geq \sup_{w\in\Sigma_{AI}}\frac{1}{2}\sum_{s=1}^t\sum_{(a,i)\in\cA\times\cI} w_s^{a,i}U_s^{a,i}\\
+  &\geq \sup_{w\in\Sigma_{AI}}\frac{1}{2}\sum_{s=1}^t\sum_{(a,i)\in\cA\times\cI} w_s^{a,i} \normm{\theta -\lambda_s^{i}}^2_{aa^\top}\\
+  &= t \sup_{w\in\Sigma_ {AI}}\sum_{i\in\cI}\frac{1}{t}\sum_{s=1}^t\frac{1}{2}\normm{\theta -\lambda_s^{i}}^2_{V_{w^i}}\\
+  &\geq t \sup_{w\in\Sigma_A}\sum_{i\in\cI} \inf_{q^i\in\cP(\neg i)} \frac{1}{2}\E_{\lambda\sim q^i}\normm{\theta -\lambda}^2_{V_{w^i}}\\
+ &= t \Tstar(\theta)^{-1}\,,
+\end{align*}
+where in the last line we use the Sion's minimax theorem, see Lemma~\ref{lem:sion_convexify}.
+
+
+% Regret property of the $w$-learner:
+% \begin{align*}
+% \sum_s \sum_{i,a} w_s^{i,a}U_s^{i,a} \geq\max_{i,a} \sum_s U_s^{i,a} - U\sqrt{t}
+% \end{align*}
+% TODO: we need to control the size of $U_s^{i,a}$ to upper bound it by some $U$.
+% \todo[inline]{
+% Regret of AdaHedge:
+% \begin{align*}
+% R_T &\leq2\sqrt{(\sigma L_T - \frac{L_T^2}{T})\log(K|\mathcal I|)} + \sigma(2+\log(K|\mathcal I|)16/3)\\
+% \text{where}&\\
+% \sigma &= \max_{t\leqT}  (\max_{i',a'}U_t^{i',a'}- \min_{i,a}U_t^{i,a})\\
+% L_T &= \sum_{t=1}^T (\max_{i',a'}U_t^{i',a'} - U_t^{i^\star,a^\star}) \leqT \sigma
+% \end{align*}
+%
+% Consequence: the regret is bounded by approximately $2\sqrt{T} \max_{s,i,a} U_s^{i,a}$ .}
+%
+% Finally
+% \begin{align*}
+% \max_{i,a} \sum_s U_s^{i,a}
+% &\geq\max_{i,a} \sum_s \Vert \theta - \lambda_{s,i}\Vert_{a a^\top}^2
+% \\
+% &= t\max_{i,a} \frac{1}{t}\sum_s \Vert \theta - \lambda_{s,i}\Vert_{a a^\top}^2
+% \\
+% &\geqt\inf_{q}\max_{i,a} \mathbb{E}_{\lambda \sim q} \Vert \theta - \lambda_{i}\Vert_{a a^\top}^2
+% \end{align*}
+
+% \subsection{Boundedness problems}
+%
+% We need to find reasonable hypotheses/techniques to bound $\max_{s,i!,a} U_s^{i,a}$
+%
+% The following is for best arm identification.
+%
+% For $i \neq i^\star(\hat{\theta}_{s-1})$, $\lambda_{s,i} = \hat{\theta}_{s-1}$ and $U_s^{i,a} = 2 C_s a^\top V_{N_s}^{-1}a $. For $i^\star(\hat{\theta}_{s-1})$,
+% \begin{align*}
+% \hat{\theta}_{s-1} - \lambda_{s,i^\star}
+% &= \frac{(a' - a^\star)^\top \hat{\theta}_{s-1}}{(a' - a^\star)^\top V_{w_s^{i^\star}}^{-1}(a' - a^\star)} V_{w_s^{i^\star}}^{-1}(a' - a^\star)
+% \text{ for } a' = \argmin_a  \frac{((a - a^\star)^\top \hat{\theta}_{s-1})^2}{(a - a^\star)^\top V_{w_s^{i^\star}}^{-1}(a - a^\star)} \: .
+% \end{align*}
+%
+% \begin{align*}
+% a^\top (\theta - \lambda_{a'\geqa^\star,w}(\theta))
+% &= \frac{(a' - a^\star)^\top \theta}{(a' - a^\star)^\top V_{w}^{-1}(a' - a^\star)} a^\top V_{w}^{-1}(a' - a^\star)
+% \\
+% &= \left( (V_{w}^{1/2}\theta)^\top \frac{V_{w}^{-1/2}(a' - a^\star)}{\Vert V_{w}^{-1/2}(a' - a^\star) \Vert} \right) \left( (V_{w}^{-1/2}a)^\top \frac{V_{w}^{-1/2}(a' - a^\star)}{\Vert V_{w}^{-1/2}(a' - a^\star) \Vert} \right)
+% \\
+% &\leq\sqrt{\theta^\top V_{w} \theta} \sqrt{a^\top V_{w}^{-1} a}
+% \end{align*}
+%
+% \begin{align*}
+% \lambda_{a'\geqa^\star,w}(\theta') - \theta' - (\lambda_{a'\geqa^\star,w}(\theta) - \theta)
+% &= \frac{(a' - a^\star)^\top (\theta - \theta')}{(a' - a^\star)^\top V_{w}^{-1}(a' - a^\star)} V_{w}^{-1}(a' - a^\star)
+% \\
+% a^\top(\lambda_{a'\geqa^\star,w}(\theta') - \theta') - a^\top(\lambda_{a'\geqa^\star,w}(\theta) - \theta)
+% &\leq\sqrt{(\theta - \theta')^\top V_{w} (\theta - \theta')}  \sqrt{a^\top V_{w}^{-1} a}
+% \end{align*}
+%
+% Hypothesis: $|a^\top (\theta - \lambda_{a'\geqa^\star,w}(\theta))| \leq C$ for all $a, a', a^\star,w$. ?
+%
+% Hypothesis: $a^\top V_w^{-1} a \leq C$ and $\theta^\top V_w \theta \leq C$ for all $a, w$. ? This can be true only if there is no $a' \bot a$
+%
+% \paragraph{Bounding the alternative sets.}
+%
+% We can guarantee that $\lambda_{s,i}$ is bounded by defining it as the infimum over $\neg i \cap \mathcal B$ where $\mathcal B$ is a closed ball for some norm (which norm?). We now investigate the consequences of doing so.
+%
+% The boundedness difficulty is avoided and the constant $U$ exists. The complexity term becomes
+% \begin{align*}
+% D_{\mathcal B} =\inf_{q \in \mathcal{P}(\neg i^\star(\theta)\cap \mathcal{B})} \max_{a} \mathbb{E}_{\lambda\sim q}\frac{1}{2} \Vert \theta - \lambda \Vert^2_{aa^\top}
+% \end{align*}
+% Denoting the unconstrained complexity by $D = \inf_{q \in \mathcal{P}(\neg i^\star(\theta))} \max_{a} \mathbb{E}_{\lambda\sim q}\frac{1}{2} \Vert \theta - \lambda \Vert^2_{aa^\top}$ , we have $D_{\mathcal B} \geqD$ since $D_{\mathcal B}$ is an infimum on a subset.
+%
+% Let $q^\star$ be a saddle point value for the distribution for the unconstrained problem that is supported on $K-1$ points and let $\lambda^{(1)},\ldots,\lambda^{(K-1)}$ be these points. Such a distribution exists by XXXX.
+%
+% If $\lambda^{(1)},\ldots,\lambda^{(K-1)} \in \mathcal B$, then $q^\star \in \mathcal{P}(\neg i^\star(\theta)\cap \mathcal{B})$ and $D_{\mathcal B} \leqD$. That is, $D_{\mathcal B} = D$.
+%
+% Question: in the BAI problem, if we know that $\Vert \theta \Vert \leqB$, can we get a bound on the norm of suitable $\lambda^{(1)},\ldots,\lambda^{(K-1)}$ ?
+
+%\begin{align*}
+%\inf_{q \in \triangle_{K-1}} \max_a \sum_i q^i \Vert \theta - \lambda^{(i)} \Vert_{aa^\top}^2
+%\end{align*}
+%For all $a$, $\sum_i q^i_* \Vert \theta - \lambda^{(i)} \Vert_{aa^\top}^2$ has the same value.
+
+%$\lambda^{(i)} = \theta + \sum_a \alpha^{(i)}_a a$. $\Vert \theta - \lambda^{(i)} \Vert_{bb^\top}^2 = (\sum_a \alpha^{(i)}_a a^\top b)^2$
+
+
+%\begin{lemma}
+%Let $\lambda_0 \in \neg i$. Let $\mathcal C(\lambda_0-\theta) = \{\lambda \in \mathbb{R}^d \: : \: \forall a, (a^\top (\lambda-\theta))^2 \geq (a^\top (\lambda_0-\theta))^2\}\setminus\{\lambda_0\}$ . Then for all $w \in \triangle_K$,
+%\begin{align*}
+%\inf_{\lambda \in \neg i} \Vert \theta - \lambda \Vert^2_{V_w}
+%&= \inf_{\lambda \in \neg i \setminus \mathcal C(\lambda_0-\theta)} \Vert \theta - \lambda \Vert^2_{V_w}
+%\end{align*}
+%\end{lemma}
+%\begin{proof}
+%For $\lambda \in \mathcal C(\lambda_0-\theta)$,
+%\begin{align*}
+%\Vert \theta - \lambda \Vert^2_{V_w}
+%= \sum_a w^a (\hat{a}^\top (\lambda - \theta))^2
+%\geq\sum_a w^a (\hat{a}^\top (\lambda_0 - \theta))^2
+%= \Vert \theta - \lambda_0\Vert^2_{V_w}
+%\end{align*}
+%This proves that if the infimum is attained in $\mathcal C(\lambda_0-\theta)$, it is also attained at $\lambda_0$ .
+%\end{proof}
+%Remark: $\mathcal C(\lambda_0-\theta)$ is a union of cones. The angle of these cones (what is that?) is related to the minimal angle between two arms/-arms.
+
+%Now we prove a bound on $B$ such that the union of the cones $\mathcal C(\lambda_0-\theta)$ for all $\lambda_0-\theta$ in the intersection of $\neg i$ and the ball of radius $B$ cover $\neg i$ .
+
+%For an arm $a$ and $\lambda \in \mathbb{R}^d$, let $a_\lambda = \pm a$ such that $a_\lambda^\top(\lambda-\theta)\geq0$ .
+
+%Let $\xi \in B_b =\{(b - a^\star)^\top \lambda \geq0\}$ be such that is is not in the cone of another $\lambda$. For all $\lambda \in B_b$, there exists $a$ such that $(a^\top (\xi - \theta))^2 < (a^\top (\lambda - \theta))^2$
+
+%For all $a$ and $x>0$, $\xi - x a_\xi \notin B_b$
+
+%$(b - a^\star)^\top u > 0  \: \Rightarrow \: \xi + u \in B_b$
+
+%$\xi - x a_\xi \notin B_b \: \Rightarrow \: (b - a^\star)^\top a_\xi > 0$
+
+%\begin{align*}
+%\xi &\in \{\lambda \in B_b \: : \: \forall a, a_\lambda^\top (b - a^\star) > 0\}
+%\\
+%&= \{\lambda \in B_b \: : \: \forall a, \: (a^\top (b - a^\star))(a^\top (\lambda - \theta)) > 0\}
+%\\
+%&= \{\lambda \in B_b \: : \: \forall a, \: a_{(b - a^\star)}^\top (\lambda - \theta) > 0\}
+%\end{align*}
+
+%Consider the set $S_\xi = \{\lambda \in B_b \: : \: \forall a_\xi, a_\xi^\top(\xi- \lambda)\geq0, a_\xi^\top(\lambda - \theta) \geq0\}$
+
+
+\subsection{Cumputation of some sums}
+\begin{lemma} For all $t$,
+\label{lem:computation_sum_w_a_N}
+\[
+\sum_{s=1}^t \sum_{a\in\cA} w_s^{a} \normm{ a }_{(V_{N_{s-1}}+\eta I_d)^{-1}}^2 \leq g(t)\eqdef \max\!\left(d \log\!\left(1 +\frac{t L^2}{d \eta} \right),1 \right) \,.
+\]
+\end{lemma}
+
+\begin{proof}
+Thanks to the tracking we know that $N_{s-1}^a \geq W_{s-1}^a -\log(A)$. Thus, in combination with the choice of $\eta$  we can exchange counts and weights
+\begin{align*}
+  V_{N_{s-1}} + \eta I_d \geq V_{W_{s}} - V_{w_s} - \log(A) V_{\bOne_A} +\eta I_d \geq  V_{W_{s}} - (\log(A)+1) V_{\bOne_A} +\eta I_d \geq V_{W_{s}}+ \frac{\eta}{2} I_d\,.
+\end{align*}
+Hence we obtain
+\[
+\normm{ a }_{(V_{N_{s-1}}+\eta I_d)^{-1}}^2 \leq \normm{ a }_{(V_{W_{s}}+(\eta/2) I_d)^{-1}}^2\,,
+\]
+and applying Lemma~\ref{lem:sum_w_norm_a} leads to
+\[
+\sum_{s=1}^t \sum_{a\in\cA} w_s^{a} \normm{ a }_{(V_{N_{s-1}}+\eta I_d)^{-1}}^2 \leq d \log\!\left(1 +\frac{t L^2}{d \eta} \right)\,.
+\]
+\end{proof}
+
+
+%\begin{lemma}
+%Under the concentration event $\mathcal E_t$,
+%\begin{align*}
+%\sum_s \sum_{i,a}w_s^{i,a} a^\top V_{N_{s-1}}^{-1}a
+%&\leq\ldots
+%\end{align*}
+%\end{lemma}
+%
+%Let $W_t^a = \sum_{s=1}^t w_s^a$ and $W_t^{i,a} = \sum_{s=1}^t w_s^{i,a}$ .
+%\begin{align*}
+%\sum_s \sum_{i,a}w_s^{i,a} a^\top V_{N_{s-1}}^{-1}a
+%&= \sum_s \sum_{i,a}w_s^{i,a} a^\top \left( \sum_a N_{s-1}^a a a^\top \right)^{-1}a
+%\\
+%&\leq\sum_s \sum_{i,a}w_s^{i,a} a^\top \left( \sum_a (W_{s-1}^a - \log(K|\mathcal I|)) a a^\top \right)^{-1}a
+%\\
+%&\leq...
+%\end{align*}
+%
+%\begin{lemma}
+%Under the concentration event $\mathcal E_t$,
+%\begin{align*}
+%\sum_s \sum_{i,a} w_s^{i,a}\Vert \theta - \hat{\theta}_{s-1} \Vert_{a a^\top}^2
+%&\leq\ldots
+%\end{align*}
+%\end{lemma}
+%
+%\begin{align*}
+%\sum_s \sum_{i,a} w_s^{i,a}\Vert \theta - \hat{\theta}_{s-1} \Vert_{a a^\top}^2
+%&\leq\sum_s \sum_{i,a} w_s^{i,a} \sup\{\Vert \xi - \hat{\theta}_{s-1} \Vert_{a a^\top}^2 \: : \: \Vert \xi - \hat{\theta}_{s-1} \Vert_{V_{N_{s-1}}}^2 \leq2 C_{s-1}\}
+%\\
+%&\leq\sum_s \sum_{i,a} w_s^{i,a} \sup\{\Vert \xi - \hat{\theta}_{s-1} \Vert_{a a^\top}^2 \: : \: \Vert \xi - \hat{\theta}_{s-1} \Vert_{V_{N_{s-1}}}^2 \leq2 C_{s-1}\}\\
+%&\leq\sum_s \sum_{i,a} w_s^{i,a} 2 C_{s-1} a^\top V_{N_{s-1}}^{-1} a
+%\end{align*}
+
+
+
+\subsection{Technical lemmas}
+We regroup in this section  some technical lemmas.
+\begin{lemma}
+\label{lem:inq_revert_sqrt}
+For all $\alpha,y\geq 0$, if for some $x\geq 0$ if holds $y \geq x-\alpha\sqrt{x}$ then
+\[
+x \leq y + \alpha \sqrt{y} + \alpha^2\,.
+\]
+\end{lemma}
+\begin{proof}
+Just note that for $z=\sqrt{x}$ we have
+\[
+z^2-\alpha z -y \leq 0\,,
+\]
+thus
+\begin{align*}
+  x \leq \frac{1}{4}\left(\alpha +\sqrt{\alpha^2+4y}\right)^2
+  \leq y +\frac{\alpha^2}{2}+\frac{\alpha}{2}\sqrt{\alpha^2+4y}
+  \leq y +\alpha\sqrt{y}+\alpha^2\,.
+\end{align*}
+\end{proof}
+One consequence of the concavity of $V\mapsto \log\det(V)$.
+\begin{lemma}
+\label{lem:sum_w_norm_a}
+Let $(w_t)_{t\geq 1}$ be a sequence in $\Sigma_A$ and $\eta>0$ then
+\[
+\sum_{s=1}^t \sum_{a\in\cA} w_a^s \normm{a}^2_{W_s +\eta I_d} \leq d \log\left(1 +\frac{t L^2}{d \eta}\right)\,.
+\]
+where $W_t = \sum_{s=1}^t w_s$.
+\end{lemma}
+\begin{proof}
+Define the $f(W)= \log\det(V_W+\eta I_d)$ for any $W\in(\R^+)^A$. It is a concave function since the function
+$V\mapsto \log\det(V)$ is a concave function over the set of positive definite matrices (see Exercise 21.2 of \citealt{lattimore2018}). And its partial derivative with respect to the coordinate $a$ at $W$ is
+\[
+    \nabla_a f(W) = \normm{a}^2_{(W+\eta I_d)^{-1}}\,.
+\]
+Hence using the concavity of $f$ we have
+\begin{align*}
+  \sum_{a\in\cA} w_a^s \normm{a}^2_{(V_{W_s} +\eta I_d)^{-1}} = \langle W_s - W_{s-1}, \nabla_a f(W_s) \rangle \leq f(W_s) - f(W_{s-1})\,.
+\end{align*}
+Which implies that
+\begin{align*}
+  \sum_{s=1}^t \sum_{a\in\cA} w_a^s \normm{a}^2_{V_{W_s} +\eta I_d} \leq f(W_t)-f(W_0) = \log\left(\frac{\det(V_{W_t} +\eta I_d) }{\det(\eta I_d)}\right) \leq d \log\left(1 +\frac{t L^2}{d \eta}\right)\,,
+\end{align*}
+where in the last inequality we used the inequality of arithmetic and geometric means in combination with $\Tr(W_t) \leq t L^2$\,.
+\end{proof}

@@ -1,0 +1,65 @@
+\section{Technical Lemmas}\label{app:lemmas}
+
+The whole fixed-confidence analysis for the two sampling rules are both substantially based on two lemmas: Lemma 5 of~\cite{qin2017ttei} and Lemma~\ref{lemma:link}. We prove Lemma~\ref{lemma:link} in this section.
+
+\restatewtwo*
+
+\begin{proof}
+
+The proof shares some similarities with that of Lemma 6 of~\cite{qin2017ttei}.
+For any arm $i\in\cA$, define $\forall n\in\NN$,
+\[
+    D_n \eqdef T_{n,i} - \Psi_{n,i},
+\]
+\[
+    d_n \eqdef \1{\{I_n=i\}} - \psi_{n,i}.
+\]
+It is clear that $D_n = \sum_{l=1}^{n-1} d_l$ and $\EE{d_n|\cF_{n-1}} = 0$. Indeed,
+\begin{align*}
+    \EE{d_n|\cF_{n-1}} &= \EE{\1{\{I_n=i\}} - \psi_{n,i}|\cF_{n-1}} \\
+                       %&= \EE{\1{\{I_n=i\}}|\cF_{n-1}} - \EE{\psi_{n,i}|\cF_{n-1}} \\
+                       &= \PP{I_n=i|\cF_{n-1}} - \EE{\PP{I_n=i|\cF_{n-1}}|\cF_{n-1}} \\
+                       &= \PP{I_n=i|\cF_{n-1}} - \PP{I_n=i|\cF_{n-1}} = 0.
+\end{align*}
+The second last equality holds since $\PP{I_n=i|\cF_{n-1}}$ is $\cF_{n-1}$-measurable. Thus $D_n$ is a martingale, whose increment are 1 sub-Gaussian as $d_n \in [-1,1]$ for all $n$. 
+
+Applying Corollary 8 of~\cite{abbasi-yadkori2012}\footnote{but we could actually use several deviation inequalities that hold uniformly over time for martingales with sub-Gaussian increments}, it holds that, with probability larger than $1-\delta$, for all $n$,
+\[
+    |D_n| \leq \sqrt{2\left(1+n\right)\ln\left(\frac{\sqrt{1+n}}{\delta}\right)}
+\]
+which yields the first statement of Lemma~\ref{lemma:link}.
+
+We now introduce the random variable
+\[
+    W_2 \eqdef \max_{n\in\NN}\max_{i\in\cA} \frac{|T_{n,i}-\Psi_{n,i}|}{\sqrt{(n+1)\ln(e^2+n)}}.
+\]
+Applying the previous inequality with $\delta = e^{-x^2 / 2}$ yields 
+\begin{align*}
+          \PP{\exists n \in \mathbb{N}^\star : |D_n | > \sqrt{\left(1+n\right)\left(\ln\left(1+n \right)+x^2\right)}} &\leq e^{-x^2 / 2}, \\
+          \PP{\exists n \in \mathbb{N}^\star : |D_n | > \sqrt{\left(1+n\right)\ln\left(e^2+n \right)x^2}} &\leq e^{-x^2 / 2},
+\end{align*}
+where the last inequality uses that for all $a,b \geq 2$, we have $ab \geq a+b$. 
+
+Consequently $\forall x\geq 2$, for all $i \in \cA$
+\[
+    \PP{\max_{n\in\NN}\frac{|T_{n,i}-\Psi_{n,i}|}{\sqrt{\left(n+1\right)\log\left({e^2+n}\right)}}\geq x} \leq e^{-x^2/2}.
+\]
+Now taking a union bound over $i\in\cA$, we have $\forall x\geq 2$,
+\begin{align*}
+    \PP{W_2\geq x} &\leq \PP{\max_{i\in\cA}\max_{n\in\NN}\frac{|T_{n,i}-\Psi_{n,i}|}{\left(n+1\right)\log\left(\sqrt{e^2+n}\right)}\geq x} \\ 
+                 &\leq \PP{\bigcup_{i\in\cA}\max_{n\in\NN}\frac{|T_{n,i}-\Psi_{n,i}|}{\left(n+1\right)\log\left(\sqrt{e^2+n}\right)}\geq x} \\
+                 &\leq \sum_{i\in\cA} \PP{\max_{n\in\NN}\frac{|T_{n,i}-\Psi_{n,i}|}{\left(n+1\right)\log\left(\sqrt{e^2+n}\right)}\geq x} \\
+                 &\leq Ke^{-x^2/2}.
+\end{align*}
+
+The previous inequalities imply that $\forall i\in\cA$ and $\forall n\in\NN$, we have $|T_{n,i}-\Psi_{n,i}| \leq W_2\sqrt{(n+1)\log(e^2+n)}$ almost surely. Now it remains to show that $\forall \lambda > 0, \EE{e^{\lambda W_2}}<\infty$. Fix some $\lambda > 0$.
+\begin{align*}
+    \EE{e^{\lambda W_2}} &= \int_{x=1}^{\infty} \PP{e^{\lambda W_2}\geq x} \diff{x} = \int_{y=0}^{\infty} \PP{e^{\lambda W_2}\geq e^{2\lambda y}}2\lambda e^{2\lambda y} \diff{y} \\
+                       &= 2\lambda \int_{y=0}^{2} \PP{W_2\geq 2y} e^{2\lambda y} \diff{y} + 2\lambda \int_{y=2}^{\infty} \PP{W_2\geq 2y} e^{2\lambda y} \diff{y} \\
+                       &\leq \underbrace{2\lambda \int_{y=0}^{2} \PP{W_2\geq 2y} e^{2\lambda y} \diff{y}}_{=e^{4\lambda-1}} + \underbrace{2\lambda C_1 \int_{y=2}^{\infty} e^{-y^2/2} e^{2\lambda y} \diff{y}}_{<\infty} < \infty,
+\end{align*}
+where $C_1$ is some constant.
+
+%Given that $W_2$ is a positive random variable by definition, one has \[\EE{W_2} = \int_{0}^{\infty}\PP{W_2 > x} \diff{x} \leq \int_{0}^\infty e^{-x^2/2}\diff{x} < \infty.\]
+
+\end{proof}

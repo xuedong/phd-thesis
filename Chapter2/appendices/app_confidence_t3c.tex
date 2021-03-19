@@ -1,0 +1,211 @@
+\section{Fixed-Confidence Analysis for \texorpdfstring{\TCC}{}}\label{app:confidence_t3c}
+
+This section is entirely dedicated to \TCC. Note that the analysis to follow share the same proof line with that of \TTTS, and some parts even completely coincide with those of \TTTS. For the sake of simplicity and clearness, we shall only focus on the parts that differ and skip some redundant proofs. 
+
+\subsection{Sufficient exploration of all arms}\label{app:confidence_t3c.exploration}
+
+We prove Lemma~\ref{lemma:sufficient_exploration} for \TCC. To prove this lemma, we still need the two sets of indices for under-sampled arms like in Appendix~\ref{app:confidence_ttts.exploration}. We recall that for a given $L>0$: $\forall n\in\NN$ we define
+\[
+    U_n^L \eqdef \{i: T_{n,i} < \sqrt{L}\},
+\]
+\[
+    V_n^L \eqdef \{i: T_{n,i} < L^{3/4}\}.
+\]
+For \TCC however, we investigate the following two indices,
+\[
+    J_n^{(1)} \eqdef \argmax_{j} a_{n,j}, \tilde{J_n^{(2)}} \eqdef \argmin_{j\neq J_n^{(1)}} W_n(J_n^{(1)},j).
+\]
+Lemma~\ref{lemma:sufficient_exploration} is proved via the following sequence of lemmas.
+
+\begin{lemma}\label{lemma:link_t3c}
+    There exists $L_1 = \text{Poly}(W_1)$ s.t. if $L > L_1$, for all $n$, $U_n^L \neq \emptyset$ implies $J_n^{(1)} \in V_n^L$ or $\tilde{J_n^{(2)}} \in V_n^L$.
+\end{lemma}
+
+\begin{proof}
+    If $J_n^{(1)} \in V_n^L$, then the proof is finished. Now we assume that $J_n^{(1)} \in \bar{V_n^L} \subset \bar{U_n^L}$, and we prove that $J_n^{(2)} \in V_n^L$.
+    \paragraph{Step 1} Following the same reasoning as Step 1 and Step 2 of the proof of Lemma~\ref{lemma:link_ttps}, we know that there exists $L_2 = \text{Poly}(W_1)$ s.t. if $L>L_2$, then
+    \[
+        \bar{J_n^\star} \eqdef \argmax_{j\in\bar{U_n^L}} \mu_{n,j} = \argmax_{j\in\bar{U_n^L}} \mu_j = J_n^{(1)}.
+    \]
+    
+    \paragraph{Step 2} Now assuming that $L>L_2$, and we show that for $L$ large enough, $\tilde{J_n^{(2)}} \in V_n^L$. In the same way that we proved~\eqref{eq:upper_bound_anj_explo} one can show that for all $\forall j \in \bar{V_n^L}$,
+    % Using the same arguments we used to prove Note as we proved in step 3 of th that we have $\forall j \in \bar{V_n^L}$,
+    % \[
+    %     a_{n,j} \leq \Pi_{n}\left[\theta_j \geq \theta_{\bar{J_n^{\star}}}\right] \leq \expp{-\frac{L^{3/4}\Delta_{\text{min}}^2}{16\sigma^2}}.
+    % \]
+    %And we can thus deduce that
+    \[
+        W_n(J_n^{(1)},j) = \ddfrac{(\mu_{n,I^\star}-\mu_{n,j})^2}{2\sigma^2\left(\frac{1}{T_{n,I^\star}}+\frac{1}{T_{n,j}}\right)} \geq \frac{L^{3/4}\Delta_{\text{min}}^2}{16\sigma^2}.
+    \]
+    
+    Again, denote $J_n^\star \eqdef \argmax_{j\in U_n^L} \mu_{n,j}$, we obtain
+    \begin{equation*}
+        W_n(J_n^{(1)},J_n^\star) = \begin{cases}
+        0 &\text{if } \mu_{n,J_n^\star}\geq\mu_{n,J_n^{(1)}}, \\
+        \ddfrac{(\mu_{n,J_n^{(1)}}-\mu_{n,J_n^\star})^2}{2\sigma^2\left(\frac{1}{T_{n,J_n^{(1)}}}+\frac{1}{T_{n,J_n^\star}}\right)} &\text{else}.
+        \end{cases}
+    \end{equation*}
+    In the second case, as already shown in Step 3 of Lemma~\ref{lemma:link_ttps} we have that
+    \begin{align*}
+        |\mu_{n,J_n^\star} - \mu_{n,\bar{J_n^\star}}| 
+        &\leq \Delta_{\max} + 2\sigma W_1 \sqrt{\frac{\log(e+T_{n,J_n^\star})}{1+T_{n,J_n^\star}}}\\
+        &\leq \Delta_{\max} + 2\sigma W_1 \sqrt{\frac{\log(e+\sqrt{L})}{1+\sqrt{L}}},
+    \end{align*}
+    since $J_n^\star \in U_n^L$. We also know that
+    \[
+        2\sigma^2\left(\frac{1}{T_{n,J_n^{(1)}}}+\frac{1}{T_{n,J_n^\star}}\right) \geq \frac{2\sigma^2}{T_{n,J_n^\star}} \geq \frac{2\sigma^2}{\sqrt{L}}.
+    \]
+    Therefore, we get
+    \[
+        W_n(J_n^{(1)},J_n^\star) \leq \frac{\sqrt{L}}{2\sigma^2}\left(\Delta_{\max} + 2\sigma W_1 \sqrt{\frac{\log(e+\sqrt{L})}{1+\sqrt{L}}}\right)^2.
+    \]
+    On the other hand, we know that for all $j\in\bar{V_n^L}$,
+    \[
+        W_n(J_n^{(1)},j) \geq \frac{L^{3/4}\Delta_{\text{min}}^2}{16\sigma^2}.
+    \]
+    Thus, there exists $L_3$ s.t. if $L>L_3$, then
+    \[
+        \forall j\in \bar{V_n^L},\, W_n(J_n^{(1)},j) \geq 2W_n(J_n^{(1)},J_n^\star).
+    \]
+    
+    That means $\tilde{J_n^{(2)}}\notin \bar{V_n^L}$ and by consequence, $\tilde{J_n^{(2)}}\in V_n^L$.
+    
+    Finally, taking $L_1 = \max(L_2, L_3)$, we have $\forall L > L_1$, either $J_n^{(1)} \in V_n^L$ or $\tilde{J_n^{(2)}} \in V_n^L$.
+\end{proof}
+
+Next we show that there exists at least one arm in $V_n^L$ for whom the probability of being pulled is large enough. More precisely, we prove the following lemma.
+
+\begin{lemma}\label{lemma:psi_min_t3c}
+    There exists $L_1 = \text{Poly}(W_1)$ s.t. for $L > L_1$ and for all $n$ s.t. $U_n^L \neq \emptyset$, then there exists $J_n \in V_n^L$ s.t.
+    \[
+        \psi_{n,J_n} \geq \frac{\min(\beta,1-\beta)}{K^2} \eqdef \psi_{\min}.
+    \]
+\end{lemma}
+
+\begin{proof}
+    Using Lemma~\ref{lemma:link_t3c}, we know that $J_n^{(1)}$ or $\tilde{J_n^{(2)}} \in V_n^L$. We also know that under \TCC, for any arm $i$, $\psi_{n,i}$ can be written as
+    \[
+        \psi_{n,i} = \beta a_{n,i} + (1-\beta) \sum_{j\neq i} a_{n,j}\frac{\1\{W_n(j,i)=\min_{k\neq j} W_n(j,k)\}}{\big|\argmin_{k\neq j } W_n(j,k)\big|}.
+    \]
+    Note that $(\psi_{n,i})_i$ sums to 1,
+    \begin{align*}
+        \sum_i  \psi_{n,i} &= \beta +(1-\beta) \sum_j a_{n,j} \sum_{i\neq j } \frac{\1\{W_n(j,i)=\min_{k\neq j} W_n(j,k)\}}{\big|\argmin_{k\neq j } W_n(j,k)\big|}\\
+        &= \beta +(1-\beta) \sum_j a_{n,j} =1\,.
+    \end{align*}
+    Therefore, we have
+    \[
+        \psi_{n,J_n^{(1)}} \geq \beta a_{n,J_n^{(1)}} \geq \frac{\beta}{K}
+    \]
+    on one hand, since $\sum_{i\in\cA} a_{n,i} = 1$. On the other hand, we have
+    \begin{align*}
+        \psi_{n,\tilde{J_n^{(2)}}} &\geq (1-\beta) \frac{a_{n,J_n^{(1)}}}{K}\\
+                           &\geq \frac{1-\beta}{K^2},
+    \end{align*}
+    which concludes the proof.
+\end{proof}
+
+The rest of this subsection is exactly the same to that of \TTTS. Indeed, with the above lemma, we can show that the set of poorly explored arms $U_n^L$ is empty when $n$ is large enough.
+
+\begin{lemma}\label{lemma:poorly_explored_t3c}
+    Under \TCC, there exists $L_0 = \text{Poly}(W_1,W_2)$ s.t. $\forall L > L_0$, $U_{\floor{KL}}^L = \emptyset$.
+\end{lemma}
+
+\begin{proof}
+    See proof of Lemma~\ref{lemma:poorly_explored_ttts} in Appendix~\ref{app:confidence_ttts.exploration}.
+\end{proof}
+
+We can finally conclude the proof of Lemma~\ref{lemma:sufficient_exploration} for \TCC in the same way as for \TTTS in Appendix~\ref{app:confidence_ttts.exploration}.
+\hfill\BlackBox\\[2mm]
+
+\subsection{Concentration of the empirical means}\label{app:confidence_t3c.means}
+
+We prove Lemma~\ref{lemma:tracking_means} for \TCC. As a corollary of the previous section, we can show the concentration of $\mu_{n,i}$ to $\mu_i$, and the proof remains the same as that of \TTTS in Appendix~\ref{app:confidence_ttts.means}.
+
+\subsection{Measurement effort concentration of the optimal arm}\label{app:confidence_t3c.best_arm}
+
+Next, we show that the empirical arm draws proportion of the true best arm for \TCC concentrates to $\beta$ when the total number of arm draws is sufficiently large. We prove Lemma~\ref{lemma:tracking_best} for \TCC.
+
+This proof also remains the same as that of \TTTS in Appendix~\ref{app:confidence_ttts.best_arm}.
+
+\subsection{Measurement effort concentration of other arms}\label{app:confidence_t3c.other_arms}
+
+In this section, we show that, for \TCC, the empirical measurement effort concentration also holds for other arms than the true best arm. We prove Lemma~\ref{lemma:tracking_other} for \TCC. Note that this part differs from that of \TTTS.
+
+We again establish first an over-allocation implies negligible probability result as follow.
+
+\begin{lemma}\label{lemma:over_allocation_finite_t3c} 
+    Under \TCC, for every $\xi \leq \epsilon_0$ with $\epsilon_0$ problem dependent, there exists $S_1 = \text{Poly}(1/\xi,W_1,W_2)$ such that for all $n > S_1$, for all $i\neq I^\star$, 
+    \[
+        \frac{\Psi_{n,i}}{n} \geq \omega_{i}^\beta + 2\xi  \ \ \Rightarrow \ \ \psi_{n,i} \leq (K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}}\,.
+    \]
+\end{lemma}
+
+\begin{proof}
+    Fix $i\neq I^\star$ s.t. $\Psi_{n,i}/n\geq \omega_i^\beta+2\xi$, then using Lemma~\ref{lemma:link}, there exists $S_2=\text{Poly}(1/\xi,W_2)$ such that for any $n>S_2$, we have
+    \[
+        \frac{T_{n,i}}{n} \geq \omega_i^\beta + \xi.
+    \]
+    Then,
+    \begin{align*}
+        \psi_{n,i} &\leq \beta a_{n,i} + (1-\beta) \sum_{j\neq i} a_{n,j}\1\{W_n(j,i)=\min_{k\neq j} W_n(j,k)\}\\
+                   &\leq \beta a_{n,i} + (1-\beta) \left(\sum_{j\neq i,I^\star} a_{n,j} + a_{n,I^\star}\1\{W_n(I^\star,i)=\min_{k\neq I^\star} W_n(I^\star,k)\}\right)\\
+                   &\leq \sum_{j\neq I^\star} a_{n,j} + \1\{W_n(I^\star,i)=\min_{k\neq I^\star} W_n(I^\star,k)\}.
+    \end{align*}
+    Next we show that the indicator function term in the previous inequality equals to 0.
+    
+    Using Lemma~\ref{lemma:means} and Lemma~\ref{lemma:tracking_best} for \TCC, there exists $S_3 = \text{Poly}(1/\xi,W_1,W_2)$ such that for any $n>S_3$,
+    \[
+        \left|\frac{T_{n,I^\star}}{n} - \beta\right| \leq \xi^2 \text{ and } \forall j \in\cA, |\mu_{n,j}-\mu_j|\leq\xi^2.
+    \]
+    
+    Now if $\forall j \neq I^\star,i$, we have $T_{n,j}/n>\omega_j^\beta$, then
+    \begin{align*}
+        \frac{n-1}{n} &= \sum_{j\in\cA}\frac{T_{n,j}}{n}\\
+                      &= \frac{T_{n,I^\star}}{n} + \frac{T_{n,i}}{n} + \sum_{j\neq I^\star,i}\frac{T_{n,j}}{n}\\
+                      &> \beta - \epsilon^2 + \omega_i^\beta + \epsilon + \sum_{j\neq I^\star,i} \omega_j^\beta \geq 1,
+    \end{align*}
+    which is a contradiction.
+    
+    Thus there exists at least one $j_0\neq I^\star,i$, such that $T_{n,j_0}/n \leq \omega_j^\beta$. Assuming $n>\max(S_2,S_3)$, we have
+    \begin{align*}
+        W_n(I^\star,i)-W_n(I^\star,j_0) 
+        &= \ddfrac{(\mu_{n,I^\star}-\mu_{n,i})^2}{2\sigma^2\left(\frac{1}{T_{n,I^\star}}+\frac{1}{T_{n,i}}\right)} - \ddfrac{(\mu_{n,I^\star}-\mu_{n,j_0})^2}{2\sigma^2\left(\frac{1}{T_{n,I^\star}}+\frac{1}{T_{n,j_0}}\right)}\\
+        &\geq \underbrace{\ddfrac{(\mu_{I^\star}-\mu_{i}-2\xi^2)^2}{2\sigma^2\left(\frac{1}{\beta-\xi^2}+\frac{1}{\omega_i^\beta+\xi}\right)} - \ddfrac{(\mu_{I^\star}-\mu_{j_0}+2\xi^2)^2}{2\sigma^2\left(\frac{1}{\beta+\xi^2}+\frac{1}{\omega_{j_0}^\beta}\right)}}_{W_{i,j_0}^\xi}.
+    \end{align*}
+    According to Proposition~\ref{prop:optim}, $W_{i,j_0}^\xi$ converges to 0 when $\xi$ goes to 0, more precisely we have 
+    \[W_{i,j_0}^\xi = \frac{(\mu_{I^\star}-\mu_{i})^2}{2\sigma^2} \left(\frac{\beta}{\beta +\omega_i^\beta}\right)^2 \xi + O(\xi^2)\,,
+    \]
+    thus there exists a $\epsilon_0$ such that for all $\xi<\epsilon_0$ it holds for all $i,j_0\neq I^\star$, $W_{i, j_0}^\xi>0$. It follows then
+    \[
+        W_n(I^\star,i)-\min_{k\neq I^\star}W_n(I^\star,k) \geq W_n(I^\star,i)-W_n(I^\star,j_0) > 0,
+    \]
+    and $\1\{W_n(I^\star,i)=\min_{k\neq I^\star} W_n(I^\star,k)\}=0$.
+    
+    Knowing that Lemma~\ref{lemma:empirical_best} is also valid for \TCC, thus there exists $M_1 = \text{Poly}(4/\Delta_{\min},W_1,W_2)$ such that for all $n>M_1$,
+    \[
+        \forall j \neq I^\star, a_{n,j} \leq \expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}},
+    \]
+    which then concludes the proof by taking $S_1\eqdef\max(M_1,S_2,S_3)$.
+\end{proof}
+
+The rest of this subsection almost coincides with that of \TTTS. We first show that, starting from some known moment, no arm is overly allocated. More precisely, we show the following lemma.
+
+\begin{lemma}\label{lemma:psi_other_t3c}
+    Under \TCC, for every $\xi$, there exists $S_4 = \text{Poly}(1/\xi,W_1,W_2)$ s.t. $\forall n > S_4$,
+    \[
+        \forall i \in \cA, \ \ \frac{\Psi_{n,i}}{n} \leq \omega_{i}^\beta + 2\xi.
+    \]
+\end{lemma}
+
+\begin{proof}
+    See proof of Lemma~\ref{lemma:psi_other_ttts} in Appendix~\ref{app:confidence_ttts.other_arms}. Note that the previous step does not match exactly that of \TTTS, so the proof would be slightly different. However, the difference is only a matter of constant, we thus still choose to skip this proof.
+\end{proof}
+
+It remains to prove Lemma~\ref{lemma:tracking_other} for \TCC, which stays the same as that of \TTTS.
+
+\paragraph{Proof of Lemma~\ref{lemma:tracking_other} for \TCC} 
+
+See proof of Lemma~\ref{lemma:tracking_other} for \TTTS in Appendix~\ref{app:confidence_ttts.other_arms}.
+
+\hfill\BlackBox\\[2mm]
+
