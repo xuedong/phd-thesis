@@ -4,7 +4,9 @@
 In this section, we consider Gaussian bandits and the Bayesian rules using an improper prior on the means.
 We state our main result below, showing that \TTTS and \TCC are asymptotically $\beta$-optimal in the fixed confidence setting, when coupled with appropriate stopping and recommendation rules. 
 
-\begin{theorem}\label{thm:confidence_main} With $\cC^{g_G}$ the function defined by \cite{kaufmann2018mixture}, which satisfies $\cC^{g_G}(x) \simeq x+\ln(x)$, we introduce the threshold
+\begin{theorem}\label{thm:confidence_main} 
+\begin{leftbar}[theorembar]
+With $\cC^{g_G}$ the function defined by \cite{kaufmann2018mixture}, which satisfies $\cC^{g_G}(x) \simeq x+\ln(x)$, we introduce the threshold
 \begin{equation}d_{n,\delta} = 4\ln(4+\ln(n)) + 2 \cC^{g_G}\left(\frac{\ln((K-1)/\delta)}{2}\right).\label{def:thresholdD}\end{equation}
 The \TTTS and \TCC sampling rules coupled with either   
 \begin{itemize}
@@ -17,6 +19,7 @@ form a $\delta$-correct BAI strategy. Moreover, if all the arms means are distin
     \[
         \limsup_{\delta\rightarrow{0}} \frac{\EE{\tau_{\delta}}}{\log(1/\delta)} \leq \frac{1}{\Gamma_{\beta}^\star}.
     \]
+\end{leftbar}
 \end{theorem}
 
 %\emilie{I added the restriction of the means being distinct in the theorem, maybe it was already somewhere, I didn't find it}
