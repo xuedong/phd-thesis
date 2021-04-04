@@ -1,4 +1,24 @@
-% !TEX root = ../Chapter4.tex
-\section{Discussion}\label{sec:gpo.discussion}
+%!TEX root = ../Chapter3.tex
+\section{Discussion}\label{sec:lgc.discussion}
 
-We studied \PCT, a new instantiation of \POO on top of \HCT. We proved that \HCT is a plausible subroutine for \POO by adapting the analysis of \HCT under a new assumption w.r.t.\,a fixed partitioning. We also proposed \GPO, a general framework for making any hierarchical bandit algorithm that only has a simple regret guarantee adaptive to unknown smoothness. However, whether it is possible to weaken the assumptions of \HOO in the same way as \HCT while keeping similar regret guarantees remains open.
+In this paper, we designed the first practically usable asymptotically optimal sampling rules for the pure exploration game for finite-arm linear bandits. Should the boundedness assumption be necessary to have optimal algorithm remains an open question. 
+
+Another concern about the current sampling rules could be their computational complexity. In BAI, the one step complexity of \LGC (or \LG) is dominated by the computation of the best response for nature, which requires a full matrix inversion. Alternatives that involve rank-1 updates should be considered.
+
+More generally, however, the part of fixed-confidence pure exploration algorithms that needs an improvement the most is the stopping rule. While the one we used guarantees $\delta$-correctness, it is very conservative. Indeed, the experimental error rates of algorithms using that stopping rule are orders of magnitude below $\delta$. This means that the concentration inequality does not reflect the query we seek to answer. It quantifies deviations of the $d$-dimensional estimate in all directions (morally, along $2^d$ directions). However, for the usual BAI setting with $d$ arms in an orthogonal basis, it would be sufficient to control the deviation of that estimator in $d-1$ directions to make sure that $i^*(\theta) = i^*(\hat{\theta}_t)$.
+
+Finally, the good performance of \LGapE raises the natural question of whether it could be proven to have similar asymptotic optimality.
+
+% \section{Discussion}\label{sec:conclusion}
+%
+% %\begin{itemize}
+% %\item Fast rates for saddle point computation?
+% %\item Changing arm sets? well defined? not clear.
+% %\item exploration can be used as subroutine in a regret minimization algorithm
+% %\end{itemize}
+%
+% \paragraph{Computational complexity} First note that the complexity of one step of \LG is $O( C(\text{stopping rule} +A))$ In BAI, the complexity of one step of \LGC (or \LG) is dominated by computing the best response for nature. Indeed, even in the unbounded case, it involves the inversion of a new matrix $V_{w_s^i}$
+%
+%
+%
+% \paragraph{Stopping rule} More generally, the aspect of fixed confidence pure exploration that needs an improvement the most is the stopping rule. While the one used here guarantees $\delta$-correctness, it is very conservative. Indeed, the experimental error rates of algorithms using that stopping rule are orders of magnitude below $\delta$. There are at least two ways to devise better stopping rules. First, the threshold $\beta(t,\delta)$ such that for all $t$, $\Vert \theta - \hat{\theta} \Vert^2_{V_{N_t}} \le \beta(t,\delta)$, could perhaps be made smaller. Second and most importantly, that concentration inequality does not reflect the query we seek to answer. It quantifies deviations of the $d$-dimensional estimate in all directions (morally, along $2^d$ directions). However, for the usual best-arm identification setting with $d$ arms in an orthogonal basis, it would be sufficient to control the deviation of that estimator in $d-1$ directions to be sure that $i^*(\theta) = i^*(\hat{\theta}_t)$.

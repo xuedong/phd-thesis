@@ -35,7 +35,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%   			Liste des fichiers à compiler					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\includeonly{Chapter0,chapter2,Appendices}
+%\includeonly{Chapter0,chapter2,Appendices}
 
 
 
@@ -72,25 +72,31 @@
 
 	\cleardoublepage
 		% Table des matières
-			\setcounter{tocdepth}{1}	% Pas besoin de trop détailler le sommaire ici (chapitres/sections)
-			\dominitoc						% Génération des mini-toc	\pagenumbering{arabic}
-			\tableofcontents
+		\setcounter{tocdepth}{1}	% Pas besoin de trop détailler le sommaire ici (chapitres/sections)
+		\dominitoc						% Génération des mini-toc	\pagenumbering{arabic}
+		\tableofcontents
+		% Liste des algos
+		\listofalgorithms
+		\addcontentsline{toc}{chapter}{List of Algorithms}
 		% Liste des figures
-			\renewcommand*\listfigurename{List of Figures}
-			\listoffigures
+		\renewcommand*\listfigurename{List of Figures}
+		\listoffigures
 		% Liste des tableaux
 		\listoftables
+		
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %        Contenu du document        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\setcounter{mtc}{3}	% "Corrige" les minitocs décallés à cause des chapter* (ex : table des matières)
 	\pagenumbering{arabic}
-	\input{Chapter1/Chapter1}
+	\input{Chapter1/Intro}
 	\input{Chapter2/Chapter2}
 	\input{Chapter3/Chapter3}
 	\input{Chapter4/Chapter4}
 	\input{Chapter5/Chapter5}
+	\input{Chapter6/Chapter6}
+	\input{Chapter7/Conclusion}
 	
 	\clearpage
 	\bibliographystyle{plainnat}

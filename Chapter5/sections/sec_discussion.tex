@@ -1,3 +1,4 @@
-\section{Discussion}\label{sec:dttts.discussion}
+% !TEX root = ../Chapter4.tex
+\section{Discussion}\label{sec:gpo.discussion}
 
-We presented a way to use Thompson sampling for BAI for infinitely many-armed bandits and explained how to use it for HPO. We introduced the \textit{first fully dynamic algorithm} for this setting and showed through an empirical study that it is a promising approach for HPO. In the future, we plan to provide experiments on more datasets and establish theoretical guarantees to support the good performance of \DTTTS, with the hope to provide a finite-time upper bound on its probability of error. We also plan to investigate variants of this algorithm for the non-stochastic bandits for which \Hyperband can be used, which would allow spending more time on the more promising algorithms.
+We studied \PCT, a new instantiation of \POO on top of \HCT. We proved that \HCT is a plausible subroutine for \POO by adapting the analysis of \HCT under a new assumption w.r.t.\,a fixed partitioning. We also proposed \GPO, a general framework for making any hierarchical bandit algorithm that only has a simple regret guarantee adaptive to unknown smoothness. However, whether it is possible to weaken the assumptions of \HOO in the same way as \HCT while keeping similar regret guarantees remains open.

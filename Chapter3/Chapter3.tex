@@ -1,16 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%									Chapitre 3											%
+%%									Chapitre 3												%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Playground of Linear Best-Arm Identification}\label{chap:lgc}
+\chapter{A Bayesian Perspective of Best-Arm Identification}\label{chap:t3c}
 	\citationChap{
-		Et c'est là que jadis, à quinze ans révolus\\
-		A l'âge où s'amuser tout seul ne suffit plus\\
-		Je connus la prime amourette\\
-		Auprès d'une sirène, une femme-poisson\\
-		Je reçus de l'amour la première leçon\\
-		Avalai la première arête
-	}{Georges Brassens}
+		blabla
+	}{}
 	\minitoc
 	\newpage
 
@@ -19,22 +14,16 @@
 
 
 % Début du chapitre
-\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+
 \input{Chapter3/sections/sec_intro}
 
-\input{Chapter3/sections/sec_lower_bound}
+\input{Chapter3/sections/sec_algorithm}
+
+\input{Chapter3/sections/sec_related}
+
+\input{Chapter3/sections/sec_confidence}
 
 \input{Chapter3/sections/sec_bayesian}
-
-\input{Chapter3/sections/sec_game}
-
-\input{Chapter3/sections/sec_safe}
-
-\input{Chapter3/sections/sec_bounded}
-
-\input{Chapter3/sections/sec_related_works}
-
-%\input{Chapter3/sections/sec_analysis}  % this part got absorbed into the "algorihtm" section.
 
 \input{Chapter3/sections/sec_experiments}
 
@@ -42,33 +31,33 @@
 
 % \newpage
 % \bibliographystyle{plainnat}
-% \bibliography{Major,manual_bib}
+% \bibliography{Major}
 % \newpage
 
 \begin{subappendices}
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 \input{Chapter3/appendices/app_outline}
 
-\input{Chapter3/appendices/app_notations}
+\input{Chapter3/appendices/app_notation}
 
-\input{Chapter3/appendices/app_lower_bounds_proof}
+%\input{Chapter3/appendices/app_pac_gaussian}
 
-\input{Chapter3/appendices/app_examples}
+\input{Chapter3/appendices/app_confidence_ttts}
 
-%\input{Chapter3/appendices/app_oracle_computations}
+\input{Chapter3/appendices/app_confidence_t3c}
 
-\input{Chapter3/appendices/app_sample_complexity_proof}
+\input{Chapter3/appendices/app_confidence.tex}
 
-\input{Chapter3/appendices/app_nc_sample_complexity_proof}
+\input{Chapter3/appendices/app_lemmas}
 
-\input{Chapter3/appendices/app_concentration}
+\input{Chapter3/appendices/app_posterior_gaussian}
 
-\input{Chapter3/appendices/app_tracking_and_regret}
+\input{Chapter3/appendices/app_posterior_beta}
 
-%\input{Chapter3/appendices/app_adaptation_BAI} merged with example
+\input{Chapter3/appendices/app_optimal_weight}
 
-\input{Chapter3/appendices/app_stopping}
+\input{Chapter3/appendices/app_rate}
 
-\input{Chapter3/appendices/app_implementation}
+%\input{Chapter3/appendices/app_illustrations}
 
 \end{subappendices}

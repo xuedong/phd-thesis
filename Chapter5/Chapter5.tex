@@ -2,15 +2,10 @@
 %%									Chapitre 5												%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Bandits and Hyper-parameter Optimization}\label{chap:dttts}
+\chapter{Hierarchical Bandits for Black-Box Optimization}\label{chap:gpo}
 	\citationChap{
-		Et c'est là que jadis, à quinze ans révolus\\
-		A l'âge où s'amuser tout seul ne suffit plus\\
-		Je connus la prime amourette\\
-		Auprès d'une sirène, une femme-poisson\\
-		Je reçus de l'amour la première leçon\\
-		Avalai la première arête
-	}{Georges Brassens}
+		blabla
+	}{}
 	\minitoc
 	\newpage
 
@@ -22,30 +17,30 @@
 \addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
 \input{Chapter5/sections/sec_intro}
 
-\input{Chapter5/sections/sec_survey}
+\input{Chapter5/sections/sec_pre}
 
-\input{Chapter5/sections/sec_framework}
+\input{Chapter5/sections/sec_hct}
 
-\input{Chapter5/sections/sec_algorithm}
+\input{Chapter5/sections/sec_pct}
 
-\input{Chapter5/sections/sec_experiments}
+\input{Chapter5/sections/sec_gpo}
+
+\input{Chapter5/sections/sec_exp}
 
 \input{Chapter5/sections/sec_discussion}
 
+% Manual newpage inserted to improve the layout of sample file - not
+% needed in general before appendices/bibliography.
+
 % \newpage
-% \bibliographystyle{plain}
-% \bibliography{library}
+% \bibliographystyle{plainnat}
+% \bibliography{Major,Minor}
 % \newpage
 
 \begin{subappendices}
 \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
-\input{Chapter5/appendices/app_httts}
+\input{Chapter5/appendices/app_hct}
 
-\input{Chapter5/appendices/app_experiments}
-
-\input{Chapter5/appendices/app_arms}
-
-\input{Chapter5/appendices/app_adapt}
+\input{Chapter5/appendices/app_poo}
 
 \end{subappendices}
-\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
