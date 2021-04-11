@@ -46,7 +46,7 @@
 \directeur{Michal \scshape{Valko}}
 \encadrant{Emilie \scshape{Kaufmann}}
 \date\today
-\jurya{Mme Emilie \scshape{Kaufmann}}{Charg\'ee de recherche, CNRS, SequeL}{Co-encadrante de Th\`ese}
+\jurya{Mme Emilie \scshape{Kaufmann}}{Charg\'ee de recherche, CNRS, SequeL}{Co-directrice de Th\`ese}
 \juryb{B}{Professeur}{Rapporteur}
 \juryc{C}{Professeur}{Examinateur}
 \juryd{M. Michal \scshape{Valko}}{Charg\'e de recherche, Inria, SequeL}{Directeur de Th\`ese}
@@ -76,8 +76,9 @@
 		\dominitoc						% Génération des mini-toc	\pagenumbering{arabic}
 		\tableofcontents
 		% Liste des algos
-		\listofalgorithms
-		\addcontentsline{toc}{chapter}{List of Algorithms}
+		\clearpage
+        \addcontentsline{toc}{chapter}{List of Algorithms}
+        \listofalgorithms
 		% Liste des figures
 		\renewcommand*\listfigurename{List of Figures}
 		\listoffigures
@@ -88,7 +89,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %        Contenu du document        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\setcounter{mtc}{3}	% "Corrige" les minitocs décallés à cause des chapter* (ex : table des matières)
+	\setcounter{mtc}{4}	% "Corrige" les minitocs décallés à cause des chapter* (ex : table des matières)
 	\pagenumbering{arabic}
 	\input{Chapter1/Intro}
 	\input{Chapter2/Chapter2}
