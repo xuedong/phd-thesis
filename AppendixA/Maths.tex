@@ -1,0 +1,95 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%									ANNEXES 												%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Mathematical Tools}\label{app:maths}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Reminders on Probability}\label{app:maths.proba}
+
+\subsection{One-dimensional exponential family}\label{app:maths.proba.exponential}
+
+\subsection{Gaussian process}\label{app:maths.proba.gp}
+
+\subsection{Sub-Gaussian distributions}\label{app:maths.proba.subgaussian}
+
+\begin{definition}[Sub-Gaussian]
+
+\end{definition}
+
+\begin{example}[Centered Gaussian is sub-Gaussian]
+	We are given a random variable $X \sim \cN(0,\sigma^2)$ with $\sigma^2$ denoting its variance. We show that $X$ is $\sigma$-sub-Gaussian. Indeed, we have $\forall \lambda\in\R$,
+	\begin{align*}
+		\EE{e^{\lambda X}} &\leq \\
+	\end{align*}
+\end{example}
+
+\section{Concentration Inequalities}\label{app:maths.concentration}
+
+\subsection{Hoeffding's inequality}
+
+\subsection{Azuma's inequality}
+
+%\subsection{Bernstein's inequality}
+
+%\section{Reproducing Kernel Hilbert Space}\label{app:maths.rkhs}
+
+\section{Information Theory}\label{app:maths.information}
+
+We present some basic knowledge about information theory since it is strongly related to the data-driven machine learning research. People can refer to~\cite{cover2006} for more details.
+
+\subsection{Entropy}
+
+The \textit{entropy} is a measure of the uncertainty of a random variable, it also defines the ultimate data compression.
+
+\subsection{Kullback-Leibler divergence}
+
+Another important concept is the \textit{relative entropy} or \textit{Kullback-Leibler divergence} (KL divergence), which measures the difference between two probability distributions.
+
+\begin{remark}
+	KL divergence is not a distance since it does not satisfy the symmetry property in an usual distance definition. 
+\end{remark}
+
+Before properly defining the KL divergence, let us first give the definition of an important prerequisite notion of \textit{absolutely continuous} probability measures.
+
+\begin{definition}[absolutely continuous probability measures]\label{def:maths.absolute_continuous}
+	Suppose that $\mathbb{P}$ and $\mathbb{Q}$ are two probability measures on $(\Omega,\mathcal{F})$. If for any event $F \in \mathcal{F}$ such that $\mathbb{Q}(F) = 0$, we have also $\mathbb{P}(F) = 0$, then one says that $\mathbb{P}$ is absolutely continuous w.r.t $\mathbb{Q}$, and is denoted as $\mathbb{P} \ll \mathbb{Q}$.
+\end{definition}
+
+The KL divergence is then defined as follow.
+
+\begin{definition}[KL divergence]\label{def:maths.kl}
+	For two probability measures $\mathbb{P}$ and $\mathbb{Q}$, if $\mathbb{P} \ll \mathbb{Q}$, then the KL divergence is defined as
+	\[
+		D(\mathbb{P} \lVert \mathbb{Q}) \eqdef \int \log(\frac{d\mathbb{P}}{d\mathbb{Q}})d\mathbb{P}.
+	\]
+\end{definition}
+
+\begin{example}[KL divergence between two normal distributions]
+	We compute the KL divergence between two normal distributions $\mathbb{P}\sim\cN(\mu_1,\sigma_1)$ and $\mathbb{Q}\sim\cN(\mu_2,\sigma_2)$.
+	\[
+		D(\mathbb{P} \lVert \mathbb{Q}) = \log \frac{\sigma_2}{\sigma_1} + \frac{\sigma_1^2+(\mu_1-\mu_2)^2}{2\sigma_2^2} - \frac{1}{2}.
+	\]
+In particular, if $\sigma\eqdef\sigma_1=\sigma_2$, then
+	\[
+		D(\mathbb{P} \lVert \mathbb{Q}) = \frac{(\mu_1-\mu_2)^2}{2\sigma^2}.
+	\]
+\end{example}
+
+A very important property of KL divergence is its non-negativity, which is established by Gibbs' theory.
+
+\begin{theorem}[Gibbs' inequality]\label{thm:maths.gibbs}
+	For two probability measures $\mathbb{P}$ and $\mathbb{Q}$, if $\mathbb{P} \ll \mathbb{Q}$, then $D(\mathbb{P} \lVert \mathbb{Q}) \geq 0$. The equality holds if and only if $\mathbb{P} = \mathbb{Q}$ $\mathbb{P}$-almost everywhere. 
+\end{theorem}
+
+% \begin{proof}
+% 	We prove the result in the discrete case. Suppose $P = \{p_1, p_2, \ldots, p_n\}$ and $Q = \{q_1, q_2, \ldots, q_n\}$ two probability distributions.
+
+% 	We know that $\log(\cdot)$ is a concave function, thus $-\log(\cdot)$ is a convex function. Using Jensen's inequality, we have
+% 	\begin{align*}
+% 		D(\mathbb{P} \lVert \mathbb{Q}) & = \sum_{i=1}^n p_i \log(p_i) \frac{\log(p_i)}{\log(q_i)} \\
+% 										& = - \sum_{i=1}^n p_i \log(p_i) \frac{\log(q_i)}{\log(p_i)} \\
+% 										& \geq - \log (\sum_{i=1}^n p_i \frac{q_i}{p_i}) \\
+% 										& = 0.
+% 	\end{align*}
+% \end{proof}

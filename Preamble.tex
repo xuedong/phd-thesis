@@ -176,6 +176,10 @@
 \usepackage{bm}
 \usepackage{bbm}
 \usepackage{bbold}
+\usepackage{sectsty}
+\chapterfont{\color{violet}}
+\sectionfont{\color{plum}}
+\subsectionfont{\color{blueViolet}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Navigation dans le document
@@ -206,7 +210,7 @@
 \usepackage[acronym,xindy,toc,numberedsection,ucmark]{glossaries}
 	\newglossary[nlg]{notation}{not}{ntn}{Notation} % Création d'un type de glossaire 'notation'
 	\makeglossaries
-	\loadglsentries{Appendices/Glossary}			% Utilisation d'un fichier externe pour la définition des entrées (Glossary.tex)
+	\loadglsentries{Back/Glossary}			% Utilisation d'un fichier externe pour la définition des entrées (Glossary.tex)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -225,3 +229,5 @@
 \definecolor{pearFith}{HTML}{ECF0F1}
 \definecolor{pearDark}{HTML}{2980B9}
 \definecolor{pearDarker}{HTML}{F330DB}
+\definecolor{blueViolet}{HTML}{8A2BE2}
+\definecolor{plum}{HTML}{8E4585}
