@@ -24,18 +24,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[a4paper,12pt,twoside,openright]{report}
-\include{Preamble}		% Liste des packages et de leurs options
-\include{Macros/Commands}	% Commandes et environnements perso
-\include{Macros/names}
-\include{Macros/macros}
-\include{Macros/todos}
-\include{Front/Front}
+\input{Preamble}		% Liste des packages et de leurs options
+\input{Macros/Commands}	% Commandes et environnements perso
+\input{Macros/names}
+\input{Macros/macros}
+\input{Macros/todos}
+\input{Front/Front}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%   			Liste des fichiers à compiler					%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\includeonly{Chapter0,chapter1,chapter2,Appendices}
+%\inputonly{Chapter0,chapter1,chapter2,Appendices}
 
 
 
@@ -67,8 +67,8 @@
 	\pagenumbering{roman}
 	\pagedegarde
 
-    \include{Chapter0/Abstract}
-    %\include{Chapter0/Ack}
+    \input{Chapter0/Abstract}
+    %\input{Chapter0/Ack}
 
 	\cleardoublepage
 		% Table des matières
@@ -91,13 +91,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\setcounter{mtc}{4}	% "Corrige" les minitocs décallés à cause des chapter* (ex : table des matières)
 	\pagenumbering{arabic}
-	\include{Chapter1/Intro}
-	\include{Chapter2/Chapter2}
-	\include{Chapter3/Chapter3}
-	\include{Chapter4/Chapter4}
-	\include{Chapter5/Chapter5}
-	\include{Chapter6/Chapter6}
-	\include{Chapter7/Conclusion}
+	\input{Chapter1/Intro}
+	%\input{Chapter2/Chapter2}
+	%\input{Chapter3/Chapter3}
+	%\input{Chapter4/Chapter4}
+	%\input{Chapter5/Chapter5}
+	%\input{Chapter6/Chapter6}
+	%\input{Chapter7/Conclusion}
 	
 	\clearpage
 	\bibliographystyle{plainnat}
@@ -107,11 +107,11 @@
 	% Annexes
 	\begin{appendix}
 		%\pagenumbering{Roman}
-		\include{AppendixA/Maths}				% Figures en annexe
-        \include{AppendixB/AppendixB}
-        \include{AppendixC/AppendixC}
-        \include{AppendixD/AppendixD}
-        \include{Back/Glossary}
+		\input{AppendixA/Maths}				% Figures en annexe
+        %\input{AppendixB/AppendixB}
+        %\input{AppendixC/AppendixC}
+        %\input{AppendixD/AppendixD}
+        \input{Glossaries}
 
 		% Liste des acronymes, glossaire et liste des symboles (dans l'ordre)
 		\printglossary[type=\acronymtype , title={Acronyms}, toctitle={Acronyms}]
