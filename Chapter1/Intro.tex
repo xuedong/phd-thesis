@@ -64,7 +64,7 @@ The research work presented in this thesis tries to address sequential optimizat
     \argmax_{x\in\mathcal{X}} f(x)\,.
 \end{equation}
 
-This is the \gls{go} or \gls{bbo} problem. Sometimes we can also refer to \gls{zo}, in contrast to \emph{first-order optimization} for which gradient-based information is available.
+When the search space is continuous, it is the \gls{go} or \gls{bbo} problem. Sometimes we can also refer to \gls{zo}, in contrast to \emph{first-order optimization} for which gradient-based information is available.
 
 %In its simplest form where the action space $\mathcal{X}$ is finite, the problem can be modeled as a \emph{stochastic multi-armed bandit}. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A \emph{sequential decision making} problem comes up then when facing with several slot machines (multi-armed bandits). Concretely, a stochastic bandit is a collection of $K$ actions (also called arms) $\mathcal{X} = \{x_1,\ldots,x_K\}$. Each time the learner chooses one action $x_{a_t}\in\mathcal{X}$ which is then fed to the environment. The environment generates a reward $r_{a_t,t}=r_t$ which is assumed to be drawn from an unknown $[0,1]$-valued distribution $\nu_{a_t}$ and is revealed to the learner.
 
