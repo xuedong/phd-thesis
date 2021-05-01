@@ -36,50 +36,67 @@
 
 \section{Information Theory}\label{app:maths.information}
 
-We present some basic knowledge about information theory since it is strongly related to the data-driven machine learning research. People can refer to~\cite{cover2006} for more details.
+In this section, we briefly recall some fundamental notions and results of information theory that are unceasingly used in the technical proofs of this thesis. Readers can refer to~\cite{cover2006} for more details.
 
-\subsection{Entropy}
+\subsection{Entropy}\label{app:maths.information.entropy}
 
-The \textit{entropy} is a measure of the uncertainty of a random variable, it also defines the ultimate data compression.
+Given a random variable $X: \Omega \rightarrow \cX$, the \gls{entropy} $X$ measures its uncertainty, and also defines the ultimate data compression. When the random variable is discrete, its entropy $H(X)$ is defined as follow.
 
-\subsection{Kullback-Leibler divergence}
+\begin{definition}[entropy]\label{def:entropy}
+\begin{leftbar}[defnbar]
+    Let $X$ be a discrete random variable defined over a probability space $(\Omega,\mathcal{F},\Ps)$ to an arbitrary space $\cX$, with probability mass function $p_X$, then its entropy $H(X)$ is defined by
+    \[
+        H(X) \eqdef - \sum_{x\in\cX} p_X(x)\log p_X(x)\,.
+    \]
+\end{leftbar}
+\end{definition}
 
-Another important concept is the \textit{relative entropy} or \textit{Kullback-Leibler divergence} (KL divergence), which measures the difference between two probability distributions.
+The previous definition can be extended to continuous random variables, namely \gls{differential entropy}.
+
+\begin{definition}[differential entropy]
+\begin{leftbar}[defnbar]
+    Let $X$ be a continuous random variable defined over a probability space $(\Omega,\mathcal{F},\Ps)$, with probability density function $f$, then its differential entropy $h(X)$ is defined by
+    \[
+        h(X) \eqdef - \int f(x)\log f(x) dx\,.
+    \]
+\end{leftbar}
+\end{definition}
+
+\subsection{Kullback-Leibler divergence}\label{app:maths.information.kl}
+
+ important concept is the \textit{relative entropy} or \textit{Kullback-Leibler divergence} (KL divergence), which measures the difference between two probability distributions.
 
 \begin{remark}
-	KL divergence is not a distance since it does not satisfy the symmetry property in an usual distance definition. 
+\begin{leftbar}[remarkbar]
+	KL divergence is not a distance since it does not satisfy the symmetry property in an usual distance definition.
+\end{leftbar}
 \end{remark}
 
 Before properly defining the KL divergence, let us first give the definition of an important prerequisite notion of \textit{absolutely continuous} probability measures.
 
 \begin{definition}[absolutely continuous probability measures]\label{def:maths.absolute_continuous}
-	Suppose that $\mathbb{P}$ and $\mathbb{Q}$ are two probability measures on $(\Omega,\mathcal{F})$. If for any event $F \in \mathcal{F}$ such that $\mathbb{Q}(F) = 0$, we have also $\mathbb{P}(F) = 0$, then one says that $\mathbb{P}$ is absolutely continuous w.r.t $\mathbb{Q}$, and is denoted as $\mathbb{P} \ll \mathbb{Q}$.
+\begin{leftbar}[defnbar]
+	Let $\mathbb{P}$ and $\mathbb{Q}$ be two probability measures defined on a measurable space $(\Omega,\mathcal{F})$. If for any event $F \in \mathcal{F}$ such that $\mathbb{Q}(F) = 0$, we have also $\mathbb{P}(F) = 0$, then one says that $\mathbb{P}$ is absolutely continuous w.r.t $\mathbb{Q}$, and is denoted as $\mathbb{P} \ll \mathbb{Q}$.
+\end{leftbar}
 \end{definition}
 
 The KL divergence is then defined as follow.
 
 \begin{definition}[KL divergence]\label{def:maths.kl}
+\begin{leftbar}[defnbar]
 	For two probability measures $\mathbb{P}$ and $\mathbb{Q}$, if $\mathbb{P} \ll \mathbb{Q}$, then the KL divergence is defined as
 	\[
-		D(\mathbb{P} \lVert \mathbb{Q}) \eqdef \int \log(\frac{d\mathbb{P}}{d\mathbb{Q}})d\mathbb{P}.
+		KL(\mathbb{P} \lVert \mathbb{Q}) \eqdef \int \log(\frac{d\mathbb{P}}{d\mathbb{Q}})d\mathbb{P}.
 	\]
+\end{leftbar}
 \end{definition}
-
-\begin{example}[KL divergence between two normal distributions]
-	We compute the KL divergence between two normal distributions $\mathbb{P}\sim\cN(\mu_1,\sigma_1)$ and $\mathbb{Q}\sim\cN(\mu_2,\sigma_2)$.
-	\[
-		D(\mathbb{P} \lVert \mathbb{Q}) = \log \frac{\sigma_2}{\sigma_1} + \frac{\sigma_1^2+(\mu_1-\mu_2)^2}{2\sigma_2^2} - \frac{1}{2}.
-	\]
-In particular, if $\sigma\eqdef\sigma_1=\sigma_2$, then
-	\[
-		D(\mathbb{P} \lVert \mathbb{Q}) = \frac{(\mu_1-\mu_2)^2}{2\sigma^2}.
-	\]
-\end{example}
 
 A very important property of KL divergence is its non-negativity, which is established by Gibbs' theory.
 
 \begin{theorem}[Gibbs' inequality]\label{thm:maths.gibbs}
-	For two probability measures $\mathbb{P}$ and $\mathbb{Q}$, if $\mathbb{P} \ll \mathbb{Q}$, then $D(\mathbb{P} \lVert \mathbb{Q}) \geq 0$. The equality holds if and only if $\mathbb{P} = \mathbb{Q}$ $\mathbb{P}$-almost everywhere. 
+\begin{leftbar}[theorembar]
+	For two probability measures $\mathbb{P}$ and $\mathbb{Q}$, if $\mathbb{P} \ll \mathbb{Q}$, then $KL(\mathbb{P} \lVert \mathbb{Q}) \geq 0$. The equality holds if and only if $\mathbb{P} = \mathbb{Q}$ $\mathbb{P}$-almost everywhere.
+\end{leftbar}
 \end{theorem}
 
 % \begin{proof}
@@ -93,3 +110,24 @@ A very important property of KL divergence is its non-negativity, which is estab
 % 										& = 0.
 % 	\end{align*}
 % \end{proof}
+
+\subsection{Two special cases: Gaussian and Bernoulli}\label{app:maths.information.examples}
+
+\begin{example}[KL divergence between two Gaussian distributions]
+\begin{leftbar}[examplebar]
+	We compute the KL divergence between two normal distributions $\mathbb{P}\sim\cN(\mu_1,\sigma_1)$ and $\mathbb{Q}\sim\cN(\mu_2,\sigma_2)$.
+	\[
+		KL(\mathbb{P} \lVert \mathbb{Q}) = \log \frac{\sigma_2}{\sigma_1} + \frac{\sigma_1^2+(\mu_1-\mu_2)^2}{2\sigma_2^2} - \frac{1}{2}.
+	\]
+In particular, if $\sigma\eqdef\sigma_1=\sigma_2$, then
+	\[
+		KL(\mathbb{P} \lVert \mathbb{Q}) = \frac{(\mu_1-\mu_2)^2}{2\sigma^2}.
+	\]
+\end{leftbar}
+\end{example}
+
+\begin{example}[KL divergence between two Bernoulli distributions]
+\begin{leftbar}[examplebar]
+    We compute the KL divergence between two Bernoulli distributions
+\end{leftbar}
+\end{example}
