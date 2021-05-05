@@ -12,7 +12,7 @@
 
 \section{The Multi-Armed Bandits Model}\label{sec:mab.model}
 
-The problem of sequentially allocating resources to a defined set of actions (arms) based on successive \emph{partially observable} feedback refers to the MAB problem in probability theory. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A sequential decision making problem comes up then when facing with several slot machines (multi-armed bandits).
+The problem of sequentially allocating resources to a defined set of actions (arms) based on successive \emph{partially observable} (see Remark~\ref{remark:partial}) feedback refers to the MAB problem in probability theory. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A sequential decision making problem comes up then when facing with several slot machines (multi-armed bandits).
 
 In stochastic MAB, the goal is to maximize the total payoff obtained within a sequence of observations. For that purpose, the learner is required to simultaneously acquire new information for potential future well-being (called \emph{exploration}), and optimize the current decision based on past observations (called \emph{exploitation}). MAB thus naturally addresses the trade-off between exploration and exploitation.
 
