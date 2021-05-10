@@ -36,7 +36,7 @@ Mathematically speaking, an environment is simply a target function to be optimi
 
 \subsection{How do we approach the problem?}\label{sec:intro.context.how}
 
-Sequential optimization problem has been widely inspired by the literature of~\gls{mab}. The original MAB problem is first studied by~\cite{thompson1933}, and can be described in the following way: A learner is given a \emph{finite} set of arms $\{1,\ldots,K\}$ that follows $K$ unknown distributions respectively. For a given time horizon $T$, a vector of rewards is generated according to the distributions at each time step from $1$ to $T$. The learner can choose to pull one of the arms and observe its corresponding reward.
+Sequential optimization problem has been widely inspired by the literature of~\gls{mab}. The original MAB problem is first studied by~\cite{thompson1933}, and can be described in the following way: A learner is given a \emph{finite} set of $K$ arms and a time horizon $T$. Pulling an arm leads to a stochastic reward that follows some \emph{unknown} distribution underpin that arm. At each time step, a vector of rewards of all arms is generated according to those unknown distributions. The learner can choose to pull one of the arms and thus reveal the corresponding reward.
 
 \begin{remark}\label{remark:partial}
 \begin{leftbar}[remarkbar]
@@ -65,7 +65,7 @@ This thesis tries to address sequential optimization problems under stochastic e
 \end{equation}
 Without any prior information on the target function and/or the search space $\cX$, it is just a find-a-needle-in-a-haystack mission. This thesis studies several particular instances of \eqref{eq:optim} with various search spaces and/or different (regularity) assumptions on the target function though, and brings new theoretical and practical insights. 
 
-Before entering into details, we provide a brief overview of different settings investigated in this thesis in this section. More thorough discussion on the problem formulation, in particular how do we assess the performance of algorithms under different settings is given in Chapter~\ref{chap:mab}.
+Before jumping into details, we provide a brief overview of different settings investigated in this thesis in this section. More thorough discussion on the problem formulation, in particular how do we assess the performance of algorithms under different settings is given in Chapter~\ref{chap:mab}.
 
 %In its simplest form where the action space $\mathcal{X}$ is finite, the problem can be modeled as a \emph{stochastic multi-armed bandit}. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A \emph{sequential decision making} problem comes up then when facing with several slot machines (multi-armed bandits). Concretely, a stochastic bandit is a collection of $K$ actions (also called arms) $\mathcal{X} = \{x_1,\ldots,x_K\}$. Each time the learner chooses one action $x_{a_t}\in\mathcal{X}$ which is then fed to the environment. The environment generates a reward $r_{a_t,t}=r_t$ which is assumed to be drawn from an unknown $[0,1]$-valued distribution $\nu_{a_t}$ and is revealed to the learner.
 
@@ -74,7 +74,13 @@ Before entering into details, we provide a brief overview of different settings 
 
 \subsection{Best-arm identification for stochastic multi-armed bandits}
 
-The first setting of interest, for which the search space $\mathcal{X}$ is finite and one-dimensional and the target function $f$ can be considered as a function that maps each arm $x_k$ to its mean $\mu_k$. In one of our papers~\citep{shang2020t3c}, we employ some Bayesian machinery to address the problem based on the famous Thompson sampling (\TS). \TS is a Bayesian algorithm well known for regret minimization, for which it is now seen as a major competitor to the popular \UCB-typed approaches~\citep{auer2002ucb}. A natural question to ask is whether Bayesian methods can be also a good competitor to classical BAI approaches constructed upon complicated confidence intervals. However, it is well known that direct use of \TS cannot yield optimal performance for BAI and an adaptation such as \TTTS (top-two Thompson sampling) proposed by~\cite{russo2016ttts} is needed: by choosing between two different candidate arms in each round, it enforces the exploration of sub-optimal arms, which would be under-sampled by vanilla \TS due to its objective of maximizing rewards. \cite{shang2020t3c} provides further theoretical understandings of \TTTS and proposes a computational improvement \TCC with the same guarantees. \cite{shang2019dttts} also show that with some minor modifications, such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization.
+The first setting of interest consists of a finite and one-dimensional search space $\mathcal{X} = \{x_1,x_2,\cdots,x_K\}$. Assume that the underlying reward distribution of arm $x_k$ is characterized by its mean $\mu_k\in\R$, the target function $f$ can be simply interpreted as a mapping form each arm to its mean. The learner then aims to find
+\[
+    \argmax_{k\in[K]} \mu_k\,
+\]
+given some stopping condition. This is the best-arm identification for stochastic multi-armed bandits.
+
+Existing methods for BAI for stochastic MAB often requires construction of complicated confidence intervals of the mean estimates. We opt for Bayesian machinery to address this problem in this thesis, which is based on the famous Thompson sampling (\TS). \TS is a Bayesian algorithm well known for the classical reward maximization objective, for which it is now seen as a major competitor to the popular \UCB-typed approaches~\citep{auer2002ucb}. A natural question to ask is whether Bayesian methods can be also a good competitor to classical BAI approaches constructed upon complicated confidence intervals. However, it is well known that straight application of \TS cannot yield optimal performance for BAI and an adaptation such as \gls{ttts} proposed by~\cite{russo2016ttts} is needed: by choosing between two different candidate arms in each round, it enforces the exploration of sub-optimal arms, which would be under-sampled by vanilla \TS due to its objective of maximizing rewards. 
 
 \subsection{Extension to best-arm identification for linear bandits}
 
@@ -97,32 +103,37 @@ The full journey of the PhD is extremely rich and the present manuscript is by n
 
 We can summarize the contributions presented in this thesis as listed below.
 
-\subsection{List of publications and other work}\label{sec:intro.contributions.list}
-
-\paragraph{List of publications included in this thesis}
-
 \begin{itemize}
-    \item Omar Darwiche Domingues, Yannis Flet-Berliac, Edouard Leurent, Pierre Ménard, and Xuedong Shang. Reinforcement learning via optimistic supervised learning: A simple and effective strategy for exploration. Work in progess, 2021.
-    \item Omar Darwiche Domingues, Yannis Flet-Berliac, Edouard Leurent, Pierre Ménard, and Xuedong Shang. rlberry - A reinforcement learning library for research and education. Github Repository, 2021
-    \item Xuedong Shang, Igor Colin, Merwan Barlier, Ludovic Dos Santos. Safe best-arm-identification in linear bandits. Submitted, 2021.
-    \item Pierre Ménard, Omar Darwiche Domingues, Xuedong Shang, and Michal Valko. UCB momentum Q-learning: Correcting bias without forgetting. Submitted, 2021.
-    \item Rémy Degenne, Pierre Ménard, Xuedong Shang, and Michal Valko. Gamification of pure exploration for linear bandits. In Proceedings of the 37th International Conference on Machine Learning (ICML), 2020.
-    \item uedong Shang, Rianne de Heide, Emilie Kaufmann, Pierre Ménard, and Michal Valko. Fixed-confidence guarantees for Bayesian best-arm identification. In Proceedings of the 23rd International Conference on Artificial Intelligence and Statistics (AIStats), 2020.
-    \item Xuedong Shang, Han Shao and Jian Qian. Stochastic bandits with vector losses: Minimizing infinite norm of relative losses. Submitted, 2020.
-    \item Xuedong Shang, Emilie Kaufmann, and Michal Valko. A simple dynamic bandit algorithm for hyper-parameter tuning. In 6th Workshop on Automated Machine Learning at International Conference on Machine Learning (ICML-AutoML), 2019.
-    \item Xuedong Shang, Emilie Kaufmann, and Michal Valko. General parallel optimisation without a metric. In Proceedings of the 30th International Conference on Algorithmic Learning Theory (ALT), 2019.
-    \item Xuedong Shang, Emilie Kaufmann, and Michal Valko. Adaptive black-box optimisation got easier: HCT needs only local smoothness. In 14th European Workshop on Reinforcement Learning (EWRL), 2018.
+    \item \cite{shang2020t3c} provides further theoretical understandings of \TTTS and proposes a computational improvement \TCC with the same guarantees. 
+    \item \cite{shang2019dttts} show that with some minor modifications, such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization.
 \end{itemize}
 
-\cite{shang2018adaptive,shang2019dttts,shang2019adaptive,shang2020dttts,degenne2020game,shang2020t3c}.
+\subsection{List of publications and other work}\label{sec:intro.contributions.list}
+
+\paragraph{List of publications included in this thesis.}
+
+\begin{itemize}
+    \item Gamification of pure exploration for linear bandits. In Proceedings of the 37th International Conference on Machine Learning (ICML), 2020.~\citep{degenne2020game}
+    \item Fixed-confidence guarantees for Bayesian best-arm identification. In Proceedings of the 23rd International Conference on Artificial Intelligence and Statistics (AIStats), 2020.\citep{shang2020t3c}
+    \item Simple (dynamic) bandit algorithms for hyper-parameter optimization. Preprint, 2020.~\citep{shang2020dttts}
+    \item A simple dynamic bandit algorithm for hyper-parameter tuning. In 6th Workshop on Automated Machine Learning at International Conference on Machine Learning (ICML-AutoML), 2019.~\citep{shang2019dttts}
+    \item General parallel optimisation without a metric. In Proceedings of the 30th International Conference on Algorithmic Learning Theory (ALT), 2019.~\citep{shang2019adaptive}
+    \item Adaptive black-box optimisation got easier: HCT needs only local smoothness. In 14th European Workshop on Reinforcement Learning (EWRL), 2018.~\citep{shang2018adaptive}
+\end{itemize}
 
 \paragraph{List of publications and work not included in this thesis.}
 
-\cite{shang2020vector,shang2021safe,menard2021ucbmq}.
+\begin{itemize}
+    \item Safe best-arm-identification in linear bandits. Preprint, 2021.~\citep{shang2021safe}
+    \item UCB momentum Q-learning: Correcting bias without forgetting. In Proceedings of the 38th International Conference on Machine Learning (ICML), 2021.~\citep{menard2021ucbmq}
+    \item Stochastic bandits with vector losses: Minimizing infinite norm of relative losses. Preprint, 2020.~\citep{shang2020vector}
+\end{itemize}
 
 \paragraph{Software.}
 
-\cite{rlberry2021}.
+\begin{itemize}
+    \item rlberry - A reinforcement learning library for research and education. Github Repository, 2021.~\citep{rlberry2021}
+\end{itemize}
 
 \section{Organization of the Thesis}\label{sec:intro.organization}
 
