@@ -47,7 +47,7 @@ Note that rewards of unchosen arms at each time step are not revealed: this part
 In its original form, the objective of a MAB learner is to maximize the total rewards in the long run. A natural observation is that, the learner is required to simultaneously acquire new information for potential future well-being (exploration), and optimize the current decision based on past observations (exploitation). This trade-off is stated as the \gls{exploration-exploitation dilemma}. 
 %The usual performance criterion of the learner is measured by the total loss of the chosen arm at each time step w.r.t the best arm, namely the \emph{cumulative regret}. Typical good learners like \UCB~\citep{auer2002ucb} trade off between exploration and exploitation. 
 
-However, exploitation does not necessarily provide meaningful incentives in some real applications. Typically, in the previous working examples presented in Section~\ref{sec:intro.context.what}, we do not really care about the potential losses incurred during the whole learning phase. Indeed, we only aim at finding the (near-)optimum of the target function quickly. In this context, it is more natural to assess the learner in an optimization fashion. This setting, often named as \gls{bai}, is thus more strongly related to what we are to investigate in this thesis.
+However, exploitation does not necessarily provide meaningful incentives in some real applications. Typically, in the previous working examples presented in Section~\ref{sec:intro.context.what}, we do not really care about the potential losses incurred during the whole learning phase. Indeed, we only aim at finding the (near-)optimum of the target function quickly. In this context, it is more natural to assess the learner in an optimization fashion. This setting, often named as \gls{bai}, is thus more closely related to what we are to investigate in this thesis.
 
 \begin{remark}
 \begin{leftbar}[remarkbar]
@@ -61,9 +61,9 @@ More generally, we talk about \gls{pure exploration} problems~\citep{bubeck2011p
     
 This thesis tries to address sequential optimization problems under stochastic environments from a bandit point of view. A stochastic environment refers to an environment from which stochastic feedback are acquired when an input is queried from the search/action space\footnote{Those terms can be interchangeably employed.} $\mathcal{X}$. Formally, and without loss of generality, we aim to maximize\footnote{Minimization is obviously the same problem.} a target function $f:\mathcal{X}\rightarrow\mathbb{R}$, i.e. find 
 \begin{equation}\label{eq:optim}
-    \argmax_{x\in\mathcal{X}} f(x)\,.
+    \argmax_{x\in\mathcal{X}} f(x)
 \end{equation}
-Without any prior information on the target function and/or the search space $\cX$, it is just a find-a-needle-in-a-haystack mission. This thesis studies several particular instances of \eqref{eq:optim} with various search spaces and/or different (regularity) assumptions on the target function though, and brings new theoretical and practical insights. 
+based on a sequence of function values of $f$. Obviously without any prior information on the target function and/or the search space $\cX$, it is just a find-a-needle-in-a-haystack mission. This thesis studies several particular instances of \eqref{eq:optim} with various search spaces and/or different (regularity) assumptions on the target function though, and brings both novel theoretical and practical insights. 
 
 Before jumping into details, we provide a brief overview of different settings investigated in this thesis in this section. More thorough discussion on the problem formulation, in particular how do we assess the performance of algorithms under different settings is given in Chapter~\ref{chap:mab}.
 
@@ -75,16 +75,24 @@ Before jumping into details, we provide a brief overview of different settings i
 \subsection{Best-arm identification for stochastic multi-armed bandits}
 
 The first setting of interest consists of a finite and one-dimensional search space $\mathcal{X} = \{x_1,x_2,\cdots,x_K\}$. Assume that the underlying reward distribution of arm $x_k$ is characterized by its mean $\mu_k\in\R$, the target function $f$ can be simply interpreted as a mapping form each arm to its mean. The learner then aims to find
-\[
+\begin{align}\label{eq:optim_bai}
     \argmax_{k\in[K]} \mu_k\,
-\]
-given some stopping condition. This is the best-arm identification for stochastic multi-armed bandits.
+\end{align}
+given some stopping condition. This is the best-arm identification for stochastic multi-armed bandits. Several learning objectives exist for a general BAI problem, among which we are in particular interested in the setting of which the goal is to identify the best arm with high confidence based on a minimum of function evaluations. This is the \gls{fixed-confidence setting} for whom the formal definition, along with those for other learning objectives, are provided and discussed later in Chapter~\ref{chap:mab}.
 
-Existing methods for BAI for stochastic MAB often requires construction of complicated confidence intervals of the mean estimates. We opt for Bayesian machinery to address this problem in this thesis, which is based on the famous Thompson sampling (\TS). \TS is a Bayesian algorithm well known for the classical reward maximization objective, for which it is now seen as a major competitor to the popular \UCB-typed approaches~\citep{auer2002ucb}. A natural question to ask is whether Bayesian methods can be also a good competitor to classical BAI approaches constructed upon complicated confidence intervals. However, it is well known that straight application of \TS cannot yield optimal performance for BAI and an adaptation such as \gls{ttts} proposed by~\cite{russo2016ttts} is needed: by choosing between two different candidate arms in each round, it enforces the exploration of sub-optimal arms, which would be under-sampled by vanilla \TS due to its objective of maximizing rewards. 
+Existing methods for BAI for stochastic MAB often requires construction of complicated confidence intervals of the mean estimates. We opt for Bayesian machinery to address this problem in this thesis, which is based on the famous Thompson sampling (\TS). \TS is a Bayesian algorithm well known for the classical reward maximization objective, for which it is now seen as a major competitor to the popular \UCB-typed approaches~\citep{auer2002ucb}. A natural question to ask is whether Bayesian methods can be also a good competitor to classical BAI approaches constructed upon complicated confidence intervals. However, it is well known that straight application of \TS cannot yield optimal performance for BAI both in a practical and theoretical point of view (in the sense of \gls{asymptotic optimality} in the fixed-confidence setting, to be precised again in Chapter~\ref{chap:mab}). An adaptation such as \gls{ttts} proposed by~\cite{russo2016ttts} is needed: by choosing between two different candidate arms in each round, it enforces the exploration of sub-optimal arms, which would be under-sampled by vanilla \TS due to its objective of maximizing rewards. 
+
+In this thesis, we revisit \TTTS both in theory and in practice, trying to provide new insights on its convergence and complexity, and also improve its computational performance.
 
 \subsection{Extension to best-arm identification for linear bandits}
 
-A very natural and popular extension of the vanilla BAI is to take a finite space of features $\cX$ in $\R^d$ as the search space and consider a target function $f$ that maps each arm $\mathbf{x}$ (also called context in this case) to its linear combination with a \emph{regression parameter} $\btheta$, and is thus called linear bandits. $\btheta$ is of course unknown to the learner. Previous work on this topic were not (asymptotically) optimal. A lower bound, which can be written as a complicated minimax optimization problem, is given by~\cite{garivier2016tracknstop}. In a subsequent work, we develop a saddle-point approach to that lower bound optimization problem, which then led to optimal algorithms for linear BAI in the fixed-confidence regime~\citep{degenne2020game}. In addition, their empirical performance is competitive with the best existing algorithms. We also investigate a natural adaptation of our Bayesian approaches developed in the previous paper~\citep{shang2020t3c}. Unfortunately, they do not seem to be (asymptotically) optimal (work not published yet). Therefore, knowing whether one can find an *optimal* Bayesian approach remains an open problem.
+Beyond the previous vanilla setting of BAI, a very natural and widely studied extension is to take a finite set of $K$ arms/contexts/features\footnote{Those terms can be interchangeably employed in the context of this thesis.} $\cX=\{\bx_1,\bx_2,\cdots,\bx_K\}\subset\R^d$ as the search space. The reward of each arm under this circumstance is assumed to depend linearly on a \gls{regression parameter} $\btheta$. The target function $f$ therefore can be considered as a mapping from each arm $\bx$ to its linear combination with $\btheta$, and is thus called linear bandits. Precisely, the learner seeks to find
+\begin{align}\label{eq:optim_linbai}
+    \argmax_{k\in[K]} \btheta^\top\bx_k\,.
+\end{align}
+The parameter $\btheta$ is of course \emph{unknown} to the learner. This linear contextual setting describes better some real-world scenarios like advertising placement optimization, and therefore often attracts great attention.
+
+Again, we are interested in the fixed-confidence setting. Previous work on this topic are not (asymptotically) optimal. A lower bound, which can be written as a complicated minimax optimization problem, is given by~\cite{garivier2016tracknstop}. In a subsequent work, we develop a saddle-point approach to that lower bound optimization problem, which then led to optimal algorithms for linear BAI in the fixed-confidence regime~\citep{degenne2020game}. In addition, their empirical performance is competitive with the best existing algorithms. We also investigate a natural adaptation of our Bayesian approaches developed in the previous paper~\citep{shang2020t3c}. Unfortunately, they do not seem to be (asymptotically) optimal (work not published yet). Therefore, knowing whether one can find an *optimal* Bayesian approach remains an open problem.
 
 \subsection{Infinitely-armed bandits and black-box optimization}
 
@@ -103,41 +111,45 @@ The full journey of the PhD is extremely rich and the present manuscript is by n
 
 We can summarize the contributions presented in this thesis as listed below.
 
-\begin{itemize}
-    \item \cite{shang2020t3c} provides further theoretical understandings of \TTTS and proposes a computational improvement \TCC with the same guarantees. 
+\begin{itemize}[label=\ding{43}]
+    \item \cite{shang2020t3c} revisits a Bayesian BAI algorithm \TTTS, and provides new theoretical understandings on its posterior convergence.
+    \item \cite{shang2020t3c} also shows that \TTTS achieves asymptotic optimality on the sample complexity.
+    \item \cite{shang2020t3c} further proposes a computational improvement \TCC of \TTTS, whilst keeping the same guarantees.
+    \item \cite{degenne2020game}
     \item \cite{shang2019dttts} show that with some minor modifications, such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization.
 \end{itemize}
 
 \subsection{List of publications and other work}\label{sec:intro.contributions.list}
 
-\paragraph{List of publications included in this thesis.}
+\paragraph{List of papers (peer-reviewed publications or preprints) included in this thesis.}
 
-\begin{itemize}
+\begin{itemize}[label=\ding{171}]
     \item Gamification of pure exploration for linear bandits. In Proceedings of the 37th International Conference on Machine Learning (ICML), 2020.~\citep{degenne2020game}
     \item Fixed-confidence guarantees for Bayesian best-arm identification. In Proceedings of the 23rd International Conference on Artificial Intelligence and Statistics (AIStats), 2020.\citep{shang2020t3c}
     \item Simple (dynamic) bandit algorithms for hyper-parameter optimization. Preprint, 2020.~\citep{shang2020dttts}
     \item A simple dynamic bandit algorithm for hyper-parameter tuning. In 6th Workshop on Automated Machine Learning at International Conference on Machine Learning (ICML-AutoML), 2019.~\citep{shang2019dttts}
     \item General parallel optimisation without a metric. In Proceedings of the 30th International Conference on Algorithmic Learning Theory (ALT), 2019.~\citep{shang2019adaptive}
     \item Adaptive black-box optimisation got easier: HCT needs only local smoothness. In 14th European Workshop on Reinforcement Learning (EWRL), 2018.~\citep{shang2018adaptive}
+    \item Hierarchical bandits for black-box optimization and Monte-Carlo tree search. Master Thesis, 2017.~\citep{shang2017master}
 \end{itemize}
 
-\paragraph{List of publications and work not included in this thesis.}
+\paragraph{List of papers (peer-reviewed publications or preprints) not included in this thesis.}
 
-\begin{itemize}
+\begin{itemize}[label=\ding{171}]
     \item Safe best-arm-identification in linear bandits. Preprint, 2021.~\citep{shang2021safe}
     \item UCB momentum Q-learning: Correcting bias without forgetting. In Proceedings of the 38th International Conference on Machine Learning (ICML), 2021.~\citep{menard2021ucbmq}
     \item Stochastic bandits with vector losses: Minimizing infinite norm of relative losses. Preprint, 2020.~\citep{shang2020vector}
 \end{itemize}
 
-\paragraph{Software.}
+\paragraph{Open source software.}
 
-\begin{itemize}
+\begin{itemize}[label=\ding{171}]
     \item rlberry - A reinforcement learning library for research and education. Github Repository, 2021.~\citep{rlberry2021}
 \end{itemize}
 
 \section{Organization of the Thesis}\label{sec:intro.organization}
 
-We conclude this chapter by providing an outline of the main text of the thesis.
+We conclude this chapter by providing an outline of the main text of the thesis. We start by 
 
 % \newpage
 % \bibliographystyle{plain}
