@@ -61,7 +61,7 @@ More generally, we talk about \gls{pure exploration} problems~\citep{bubeck2011p
     
 This thesis tries to address sequential optimization problems under stochastic environments from a bandit point of view. A stochastic environment refers to an environment from which stochastic feedback are acquired when an input is queried from the search/action space\footnote{Those terms can be interchangeably employed.} $\mathcal{X}$. Formally, and without loss of generality, we aim to maximize\footnote{Minimization is obviously the same problem.} a target function $f:\mathcal{X}\rightarrow\mathbb{R}$, i.e. find 
 \begin{equation}\label{eq:optim}
-    \argmax_{x\in\mathcal{X}} f(x)
+    \argmax_{x\in\cX} f(x)
 \end{equation}
 based on a sequence of function values of $f$. Obviously without any prior information on the target function and/or the search space $\cX$, it is just a find-a-needle-in-a-haystack mission. This thesis studies several particular instances of \eqref{eq:optim} with various search spaces and/or different (regularity) assumptions on the target function though, and brings both novel theoretical and practical insights. 
 
@@ -80,7 +80,7 @@ The first setting of interest consists of a finite and one-dimensional search sp
 \end{align}
 given some stopping condition. This is the best-arm identification for stochastic multi-armed bandits. Several learning objectives exist for a general BAI problem, among which we are in particular interested in the setting of which the goal is to identify the best arm with high confidence based on a minimum of function evaluations. This is the \gls{fixed-confidence setting} for whom the formal definition, along with those for other learning objectives, are provided and discussed later in Chapter~\ref{chap:mab}.
 
-Existing methods for BAI for stochastic MAB often requires construction of complicated confidence intervals of the mean estimates. We opt for Bayesian machinery to address this problem in this thesis, which is based on the famous Thompson sampling (\TS). \TS is a Bayesian algorithm well known for the classical reward maximization objective, for which it is now seen as a major competitor to the popular \UCB-typed approaches~\citep{auer2002ucb}. A natural question to ask is whether Bayesian methods can be also a good competitor to classical BAI approaches constructed upon complicated confidence intervals. However, it is well known that straight application of \TS cannot yield optimal performance for BAI both in a practical and theoretical point of view (in the sense of \gls{asymptotic optimality} in the fixed-confidence setting, to be precised again in Chapter~\ref{chap:mab}). An adaptation such as \gls{ttts} proposed by~\cite{russo2016ttts} is needed: by choosing between two different candidate arms in each round, it enforces the exploration of sub-optimal arms, which would be under-sampled by vanilla \TS due to its objective of maximizing rewards. 
+Existing methods for BAI for stochastic MAB often requires construction of complicated confidence intervals of the mean estimates. We opt for Bayesian machinery to address this problem in this thesis, which is based on the famous Thompson sampling (\TS). \TS is a Bayesian algorithm well known for the classical reward maximization objective, for which it is now seen as a major competitor to the popular \UCB-typed approaches~\citep{auer2002ucb}. A natural question to ask is whether Bayesian methods can be also a good competitor to classical BAI approaches constructed upon complicated confidence intervals. However, it is well known that straight application of \TS cannot yield optimal performance for BAI both in a practical and theoretical point of view. More precisely, it cannot achieve an asymptotic \gls{sample complexity} that matches the lower bound provided by~\cite{garivier2016tracknstop}. Such property is called \gls{asymptotic optimality} that we shall give formal definition later in Chapter~\ref{chap:mab}. An adaptation such as \TTTS proposed by~\cite{russo2016ttts} is needed: by choosing between two different candidate arms in each round, it enforces the exploration of sub-optimal arms, which would be under-sampled by vanilla \TS due to its objective of maximizing rewards. 
 
 In this thesis, we revisit \TTTS both in theory and in practice, trying to provide new insights on its convergence and complexity, and also improve its computational performance.
 
@@ -92,13 +92,24 @@ Beyond the previous vanilla setting of BAI, a very natural and widely studied ex
 \end{align}
 The parameter $\btheta$ is of course \emph{unknown} to the learner. This linear contextual setting describes better some real-world scenarios like advertising placement optimization, and therefore often attracts great attention.
 
-Again, we are interested in the fixed-confidence setting. Previous work on this topic are not (asymptotically) optimal. A lower bound, which can be written as a complicated minimax optimization problem, is given by~\cite{garivier2016tracknstop}. In a subsequent work, we develop a saddle-point approach to that lower bound optimization problem, which then led to optimal algorithms for linear BAI in the fixed-confidence regime~\citep{degenne2020game}. In addition, their empirical performance is competitive with the best existing algorithms. We also investigate a natural adaptation of our Bayesian approaches developed in the previous paper~\citep{shang2020t3c}. Unfortunately, they do not seem to be (asymptotically) optimal (work not published yet). Therefore, knowing whether one can find an *optimal* Bayesian approach remains an open problem.
+Again, we are interested in the fixed-confidence setting. Previous algorithms on this topic only achieve loose sample complexity bound which is linked to the \gls{G-optimality} of experimental design theory (see e.g.~\citealt{pukelsheim2006optimal}). We conjecture that G-optimality does not describe best the complexity of linear bandits BAI, and therefore try to opt for other more appropriate complexities.
+
+One natural research line is then to design asymptotically optimal algorithm. A simple adaptation of \Track~\citep{garivier2016tracknstop} to the linear setting is very likely to be asymptotically optimal, but remains computationally unfavorable. We thus also seek to design computational friendly algorithms. In this thesis, we investigate both Bayesian approach and confidence interval-based algorithms. In particular, we study whether extensions of \TTTS can be asymptotically optimal.
+%Unfortunately, they do not seem to be (asymptotically) optimal (work not published yet). Therefore, knowing whether one can find an *optimal* Bayesian approach remains an open problem.
 
 \subsection{Infinitely-armed bandits and black-box optimization}
 
-Finally, a more general problem is to consider an infinite (probably uncountable) measurable space $\mathcal{X}$, and each arm $x\in\mathcal{X}$ gets its mean reward $f(x)$ through the reward function $f$. This is the \gls{go} or \gls{bbo} problem. Sometimes we can also refer to \gls{zo}, in contrast to \emph{first-order optimization} for which gradient-based information is available.
+Finally, a more general problem is to consider an infinite (probably uncountable) measurable space $\mathcal{X}$, and each arm $x\in\mathcal{X}$ gets its mean reward $f(x)$ through the reward function $f$. We thus recover~\eqref{eq:optim}:
+\[
+    \argmax_{x\in\cX} f(x)\,.
+\]
+This is the \gls{go} or \gls{bbo} problem. Sometimes we can also refer to \gls{zo}, in contrast to \emph{first-order optimization} for which gradient-based information is available.
 
-We study the noisy setting in which the obtained reward is a noisy evaluation of $f: r_t = f(x_t) + \epsilon_t$. This problem is also better known under the name \emph{black-box optimization}, to which the main approaches include Bayesian optimization~\citep{brochu2010bayesian}, evolutionary algorithms and hierarchical bandits~\citep{bubeck2010x}. We opt for another performance measure in this case, namely the simple regret: $\max_{x\in\mathcal{X}} f(x) - f(x_{j_t})$ with $x_{j_t}$ our guess at time $t$. In a recent work of ours, we provide a general wrapper for hierarchical bandit algorithms that only have guarantees for their simple regret~\cite{shang2019adaptive}. We show that with a cross-validation scheme, any hierarchical bandit algorithm with simple regret guarantees can be plugged into our meta-algorithm with only a tiny increase in the resulting simple regret.
+We study the noisy setting in which the obtained reward is a noisy evaluation of $f: r_t = f(x_t) + \epsilon_t$. Typical approaches to this problem include Bayesian optimization (see e.g.~\citealt{brochu2010bayesian}), evolutionary algorithms and hierarchical bandits (see e.g.~\citealt{bubeck2010x}). In this thesis, we focus on the hierarchical bandits algorithms. In the literature of bandits, we often refer to \gls{infinitely-armed bandits} or more precisely \gls{continuum-armed bandits}.
+
+Obviously, we can only expect for a \emph{near-optimal} solution under continuum-armed bandits. We thus opt for another performance measure, namely the \gls{simple regret}, which is the difference between the true optimal function value and the function value of our final guess. 
+
+%In a recent work of ours, we provide a general wrapper for hierarchical bandit algorithms that only have guarantees for their simple regret~\cite{shang2019adaptive}. We show that with a cross-validation scheme, any hierarchical bandit algorithm with simple regret guarantees can be plugged into our meta-algorithm with only a tiny increase in the resulting simple regret.
 
 \subsection{Hyper-parameter optimization}
 
@@ -115,8 +126,12 @@ We can summarize the contributions presented in this thesis as listed below.
     \item \cite{shang2020t3c} revisits a Bayesian BAI algorithm \TTTS, and provides new theoretical understandings on its posterior convergence.
     \item \cite{shang2020t3c} also shows that \TTTS achieves asymptotic optimality on the sample complexity.
     \item \cite{shang2020t3c} further proposes a computational improvement \TCC of \TTTS, whilst keeping the same guarantees.
-    \item \cite{degenne2020game}
-    \item \cite{shang2019dttts} show that with some minor modifications, such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization.
+    \item \cite{degenne2020game} proposes a new linear bandits BAI complexity, and provides a comprehensive comparison of existing complexities.
+    \item In an unpublished work, we propose several different extensions of \TTTS and \TCC to the linear setting. Unfortunately, we show empirically that they are not asymptotically optimal. In the meantime, \cite{degenne2020game} develops a saddle-point approach that leads to optimal algorithms \LG and \LGC.
+    \item \cite{shang2019adaptive} provides a new cross-validation scheme \GPO that wraps up all hierarchical bandit algorithms with simple regret guarantees.
+    \item \cite{shang2018adaptive} shows that \HCT is a valid underlying algorithm for \GPO.
+    \item \cite{shang2019dttts} designs a robust and dynamic algorithm \DTTTS based on \TTTS, and shows that such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization.
+    \item \cite{shang2020dttts} provides some further understandings of \DTTTS.
 \end{itemize}
 
 \subsection{List of publications and other work}\label{sec:intro.contributions.list}
