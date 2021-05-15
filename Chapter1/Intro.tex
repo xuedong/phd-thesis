@@ -72,7 +72,7 @@ Before jumping into details, we provide a brief overview of different settings i
 %In its original formulation, the learning objective of a stochastic bandit is to maximise the total reward $\sum_{t=1}^T r_t$ obtained within a given time horizon $T$. In the literature of bandit, we usually denote by $\mu_k$ (resp. $\mu^\star$) the expectation of the unknown distribution $\nu_k$ (resp. the optimal arm), and the previous reward maximisation objective is equivalent to minimising the \emph{cumulative regret}: $T\mu^\star-\sum_{t=1}^T \mu_{a_t}$. %A such learning objective requires the learner to simultaneously acquire new information for potential future well-being (called \emph{exploration}), and optimize the current decision based on past observations (called \emph{exploitation}). 
 %Multi-armed bandits naturally addresses the trade-off between exploration and exploitation.
 
-\subsection{Best-arm identification for stochastic multi-armed bandits}
+\subsection{Best-arm identification for stochastic multi-armed bandits}\label{sec:intro.mab.bai}
 
 The first setting of interest consists of a finite and one-dimensional search space $\mathcal{X} = \{x_1,x_2,\cdots,x_K\}$. Assume that the underlying reward distribution of arm $x_k$ is characterized by its mean $\mu_k\in\R$, the target function $f$ can be simply interpreted as a mapping form each arm to its mean. The learner then aims to find
 \begin{align}\label{eq:optim_bai}
@@ -84,7 +84,7 @@ Existing methods for BAI for stochastic MAB often requires construction of compl
 
 In this thesis, we revisit \TTTS both in theory and in practice, trying to provide new insights on its convergence and complexity, and also improve its computational performance.
 
-\subsection{Extension to best-arm identification for linear bandits}
+\subsection{Extension to best-arm identification for linear bandits}\label{sec:intro.mab.linear}
 
 Beyond the previous vanilla setting of BAI, a very natural and widely studied extension is to take a finite set of $K$ arms/contexts/features\footnote{Those terms can be interchangeably employed in the context of this thesis.} $\cX=\{\bx_1,\bx_2,\cdots,\bx_K\}\subset\R^d$ as the search space. The reward of each arm under this circumstance is assumed to depend linearly on a \gls{regression parameter} $\btheta$. The target function $f$ therefore can be considered as a mapping from each arm $\bx$ to its linear combination with $\btheta$, and is thus called linear bandits. Precisely, the learner seeks to find
 \begin{align}\label{eq:optim_linbai}
@@ -97,7 +97,7 @@ Again, we are interested in the fixed-confidence setting. Previous algorithms on
 One natural research line is then to design asymptotically optimal algorithm. A simple adaptation of \Track~\citep{garivier2016tracknstop} to the linear setting is very likely to be asymptotically optimal, but remains computationally unfavorable. We thus also seek to design computational friendly algorithms. In this thesis, we investigate both Bayesian approach and confidence interval-based algorithms. In particular, we study whether extensions of \TTTS can be asymptotically optimal.
 %Unfortunately, they do not seem to be (asymptotically) optimal (work not published yet). Therefore, knowing whether one can find an *optimal* Bayesian approach remains an open problem.
 
-\subsection{Infinitely-armed bandits and black-box optimization}
+\subsection{Infinitely-armed bandits and black-box optimization}\label{sec:intro.mab.bbo}
 
 Finally, a more general problem is to consider an infinite (probably uncountable) measurable space $\mathcal{X}$, and each arm $x\in\mathcal{X}$ gets its mean reward $f(x)$ through the reward function $f$. We thus recover~\eqref{eq:optim}:
 \[
@@ -105,18 +105,27 @@ Finally, a more general problem is to consider an infinite (probably uncountable
 \]
 This is the \gls{go} or \gls{bbo} problem. Sometimes we can also refer to \gls{zo}, in contrast to \emph{first-order optimization} for which gradient-based information is available.
 
-We study the noisy setting in which the obtained reward is a noisy evaluation of $f: r_t = f(x_t) + \epsilon_t$. Typical approaches to this problem include Bayesian optimization (see e.g.~\citealt{brochu2010bayesian}), evolutionary algorithms and hierarchical bandits (see e.g.~\citealt{bubeck2010x}). In this thesis, we focus on the hierarchical bandits algorithms. In the literature of bandits, we often refer to \gls{infinitely-armed bandits} or more precisely \gls{continuum-armed bandits}.
+We study the noisy setting in this thesis. Typical approaches to address GO include \gls{bo} (see e.g.~\citealt{brochu2010bayesian}), evolutionary algorithms and hierarchical bandits (see e.g.~\citealt{bubeck2010x}). In this thesis, we focus on hierarchical bandits algorithms. In the literature of bandits, we often refer to \gls{infinitely-armed bandits} or more precisely \gls{continuum-armed bandits}.
 
-Obviously, we can only expect for a \emph{near-optimal} solution under continuum-armed bandits. We thus opt for another performance measure, namely the \gls{simple regret}, which is the difference between the true optimal function value and the function value of our final guess. 
+Obviously, we can only expect for a \emph{near-optimal} solution under continuum-armed bandits. We thus opt for another performance measure, namely the \gls{simple regret}, which is the difference between the true optimal function value and the function value of our final guess. Simple regret differs from \gls{cumulative regret} which serves as the performance measure for reward maximization. Formal definitions are provided later in Chapter~\ref{chap:mab}.
+
+In this thesis, we explore the possibility of designing parameter-free hierarchical-bandit algorithms with minimum (smoothness) assumptions.
 
 %In a recent work of ours, we provide a general wrapper for hierarchical bandit algorithms that only have guarantees for their simple regret~\cite{shang2019adaptive}. We show that with a cross-validation scheme, any hierarchical bandit algorithm with simple regret guarantees can be plugged into our meta-algorithm with only a tiny increase in the resulting simple regret.
 
-\subsection{Hyper-parameter optimization}
+\subsection{Hyper-parameter optimization}\label{sec:intro.mab.hpo}
 
+Finally, we turn our attention to a more practical question: hyper-parameter optimization. As introduced in Section~\ref{sec:intro.context.what}, efficient hyper-parameter tuning could be of great importance for machine learning practitioners. As is stated, HPO can be naturally modelled as a sequential optimization problem.
+
+The search space of HPO can be both discrete (categorical variables, integer-valued variables, etc) and continuous (real-valued variables). It is natural to ask if hierarchical-bandit algorithms are able to achieve competitive performances for HPO against classical BO algorithms.
+
+Additionally, inspired by a recent BAI-based algorithm \Hyperband~\citep{li2017hyperband}, we seek to propose other BAI-based algorithms for HPO. Indeed, \Hyperband is constructed upon an elimination-based BAI algorithm and achieves state-of-the-art performances compared to previous methods. We, on the other hand, are interested in whether Bayesian algorithms like \TTTS can also be adapted to tackle HPO problems. Note that \TTTS is only designed for \gls{finitely-armed bandits}, an appropriate workaround is hence necessary.
 
 \section{A Summary of the PhD}\label{sec:intro.contributions}
 
-The full journey of the PhD is extremely rich and the present manuscript is by no means intended to introduce all the results I have obtained during that period, but rather tell a story about the bandit optimization research line. The purpose of this section is thus to provide a summary of the contributions included in this thesis, but also list all the other work I have done just for the record.
+From Section~\ref{sec:intro.mab} we can see that the entire thesis is dedicated to one single problem -- sequential bandit optimization -- only with different settings. The full journey of my PhD is, however, far beyond the scope of the present manuscript. This thesis is by no means intended to introduce all the results I have obtained, but rather tell a story about the bandit optimization research line. 
+
+The purpose of this section is to provide a summary of the contributions included in this thesis, and also list all the other work I have participated to just for the record.
 
 \subsection{Summary of the contributions in this thesis}\label{sec:intro.contributions.summary}
 
@@ -128,8 +137,8 @@ We can summarize the contributions presented in this thesis as listed below.
     \item \cite{shang2020t3c} further proposes a computational improvement \TCC of \TTTS, whilst keeping the same guarantees.
     \item \cite{degenne2020game} proposes a new linear bandits BAI complexity, and provides a comprehensive comparison of existing complexities.
     \item In an unpublished work, we propose several different extensions of \TTTS and \TCC to the linear setting. Unfortunately, we show empirically that they are not asymptotically optimal. In the meantime, \cite{degenne2020game} develops a saddle-point approach that leads to optimal algorithms \LG and \LGC.
-    \item \cite{shang2019adaptive} provides a new cross-validation scheme \GPO that wraps up all hierarchical bandit algorithms with simple regret guarantees.
-    \item \cite{shang2018adaptive} shows that \HCT is a valid underlying algorithm for \GPO.
+    \item \cite{shang2019adaptive} proposes a general wrapper \GPO, using a cross-validation scheme, that wraps up all hierarchical bandit algorithms with simple regret guarantees.
+    \item \cite{shang2018adaptive} shows that \HCT is a valid underlying algorithm for \GPO as well as \POO by~\cite{grill2015poo}.
     \item \cite{shang2019dttts} designs a robust and dynamic algorithm \DTTTS based on \TTTS, and shows that such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization.
     \item \cite{shang2020dttts} provides some further understandings of \DTTTS.
 \end{itemize}
