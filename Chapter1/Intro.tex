@@ -119,7 +119,7 @@ Finally, we turn our attention to a more practical question: hyper-parameter opt
 
 The search space of HPO can be both discrete (categorical variables, integer-valued variables, etc) and continuous (real-valued variables). It is natural to ask if hierarchical-bandit algorithms are able to achieve competitive performances for HPO against classical BO algorithms.
 
-Additionally, inspired by a recent BAI-based algorithm \Hyperband~\citep{li2017hyperband}, we seek to propose other BAI-based algorithms for HPO. Indeed, \Hyperband is constructed upon an elimination-based BAI algorithm and achieves state-of-the-art performances compared to previous methods. We, on the other hand, are interested in whether Bayesian algorithms like \TTTS can also be adapted to tackle HPO problems. Note that \TTTS is only designed for \gls{finitely-armed bandits}, an appropriate workaround is hence necessary.
+Additionally, inspired by a recent BAI-based algorithm \Hyperband~\citep{li2017hyperband}, we seek to propose other BAI-based algorithms for HPO. Indeed, \Hyperband is constructed upon an elimination-based BAI algorithm and achieves state-of-the-art performances compared to previous methods. We, on the other hand, are interested in whether Bayesian algorithms like \TTTS can also be adapted to tackle HPO problems. Note that \TTTS is only designed for \gls{finitely-armed bandits}, an appropriate workaround is hence needed.
 
 \section{A Summary of the PhD}\label{sec:intro.contributions}
 
@@ -159,6 +159,8 @@ We can summarize the contributions presented in this thesis as listed below.
 
 \paragraph{List of papers (peer-reviewed publications or preprints) not included in this thesis.}
 
+The list below presents other work that are not included in this thesis since they do not really fit in with the scope of the main story line.
+
 \begin{itemize}[label=\ding{171}]
     \item Safe best-arm-identification in linear bandits. Preprint, 2021.~\citep{shang2021safe}
     \item UCB momentum Q-learning: Correcting bias without forgetting. In Proceedings of the 38th International Conference on Machine Learning (ICML), 2021.~\citep{menard2021ucbmq}
@@ -175,15 +177,17 @@ We can summarize the contributions presented in this thesis as listed below.
 
 We conclude this chapter by providing an outline of the main text of the thesis. 
 
-We start by an introductory Chapter~\ref{chap:mab} about the MAB model. We recall some basic notions as well as some fundamental results for stochastic MAB for the sake of integrity. We pay particular attention to how the settings previously mentioned in Section~\ref{sec:intro.mab} are formally defined.
+We start by an introductory Chapter~\ref{chap:mab} about the MAB model. We recall some basic notions as well as some fundamental results for stochastic MAB for the sake of integrity. We pay more attention on how different best-arm identification/global optimization settings previously mentioned in Section~\ref{sec:intro.mab} are formally defined.
 
-Chapter~\ref{chap:t3c} is dedicated to the problem of stochastic best-arm identification.
+Chapter~\ref{chap:t3c} is dedicated to the problem of stochastic best-arm identification, where we study in particular Bayesian approaches. This chapter is based on the results presented by~\cite{shang2020t3c}.
 
-Chapter~\ref{chap:lgc} studies best-arm identification for linear bandits.
+Chapter~\ref{chap:lgc} studies best-arm identification for linear bandits. We first investigate the problem from a Bayesian point of view based on some unpublished work. Besides, we also present some general results of linear bandits BAI~\citep{degenne2020game}. 
 
-Chapter~\ref{chap:gpo} is dedicated to continuum-armed bandits.
+Chapter~\ref{chap:gpo} is dedicated to continuum-armed bandits. This chapter is mainly based on the results presented by~\cite{shang2018adaptive} and~\cite{shang2019adaptive}.
 
-Finally, we devote a whole Chapter~\ref{chap:dttts} to \gls{automated machine learning} before concluding in Chapter~\ref{chap:conclusion}. We focus in particular on hyper-parameter optimization in this chapter.
+We talk about one important application of previous problem settings in Chapter~\ref{chap:dttts}, namely \gls{automated machine learning}. We focus especially on hyper-parameter optimization. This chapter is partly based on the results by~\cite{shang2019dttts,shang2020dttts}, but also includes some discussion from my master thesis~\cite{shang2017master}.
+
+Finally, we conclude the present manuscript by some general discussions as well as some future perspectives in Chapter~\ref{chap:conclusion}.
 
 % \newpage
 % \bibliographystyle{plain}
