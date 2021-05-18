@@ -12,15 +12,19 @@
 
 \section{The Multi-Armed Bandits Model}\label{sec:mab.model}
 
-The problem of sequentially allocating resources to a defined set of actions (arms) based on successive \emph{partially observable} (see Remark~\ref{remark:partial}) feedback refers to the MAB problem in probability theory. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A sequential decision making problem comes up then when facing with several slot machines (multi-armed bandits).
+The problem of sequentially allocating resources to a defined set of actions (arms) based on successive \emph{partially observable} (see Definition~\ref{def:mab.mab} and Remark~\ref{remark:mab.partial} below) feedback refers to the MAB problem in probability theory. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A sequential decision making problem comes up then when facing with several slot machines (multi-armed bandits).
 
-In stochastic MAB, the goal is to maximize the total payoff obtained within a sequence of observations. For that purpose, the learner is required to simultaneously acquire new information for potential future well-being (called \emph{exploration}), and optimize the current decision based on past observations (called \emph{exploitation}). MAB thus naturally addresses the trade-off between exploration and exploitation.
+The study of MAB models can date back to 1933~\citep{thompson1933}, and was first proposed to deal with clinical trials. 
+
+As stated in Chapter~\ref{chap:intro}, the original learning goal in stochastic MAB is to maximize the total payoff obtained given a sequence of observations. For that purpose, the learner is required to balance between exploration and exploitation.
+
+In this section, we go beyond the intuition and provide the formal definition of the model. We also recall some fundamental results for the sake of self-containedness.
 
 \subsection{Problem Formulation}\label{sec:mab.model.formulation}
 
-The problem can be formalized as follow.
+An MAB problem can be formulated as follow.
 
-\begin{definition}[multi-armed bandit problem]
+\begin{definition}[multi-armed bandit problem]\label{def:mab.mab}
 \begin{leftbar}[defnbar]
 	We are given a set of $K$ arms $\{1,\ldots,K\}$ that follow $K$ unknown $[0,1]$-valued distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $T$. At each time step $t$, the process consists of the following actions:
 	\begin{itemize}
@@ -31,7 +35,7 @@ The problem can be formalized as follow.
 \end{leftbar}
 \end{definition}
 
-\begin{remark}
+\begin{remark}\label{remark:mab.partial}
 \begin{leftbar}[remarkbar]
 	Rewards of unchosen arms at time $t$ are not revealed, this partial feedback setting is a special case of the online learning with experts setting.
 \end{leftbar}
