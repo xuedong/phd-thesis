@@ -57,6 +57,14 @@ More generally, we talk about \gls{pure exploration} problems~\citep{bubeck2011p
 
 \subsection{From multi-armed bandits to reinforcement learning}\label{sec:intro.context.rl}
 
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.33\textwidth]{Chapter1/img/mab.pdf}
+    \includegraphics[width=0.33\textwidth]{Chapter1/img/rl.pdf}
+    \caption{Left: a bandit learning cycle vs. Right: a reinforcement learning cycle.}
+    \label{fig:intro.comparison}
+\end{figure}
+
 \section{Multi-Armed Bandits and Optimization}\label{sec:intro.mab}
     
 This thesis tries to address sequential optimization problems under stochastic environments from a bandit point of view. A stochastic environment refers to an environment from which stochastic feedback are acquired when an input is queried from the search/action space\footnote{Those terms can be interchangeably employed.} $\mathcal{X}$. Formally, and without loss of generality, we aim to maximize\footnote{Minimization is obviously the same problem.} a target function $f:\mathcal{X}\rightarrow\mathbb{R}$, i.e. find 
