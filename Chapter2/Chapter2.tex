@@ -14,13 +14,13 @@
 
 The problem of sequentially allocating resources to a defined set of actions (arms) based on successive \emph{partially observable} (see Definition~\ref{def:mab.mab} and Remark~\ref{remark:mab.partial} below) feedback refers to the MAB problem in probability theory. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A sequential decision making problem comes up then when facing with several slot machines (multi-armed bandits).
 
-The study of MAB models can date back to 1933~\citep{thompson1933}, and was first proposed to deal with clinical trials. 
+The study of MAB problems can date back to as early as 1933~\citep{thompson1933}, and was first proposed to model sequential clinical trials.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth]{Chapter2/img/mab.pdf}
-    \caption{A bandit learning cycle.}
-    \label{fig:mab.mab}
+    \includegraphics[width=\textwidth]{Chapter2/img/covid.pdf}
+    \caption{Caption}
+    \label{fig:my_label}
 \end{figure}
 
 As stated in Chapter~\ref{chap:intro}, the original learning goal in stochastic MAB is to maximize the total payoff obtained given a sequence of observations. For that purpose, the learner is required to balance between exploration and exploitation.
@@ -29,7 +29,14 @@ In this section, we go beyond the intuition and provide the formal definition of
 
 \subsection{Problem Formulation}\label{sec:mab.model.formulation}
 
-An MAB problem can be formulated as follow.
+Recall that a bandit learning cycle can be described as in Fig.~\ref{fig:mab.mab}. An MAB problem can be formulated as follow.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Chapter2/img/mab.pdf}
+    \caption{A bandit learning cycle.}
+    \label{fig:mab.mab}
+\end{figure}
 
 \begin{definition}[multi-armed bandit problem]\label{def:mab.mab}
 \begin{leftbar}[defnbar]
