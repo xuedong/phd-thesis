@@ -25,11 +25,11 @@ The study of MAB problems can date back to as early as 1933~\citep{thompson1933}
 
 As stated in Chapter~\ref{chap:intro}, a common learning objective for stochastic MAB is to maximize the total reward obtained given a sequence of observations. In the previous example, researchers need to decide which vaccine to employ for each patient depending on the previous success rates with the purpose of maximizing the total success rate $\sum_{t=1}^T r_t$ at the end.
 
-In this section, we go beyond the intuition and provide the formal definition of the model. We also recall some fundamental results for the sake of self-containedness. Of course, we do not intend to write a survey of MAB, for which the content is far too rich for this thesis. Interested lecturers can refer to~\cite{bubeck2012bandits,lattimore2018bandits} or~\cite{slivkins2019bandits} for further readings and more recent results.
+In this section, we go a little beyond the intuition and provide the formal definition of the model. We also recall some fundamental results for the sake of self-containedness. Of course, we do not intend to write a survey of MAB, for which the content is far too rich for this thesis. Interested lecturers can refer to~\cite{bubeck2012bandits,lattimore2018bandits} or~\cite{slivkins2019bandits} for further readings and more general results.
 
 \subsection{Problem Formulation}\label{sec:mab.model.formulation}
 
-Recall that a bandit learning cycle can be described as in Fig.~\ref{fig:mab.mab}. An MAB problem can be formulated as follow.
+From a mathematical point of view, a MAB model is a collection of $K$ \emph{unknown} distributions $(\nu_k)_{1 \leq k \leq K}$. At each time step $t$, the learner chooses a distribution $\nu_{k_t}$ where $k_t\in[K]$ and receive a reward $r_t$ that is generated from $\nu_{k_t}$. We then recover the bandit learning cycle as shown in Fig.~\ref{fig:mab.mab}. We summarize such a sequential learning procedure in Definition~\ref{def:mab.mab}.
 
 \begin{figure}[ht]
     \centering
@@ -40,7 +40,7 @@ Recall that a bandit learning cycle can be described as in Fig.~\ref{fig:mab.mab
 
 \begin{definition}[multi-armed bandit problem]\label{def:mab.mab}
 \begin{leftbar}[defnbar]
-	We are given a set of $K$ arms $\{1,\ldots,K\}$ that follow $K$ unknown $[0,1]$-valued distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $T$. At each time step $t$, the process consists of the following actions:
+	We are given a set of $K$ arms $\{1,\ldots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $T$. At each stage $t$, the learning procedure consists of the following steps:
 	\begin{itemize}
 		\item a vector of rewards $(r_{1,t} \sim \nu_1, \ldots, r_{K,t} \sim \nu_K)$ is generated,
 		\item the learner picks an arm $k_t \in \{1,\ldots,K\}$, and
@@ -54,6 +54,8 @@ Recall that a bandit learning cycle can be described as in Fig.~\ref{fig:mab.mab
 	Rewards of unchosen arms at time $t$ are not revealed, this partial feedback setting is a special case of the online learning with experts setting.
 \end{leftbar}
 \end{remark}
+
+\subsection{Common assumptions on the rewards}\label{sec:mab.model.assumptions}
 
 \subsection{Regret minimization}\label{sec:mab.model.regret}
 
