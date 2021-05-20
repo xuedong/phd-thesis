@@ -44,7 +44,7 @@ Sequential optimization problem has been widely inspired by the literature of~\g
 % \end{leftbar}
 % \end{remark}
 
-In its original form, the objective of a MAB learner is to maximize the total rewards in the long run. A natural observation is that, the learner is required to simultaneously acquire new information for potential future well-being (exploration), and optimize the current decision based on past observations (exploitation). This trade-off is stated as the \gls{exploration-exploitation dilemma}. 
+In its original form, the objective of a MAB learner is to maximize the total rewards in the long run. A natural observation is that, the learner is required to simultaneously acquire new information for potential future well-being (exploration), and optimize the current decision based on past observations (exploitation). Such phenomena is stated as the \gls{exploration-exploitation dilemma}, and is present in many real-world tasks. The MAB model is thus popular among different communities as it trades off exploration and exploitation naturally.
 %The usual performance criterion of the learner is measured by the total loss of the chosen arm at each time step w.r.t the best arm, namely the \emph{cumulative regret}. Typical good learners like \UCB~\citep{auer2002ucb} trade off between exploration and exploitation. 
 
 However, exploitation does not necessarily provide meaningful incentives in some real applications. Typically, in the previous working examples presented in Section~\ref{sec:intro.context.what}, we do not really care about the potential losses incurred during the whole learning phase. Indeed, we only aim at finding the (near-)optimum of the target function quickly. In this context, it is more natural to assess the learner in an optimization fashion. This setting, often named as \gls{bai}, is thus more closely related to what we are to investigate in this thesis.
@@ -56,6 +56,10 @@ More generally, we talk about \gls{pure exploration} problems~\citep{bubeck2011p
 \end{remark}
 
 \subsection{From multi-armed bandits to reinforcement learning}\label{sec:intro.context.rl}
+
+The MAB model is popular from another perspective as it is part of the more general \gls{rl} framework. In RL, a learner is characterized by its current state and interacts with the environment by taking different actions. Each action leads to a reward from the environment as well as a change of states. Formal definition and general results of RL are beyond the scope of this thesis, lecturers can refer to~\cite{sutton1998,bertsekas2011approximate} for surveys. 
+
+Modern RL combined with \gls{dl} has marked a handful of exciting breakthroughs including AlphaGo~\citep{silver2016alphago}, AlphaStar, AlphaFold, etc. However, a big gap still exists in understanding the huge success of Deep RL. MAB, as a strongly theoretically-grounded statistical model, can potentially serve as a first step towards filling that gap in RL research. More precisely, MAB is sometimes considered as the simplest form of RL as MAB learners do not incur any change of states (see Fig.~\ref{fig:intro.comparison}). We shall discuss a little more the link between MAB and RL later in the general conclusion Chapter~\ref{chap:conclusion} as contextual MAB (MAB with side information) -- a variant of the vanilla MAB model -- describes eventually better how MAB is related to RL.
 
 \begin{figure}[ht]
     \centering
