@@ -12,7 +12,7 @@
 
 \section{The Multi-Armed Bandits Model}\label{sec:mab.model}
 
-The problem of sequentially allocating resources to a defined set of actions (arms) based on successive \emph{partially observable} (see Definition~\ref{def:mab.mab} and Remark~\ref{remark:mab.partial} below) feedback refers to the MAB problem in probability theory. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A sequential decision making problem comes up then when facing with several slot machines (multi-armed bandits).
+The problem of sequentially allocating resources to a defined set of actions (arms) based on successive \emph{partially observable} (see Definition~\ref{def:mab.mab} and Remark~\ref{remark:mab.partial} below) feedback refers to the MAB game in probability theory. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A sequential decision making problem comes up then when facing with several slot machines (multi-armed bandits).
 
 The study of MAB problems can date back to as early as 1933~\citep{thompson1933}, and was originally proposed to model sequential clinical trials. For example, researchers testing the efficacy of potential vaccines for a new coronavirus have to choose a vaccine (arm) from the following 4 options as shown in Fig.~\ref{fig:mab.covid} on each patient from an experimental group of $T$ person. For each patient $t\in[T]$, researchers receive a reward signal $r_t\in\{0,1\}$. $r_t=1$ indicates that the treatment is successful, otherwise the treatment is a failure. We thus assume that the efficacy of each vaccine follows some Bernoulli distribution that is unknown to the researchers.
 
@@ -24,6 +24,8 @@ The study of MAB problems can date back to as early as 1933~\citep{thompson1933}
 \end{figure}
 
 As stated in Chapter~\ref{chap:intro}, a common learning objective for stochastic MAB is to maximize the total reward obtained given a sequence of observations. In the previous example, researchers need to decide which vaccine to employ for each patient depending on the previous success rates with the purpose of maximizing the total success rate $\sum_{t=1}^T r_t$ at the end.
+
+However, due to the complex nature of drug development, it turns out that the MAB model is hardly applied in real clinical trials despite its primary purpose~\citep{Reda2020}. Nevertheless, it has been widely employed in many other applications recently, in particular online recommendation systems for example (see e.g.~\citealt{li2010contextual,zeng2016online}).
 
 In this section, we go a little beyond the intuition and provide the formal definition of the model. We also recall some fundamental results for the sake of self-containedness. Of course, we do not intend to write a survey of MAB, for which the content is far too rich for this thesis. Interested lecturers can refer to~\cite{bubeck2012bandits,lattimore2018bandits} or~\cite{slivkins2019bandits} for further readings and more general results.
 
@@ -38,9 +40,9 @@ From a mathematical point of view, a MAB model is a collection of $K$ \emph{unkn
     \label{fig:mab.mab}
 \end{figure}
 
-\begin{definition}[multi-armed bandit problem]\label{def:mab.mab}
+\begin{definition}[multi-armed bandit game]\label{def:mab.mab}
 \begin{leftbar}[defnbar]
-	We are given a set of $K$ arms $\{1,\ldots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $T$. At each stage $t$, the learning procedure consists of the following steps:
+	We are given a set of $K$ arms $\{1,\ldots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $T$. At each stage $t$, the bandit game consists of the following steps:
 	\begin{itemize}
 		\item a vector of rewards $(r_{1,t} \sim \nu_1, \ldots, r_{K,t} \sim \nu_K)$ is generated,
 		\item the learner picks an arm $k_t \in \{1,\ldots,K\}$, and
@@ -56,6 +58,18 @@ From a mathematical point of view, a MAB model is a collection of $K$ \emph{unkn
 \end{remark}
 
 \subsection{Common assumptions on the rewards}\label{sec:mab.model.assumptions}
+
+One important thing to take into consideration before starting any bandit game is to take care of the assumptions on the rewards. Intuitively, we shall have a minimum prior knowledge of the `shape' of the rewards. Obviously, the less the learner knows about that shape, the more difficult the problem is. In this thesis, several different assumptions on the reward distributions are considered depending on the problem settings. In the next, we offer a brief overview of commonly used assumptions in the literature.
+
+\paragraph{Bounded rewards.}
+
+The mostly considered assumption is whether the supports of the reward distributions are bounded, and if so, whether 
+
+\paragraph{One-dimensional exponential family.}
+
+\paragraph{Sub-Gaussian family.}
+
+\paragraph{Beyond...}
 
 \subsection{Regret minimization}\label{sec:mab.model.regret}
 
