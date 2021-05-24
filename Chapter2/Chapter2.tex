@@ -25,13 +25,13 @@ The study of MAB problems can date back to as early as 1933~\citep{thompson1933}
 
 As stated in Chapter~\ref{chap:intro}, a common learning objective for stochastic MAB is to maximize the total reward obtained given a sequence of observations. In the previous example, researchers need to decide which vaccine to employ for each patient depending on the previous success rates with the purpose of maximizing the total success rate $\sum_{t=1}^T r_t$ at the end.
 
-However, due to the complex nature of drug development, it turns out that the MAB model is hardly applied in real clinical trials despite its primary purpose~\citep{Reda2020}. Nevertheless, it has been widely employed in many other applications recently, in particular online recommendation systems for example (see e.g.~\citealt{li2010contextual,zeng2016online}).
+However, due to the complex nature of medical treatment, it turns out that the MAB model is hardly applied in real clinical trials despite its primary purpose~\citep{reda2020drug}. Nevertheless, the model has been widely employed in many other applications recently, in particular online recommendation systems for example (see e.g.~\citealt{li2010contextual,zeng2016online}).
 
 In this section, we go a little beyond the intuition and provide the formal definition of the model. We also recall some fundamental results for the sake of self-containedness. Of course, we do not intend to write a survey of MAB, for which the content is far too rich for this thesis. Interested lecturers can refer to~\cite{bubeck2012bandits,lattimore2018bandits} or~\cite{slivkins2019bandits} for further readings and more general results.
 
 \subsection{Problem Formulation}\label{sec:mab.model.formulation}
 
-From a mathematical point of view, a MAB model is a collection of $K$ \emph{unknown} distributions $(\nu_k)_{1 \leq k \leq K}$. At each time step $t$, the learner chooses a distribution $\nu_{k_t}$ where $k_t\in[K]$ and receive a reward $r_t$ that is generated from $\nu_{k_t}$. We then recover the bandit learning cycle as shown in Fig.~\ref{fig:mab.mab}. We summarize such a sequential learning procedure in Definition~\ref{def:mab.mab}.
+From a mathematical point of view, a MAB model is a collection of $K$ \emph{unknown} probability distributions $(\nu_k)_{1 \leq k \leq K}$. At each time step $t$, the learner chooses a distribution $\nu_{k_t}$ where $k_t\in[K]$ and receive a reward $r_t$ that is generated from $\nu_{k_t}$. We then recover the bandit learning cycle as shown in Fig.~\ref{fig:mab.mab}. We summarize such a sequential learning procedure in Definition~\ref{def:mab.mab}.
 
 \begin{figure}[ht]
     \centering
@@ -57,19 +57,33 @@ From a mathematical point of view, a MAB model is a collection of $K$ \emph{unkn
 \end{leftbar}
 \end{remark}
 
+In the rest of this manuscript, when $\nu_k$ are some common probability distributions, we can simply call our MAB model by the corresponding probability distribution name. For example, if the underlying reward distributions are Bernoulli (resp. Gaussian, exponential, Poisson, etc) distributions, then we can simply use Bernoulli bandits (resp. Gaussian bandits, exponential bandits, Poisson bandits, etc) to represent our bandit model. 
+
 \subsection{Common assumptions on the rewards}\label{sec:mab.model.assumptions}
 
 One important thing to take into consideration before starting any bandit game is to take care of the assumptions on the rewards. Intuitively, we shall have a minimum prior knowledge of the `shape' of the rewards. Obviously, the less the learner knows about that shape, the more difficult the problem is. In this thesis, several different assumptions on the reward distributions are considered depending on the problem settings. In the next, we offer a brief overview of commonly used assumptions in the literature.
 
 \paragraph{Bounded rewards.}
 
-The mostly considered assumption is whether the supports of the reward distributions are bounded, and if so, whether 
+The mostly considered assumption is whether the supports of the reward distributions are bounded, and if so, whether the bounds are known to the learner. In that latter case, we can assume without loss of generality that the rewards are supported on $[0,1]$. Indeed, if the rewards are contained in an arbitrary bounded interval $[a,b]$, then we can simply apply a normalization trick to recover the $[0,1]$ case.
+
+The previous vaccine example of Fig.~\ref{fig:mab.covid} with Bernoulli bandits is a typical example of known bounded rewards. Bounded rewards are widely used in many MAB research work. It is also the case for instance in Chapter~\ref{chap:gpo} of this thesis.
 
 \paragraph{One-dimensional exponential family.}
 
+Unbounded reward distributions are obviously also considered in the literature. A classic example of infinitely-supported reward distributions are Gaussian distributions.
+
+A more formal reminder of one-dimensional exponential family is given in Appendix~\ref{chap:maths}.
+
 \paragraph{Sub-Gaussian family.}
 
+Sometimes, we can also consider a more relaxed family of distributions, namely the sub-Gaussian family.
+
+Again, a formal introduction of sub-Gaussian family is provided in Appendix~\ref{chap:maths}.
+
 \paragraph{Beyond...}
+
+Other types of reward distributions are also studied in the literature, but are out of the scope of this thesis.
 
 \subsection{Regret minimization}\label{sec:mab.model.regret}
 
