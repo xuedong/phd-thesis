@@ -144,15 +144,15 @@ The purpose of this section is to provide a summary of the contributions include
 We can summarize the contributions presented in this thesis as listed below.
 
 \begin{itemize}[label=\ding{43}]
-    \item \cite{shang2020t3c} revisits a Bayesian BAI algorithm \TTTS, and provides new theoretical understandings on its posterior convergence.
-    \item \cite{shang2020t3c} also shows that \TTTS achieves asymptotic optimality on the sample complexity.
-    \item \cite{shang2020t3c} further proposes a computational improvement \TCC of \TTTS, whilst keeping the same guarantees.
-    \item \cite{degenne2020game} proposes a new linear bandits BAI complexity, and provides a comprehensive comparison of existing complexities.
-    \item In an unpublished work, we propose several different extensions of \TTTS and \TCC to the linear setting. Unfortunately, we show empirically that they are not asymptotically optimal. In the meantime, \cite{degenne2020game} develops a saddle-point approach that leads to optimal algorithms \LG and \LGC.
-    \item \cite{shang2019adaptive} proposes a general wrapper \GPO, using a cross-validation scheme, that wraps up all hierarchical bandit algorithms with simple regret guarantees.
-    \item \cite{shang2018adaptive} shows that \HCT is a valid underlying algorithm for \GPO as well as \POO by~\cite{grill2015poo}.
-    \item \cite{shang2019dttts} designs a robust and dynamic algorithm \DTTTS based on \TTTS, and shows that such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization.
-    \item \cite{shang2020dttts} provides some further understandings of \DTTTS.
+    \item We revisit a Bayesian BAI algorithm \TTTS, and provide new theoretical understandings on its posterior convergence~\citep{shang2020t3c}.
+    \item We also show that \TTTS achieves asymptotic optimality on the sample complexity~\citep{shang2020t3c}.
+    \item We further propose a computational improvement \TCC of \TTTS, whilst keeping the same guarantees~\citep{shang2020t3c}.
+    \item We propose a new complexity notion for linear bandits BAI, and provide a comprehensive comparison of existing complexities~\citep{degenne2020game}.
+    \item We propose several different extensions of \TTTS and \TCC to the linear setting. Unfortunately, we show empirically that they are not asymptotically optimal. In the meantime, \cite{degenne2020game} develop a saddle-point approach that leads to optimal algorithms \LG and \LGC.
+    \item We propose a general wrapper \GPO for continuum-armed bandit algorithms using a cross-validation scheme. In particular, \GPO covers all hierarchical bandit algorithms with simple regret guarantees~\citep{shang2019adaptive}.
+    \item As a side result of~\cite{shang2019adaptive}, we also show that \HCT is a valid underlying algorithm for \GPO as well as \POO by~\cite{grill2015poo}.
+    \item We design a robust and dynamic algorithm \DTTTS based on \TTTS, and show that such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization~\citep{shang2019dttts}.
+    \item We provide some further understandings of \DTTTS in a sequel work~\citep{shang2020dttts}.
 \end{itemize}
 
 \subsection{List of publications and other work}\label{sec:intro.contributions.list}
@@ -165,8 +165,8 @@ We can summarize the contributions presented in this thesis as listed below.
     \item Simple (dynamic) bandit algorithms for hyper-parameter optimization. Preprint, 2020.~\citep{shang2020dttts}
     \item A simple dynamic bandit algorithm for hyper-parameter tuning. In 6th Workshop on Automated Machine Learning at International Conference on Machine Learning (ICML-AutoML), 2019.~\citep{shang2019dttts}
     \item General parallel optimisation without a metric. In Proceedings of the 30th International Conference on Algorithmic Learning Theory (ALT), 2019.~\citep{shang2019adaptive}
-    \item Adaptive black-box optimisation got easier: HCT needs only local smoothness. In 14th European Workshop on Reinforcement Learning (EWRL), 2018.~\citep{shang2018adaptive}
-    \item Hierarchical bandits for black-box optimization and Monte-Carlo tree search. Master Thesis, 2017.~\citep{shang2017master}
+    %\item Adaptive black-box optimisation got easier: HCT needs only local smoothness. In 14th European Workshop on Reinforcement Learning (EWRL), 2018.~\citep{shang2018adaptive}
+    %\item Hierarchical bandits for black-box optimization and Monte-Carlo tree search. Master Thesis, 2017.~\citep{shang2017master}
 \end{itemize}
 
 \paragraph{List of papers (peer-reviewed publications or preprints) not included in this thesis.}
@@ -174,7 +174,7 @@ We can summarize the contributions presented in this thesis as listed below.
 The list below presents other work that are not included in this thesis since they do not really fit in with the scope of the main story line.
 
 \begin{itemize}[label=\ding{171}]
-    \item Safe best-arm-identification in linear bandits. Preprint, 2021.~\citep{shang2021safe}
+    %\item Safe best-arm-identification in linear bandits. Preprint, 2021.~\citep{shang2021safe}
     \item UCB momentum Q-learning: Correcting bias without forgetting. In Proceedings of the 38th International Conference on Machine Learning (ICML), 2021.~\citep{menard2021ucbmq}
     \item Stochastic bandits with vector losses: Minimizing infinite norm of relative losses. Preprint, 2020.~\citep{shang2020vector}
 \end{itemize}

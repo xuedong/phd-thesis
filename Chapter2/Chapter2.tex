@@ -25,7 +25,7 @@ The study of MAB problems can date back to as early as 1933~\citep{thompson1933}
 
 As stated in Chapter~\ref{chap:intro}, a common learning objective for stochastic MAB is to maximize the total reward obtained given a sequence of observations. In the previous example, researchers need to decide which vaccine to employ for each patient depending on the previous success rates with the purpose of maximizing the total success rate $\sum_{t=1}^T r_t$ at the end.
 
-However, due to the complex nature of medical treatment, it turns out that the MAB model is hardly applied in real clinical trials despite its primary purpose~\citep{reda2020drug}. Nevertheless, the model has been widely employed in many other applications recently, in particular online recommendation systems for example (see e.g.~\citealt{li2010contextual,zeng2016online}).
+However, due to the complex nature of medical treatment, it turns out that the MAB model is hardly applied in real clinical trials despite its primary purpose~\citep{reda2020drug}. Nevertheless, the model has been widely employed in many other applications recently, in particular online recommendation systems for example (see e.g.~\citealt{li2010contextual,zeng2016online}). Other application scenarios include...
 
 In this section, we go a little beyond the intuition and provide the formal definition of the model. We also recall some fundamental results for the sake of self-containedness. Of course, we do not intend to write a survey of MAB, for which the content is far too rich for this thesis. Interested lecturers can refer to~\cite{bubeck2012bandits,lattimore2018bandits} or~\cite{slivkins2019bandits} for further readings and more general results.
 
@@ -71,25 +71,25 @@ The previous vaccine example of Fig.~\ref{fig:mab.covid} with Bernoulli bandits 
 
 \paragraph{One-dimensional exponential family.}
 
-Unbounded reward distributions are obviously considered in the literature as well. An usual example of infinitely-supported reward distributions is Gaussian distribution. Therefore in the literature, we sometimes think of a more general parametric framework, namely the exponential family. The exponential family contains a large set of natural distributions as Bernoulli distributions and Gaussian distributions, thus covers a wider range of both bounded and unbounded rewards.
+Unbounded reward distributions are obviously considered in the literature as well. An usual example of infinitely-supported reward distributions is Gaussian distribution. Therefore in the literature, we sometimes think of a more general parametric framework, namely the exponential family. The exponential family contains a large set of natural distributions as Bernoulli distributions and Gaussian distributions, hence covers a wide range of both bounded and unbounded rewards.
 
-In practice, we often further consider a specific sub-family of distributions that is the \gls{one-dimensional exponential family} or \gls{single-parameter exponential family}. Typical distributions in the one-dimensional exponential family include beta distributions, Bernoulli distributions, Gaussian distributions with \emph{known} variance, etc.
+In practice, we often further consider a specific sub-family of distributions that is the \gls{one-dimensional exponential family} or \gls{single-parameter exponential family}. Typical distributions in the one-dimensional exponential family include beta distributions, Bernoulli distributions, Gaussian distributions with \emph{known} variance, etc. Formally, given a random variable $X$ whose probability distribution belongs to the single-parameter exponential family, then its \gls{probability density function} (or \gls{probability mass function} if $X$ is discrete), depending only on one single parameter $\theta$, can be written as
+\begin{align}\label{eq:mab.exponential}
+    p_{X}(x \mid \theta ) = b(x) \exp \left[\eta (\theta ) \cdot T(x) + A(\theta )\right]\,,
+\end{align}
+where $T(X)$ is the \gls{natural sufficient statistic} and $b,\eta,A$ are known functions. A more formal reminder of one-dimensional exponential family is given in Appendix~\ref{chap:maths}.
 
-A more formal reminder of one-dimensional exponential family is given in Appendix~\ref{chap:maths}.
-
-\paragraph{Sub-Gaussian family.}
-
-Sometimes, we can also consider a more relaxed family of distributions, namely the sub-Gaussian family.
-
-Again, a formal introduction of sub-Gaussian family is provided in Appendix~\ref{chap:maths}.
+The MAB community is interested in exponential family not only because it covers a large family of most common distributions, but also because it holds some nice properties for statistical analysis. For example, exponential family has sufficient statistics that can summarize arbitrary amounts of \gls{iid} data with a finite number of samples, which is a great property in bandit analysis. Another important fact is that exponential family distributions have conjugate priors, which is extremely useful in Bayesian statistics. The latter one is for example used in Chapter~\ref{chap:t3c}.
 
 \paragraph{Beyond...}
 
-Other types of reward distributions are also studied in the literature, but are out of the scope of this thesis.
+Other types of reward distributions are also studied in the literature. To list a few of them, we can think of sub-Gaussian distributions whose tails decay at least as fast as Gaussian distributions (see e.g.~\citealt{}), and also heavy-tailed distributions whose tails are not exponentially bounded (see e.g;~\citealt{}). Those reward distributions also incite interesting theoretical questions as well as applications, but are out of the scope of this manuscript.
 
 \subsection{Regret minimization}\label{sec:mab.model.regret}
 
-As we have mentioned in Chapter~\ref{chap:intro} that one needs to trade-off between exploration and exploitation in a MAB problem. The objective is to design a clever (in a precise sense) way of choosing the arms based on the past observations, and we call this design an \emph{allocation strategy} or \emph{policy}. Depending on our ultimate goal, we usually have two criteria of performance measurement for a given policy.
+Once we have imposed some assumptions on the reward distributions, the next step is to fix a learning goal and set an evaluation measure accordingly.
+
+As previously stated that the classical learning objective of a MAB learner is to maximize the total return in the long run, hence trades-off between exploration and exploitation. To achieve that goal, the learner needs to design a clever (in a precise sense) way of pulling arms based on past observations, and we call this design an \emph{allocation strategy} or \emph{policy}. To evaluate a strategy for this reward-maximization setting, we can use the metric often referred to as \emph{regret} defined in the next. 
 
 Suppose that each unknown distribution $\nu_k$ is associated with a mean $\mu_k$, and that $\mu^{\star}$ is the mean of the optimal arm. One natural way to assess the quality of the given policy would be minimizing the total loss w.r.t the optimal arm during the whole process, which leads to the notion of \gls{cumulative regret} (sometimes simply called regret if there is no ambiguity).
 
@@ -126,12 +126,13 @@ In general, both rewards and choices of the learner might be stochastic, it is t
     \]
 \end{proof}
 
-In practice, people are essentially interested in bounding: (a) the \emph{expected cumulative regret}, or (b) the \emph{cumulative regret with high probability}. One can notice that the two definitions of cumulative regret above are equivalent if their objective is to obtain an expected regret bound. Hence, people often only focus on the pseudo-regret. 
+In practice, people are essentially interested in bounding: (a) the \emph{expected cumulative regret}, or (b) the \emph{cumulative regret with high probability}. One can notice that the two definitions of cumulative regret above are equivalent if their objective is to obtain an expected regret bound. People therefore often only focus on the pseudo-regret.
 
-
-\subsection{\UCB{} and asymptotically optimal strategy}\label{sec:mab.model.ucb}
+Clearly, minimizing the cumulative regret is equivalent to maximizing the total rewards. Hence in the bandit literature, we often refer to the regret minimization setting.
 
 \section{Multi-Armed Bandits for Optimization}\label{sec:mab.optim}
+
+One question to ask is whether 
 
 \subsection{Best-arm identification for stochastic multi-armed bandits}
 
