@@ -138,11 +138,11 @@ The seminal work of~\cite{robbins1952}.
 
 \section{Best-Arm Identification}\label{sec:mab.bai}
 
-The rest of this chapter is dedicated to MAB for optimization. We hereby aim to provide a formal presentation of different problem settings and related performance metrics. We put a specific focus of course on the settings to be investigated in this thesis.
+The rest of this chapter is dedicated to MAB for optimization. We aim to provide a formal presentation of different problem settings and related performance metrics. We put a specific focus of course on the settings to be investigated in this thesis. We begin by the original and the most general setting, namely BAI for stochastic MAB.
 
 \subsection{Two frameworks of best-arm identification}\label{sec:mab.bai.frameworks}
 
-We begin by the original and simplest setting, namely BAI for stochastic MAB. Recall that in this case, we consider a finite-arm bandit model, which is a collection of $K$ probability distributions, called arms $\cX\eqdef\{x_1,\cdots,x_K\}$, parameterized by their means $\mu_1, \cdots, \mu_K$. When clear from the context, we can simply denote the arms by $\{1,2,\cdots,K\}$. We assume the (unknown) best arm is unique and we denote it by $I^\star \eqdef \argmax_i \mu_i$. 
+Recall that for the vanilla problem setup of BAI, we consider a finite-armed bandit model, which is a collection of $K$ probability distributions, called arms $\cX\eqdef\{x_1,\cdots,x_K\}$, parameterized by their means $\mu_1, \cdots, \mu_K$. When clear from the context, we can simply denote the arms by $\{1,2,\cdots,K\}$. We assume the (unknown) best arm is unique and we denote it by $i_{\bmu}^\star \eqdef \argmax_i \mu_i$\footnote{The subscript $\bmu$ can be omitted when clear from the context.}. 
 
 A BAI strategy or algorithm can be characterized by a triple $(i_t, j_t, \tau)$ at each time step, hence consists of three components: 
 \begin{itemize}
@@ -152,25 +152,6 @@ A BAI strategy or algorithm can be characterized by a triple $(i_t, j_t, \tau)$ 
 \end{itemize}
 
 In general, there are two learning frameworks of BAI: (1) \gls{fixed-confidence setting}, first studied by~\citep{even-dar2003confidence} and (2) \gls{fixed-budget setting}, first proposed by~\citep{audibert2010budget}. We will see later that the two frameworks differ mostly in the stopping rule.
-
-\paragraph{Fixed-confidence setting.}
-
-In the fixed-confidence setting, the learner is given a confidence level/risk $\delta$ about the quality of the returned guess of the best arm. The goal is to reach a quality level of $1-\delta$ with as few samples as possible. The setting can be summarized as follow.
-
-\begin{definition}[fixed-confidence best-arm identification]\label{def:mab.bai_confidence}
-\begin{leftbar}[defnbar]
-	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, a confidence level $\delta$, and a stopping time $\tau$ w.r.t. the observations. At each time step $t$, the learning process consists of the following actions:
-\begin{itemize}
-	\item a vector of rewards $(r_{1,t} \sim \nu_1, \cdots, r_{K,t} \sim \nu_K)$ is generated,
-	\item the learner picks an arm $i_t \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_t = r_{i_t, t}$,
-	\item the learner stops if $\PP{j_{\tau}\neq i^{\star}} \leq \delta$, where $i^{\star}$ is the optimal arm, and
-	\item the learner outputs a guess for the best arm $j_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
-\end{itemize}
-\end{leftbar}
-\end{definition}
-
-Mathematically, the goal is to obtain a small expected number of samples $\EEs{\bmu}{\tau}$, where $\bmu=(\mu_1,\mu_2,\cdots,\mu_K)$ is the underlying bandit model associated to the given set of $K$ arms. In the rest of this thesis, we ignore the subscripts $\bmu$ for expectations and probabilities if there is no ambiguity. 
 
 \paragraph{Fixed-budget setting.}
 
@@ -189,7 +170,26 @@ In the fixed-budget setting, the learner tries to maximize the probability of re
 \end{leftbar}
 \end{definition}
 
-The ultimate objective is thus to make the probability of $j_T$ not being the optimal arm, i.e. $\PP{j_T\neq i^{\star}}$, as small as possible.
+The ultimate objective is thus to make the probability of $j_T$ not being the optimal arm, i.e. $\PP{j_T\neq i^{\star}}$, as small as possible. We postpone the discussion about the performance measure to Section~\ref{sec:mab.performance.optim}.
+
+\paragraph{Fixed-confidence setting.}
+
+In the fixed-confidence setting, the learner is given a confidence level/risk $\delta$ about the quality of the returned guess of the best arm. The goal is to reach a quality level of $1-\delta$ with as few samples as possible. The setting can be summarized as follow.
+
+\begin{definition}[fixed-confidence best-arm identification]\label{def:mab.bai_confidence}
+\begin{leftbar}[defnbar]
+	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, a confidence level $\delta$, and a stopping time $\tau$ w.r.t. the observations. At each time step $t$, the learning process consists of the following actions:
+\begin{itemize}
+	\item a vector of rewards $(r_{1,t} \sim \nu_1, \cdots, r_{K,t} \sim \nu_K)$ is generated,
+	\item the learner picks an arm $i_t \in \{1,\cdots,K\}$ (according to the sampling rule),
+	\item the learner observes the reward $r_t = r_{i_t, t}$,
+	\item the learner stops if $\PP{j_{\tau}\neq i^{\star}} \leq \delta$, where $i^{\star}$ is the optimal arm, and
+	\item the learner outputs a guess for the best arm $j_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
+\end{itemize}
+\end{leftbar}
+\end{definition}
+
+Mathematically, the goal is to obtain a small expected number of samples $\EEs{\bmu}{\tau}$, where $\bmu=(\mu_1,\mu_2,\cdots,\mu_K)$ is the underlying bandit model associated to the given set of $K$ arms. In the rest of this thesis, we ignore the subscripts $\bmu$ for expectations and probabilities if there is no ambiguity. We postpone the discussion about the performance measure to Section~\ref{sec:mab.performance.sample}.
 
 \subsection{Sampling rules}\label{sec:mab.bai.sampling}
 
@@ -199,32 +199,19 @@ For fixed-budget BAI, all of the existing sampling rules depend on the budget $T
 
 \paragraph{Fixed-confidence designs.}
 
-For fixed-confidence BAI, the majority of existing sampling rules rely on the confidence level $\delta$: Some rely on confidence intervals such as \LUCB~\citep{kalyanakrishnan2012lucb}, \UGapE~\citep{gabillon2012ugape}, \KLLUCB, \KLRacing~\citep{kaufmann2013kl}, and \LIL~\citep{jamieson2014lilucb}; others are elimination-based like \SE, \ME~\citep{even-dar2003confidence}, and also \EGE~\citep{karnin2013sha}. The first algorithm that does not depend on $\delta$, \Track, is proposed by~\cite{garivier2016tracknstop}.
+For fixed-confidence BAI, the majority of existing sampling rules rely on the confidence level $\delta$: Again, some of them rely on confidence intervals such as \LUCB~\citep{kalyanakrishnan2012lucb}, \UGapE~\citep{gabillon2012ugape}, \KLLUCB and \KLRacing~\citep{kaufmann2013kl}, \LIL~\citep{jamieson2014lilucb}; others are elimination-based like \SE, \ME~\citep{even-dar2003confidence}, \EGE~\citep{karnin2013sha}. The first algorithm that does not depend on $\delta$, \Track, is proposed by~\cite{garivier2016tracknstop}.
 
 \paragraph{Anytime designs.}
 
-The fact that the two frameworks produce sampling rules that depend either on a confidence parameter $\delta$ or a budget parameter $T$ is not desirable in some real applications. To address this problem, \cite{jun2016atlucb} propose to use a \emph{doubling trick} upon fixed-budget algorithms like \SR and \SHA, or use a time-varying confidence parameter when dealing with the fixed-confidence setting. This allows us to stop the learning process \emph{anytime} we want, meaning that we want the probability of $i^{\star}$ not being recommended to be decreasing as fast as possible. \cite{russo2016ttts} provides an interesting alternative that evaluates sampling rules in a Bayesian perspective. In this note, our main interest remains on how to develop universal anytime BAI algorithms.
+The fact that the two frameworks produce sampling rules that depend either on a confidence parameter $\delta$ or a budget parameter $T$ is not desirable in some real applications. To address this problem, \cite{jun2016atlucb} propose to use a \emph{doubling trick} upon fixed-budget algorithms like \SR and \SHA, or use a time-varying confidence parameter when dealing with the fixed-confidence setting. This allows us to stop the learning process \emph{anytime} we want, meaning that we want the probability of $i^{\star}$ not being recommended to be decreasing as fast as possible. \cite{russo2016ttts} provides an interesting alternative that evaluates sampling rules in a Bayesian perspective. %In this note, our main interest remains on how to develop universal anytime BAI algorithms.
 
 \subsection{Stopping rules}\label{sec:mab.bai.stopping}
-
-\paragraph{$\delta$-correctness and PAC learning.}
-
-In a fixed-confidence BAI problem, a sampling rule is always accompanied by a stopping rule that decides when to stop the algorithm given a confidence level $\delta$. This stopping rule is characterized by a $\delta$-dependent stopping time $\tau_{\delta}$. As stated in Section~\ref{sec:mab.bai.frameworks}, our goal is to minimize its expectation $\EEs{\bmu}{\tau_{\delta}}$. By Definition~\ref{def:mab.bai_confidence}, it is clear to see that we are searching for a \emph{probably approximately correct} (PAC) algorithm~\citep{valiant1984pac} in a fixed-confidence BAI frame.
-
-\begin{definition}[$\delta$-PAC strategy]
-\begin{leftbar}[defnbar]
-A sampling rule is called $\delta$-PAC if for any bandit model, we have
-\[
-	\PP{\tau_\delta < \infty} = 1 \text{ and } \PP{j_{\tau_\delta}\neq i^{\star}} \leq \delta\,.
-\]
-\end{leftbar}
-\end{definition}
 
 \paragraph{Chernoff stopping rule.}
 
 \subsection{Decision rules}\label{sec:mab.bai.decision}
 
-There exist several natural and simple decision rules that can be applied to most of the existing BAI algorithms, namely \emph{empirical best arm} (\EBA), \emph{most played arm} (\MPA) and \emph{empirical distribution of plays} (\EDP)~\citep{bubeck2009pure}.
+There exist several natural and simple decision rules that can be applied to most of the existing BAI algorithms, namely \gls{eba}, \gls{mpa} and \gls{edp}~\citep{bubeck2009pure}.
 
 \begin{remark}
 \begin{leftbar}[remarkbar]
@@ -241,6 +228,36 @@ There exist several natural and simple decision rules that can be applied to mos
 \section{$\cX$-armed bandits}\label{sec:mab.continuum}
 
 \section{Performance Measure}\label{sec:mab.performance}
+
+Now that we have described how the learning settings of MAB for optimization are formalized, it remains to define appropriate metrics to assess the performance of the learner.
+
+\subsection{Optimization error}\label{sec:mab.performance.optim}
+
+In the fixed-budget setting, the performance measure is quite natural.
+
+\subsection{$\delta$-correctness and PAC learning}\label{sec:mab.performance.pac}
+
+In the fixed-confidence setting, a sampling rule is always accompanied by a $\delta$-dependent stopping rule $\tau_{\delta}$. As stated in Section~\ref{sec:mab.bai.frameworks}, our goal is to minimize its expectation $\EEs{\bmu}{\tau_{\delta}}$ while ensuring that the final guess is the true best arm with high confidence. This objective can be translated into
+
+\begin{definition}[$\delta$-correct strategy]
+\begin{leftbar}[defnbar]
+A BAI strategy is called $\delta$-correct if for any bandit model $\bmu$, we have
+\[
+	\PP{\tau_\delta < \infty} = 1 \text{ and } \PP{j_{\tau_\delta}\neq i_{\bmu}^{\star}} \leq \delta\,.
+\]
+\end{leftbar}
+\end{definition}
+
+In a more general setting where the arm space is continuous, we can opt for the \emph{probably approximately correct} (PAC) algorithm~\citep{valiant1984pac} learning framework.
+
+\begin{definition}[$(\epsilon,\delta)$-PAC strategy]
+\begin{leftbar}[defnbar]
+A BAI strategy is called $(\epsilon,\delta)$-PAC if for any bandit model, we have
+\[
+	\PP{\tau_\delta < \infty} = 1 \text{ and } \PP{\mu^\star-\mu_{j_{\tau_\delta}}\leq \epsilon} \geq 1-\delta\,.
+\]
+\end{leftbar}
+\end{definition}
 
 \subsection{Sample complexity}\label{sec:mab.performance.sample}
 
