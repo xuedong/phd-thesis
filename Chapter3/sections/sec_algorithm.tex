@@ -8,7 +8,7 @@ In this section, we give an overview of the sampling rule \TTTS and introduce \T
 Both \TTTS and \TCC employ a Bayesian machinery and make use of a prior distribution $\Pi_1$ over a set of parameters $\Theta$, that contains the unknown true parameter vector $\bmu$. Upon acquiring observations $(Y_{1,I_1},\cdots,Y_{n-1,I_{n-1}})$, we update our beliefs according to Bayes' rule and obtain a posterior distribution $\Pi_{n}$ which we assume to have density $\pi_n$ w.r.t.\,the Lebesgue measure. %The posterior distribution can be computed by conjugacy when using common probability distributions for the prior. For example, \citet{russo2016ttts} uses \emph{correlated} and \emph{bounded} one-dimensional exponential family priors.
 \citeauthor{russo2016ttts}'s analysis is restricted to strong regularity properties on the models and priors that exclude two important useful cases we consider in this paper: (1) the observations of each arm~$i$ follow a Gaussian distribution $\cN(\mu_i,\sigma^2)$ with common known variance $\sigma^2$, with imposed Gaussian prior $\cN(\mu_{1,i},\sigma_{1,i}^2)$, (2) all arms receive Bernoulli rewards with unknown means, with a uniform prior on each arm.
 
-\paragraph{Gaussian model} For Gaussian bandits with a $\mathcal{N}(0,\kappa^2)$ prior on each mean, the posterior distribution of $\mu_i$ at round $n$ is Gaussian with mean and variance that are respectively given by
+\paragraph{Gaussian model.} For Gaussian bandits with a $\mathcal{N}(0,\kappa^2)$ prior on each mean, the posterior distribution of $\mu_i$ at round $n$ is Gaussian with mean and variance that are respectively given by
 \[\frac{\sum_{\ell=1}^{n-1} \1\{I_\ell = i\} Y_{\ell,I_\ell}}{T_{n,i} + \sigma^2/\kappa^2}\quad\text{ and }\quad \frac{\sigma^2}{T_{n,i} + \sigma^2/\kappa^2},\]
 where $T_{n,i}\eqdef\sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}}$ is the number of selections of arm $i$ before round $n$.
 % 
@@ -28,13 +28,13 @@ where $T_{n,i}\eqdef\sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}}$ is the number of
 % 			\end{array}\right.
 % %\end{equation*}
 % \end{align*}
-For the sake of simplicity, we consider improper Gaussian priors with $\mu_{1,i}=0$ and $\sigma_{1,i}=+\infty$ for all $i\in\cA$, for which
+For the sake of simplicity, we consider improper Gaussian priors with $\mu_{1,i}=0$ and $\sigma_{1,i}=+\infty$ for all $i\in\cX$, for which
 \[
     \mu_{n,i}  = \frac{1}{T_{n,i}} \sum_{\ell=1}^{n-1} \1\{I_\ell = i\}Y_{\ell,I_\ell} \quad \text{and} \quad \sigma_{n,i}^2 = \frac{\sigma^2}{T_{n,i}}.
 \]
 Observe that in that case the posterior mean $\mu_{n,i}$ coincides with the empirical mean.
 
-\paragraph{Beta-Bernoulli model} For Bernoulli bandits with a uniform ($\cB eta(1,1)$) prior on each mean, the posterior distribution of $\mu_i$ at round $n$ is a Beta distribution with shape parameters $\alpha_{n,i} = \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}} +1$ and $\beta_{n,i} = T_{n,i} - \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}} + 1$. 
+\paragraph{Beta-Bernoulli model.} For Bernoulli bandits with a uniform ($\cB eta(1,1)$) prior on each mean, the posterior distribution of $\mu_i$ at round $n$ is a Beta distribution with shape parameters $\alpha_{n,i} = \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}} +1$ and $\beta_{n,i} = T_{n,i} - \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}} + 1$. 
 %We can calculate the posterior mean of arm $i$ at time $n$ by
 %\begin{align*}
 %\mu_{n, i} = \frac{\alpha_{n,i}}{\alpha_{n,i} + \beta_{n, i}} = \frac{1 + \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}}}{2 + T_{n,i}}.
@@ -42,11 +42,25 @@ Observe that in that case the posterior mean $\mu_{n,i}$ coincides with the empi
 
 Now we briefly recall \TTTS and introduce \TCC.
 
-\paragraph{Description of \TTTS} At each time step $n$, \TTTS has two potential actions: (1) with probability $\beta$, a parameter vector $\btheta$ is sampled from $\Pi_{n}$, and \TTTS chooses to play $I_n^{(1)} \eqdef \argmax_{i\in\cA} \theta_i$, (2) and with probability $1-\beta$, the algorithm continues sampling new $\btheta'$ until we obtain a \emph{challenger} $I_n^{(2)} \eqdef \argmax_{i\in\cA} \theta_i'$ that is different from $I_n^{(1)}$, and \TTTS then selects the challenger.
+\paragraph{Description of \TTTS.} 
+At each time step $n$, \TTTS has two potential actions: (1) with probability $\beta$, a parameter vector $\btheta$ is sampled from $\Pi_{n}$, and \TTTS chooses to play 
+\[
+    I_n^{(1)} \eqdef \argmax_{i\in\cX} \theta_i\,,
+\] 
+(2) and with probability $1-\beta$, the algorithm continues sampling new $\btheta'$ until we obtain a \emph{challenger} 
+\[
+I_n^{(2)} \eqdef \argmax_{i\in\cX} \theta_i'
+\]
+that is different from $I_n^{(1)}$, and \TTTS then selects the challenger.
 
-\paragraph{Description of \TCC} One drawback of \TTTS is that, in practice, when the posteriors become concentrated, it takes many Thompson samples before the challenger $I_n^{(2)}$ is obtained. We thus propose a variant of \TTTS, called \TCC, which alleviates this computational burden. Instead of re-sampling from the posterior until a different candidate appears, we define the challenger as the arm that has the lowest \emph{transportation cost} $W_n(I_n^{(1)},i)$ with respect to the first candidate (with ties broken uniformly at random). 
+\paragraph{Description of \TCC.} 
+One drawback of \TTTS is that, in practice, when the posteriors become concentrated, it takes many Thompson samples before the challenger $I_n^{(2)}$ is obtained. We thus propose a variant of \TTTS, called \TCC, which alleviates this computational burden. Instead of re-sampling from the posterior until a different candidate appears, we define the challenger as the arm that has the lowest \emph{transportation cost} $W_n(I_n^{(1)},i)$ with respect to the first candidate (with ties broken uniformly at random). 
 
-Let $\mu_{n,i}$ be the empirical mean of arm $i$ and $\mu_{n,i,j} \eqdef (T_{n,i}\mu_{n,i} +T_{n,j}\mu_{n,j})/(T_{n,i}+T_{n,j})$, then we define
+Let $\mu_{n,i}$ be the empirical mean of arm $i$ and 
+\[
+    \mu_{n,i,j} \eqdef \dfrac{(T_{n,i}\mu_{n,i} +T_{n,j}\mu_{n,j})}{(T_{n,i}+T_{n,j})}\,,
+\]
+then we define
 \begin{equation}\label{def:Transportation}
 	W_n(i,j) \eqdef
 	\left\{ \begin{array}{ll}
@@ -54,7 +68,11 @@ Let $\mu_{n,i}$ be the empirical mean of arm $i$ and $\mu_{n,i,j} \eqdef (T_{n,i
 				W_{n,i,j}+W_{n,j,i} & \operatorname{otherwise},
 			\end{array}\right.
 \end{equation}
-where $W_{n,i,j}\eqdef T_{n,i} d\left(\mu_{n,i},\mu_{n,i,j}\right)$ for any $i,j$ and $d(\mu ; \mu' )$ denotes the Kullback-Leibler between the distribution with mean $\mu$ and that of mean $\mu'$. In the Gaussian case, $d(\mu;\mu') = (\mu-\mu')^2/(2\sigma^2)$ while in the Bernoulli case $d(\mu;\mu') = \mu \ln (\mu/\mu') + (1-\mu)\ln (1-\mu)/(1-\mu')$.
+where 
+\[
+    W_{n,i,j}\eqdef T_{n,i} d\left(\mu_{n,i},\mu_{n,i,j}\right)
+\]
+for any $i,j$ and $d(\mu ; \mu' )$ denotes the KL-divergence between the distribution with mean $\mu$ and that of mean $\mu'$. In the Gaussian case, $d(\mu;\mu') = (\mu-\mu')^2/(2\sigma^2)$ while in the Bernoulli case $d(\mu;\mu') = \mu \ln (\mu/\mu') + (1-\mu)\ln (1-\mu)/(1-\mu')$.
 %\begin{equation}\left\{\begin{array}{ccl}
 %W_n(i,j)\!\!\! &=& \!\!0 \ \text{ if } \ \mu_{n,j} \geq \mu_{n,i},\\
 %W_n(i,j)\!\!\! &=& \!\!T_{n,i} d\left(\mu_{n,i},\mu_{n,i,j}\right) + T_{n,j} d\left(\mu_{n,j},\mu_{n,i,j}\right) \text{ else.} 
@@ -79,13 +97,13 @@ The pseudo-code of \TTTS and \TCC are shown in Algorithm~\ref{alg:ttts_sampling_
    %\STATE {\bfseries Initialization:} $\forall \blambda\in\Omega, S_{\blambda}=0, F_{\blambda}=0$
    \For{$n \leftarrow 1,2,\cdots$}
         \State \texttt{sample} $\btheta \sim \Pi_n$
-        \State $I^{(1)} \leftarrow \argmax_{i\in\cA}\theta_i$
+        \State $I^{(1)} \leftarrow \argmax_{i\in\cX}\theta_i$
 	    \State \texttt{sample} $b \sim \cB ern(\beta)$
 	    \If{$b = 1$}
 	        \State \texttt{evaluate arm} $I^{(1)}$
 	    \Else
 	        \State \texttt{repeat sample} $\btheta' \sim \Pi_n$
-            \State $I^{(2)} \leftarrow \argmax_{i\in\cA}\theta_i'$
+            \State $I^{(2)} \leftarrow \argmax_{i\in\cX}\theta_i'$
 	        \State \texttt{until} $I^{(2)} \neq I^{(1)}$
 		    \State \texttt{evaluate arm} $I^{(2)}$
 	    \EndIf
@@ -105,7 +123,7 @@ The pseudo-code of \TTTS and \TCC are shown in Algorithm~\ref{alg:ttts_sampling_
    %\STATE {\bfseries Initialization:} $\forall \blambda\in\Omega, S_{\blambda}=0, F_{\blambda}=0$
    \For{$n \leftarrow 1,2,\cdots$}
         \State \texttt{sample} $\btheta \sim \Pi_n$
-        \State $I^{(1)} \leftarrow \argmax_{i\in\cA}\theta_i$
+        \State $I^{(1)} \leftarrow \argmax_{i\in\cX}\theta_i$
 	    \State \texttt{sample} $b \sim \cB ern(\beta)$
 	    \If{$b = 1$}
 	        \State \texttt{evaluate arm} $I^{(1)}$
@@ -130,15 +148,15 @@ $W_n$ in Line 9 of Algorithm~\ref{alg:t3c_sampling_rule} is the transportation c
 %   \State {\bfseries Input:} $n$, $\beta$
 %   %\STATE {\bfseries Initialization:} $\forall %\blambda\in\Omega, S_{\blambda}=0, F_{\blambda}=0$
 %   \For{$t \leftarrow 1$ {\bfseries to} $n$}
-%        \State $\forall i\in\cA$, \texttt{sample} $\theta_i \sim \cB eta(\alpha_{t-1,i}, \beta_{t-1,i})$
-%        \State $I^{(1)} \leftarrow \argmax_{i\in\cA}\theta_i$
+%        \State $\forall i\in\cX$, \texttt{sample} $\theta_i \sim \cB eta(\alpha_{t-1,i}, \beta_{t-1,i})$
+%        \State $I^{(1)} \leftarrow \argmax_{i\in\cX}\theta_i$
 %	    \State \texttt{sample} $b \sim \cB ern(\beta)$
 %	    \If{$b = 1$}
 %	        \State \texttt{evaluate arm} $I^{(1)}$
 %	    \Else
 %	        \State \texttt{repeat} 
 %	            \State \texttt{sample} $\theta_i' \sim \cB eta(\alpha_{t-1,i}, \beta_{t-1,i})$
-%                \State $I^{(2)} \leftarrow \argmax_{i\in\cA}\theta_i'$
+%                \State $I^{(2)} \leftarrow \argmax_{i\in\cX}\theta_i'$
 %	        \State \texttt{until} $I^{(2)} \neq I^{(1)}$
 %		    \State \texttt{evaluate arm} $I^{(2)}$
 %	    \EndIf
@@ -168,23 +186,25 @@ Furthermore, when $i$ coincides with the empirical best mean (and this will ofte
 \[a_{n,j} \simeq \Pi_n\left(\theta_j \geq \theta_{i}\right) \simeq \exp\left(-W_n(i,j)\right),\]
 where the last step is justified in Lemma~\ref{lemma:gaussiantails} in the Gaussian case (and Lemma~\ref{lemma:binomial_tail} in Appendix~\ref{app:posterior_beta.aux} in the Bernoulli case). Hence, \TCC replaces sampling from the distribution \eqref{CondDist} by an approximation of its mode which is \emph{easy to compute}. Note that directly computing the mode would require to compute $a_{n,j}$, which is much more costly than the computation of $W_{n}(i,j)$\footnote{the \TTPS sampling rule \citep{russo2016ttts} also requires the computation of $a_{n,i}$, thus we do not report simulations for this Bayesian sampling rule in Section~\ref{sec:t3c.experiments}}. 
 
-\subsection{Stopping and recommendation rules}
+\subsection{Stopping and decision rules}
 
-In order to use \TTTS or \TCC as sampling rule for fixed-confidence BAI, we need to additionally define stopping and recommendation rules. While \cite{qin2017ttei} suggest to couple \TTEI with the ``frequentist'' Chernoff stopping rule \citep{garivier2016tracknstop}, we propose in this section natural Bayesian stopping and recommendation rule. They both rely on the optimal action probabilities defined above.
+In order to use \TTTS or \TCC as sampling rule for fixed-confidence BAI, we need to additionally define stopping and decision rules. While \cite{qin2017ttei} suggest to couple \TTEI with the ``frequentist'' Chernoff stopping rule \citep{garivier2016tracknstop}, we propose in this section natural Bayesian stopping and recommendation rule. They both rely on the optimal action probabilities defined above.
 
-\paragraph{Bayesian recommendation rule} At time step $n$, a natural candidate for the best arm is the arm with largest optimal action probability, hence we define 
+\paragraph{Bayesian recommendation rule.} 
+At time step $n$, a natural candidate for the best arm is the arm with largest optimal action probability, hence we define 
 \[
-    J_n \eqdef \argmax_{i\in\cA} a_{n,i}.
+    J_n \eqdef \argmax_{i\in\cX} a_{n,i}.
 \]
 
-\paragraph{Bayesian stopping rule}
+\paragraph{Bayesian stopping rule.}
 In view of the recommendation rule, it is natural to stop when the posterior probability that the recommended action is optimal is large, and exceeds some threshold $c_{n,\delta}$ which gets close to 1. Hence our Bayesian stopping rule is \begin{equation}\label{eq:stopping}
-    \tau_{\delta} \eqdef \inf \left\{ n\in\NN:\max_{i\in\cA} a_{n,i} \geq c_{n,\delta} \right\}.
+    \tau_{\delta} \eqdef \inf \left\{ n\in\NN:\max_{i\in\cX} a_{n,i} \geq c_{n,\delta} \right\}.
 \end{equation}
 
-\paragraph{Links with frequentist counterparts} Using the transportation cost $W_n(i,j)$ defined in \eqref{def:Transportation}, the Chernoff stopping rule of~\cite{garivier2016tracknstop} can actually be rewritten as
+\paragraph{Links with frequentist counterparts.} 
+Using the transportation cost $W_n(i,j)$ defined in \eqref{def:Transportation}, the Chernoff stopping rule of~\cite{garivier2016tracknstop} can actually be rewritten as
 \begin{equation}\label{eq:chernoffstoppingtime}
-\hspace{-0.2cm}\tau_\delta^{\text{Ch.}} \eqdef \inf \left\lbrace n \in \mathbb{N} : \max_{i \in \cA} \min_{j \in \cA \setminus \{i\} } W_{n}(i,j) > d_{n,\delta} \right\rbrace.
+\hspace{-0.2cm}\tau_\delta^{\text{Ch.}} \eqdef \inf \left\lbrace n \in \mathbb{N} : \max_{i \in \cX} \min_{j \in \cX \setminus \{i\} } W_{n}(i,j) > d_{n,\delta} \right\rbrace.
 \end{equation}
 This stopping rule coupled with the recommendation rule $J_n = \argmax_{i} \mu_{n,i}$. 
 

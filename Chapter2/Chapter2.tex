@@ -14,7 +14,7 @@
 
 The problem of sequentially allocating resources to a defined set of actions (arms) based on successive \emph{partially observable} (see Definition~\ref{def:mab.mab} and Remark~\ref{remark:mab.partial} below) feedback refers to the MAB game in probability theory. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A sequential decision making problem comes up then when facing with several slot machines (multi-armed bandits).
 
-The study of MAB problems can date back to as early as 1933~\citep{thompson1933}, and was originally proposed to model sequential clinical trials. For example, researchers testing the efficacy of potential vaccines for a new coronavirus have to choose a vaccine (arm) from the following 4 options as shown in Fig.~\ref{fig:mab.covid} on each patient from an experimental group of $T$ person. For each patient $t\in[T]$, researchers receive a reward signal $r_t\in\{0,1\}$. $r_t=1$ indicates that the treatment is successful, otherwise the treatment is a failure. We thus assume that the efficacy of each vaccine follows some Bernoulli distribution that is unknown to the researchers.
+The study of MAB problems can date back to as early as 1933~\citep{thompson1933}, and was originally proposed to model sequential clinical trials. For example, researchers testing the efficacy of potential vaccines for a new coronavirus have to choose a vaccine (arm) from the following 4 options as shown in Fig.~\ref{fig:mab.covid} on each patient from an experimental group of $N$ person. For each patient $n\in[N]$, researchers receive a reward signal $r_n\in\{0,1\}$. $r_n=1$ indicates that the treatment is successful, otherwise the treatment is a failure. We thus assume that the efficacy of each vaccine follows some Bernoulli distribution that is unknown to the researchers.
 
 \begin{figure}[ht]
     \centering
@@ -23,7 +23,7 @@ The study of MAB problems can date back to as early as 1933~\citep{thompson1933}
     \label{fig:mab.covid}
 \end{figure}
 
-As stated in Chapter~\ref{chap:intro}, a common learning objective for stochastic MAB is to maximize the total reward obtained given a sequence of observations. In the previous example, researchers need to decide which vaccine to employ for each patient depending on the previous success rates with the purpose of maximizing the total success rate $\sum_{t=1}^T r_t$ at the end.
+As stated in Chapter~\ref{chap:intro}, a common learning objective for stochastic MAB is to maximize the total reward obtained given a sequence of observations. In the previous example, researchers need to decide which vaccine to employ for each patient depending on the previous success rates with the purpose of maximizing the total success rate $\sum_{n=1}^N r_n$ at the end.
 
 However, due to the complex nature of medical treatment, it turns out that the MAB model is hardly applied in real clinical trials despite its primary purpose~\citep{reda2020drug}. Nevertheless, the model has been widely employed in many other applications recently, in particular online recommendation systems for example (see e.g.~\citealt{li2010contextual,zeng2016online}). Other application scenarios include...
 
@@ -31,7 +31,7 @@ In this section, we go a little beyond the intuition and provide the formal defi
 
 \subsection{Problem Formulation}\label{sec:mab.model.formulation}
 
-From a mathematical point of view, a MAB model is a collection of $K$ \emph{unknown} probability distributions $(\nu_k)_{1 \leq k \leq K}$. At each time step $t$, the learner chooses a distribution $\nu_{i_t}$ where $i_t\in[K]$ and receive a reward $r_t$ that is generated from $\nu_{i_t}$. We then recover the bandit learning cycle as shown in Fig.~\ref{fig:mab.mab}. We summarize such a sequential learning procedure in Definition~\ref{def:mab.mab}.
+From a mathematical point of view, a MAB model is a collection of $K$ \emph{unknown} probability distributions $(\nu_k)_{1 \leq k \leq K}$. At each time step $n$, the learner chooses a distribution $\nu_{I_n}$ where $I_n\in[K]$ and receive a reward $r_n$ that is generated from $\nu_{I_n}$. We then recover the bandit learning cycle as shown in Fig.~\ref{fig:mab.mab}. We summarize such a sequential learning procedure in Definition~\ref{def:mab.mab}.
 
 \begin{figure}[ht]
     \centering
@@ -42,11 +42,11 @@ From a mathematical point of view, a MAB model is a collection of $K$ \emph{unkn
 
 \begin{definition}[multi-armed bandit game]\label{def:mab.mab}
 \begin{leftbar}[defnbar]
-	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $T$. At each stage $t$, the bandit game consists of the following steps:
+	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $N$. At each stage $n$, the bandit game consists of the following steps:
 	\begin{itemize}
-		\item a vector of rewards $(r_{1,t} \sim \nu_1, \cdots, r_{K,t} \sim \nu_K)$ is generated,
-		\item the learner picks an arm $i_t \in \{1,\cdots,K\}$, and
-		\item the learner observes the reward $r_t = r_{i_t, t}$.
+		\item a vector of rewards $(r_{1,n} \sim \nu_1, \cdots, r_{K,n} \sim \nu_K)$ is generated,
+		\item the learner picks an arm $I_n \in \{1,\cdots,K\}$, and
+		\item the learner observes the reward $r_n = r_{I_n, n}$.
 	\end{itemize}
 \end{leftbar}
 \end{definition}
@@ -95,9 +95,9 @@ Suppose that each unknown distribution $\nu_k$ is associated with a mean $\mu_k$
 
 \begin{definition}[cumulative regret]\label{def:mab.cumulative_regret}
 \begin{leftbar}[defnbar]
-	At the end of round $T$, a given policy which observes a sequence of rewards $(r_t)_{1 \leq t \leq T}$ suffers from a cumulative regret:
+	At the end of round $N$, a given policy which observes a sequence of rewards $(r_n)_{1 \leq n \leq N}$ suffers from a cumulative regret:
 	\[
-		\hat{R}_T \eqdef \max_{i=1\cdots K} \sum_{t=1}^T r_{i,t} - \sum_{t=1}^T r_t.
+		\hat{R}_N \eqdef \max_{i=1\cdots K} \sum_{n=1}^N r_{i,n} - \sum_{n=1}^N r_n.
 	\]
 \end{leftbar}
 \end{definition}
@@ -108,7 +108,7 @@ In general, both rewards and choices of the learner might be stochastic, it is t
 \begin{leftbar}[defnbar]
 	At the end of round $T$, a given policy which observes a sequence of rewards $(r_t)_{1 \leq t \leq T}$ suffers from a cumulative pseudo-regret:
 	\[
-		R_T \eqdef \mu^{\star}T - \sum_{t=1}^T \mu_{i_t}.
+		R_T \eqdef \mu^{\star}T - \sum_{t=1}^T \mu_{I_t}.
 	\]
 \end{leftbar}
 \end{definition}
@@ -120,9 +120,9 @@ In general, both rewards and choices of the learner might be stochastic, it is t
 \end{proposition}
 
 \begin{proof}
-	Let us define a function that relates each arm to its mean reward \func{f}{\{1,\cdots,K\}}{\R}{i_t}{\mu_{i_t}\,,} then by the tower rule, we have
+	Let us define a function that relates each arm to its mean reward \func{f}{\{1,\cdots,K\}}{\R}{I_t}{\mu_{I_t}\,,} then by the tower rule, we have
     \[
-	    \E[r_t] = \E[\E[r_t|i_t]] = \E[f(i_t)] = \mu_{i_t}\,.
+	    \E[r_t] = \E[\E[r_t|I_t]] = \E[f(I_t)] = \mu_{I_t}\,.
     \]
 \end{proof}
 
@@ -142,12 +142,12 @@ The rest of this chapter is dedicated to MAB for optimization. We aim to provide
 
 \subsection{Two frameworks of best-arm identification}\label{sec:mab.bai.frameworks}
 
-Recall that for the vanilla problem setup of BAI, we consider a finite-armed bandit model, which is a collection of $K$ probability distributions, called arms $\cX\eqdef\{x_1,\cdots,x_K\}$, parameterized by their means $\mu_1, \cdots, \mu_K$. When clear from the context, we can simply denote the arms by $\{1,2,\cdots,K\}$. We assume the (unknown) best arm is unique and we denote it by $i_{\bmu}^\star \eqdef \argmax_i \mu_i$\footnote{The subscript $\bmu$ can be omitted when clear from the context.}. 
+Recall that for the vanilla problem setup of BAI, we consider a finite-armed bandit model, which is a collection of $K$ probability distributions, called arms $\cX\eqdef\{x_1,\cdots,x_K\}$, parameterized by their means $\mu_1, \cdots, \mu_K$. When clear from the context, we can simply denote the arms by $\{1,2,\cdots,K\}$. We assume the (unknown) best arm is unique and we denote it by $I_{\bmu}^\star \eqdef \argmax_i \mu_i$\footnote{The subscript $\bmu$ can be omitted when clear from the context.}. 
 
-A BAI strategy or algorithm can be characterized by a triple $(i_t, j_t, \tau)$ at each time step, hence consists of three components: 
+A BAI strategy or algorithm can be characterized by a triple $(I_t, J_t, \tau)$ at each time step, hence consists of three components: 
 \begin{itemize}
-    \item The first is a \gls{sampling rule}, which selects an arm $i_t\in[K]$. Recall that in a MAB problem, a vector of rewards $(r_{t,1},\cdots,r_{t,K})$ is generated for all arms independently from past observations at each round, but only $r_t = r_{t,i_t}$ is revealed to the learner. Let $\cF_n$ be the $\sigma$-algebra generated by $(U_1,k_1,r_1,\cdots,U_t,i_t,r_t)$, then $i_t$ is $\cF_{t-1}$-measurable, i.e., it can only depend on the past $t-1$ observations, and some exogenous randomness, materialized into $U_{n-1} \sim \cU([0,1])$;
-    \item The second component is a $\cF_{t}$-measurable \gls{decision rule} $j_t$, which returns a guess for the best arm;
+    \item The first is a \gls{sampling rule}, which selects an arm $I_t\in[K]$. Recall that in a MAB problem, a vector of rewards $(r_{t,1},\cdots,r_{t,K})$ is generated for all arms independently from past observations at each round, but only $r_t = r_{t,I_t}$ is revealed to the learner. Let $\cF_n$ be the $\sigma$-algebra generated by $(U_1,k_1,r_1,\cdots,U_t,I_t,r_t)$, then $I_t$ is $\cF_{t-1}$-measurable, i.e., it can only depend on the past $t-1$ observations, and some exogenous randomness, materialized into $U_{n-1} \sim \cU([0,1])$;
+    \item The second component is a $\cF_{t}$-measurable \gls{decision rule} $J_t$, which returns a guess for the best arm;
     \item And thirdly, the \gls{stopping rule}~$\tau$, a stopping time with respect to $\left(\cF_{t}\right)_{t \in \mathbb{N}}$, decides when the exploration is over.
 \end{itemize}
 
@@ -162,8 +162,8 @@ In the fixed-budget setting, the learner tries to maximize the probability of re
 	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $T$. At each time step $t$, the learning process consists of the following actions:
 \begin{itemize}
 	\item a vector of rewards $(r_{1,t} \sim \nu_1, \cdots, r_{K,t} \sim \nu_K)$ is generated,
-	\item the learner picks an arm $i_t \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_t = r_{i_t, t}$,
+	\item the learner picks an arm $I_t \in \{1,\cdots,K\}$ (according to the sampling rule),
+	\item the learner observes the reward $r_t = r_{I_t, t}$,
 	\item the learner stops when $t=T$, and
 	\item the learner outputs a guess for the best arm $j_T \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
 \end{itemize}
@@ -181,8 +181,8 @@ In the fixed-confidence setting, the learner is given a confidence level/risk $\
 	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, a confidence level $\delta$, and a stopping time $\tau$ w.r.t. the observations. At each time step $t$, the learning process consists of the following actions:
 \begin{itemize}
 	\item a vector of rewards $(r_{1,t} \sim \nu_1, \cdots, r_{K,t} \sim \nu_K)$ is generated,
-	\item the learner picks an arm $i_t \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_t = r_{i_t, t}$,
+	\item the learner picks an arm $I_t \in \{1,\cdots,K\}$ (according to the sampling rule),
+	\item the learner observes the reward $r_t = r_{I_t, t}$,
 	\item the learner stops if $\PP{j_{\tau}\neq i^{\star}} \leq \delta$, where $i^{\star}$ is the optimal arm, and
 	\item the learner outputs a guess for the best arm $j_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
 \end{itemize}
@@ -190,6 +190,12 @@ In the fixed-confidence setting, the learner is given a confidence level/risk $\
 \end{definition}
 
 Mathematically, the goal is to obtain a small expected number of samples $\EEs{\bmu}{\tau}$, where $\bmu=(\mu_1,\mu_2,\cdots,\mu_K)$ is the underlying bandit model associated to the given set of $K$ arms. In the rest of this thesis, we ignore the subscripts $\bmu$ for expectations and probabilities if there is no ambiguity. We postpone the discussion about the performance measure to Section~\ref{sec:mab.performance.sample}.
+
+\begin{remark}
+\begin{leftbar}[remarkbar]
+Note that these two frameworks are very different in general and do not share transferable performance guarantees, lecturers can refer to~\cite{carpentier2016budget} for a detailed discussion on the topic.
+\end{leftbar}
+\end{remark}
 
 \subsection{Sampling rules}\label{sec:mab.bai.sampling}
 
@@ -243,7 +249,7 @@ In the fixed-confidence setting, a sampling rule is always accompanied by a $\de
 \begin{leftbar}[defnbar]
 A BAI strategy is called $\delta$-correct if for any bandit model $\bmu$, we have
 \[
-	\PP{\tau_\delta < \infty} = 1 \text{ and } \PP{j_{\tau_\delta}\neq i_{\bmu}^{\star}} \leq \delta\,.
+	\PP{\tau_\delta < \infty} = 1 \text{ and } \PP{j_{\tau_\delta}\neq I_{\bmu}^{\star}} \leq \delta\,.
 \]
 \end{leftbar}
 \end{definition}
