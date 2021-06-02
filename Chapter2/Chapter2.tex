@@ -234,39 +234,40 @@ The fact that the two frameworks produce sampling rules that depend either on a 
 
 There exist several natural and simple decision rules that can be applied to most of the existing BAI algorithms, namely \gls{eba}, \gls{mpa} and \gls{edp}~\citep{bubeck2009pure}.
 
-We introduce first EBA which returns, according to its name, the arm with the largest empirical average reward (see Definition~\ref{def:mba.eba}. EBA is the most natural decision rule that one can think of as the empirical mean is a good estimation of the true mean when the corresponding arm is sufficiently pulled. EBA is also the most used decision rule in the literature.
+We introduce first EBA which returns, according to its name, the arm with the largest empirical average reward (see Definition~\ref{def:mba.eba}. EBA is the most natural decision rule that one can think of as the empirical mean is a good estimation of the true mean when the corresponding arm is sufficiently pulled.
 
 \begin{definition}[empirical best arm decision rule]
 \begin{leftbar}[defnbar]\label{def:mba.eba}
     At the end of round $n$, the learner decides to recommend the arm with the best empirical average reward,
     \[
-        J_n \eqdef \argmax_{i\in[K]} \mu_{n+1,i}\,.
+        J_n = \argmax_{i\in[K]} \mu_{n+1,i}\,.
     \]
 \end{leftbar}
 \end{definition}
 
-Another natural decision is to output the most pulled arm (see Definition~\ref{def:mab.mpa}. Intuitively, the true best arm should be played the most number of times.
+Another natural decision is to output the most pulled arm (see Definition~\ref{def:mab.mpa}). Intuitively, the true best arm should be played the most number of times.
 
 \begin{definition}[most played arm decision rule]
 \begin{leftbar}[defnbar]\label{def:mab.mpa}
     At the end of round $n$, the learner decides to recommend the most played arm,
     \[
-        J_n \eqdef \argmax_{i\in[K]} T_{n+1,i}\,.
+        J_n = \argmax_{i\in[K]} T_{n+1,i}\,.
     \]
 \end{leftbar}
 \end{definition}
 
+The learner can also recommend arm $i$ with probability $T_{n,i}/n$, this is the EDP decision rule (see Definition~\ref{def:mab.edp}).
+
 \begin{definition}[empirical distribution of plays decision rule]
-\begin{leftbar}[defnbar]\label{def:mba.edp}
-    
+\begin{leftbar}[defnbar]\label{def:mab.edp}
+    At the end of round $n$, the learner decides to recommend arm $i$ with probability $T_{n+1,i}/(n+1)$, that is
+    \[
+        J_n \sim \bp_{n+1}\eqdef\left(\frac{T_{n+1,1}}{n+1},\frac{T_{n+1,2}}{n+1},\cdots,\frac{T_{n+1,K}}{n+1}\right)\,.
+    \]
 \end{leftbar}
 \end{definition}
 
-\begin{remark}
-\begin{leftbar}[remarkbar]
-    The present rules are obviously not the only options for decision rules. Specific rules can be adopted for certain sampling rules. We will see that it is indeed the case in Chapter~\ref{chap:t3c}.
-\end{leftbar}
-\end{remark}
+In practice, EBA is often used in the literature. A more detailed discussion of the three decision rules can be found in the work of~\cite{bubeck2009pure}. We do not try to go further on the topic in this thesis. Note, however, that the present rules are obviously not the only options for decision rules. Specific rules can be adopted for certain sampling rules. We will see that it is indeed the case in Chapter~\ref{chap:t3c}.
 
 \section{Extensions of Best-Arm Identification}\label{sec:mab.extensions}
 
