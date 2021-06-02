@@ -1,12 +1,12 @@
 %!TEX root = ../Chapter2.tex
 \section{Two Related Optimality Notions}\label{sec:related}
 
-In the fixed-confidence setting, we aim for building $\delta$-correct strategies, i.e.\ strategies that identify the best arm with high confidence on any problem instance. 
+In the fixed-confidence setting, we aim for building $\delta$-correct strategies, i.e.\ strategies that identify the best arm with high confidence on any problem instance (see Definition~\ref{def:mab.delta}). 
 
-\begin{definition} A strategy $(I_n,J_n,\tau)$ is $\delta$-correct if for all bandit models $\bmu$ with a unique optimal arm, it holds that $\mathbb{P}_{\bmu}\left[J_{\tau} \neq I^\star\right] \leq \delta$. 
-\end{definition}
+% \begin{definition} A strategy $(I_n,J_n,\tau)$ is $\delta$-correct if for all bandit models $\bmu$ with a unique optimal arm, it holds that $\mathbb{P}_{\bmu}\left[J_{\tau} \neq I^\star\right] \leq \delta$. 
+% \end{definition}
 
-Among $\delta$-correct strategies, seek the one with the smallest sample complexity $\EE{\tau_\delta}$. So far, \TTTS has not been analyzed in terms of sample complexity; \citet{russo2016ttts} focusses on posterior consistency and optimal convergence rates. Interestingly, both the smallest possible sample complexity and the fastest rate of posterior convergence can be expressed in terms of the following quantities.
+Among $\delta$-correct strategies, we seek the one with the smallest sample complexity $\EE{\tau_\delta}$. So far, \TTTS has not been analyzed in terms of sample complexity; \citet{russo2016ttts} focusses on posterior consistency and optimal convergence rates. Interestingly, both the smallest possible sample complexity and the fastest rate of posterior convergence can be expressed in terms of the following quantities.
 
 %\cite{russo2016ttts} proposes an (asymptotic) upper bound on $\Pi_n(\overline{\Theta_{I^\star}}) = 1 - a_{n,I^\star}$, the posterior probability that $I^\star$ is not the best arm. 
 
