@@ -1,8 +1,9 @@
-% !TEX root = ../Chapter4.tex
+% !TEX root = ../Chapter5.tex
 \section{Introduction}\label{sec:gpo.intro}
 
-\textit{Global optimization} (GO)
-has applications in several domains including hyper-parameter tuning \citep{jamieson2016hyperband, li2017hyperband,samothrakis2013}.  GO usually consists of a data-driven optimization process over an expensive-to-evaluate function. It is also known as \emph{black-box optimization} since the inner behavior of a function is often unknown.
+In this chapter, we deviate our focus a bit. We are still interested in identifying the best arm, but this time among an infinite number of candidates. The search space can be countably infinite or even continuous. This is the \emph{global optimization} (GO). 
+
+GO has applications in several domains including hyper-parameter tuning \citep{jamieson2016hyperband, li2017hyperband,samothrakis2013} which is the main topic of Chapter~\ref{chap:dttts}. GO usually consists of a data-driven optimization process over an expensive-to-evaluate function. It is also known as \emph{black-box optimization} since the inner behavior of a function is often unknown.
 
 In GO, we optimize an unknown and costly-to-evaluate function $f: \mathcal{X} \rightarrow \mathbb{R}$ based on~$n$ noisy evaluations, that can be sequentially selected. This setting is a generalization of \textit{multi-armed bandits}, where the arm space $\mathcal{X}$ is some measurable space (\citealt{bubeck2011pure}). Each \emph{arm} $x \in \mathcal{X}$ gets its mean reward $f(x)$ through the reward function $f$, which is  the function to be optimized. At each round $t$, the learner chooses an arm $x_t \in \mathcal{X}$ and receives a reward~$r_t$. We study the noisy setting in which the obtained reward is a noisy evaluation of $f$: $r_t \triangleq f(x_t) + \epsilon_t$, where $\epsilon_t$ is a bounded noise.
 

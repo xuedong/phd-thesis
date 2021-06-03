@@ -42,11 +42,11 @@ From a mathematical point of view, a MAB model is a collection of $K$ \emph{unkn
 
 \begin{definition}[multi-armed bandit game]\label{def:mab.mab}
 \begin{leftbar}[defnbar]
-	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $N$. At each stage $n$, the bandit game consists of the following steps:
+	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $N$. At each stage $n\in\NN$, the bandit game consists of the following steps:
 	\begin{itemize}
 		\item a vector of rewards $(r_{1,n} \sim \nu_1, \cdots, r_{K,n} \sim \nu_K)$ is generated,
 		\item the learner picks an arm $I_n \in \{1,\cdots,K\}$, and
-		\item the learner observes the reward $r_n = r_{I_n, n}$.
+		\item the learner observes the reward $r_n \eqdef r_{I_n, n}$.
 	\end{itemize}
 \end{leftbar}
 \end{definition}
@@ -145,7 +145,16 @@ Clearly, minimizing the cumulative regret is equivalent to maximizing the total 
 
 In Chapter~\ref{chap:intro} we have mentioned that regret minimization is not always the most appropriate learning objective under some circumstances, but we should rather study MAB from an optimization point of view. However, before we jump into details of MAB for optimization, let us briefly review some fundamental results of regret minimization as they may be relevant for understanding some of our motivations later.
 
-The seminal work of~\cite{robbins1952}...
+The seminal work of~\cite{robbins1952}... (TODO)
+
+\begin{definition}[sub-optimality gap]\label{def:mab.gap}
+\begin{leftbar}[defnbar]
+The sub-optimality gap $\Delta_i$ of arm $i$ is given by:
+\[
+	\Delta_i \eqdef \mu^{\star} - \mu_i\,.
+\]
+\end{leftbar}
+\end{definition}
 
 \section{Best-Arm Identification}\label{sec:mab.bai}
 
@@ -153,7 +162,7 @@ The rest of this chapter is dedicated to MAB for optimization. We aim to provide
 
 \subsection{Two frameworks of best-arm identification}\label{sec:mab.bai.frameworks}
 
-Recall that for the vanilla problem setup of BAI, we consider a finite-armed bandit model, which is a collection of $K$ probability distributions, called arms $\cX\eqdef\{x_1,\cdots,x_K\}$, parameterized by their means $\mu_1, \cdots, \mu_K$. When clear from the context, we can simply denote the arms by $\{1,2,\cdots,K\}$. We assume the (unknown) best arm is unique and we denote it by $I_{\bmu}^\star \eqdef \argmax_i \mu_i$\footnote{The subscript $\bmu$ can be omitted when clear from the context.}. 
+Recall that for the vanilla problem setup of BAI, we consider a finitely-armed bandit model, which is a collection of $K$ probability distributions, called arms $\cX\eqdef\{x_1,\cdots,x_K\}$, parameterized by their means $\mu_1, \cdots, \mu_K$. When clear from the context, we can simply denote the arms by $\{1,2,\cdots,K\}$. We assume the (unknown) best arm is unique and we denote it by $I_{\bmu}^\star \eqdef \argmax_i \mu_i$\footnote{The subscript $\bmu$ can be omitted when clear from the context.}. 
 
 A BAI strategy or algorithm can be characterized by a triple $(I_n, J_n, \tau)$ at each time step, hence consists of three components: 
 \begin{itemize}
@@ -166,7 +175,7 @@ In general, there are two learning frameworks of BAI: (1) \gls{fixed-confidence 
 
 \paragraph{Fixed-budget setting.}
 
-In the fixed-budget setting, the learner tries to maximize the probability of returning the best (or $\epsilon$-best) arm with a fixed horizon $N$. Therefore, the stopping rule in this case can be simply written as $\tau=N$. The setting can be summarized as below.
+In the fixed-budget setting, the learner tries to maximize the probability of returning the best (or $\epsilon$-best) arm with a fixed horizon $N$. Therefore, the stopping rule in this case can be simply written as $\tau=N$. The protocol of fixed-budget BAI can be summarized as below.
 
 \begin{definition}[fixed-budget best-arm identification]\label{def:mab.bai_budget}
 \begin{leftbar}[defnbar]
@@ -174,7 +183,7 @@ In the fixed-budget setting, the learner tries to maximize the probability of re
 \begin{itemize}
 	\item a vector of rewards $(r_{1,n} \sim \nu_1, \cdots, r_{K,n} \sim \nu_K)$ is generated,
 	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_n = r_{I_n, n}$,
+	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$,
 	\item the learner stops when $n=N$, and
 	\item the learner outputs a guess for the best arm $J_N \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
 \end{itemize}
@@ -185,15 +194,15 @@ The ultimate objective is thus to make the probability of $j_N$ not being the op
 
 \paragraph{Fixed-confidence setting.}
 
-In the fixed-confidence setting, the learner is given a confidence level/risk $\delta$ about the quality of the returned guess of the best arm. The goal is to reach a quality level of $1-\delta$ with as few samples as possible. The setting can be summarized as follow.
+In the fixed-confidence setting, the learner is given a confidence level/risk $\delta$ about the quality of the returned guess of the best arm. The goal is to reach a quality level of $1-\delta$ with as few samples as possible. The learning protocol of fixed-confidence BAI can be summarized as follow.
 
 \begin{definition}[fixed-confidence best-arm identification]\label{def:mab.bai_confidence}
 \begin{leftbar}[defnbar]
-	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, a confidence level $\delta$, and a stopping time $\tau$ w.r.t. the observations. At each time step $t$, the learning process consists of the following actions:
+	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, a confidence level $\delta$, and a stopping time $\tau$ w.r.t. the observations. At each time step $n$, the learning process consists of the following actions:
 \begin{itemize}
 	\item a vector of rewards $(r_{1,n} \sim \nu_1, \cdots, r_{K,n} \sim \nu_K)$ is generated,
 	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_n = r_{I_n, n}$,
+	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$,
 	\item the learner stops if $\PP{J_{\tau}\neq I^\star} \leq \delta$, where $I^\star$ is the optimal arm, and
 	\item the learner outputs a guess for the best arm $J_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
 \end{itemize}
@@ -207,12 +216,14 @@ The goal is to obtain a small expected number of samples $\EEs{\bmu}{\tau}$, whe
 is the underlying bandit model associated to the given set of $K$ arms. In the rest of this thesis, we ignore the subscripts $\bmu$ for expectations and probabilities if there is no ambiguity. We postpone the discussion about the performance measure to Section~\ref{sec:mab.performance.sample}.
 
 \begin{remark}
-\begin{leftbar}[remarkbar]
+\begin{leftbar}[remarkbar]\label{remark:mab.two_frameworks}
 Note that these two frameworks are very different in general and do not share transferable performance guarantees, lecturers can refer to~\cite{carpentier2016budget} for a detailed discussion on the topic.
 \end{leftbar}
 \end{remark}
 
 \subsection{Sampling rules}\label{sec:mab.bai.sampling}
+
+Designing smart sampling rules is the main focus of a large part of the thesis, thus we only survey the related work in this chapter, and leave the technical details to subsequent chapters.
 
 \paragraph{Fixed-budget designs.}
 
@@ -224,11 +235,40 @@ For fixed-confidence BAI, the majority of existing sampling rules rely on the co
 
 \paragraph{Anytime designs.}
 
-The fact that the two frameworks produce sampling rules that depend either on a confidence parameter $\delta$ or a budget parameter $N$ is not desirable in some real applications. To address this problem, \cite{jun2016atlucb} propose to use a \emph{doubling trick} upon fixed-budget algorithms like \SR and \SHA, or use a time-varying confidence parameter when dealing with the fixed-confidence setting. This allows us to stop the learning process \emph{anytime} we want, meaning that we want the probability of $I^\star$ not being recommended to be decreasing as fast as possible. \cite{russo2016ttts} provides an interesting alternative that evaluates sampling rules in a Bayesian perspective. %In this note, our main interest remains on how to develop universal anytime BAI algorithms.
+The fact that the two frameworks produce sampling rules that depend either on a confidence parameter $\delta$ or a budget parameter $N$ is not desirable in some real applications. To address this problem, \cite{jun2016atlucb} propose to use a \emph{doubling trick} upon fixed-budget algorithms like \SR and \SHA, or use a time-varying confidence parameter when dealing with the fixed-confidence setting. This allows us to stop the learning process \emph{anytime} we want. In other words, the probability of not recommending the true best arm $I^\star$, when the learner stops, needs to decay as fast as possible. \cite{russo2016ttts} provides an interesting alternative that evaluates sampling rules in a Bayesian perspective. We provide further insights on this topic in Chapter~\ref{chap:t3c}. %In this note, our main interest remains on how to develop universal anytime BAI algorithms.
 
 \subsection{Stopping rules}\label{sec:mab.bai.stopping}
 
+One can observe from Definition~\ref{def:mab.bai_confidence} and Definition~\ref{def:mab.bai_budget} that stopping rules are more important in fixed-confidence BAI, as for fixed-budget BAI the learner stops simply when the budget is exhausted.
+
+One of the most applied stopping rules is constructed upon the \gls{generalized likelihood ratio}. The stopping rule was first studied by~\cite{chernoff1959}, and has recently been reformulated by~\cite{garivier2016tracknstop}.
+
 \paragraph{Chernoff stopping rule.}
+Finding an appropriate stopping time $\tau$ is actually a classical hypothesis test, namely \gls{glrt}, to decide whether we can tell an arm is larger than another arm with a small risk $\delta$ based only on past observations.
+
+For any pair of arms indexed by $i, j \in [K]$, we thus consider the generalized likelihood ratio statistic:
+\[
+    Z_{n,i,j} \eqdef\,,
+\]
+where
+
+A strong point of this statistic is that it has a closed-form expression for exponential family bandit models. Indeed, we can define for all pairs of arm $i, j$ a weighted average of their empirical mean:
+\[
+    \mu_{n,i,j} \eqdef \frac{T_{n,i}}{T_{n,i}+T_{n,j}}\mu_{n,i} + \frac{T_{n,j}}{T_{n,i}+T_{n,j}}\mu_{n,j}\,,
+\]
+where we recall that $\mu_{n,i}$ is the empirical mean of arm $i$. It can be shown that if $\mu_{n,i} \geq \mu_{n,j}$, then the generalized likelihood ratio statistic can be rewritten as
+\[
+    Z_{n,i,j} = T_{n,i}d(\mu_{n,i}, \mu_{n,i,j}) + T_{n,j}d(\mu_{n,j}, \mu_{n,i,j})\,.
+\]
+and also we have $Z_{n,i,j} = -Z_{n,j,i}$. The following stopping rule thus emerges naturally:
+\begin{align}\label{eq:mab.glr}
+    \tau_\delta &\eqdef \inf \left\lbrace n \in \NN : \exists i \in \cX, \forall j \in \cX \setminus \{i\}, Z_{n,i,j} > d_{n,\delta} \right\rbrace\nonumber \\
+    &= \inf \left\lbrace n \in \NN : \max_{i \in \cX} \min_{j \in \cX \setminus \{i\}} Z_{n,i,j} > d_{n,\delta} \right\rbrace\,,
+\end{align}
+where $d_{n,\delta}$ is an exploration rate that needs to be chosen carefully.
+
+\paragraph{Other options.}
+Other stopping rules also exist, but are often explicitly or implicitly equivalent to the Chernoff stopping rule. For example, in Chapter~\ref{chap:t3c}, we introduce a \gls{Bayesian stopping rule} and we can show that it has implicitly the same behaviour as the Chernoff one. It is also the case for many stopping rules in the linear bandits BAI literature, as we show in Chapter~\ref{chap:lgc} that they are explicitly equivalent to the Chernoff stopping rule up to constant factors.
 
 \subsection{Decision rules}\label{sec:mab.bai.decision}
 
@@ -262,7 +302,7 @@ The learner can also recommend arm $i$ with probability $T_{n,i}/n$, this is the
 \begin{leftbar}[defnbar]\label{def:mab.edp}
     At the end of round $n$, the learner decides to recommend arm $i$ with probability $T_{n+1,i}/(n+1)$, that is
     \[
-        J_n \sim \bp_{n+1}\eqdef\left(\frac{T_{n+1,1}}{n+1},\frac{T_{n+1,2}}{n+1},\cdots,\frac{T_{n+1,K}}{n+1}\right)\,.
+        J_n \sim \bp_{n}\eqdef\left(\frac{T_{n+1,1}}{n},\frac{T_{n+1,2}}{n},\cdots,\frac{T_{n+1,K}}{n}\right)\,.
     \]
 \end{leftbar}
 \end{definition}
@@ -271,11 +311,87 @@ In practice, EBA is often used in the literature. A more detailed discussion of 
 
 \section{Extensions of Best-Arm Identification}\label{sec:mab.extensions}
 
+For real-world applications, sometimes specific need should be met when applying BAI. The problem formulation needs to be adapted with potentially additional assumptions. Furthermore, as stated in Remark~\ref{remark:intro.pure}, BAI can be studied within a more general context of pure exploration. The purpose of this section is thus to provide a brief overview of commonly studied extensions of BAI as well as other pure exploration problems. We pay particular attention to BAI for linear bandits as it is the main topic of Chapter~\ref{chap:lgc}.
+
 \subsection{Best-arm identification for linear bandits}\label{sec:mab.extensions.linear}
 
-\subsection{Other variants of best-arm identification}\label{sec:mab.extensions.other}
+In linear bandits BAI, we consider a \emph{finitely-armed}\footnote{We can also generalize to an infinite number of arms. The setting appears to be much more intricate, and is out of the scope of this thesis.} linear bandit model, where a collection of $K$ arms $\cX\eqdef\{\bx_1,\ldots,\bx_K\}\footnote{Sometimes called contexts or feature vectors as well}\subset \R^d.$, is given. $d\in\NN$ is the dimension of the arm space. Usually we assume that the arm set $\cX$ spans $\R^d$. Each arm $i$ is parameterized again by its (unknown) mean $\mu_i$. 
 
-\section{$\cX$-armed bandits}\label{sec:mab.continuum}
+In the linear case, we assume that $\mu_i$ is given by a linear combination of the feature vector and a parameter vector $\btheta^\star\in\R^d$, that is 
+\[
+\mu_i = \bx_i\transpose\btheta^\star\,.
+\]
+$\btheta^\star$ is called regression parameter as it is \emph{unknown} to the learner and needs to be approached using linear regression methods during the bandit learning. The (unknown) best arm is denoted by $\bx^\star\eqdef\argmax_{\bx\in\cX}\bx\transpose\btheta^\star$, and indexed by $I^\star$.
+
+At each time step $n$, the learner selects an arm $I_n$ whose corresponding context is denoted by $\hat{\bx}_n\eqdef \bx_{I_n}$. The learner then receives a noisy observation of the inner product of $\hat{\bx}_n$ and $\btheta^\star$ as payoff,
+\[
+    r_n = \hat{\bx}_n\transpose\btheta^\star + \epsilon_n,
+\]
+where $\epsilon_n$ is the noise. The learning protocol of linear bandits BAI is given in Definition~\ref{def:mab.linear_bai}.
+
+\begin{definition}[linear bandits best-arm identification]\label{def:mab.linear_bai}
+\begin{leftbar}[defnbar]
+	We are given a set of $K$ arms $\{\bx_1,\cdots,\bx_K\}\in\R^d$ that spans $\R^d$. At each time step $n$, the learning process consists of the following actions:
+\begin{itemize}
+	\item a vector of rewards $(r_{1,n} = \bx_1\transpose\btheta^\star+\epsilon_{1,n}, \cdots, r_{K,n} = \bx_K\transpose\btheta^\star+\epsilon_{K,n})$ is generated,
+	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
+	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$ with noise $\epsilon_n \eqdef \epsilon_{I_n,n}$,
+	\item the learner stops according to the stopping rule, and
+	\item the learner outputs a guess for the best arm $J_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
+\end{itemize}
+\end{leftbar}
+\end{definition}
+
+\begin{remark}\label{remark:mab.reduction}
+\begin{leftbar}[remarkbar]
+    One can observe that linear bandits BAI can be reduced to the vanilla BAI setting if we consider a set of \emph{linearly independent} feature vectors.
+\end{leftbar}
+\end{remark}
+
+\subsection{Other variants of best-arm identification and pure exploration}\label{sec:mab.extensions.other}
+
+Top-m identification~\cite{kalyanakrishnan2010}, threshold bandits~\cite{locatelli2016thresholding}, minimum threshold~\cite{kaufmann2018murphy}, signed bandits~\cite{menard2019lma}, pure exploration combinatorial bandits~\cite{chen2014combinatorial}, Monte-Carlo tree search \cite{teraoka2014mc}, etc.
+
+The learning protocol of a general pure exploration problem is summarized in Definition~\ref{def:mab.pure}.
+
+\begin{definition}[pure exploration]\label{def:mab.pure}
+\begin{leftbar}[defnbar]
+	We are given a set of $K$ arms $\{\bx_1,\cdots,\bx_K\}\in\R^d$ that spans $\R^d$. At each time step $n$, the learning process consists of the following actions:
+\begin{itemize}
+	\item a vector of rewards $(r_{1,n} = \bx_1\transpose\btheta^\star+\epsilon_{1,n}, \cdots, r_{K,n} = \bx_K\transpose\btheta^\star+\epsilon_{K,n})$ is generated,
+	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
+	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$ with noise $\epsilon_n \eqdef \epsilon_{I_n,n}$,
+	\item the learner stops according to the stopping rule, and
+	\item the learner outputs a guess for the best arm $J_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
+\end{itemize}
+\end{leftbar}
+\end{definition}
+
+\section{Many-armed bandits}\label{sec:mab.continuum}
+
+Now we elaborate a bit on another important extension, for which a large number of arms are available. The arm space could be infinite, or even continuous so that it's not even possible to sample each arm once.
+
+Remember that there exists two general learning objectives in a bandit game: regret minimization and pure exploration (see e.g.~\citealt{kaufmann2017survey} for a survey). While regret minimization is also an interesting topic for many-armed bandits, our focus in this thesis sticks to optimization. As introduced in Chapter~\ref{chap:intro}, it is also called \emph{global optimization}.
+
+More precisely, we consider an (measurable) arm space $\cX$ that contains infinitely-many arms. The learning goal is to optimize an \emph{unknown} function $f: \cX \rightarrow \R$ based on $N$ noisy evaluations, that can be sequentially selected. Each arm $x$ is essentially a data point in the arm space $\cX$, and it gets its mean reward $f(x)$ through the reward function $f$, which is the target function to be optimized. At each round $n$, the learner chooses an arm $x_n \in \mathcal{X}$ and receives a reward $r_n$. We study the noisy setting in which the obtained reward is a noisy evaluation of $f$: $r_n \eqdef f(x_n) + \epsilon_n$, where $\epsilon_n$ is the noise. Note that in the context of GO, practitioners are often more interested by the fixed-budget setting as the target function is usually extremely costly to evaluate, hence only a considerably limited number of function evaluations are allowed. The learning protocol can thus be given as follow.
+
+\begin{definition}[global optimization]\label{def:mab.go}
+\begin{leftbar}[defnbar]
+	We are given a measurable arm space $\cX$, and a budget of $N$ function evaluations. At each time step $n\in[N]$, the learning process consists of the following actions:
+\begin{itemize}
+	\item the learner picks a point $x_n$ from $\cX$,
+	\item the learner observes the noisy function value of $x_n$ as reward: $r_n \eqdef f(x_n) + \epsilon_n$,
+	\item the learner stops if $n=N$, and
+	\item the learner outputs a guess for the maximum when they stop.
+\end{itemize}
+\end{leftbar}
+\end{definition}
+
+It would be, however, impossible to obtain a sub-linear algorithm if no structure is assumed on the arm space. Two different settings exist in the literature: (1) \gls{infinitely-armed bandits}, and (2) \gls{continuum-armed bandits}. 
+
+The first one is initiated by~\cite{berry1997infinite}, where a specific case of Bernoulli bandits is treated. In their paper, \cite{berry1997infinite} regard the Bernoulli parameters as independent observations from a probability distribution, that we call a \gls{reservoir} in subsequent works. This setting is considered in Chapter~\ref{chap:dttts}.
+
+Continuum-armed bandits setting, or sometimes also named as \gls{X-armed bandits} (see e.g.~\citealt{bubeck2010x}), considers arms that lie in some \emph{metric} space and their mean rewards form a \emph{deterministic} or \emph{stochastic} function with some \emph{global} or \emph{local} smoothness being assumed. This setting is the focus of Chapter~\ref{chap:gpo}.
 
 \section{Performance Measure}\label{sec:mab.performance}
 
@@ -325,6 +441,8 @@ A BAI strategy $(I_n,J_n,\tau)$ is called $(\epsilon,\delta)$-PAC if for any ban
 \end{definition}
 
 \subsection{Sample complexity}\label{sec:mab.performance.sample}
+
+(TODO)
 
 \subsection{Simple regret}\label{sec:mab.performance.simple}
 

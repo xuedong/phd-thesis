@@ -204,7 +204,7 @@ In view of the recommendation rule, it is natural to stop when the posterior pro
 \paragraph{Links with frequentist counterparts.} 
 Using the transportation cost $W_n(i,j)$ defined in \eqref{def:Transportation}, the Chernoff stopping rule of~\cite{garivier2016tracknstop} can actually be rewritten as
 \begin{equation}\label{eq:chernoffstoppingtime}
-\hspace{-0.2cm}\tau_\delta^{\text{Ch.}} \eqdef \inf \left\lbrace n \in \mathbb{N} : \max_{i \in \cX} \min_{j \in \cX \setminus \{i\} } W_{n}(i,j) > d_{n,\delta} \right\rbrace.
+    \tau_\delta^{\text{Ch.}} \eqdef \inf \left\lbrace n \in \NN : \max_{i \in \cX} \min_{j \in \cX \setminus \{i\} } W_{n}(i,j) > d_{n,\delta} \right\rbrace\,.
 \end{equation}
 This stopping rule coupled with the recommendation rule $J_n = \argmax_{i} \mu_{n,i}$. 
 

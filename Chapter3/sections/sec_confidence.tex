@@ -81,7 +81,7 @@ We upper bound the desired probability as follows
 \begin{flalign*}
 &\PP{\tau_{\delta} < \infty \wedge J_{\tau_{\delta}} \neq I^\star}  \leq  \sum_{i\neq I^\star} \PP{\exists n \in \NN : a_{n,i} > c_{n,\delta}} \\
 &\leq  \sum_{i\neq I^\star}\!\PP{\exists n \in \NN : \Pi_n(\theta_i \geq \theta_{I_\star}) > c_{n,\delta}, \mu_{n,I^\star} \!\leq \mu_{n,i}}\\
-&\leq  \sum_{i\neq I^\star}\!\PP{\exists n \in \NN : 1-c_{n,\delta} > \Pi_n(\theta_{I^\star}\!\! > \theta_i), \mu_{n,I^\star} \!\leq \mu_{n,i}}.
+&\leq  \sum_{i\neq I^\star}\!\PP{\exists n \in \NN : 1-c_{n,\delta} > \Pi_n(\theta_{I^\star}\!\! > \theta_i), \mu_{n,I^\star} \!\leq \mu_{n,i}}\,.
 \end{flalign*}
 
 The second step uses the fact that as $c_{n,\delta}\geq 1/2$, a necessary condition for $\Pi_n(\theta_i \geq \theta_{I_\star}) \geq c_{n,\delta}$ is that $\mu_{n,i} \geq \mu_{n,I_\star}$. Now using the lower bound \eqref{gaussian_lower}, if $ \mu_{n,I^\star}\leq \mu_{n,i}$, the inequality  $1-c_{n,\delta} > \Pi_n(\theta_{I^\star} > \theta_i)$  implies
