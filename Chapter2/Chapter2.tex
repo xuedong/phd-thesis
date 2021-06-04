@@ -315,7 +315,7 @@ For real-world applications, sometimes specific need should be met when applying
 
 \subsection{Best-arm identification for linear bandits}\label{sec:mab.extensions.linear}
 
-In linear bandits BAI, we consider a \emph{finitely-armed}\footnote{We can also generalize to an infinite number of arms. The setting appears to be much more intricate, and is out of the scope of this thesis.} linear bandit model, where a collection of $K$ arms $\cX\eqdef\{\bx_1,\ldots,\bx_K\}\footnote{Sometimes called contexts or feature vectors as well}\subset \R^d.$, is given. $d\in\NN$ is the dimension of the arm space. Usually we assume that the arm set $\cX$ spans $\R^d$. Each arm $i$ is parameterized again by its (unknown) mean $\mu_i$. 
+In linear bandits BAI, we consider a \emph{finitely-armed}\footnote{We can also generalize to an infinite number of arms. The setting appears to be much more intricate, and is out of the scope of this thesis.} linear bandit model, where a collection of $K$ arms\footnote{Sometimes called contexts or feature vectors as well.} $\cX\eqdef\{\bx_1,\ldots,\bx_K\}\subset \R^d.$, is given. $d\in\NN$ is the dimension of the arm space. Usually we assume that the arm set $\cX$ spans $\R^d$. Each arm $i$ is parameterized again by its (unknown) mean $\mu_i$. 
 
 In the linear case, we assume that $\mu_i$ is given by a linear combination of the feature vector and a parameter vector $\btheta^\star\in\R^d$, that is 
 \[

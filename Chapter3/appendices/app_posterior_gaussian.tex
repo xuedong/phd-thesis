@@ -1,4 +1,4 @@
-\section{Proof of Posterior Convergence for the Gaussian Bandit}\label{app:posterior_gaussian}
+\section{Proof of Posterior Convergence for Gaussian Bandits}\label{app:posterior_gaussian}
 
 \subsection{Proof of Theorem~\ref{thm:posterior_gaussian}}\label{app:posterior_gaussian.main}
 
@@ -77,8 +77,8 @@ Fix any $\xi > 0$ and $j \neq I^\star$. With probability 1, under any allocation
 	Thus, there exists a sequence $\epsilon_n \rightarrow 0$, for which 
 	\begin{align*}
 	    \frac{a_{n,j}}{\max_{i \neq I^\star} a_{n,i}} 
-	    \leq \ddfrac{\expp{-n \left( \frac{ (\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} - \epsilon_n/2 \right) }}{\expp{-n \left( \Gamma_{\beta}^\star + \epsilon_n/2 \right)})}
-	    = \expp{-n \left(\frac{(\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} - \Gamma_{\beta}^\star  - \epsilon_n \right)}.
+	    &\leq \ddfrac{\expp{-n \left( \frac{ (\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} - \epsilon_n/2 \right) }}{\expp{-n \left( \Gamma_{\beta}^\star + \epsilon_n/2 \right)})}\\
+	    &= \expp{-n \left(\frac{(\mu_{n,j} - \mu_{n,I^\star})^2}{2\sigma^2 (n/T_{n,I^\star} +n/T_{n,j})} - \Gamma_{\beta}^\star  - \epsilon_n \right)}\,.
 	\end{align*}
 	Now we take a look at the two terms in the middle:
 	\begin{align*}

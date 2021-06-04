@@ -400,12 +400,12 @@ First, by Lemma~\ref{lemma:empirical_best}, there exists $M_1'' = \text{Poly}(W_
 Then, following the similar argument as in Lemma~\ref{lemma:sufficient_optimality}, one can show that for all $i\neq I^\star$ and for all $n > M_1''$,
 \begin{align*}
 	\psi_{n,i} &=a_{n,i} \left( \beta  + (1-\beta) \sum_{j \neq i} \frac{a_{n,j}}{1-a_{n,j}} \right)\\
-	           &\leq a_{n,i} \beta  + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{1-a_{n,J_n^{(1)}}}\\
-	           &= a_{n,i} \beta  + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{1-a_{n,I^\star}}\\
+	           &\leq a_{n,i} \beta  + a_{n,i} (1-\beta) \ddfrac{\sum_{j \neq i} a_{n,j}}{1-a_{n,J_n^{(1)}}}\\
+	           &= a_{n,i} \beta  + a_{n,i} (1-\beta) \ddfrac{\sum_{j \neq i} a_{n,j}}{1-a_{n,I^\star}}\\
 	           &\leq a_{n,i}\beta  + a_{n,i} (1-\beta) \frac{1}{1-a_{n,I^\star}}\\
 	           &\leq \frac{a_{n,i}}{1-a_{n,I^\star}}\\
-	           &\leq \frac{\Pi_{n}\left[ \theta_i\geq\theta_{I^\star} \right]}{\Pi_{n}\left[ \cup_{j\neq I^\star}\theta_j\geq\theta_{I^\star} \right]}\\
-	           &\leq \frac{\Pi_{n}\left[ \theta_i\geq\theta_{I^\star} \right]}{\max_{j\neq I^\star} \Pi_{n}\left[ \theta_j\geq\theta_{I^\star} \right]}.
+	           &\leq \ddfrac{\Pi_{n}\left[ \theta_i\geq\theta_{I^\star} \right]}{\Pi_{n}\left[ \cup_{j\neq I^\star}\theta_j\geq\theta_{I^\star} \right]}\\
+	           &\leq \ddfrac{\Pi_{n}\left[ \theta_i\geq\theta_{I^\star} \right]}{\max_{j\neq I^\star} \Pi_{n}\left[ \theta_j\geq\theta_{I^\star} \right]}.
 \end{align*}
 
 Using the upper and lower Gaussian tail bounds from Lemma~\ref{lemma:gaussiantails}, we have
