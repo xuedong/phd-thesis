@@ -1,0 +1,54 @@
+%!TEX root = ../Chapter4.tex
+\section{Problem Formulation and Assumptions}\label{sec:lgc.formulation}
+
+\paragraph{Linear bandits.}
+We consider a \emph{finite-arm linear bandit} problem, where the collection of arms $\cA\subset \R^d$ is given  with $|\cA|=A$, and spans $\R^d$. We assume that $\forall a\in\cA, \normm{a}\leq L$, where $\normm{a}$ denotes the Euclidean norm of the vector $a$. The learning protocol goes as follows: for each round $1\leq t \leq T,$ the agent chooses an arm $a_t\in\cA$ and observes a noisy sample
+\[
+Y_t =\langle \theta,a_t\rangle +\eta_t\,,
+\]
+where $\eta_t \sim \cN(0,\sigma^2)$ is conditionally independent from the past and $\theta$ is some unknown regression parameter. For the sake of simplicity, we use $\sigma^2 = 1$ in the rest of this paper.
+
+\paragraph{Pure exploration for linear bandits.}
+We assume that $\theta$ belongs to some set $\cM\subset\R^d$ known to the agent. % s.t.\,$\forall \theta\in\cM, \normm{\theta}\leq M$.
+For each parameter a \emph{unique correct answer} is given by the function $\istar: \cM \to \cI$ among the $I = |\cI|$ possible ones (the extension of pure exploration to multiple correct answers is studied by~\citealt{degenne2019pure}). Given a parameter~$\theta$, the agent then aims to find the correct answer $\istar(\theta)$ by interacting with the finite-armed linear bandit environment parameterized by~$\theta$.
+
+In particular, we detail the setting of BAI for which the objective is to identify the arm with the largest mean. That is, the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$ for $\theta\in\cM = \R^d$ and the set of possible correct answers is $\cI = \cA$. We provide other pure-exploration examples in Appendix~\ref{app:lgc.examples}.
+
+\paragraph{Algorithm.}
+Let $\cF_{t}=\sigma (a_1,Y_1,\ldots, a_t,Y_t)$ be the information available to the agent after $t$ round. A deterministic pure-exploration algorithm under the fixed-confidence setting is given by three components: (1) a \emph{sampling rule} $(a_t)_{t\geq 1}$, where $a_t\in\cA$ is $\cF_{t-1}$-measurable, (2) a \emph{stopping rule} $\tau_\delta$, a stopping time for the filtration $(\cF_t)_{t\geq 1}$, and (3) a \emph{decision rule} $\hi\in \cI$ which is $\cF_{\tau_\delta}$-measurable.
+Non-deterministic algorithms could also be considered by allowing the rules to depend on additional internal randomization. The algorithms we present are deterministic.
+
+\paragraph{$\delta$-correctness and fixed-confidence objective.}
+An algorithm is $\delta$-correct if it predicts the correct answer with probability at least $1-\delta$, precisely if $\P_\theta \big(\hi \neq \istar(\theta)\big) \leq \delta$ and $\tau_\delta < +\infty$ almost surely for all $\theta \in\cM$. Our goal is to find a $\delta$-correct algorithm that minimizes the \emph{sample complexity}, that is,  $\E_\theta[\tau_\delta]$ the expected number of sample needed to predict an answer.
+
+Pure exploration (in particular BAI) for linear bandits has been previously studied by
+~\citet{soare2014linear,tao2018alba,xu2018linear,zaki2019maxoverlap,fiez2019transductive,kazerouni2019glb}. They all consider the fixed-confidence setting. To the best of our knowledge, only~\citet{hoffman2014bayesgap} study the problem with a fixed-budget.
+
+Beside studying fixed-confidence sample complexity,~\citet{garivier2016tracknstop} and some subsequent works~\citep{qin2017ttei,shang2020t3c} investigate a general criterion of judging the optimality of a BAI sampling rule: Algorithms that achieve the minimal sample complexity when~$\delta$ tends to zero are called asymptotically optimal. \citet{menard2019lma} and~\citet{degenne2019game} further study the problem in a game theoretical point of view, and extend the asymptotic optimality to the general pure exploration for structured bandits. Note that a naive adaptation of the algorithm proposed by~\citet{degenne2019game} may not work smoothly in our setting. In this paper we use some different confidence intervals that benefit better from the linear structure.
+
+\paragraph{Linear estimator}
+Let $\bX_n=(\hat{\bx}_1,\ldots,\hat{\bx}_n)$ be a sequence of sampled arms, and $\bY_n=(y_1,\ldots,y_n)$ be the corresponding observations. To estimate the regression parameter $\btheta^\star$ based on the adaptive sequence of observations $\bY_n$, one may use the \emph{regularized least-squares} estimator
+\begin{align}\label{eq:update_mean}
+    \hat{\btheta}_n^{\lambda} = (\lambda \1_d + \bA_{\bX_n})^{-1}\bb_{\bX_n},
+\end{align}
+where $\bA_{\bX_n}$ and $\bb_{\bX_n}$ are the design matrix and the response vector respectively given by
+\[
+    \bA_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t\hat{\bx}_t\transpose, \quad \bb_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t y_t.
+\]
+
+\paragraph{Useful notation}
+The fixed-confidence optimality, as proved by~\cite{garivier2016tracknstop,russo2016ttts}, is related to the \emph{proportion vector} of pulls of each arm that we denote by $\bomega = (\omega_1,\ldots,\omega_K)$, where $\bomega\in\Sigma_K \eqdef \{\bomega : \sum_{i=1}^K \omega_i = 1\}$. Given a vector of proportions $\bomega$, we can define a counterpart of the design matrix 
+\[
+    \bLambda_{\bomega} \eqdef \sum_{i=1}^K \omega_i\bx_i\bx_i\transpose.
+\]
+
+It is easy to switch between the design matrix and the proportion vector. Indeed, given a sequence of sampled arms $\bX_n$, the corresponding proportion vector can be written as
+\[
+    \forall i\in [1,\ldots,K], \quad \omega_{\bX_n,i} = \frac{T_{n+1,i}}{n},
+\]
+where $T_{n,i} \eqdef \sum_{t=1}^{n-1} \1\{\hat{\bx_t} = i\}$ is the number of pulls of arm $i$ before round $n$. Therefore, the corresponding design matrix can be written as $\bA_{\bX_n}=n\bLambda_{\bomega_{\bX_n}}$.
+
+Another important notation that we employ ceaselessly is the Mahalanobis norm which is defined, given a positive semi-definite matrix $\bA\in\R^{d\times d}$, by
+\[
+    \forall \bx\in\R^d, \quad \normm{\bx}_{\bA} = \sqrt{\bx\transpose\bA\bx}.
+\]

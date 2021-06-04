@@ -123,9 +123,9 @@ We compare its performance to \LGapE over the aforementioned pathological instan
 
 We also compare the impact of the dimension $d$ over the performance of our sampling rule and $\LGapE$. We run experiments on the same instance with a value of the angle set to $\alpha=0.1$. This time we let the dimension $d$ varying from 2 to 6. \LTCC{} is always better and the performance gap increases with the dimension. Thus, our algorithm seems to be more robust to the dimension.
 
-\begin{figure}[ht]
+\begin{figure}[t!]
     \centering
-    \includegraphics[width=0.45\textwidth]{Chapter4/img/dims.pdf}
+    \includegraphics[width=0.5\textwidth]{Chapter4/img/dims.pdf}
     \caption{Comparison of the sample complexity of \LTCCG{} and \LGapE{} on the pathological instance in $\R^d$ for different values of $d$.}
     \label{fig:dims}
 \end{figure}
@@ -133,10 +133,10 @@ We also compare the impact of the dimension $d$ over the performance of our samp
 \paragraph{Saddle-point sampling rules}
 We now compare our saddle-point-based algorithms against \LGapE. To make a fair comparison, we use always the same exploration rate for all the stopping rules. Indeed the stopping rules are equivalent if they keep the same exploration rate as argued by Degenne et al. (2020). We first use the previous pathological instance with $\lambda=1$, the results are reported as box plots of average stopping time in Fig.~\ref{fig:exp1}.
 
-\begin{figure}[ht]
+\begin{figure}[t!]
     \centering
-    \includegraphics[width=0.49\textwidth]{Chapter4/img/exp_sin_-0000001}
-    \includegraphics[width=0.49\textwidth]{Chapter4/img/exp_sin_-1}
+    \includegraphics[width=0.33\textwidth]{Chapter4/img/exp_sin_-0000001}
+    \includegraphics[width=0.33\textwidth]{Chapter4/img/exp_sin_-1}
     \caption{Average stopping time (Left: $d=2,\alpha=\pi/4,\delta=0.0000001$, Right: $d=2,\alpha=0.1,\delta=0.1$), with SFW-T = \SLTCC, SFW-L = \SLGapE, T-G = \LTCC, LG = \LGapE.}
     \label{fig:exp1}
 \end{figure}

@@ -1,7 +1,69 @@
 %!TEX root = ../Chapter3.tex
-\section{Asymptotic Optimality}\label{sec:lgc.lower_bound}
+\section{Fixed-Confidence Optimality}\label{sec:lgc.lower_bound}
 
-In this section we extend the lower bound of \citet{garivier2016tracknstop}, to hold for \emph{pure exploration in finite-armed linear bandit} problems.
+As first stated by~\cite{soare2014linear}, we only consider a finite number of arms and we restrict to bandits  with Gaussian rewards and conjugate (Gaussian) priors in this work. Our objective is to propose a BAI strategy that outputs a guess which is accurate enough. Formally, given a risk level $\delta$, we want to show that
+\[
+  \PP{a_{\tau_\delta}\neq \bx^\star} \leq \delta,
+\]
+while minimizing the expected number of samples $\EE{\tau_\delta}$ that is required. That is the so-called \emph{fixed-confidence} best-arm identification introduced by~\cite{even-dar2003confidence}.
+
+\subsection{Lower bound}
+
+In this section we extend the lower bound of \citet{garivier2016tracknstop}, to hold for \emph{pure exploration in finitely-armed linear bandit} problems.
+
+\paragraph{Lower bound} A general lower bound on the sample complexity in the fixed-confidence setting is given by~\cite{garivier2016tracknstop}, which states that for any $\delta$-correct strategy, we have
+\[
+    \EE{\tau_\delta} \geq T^\star(\bmu)\log(\frac{1}{3\delta}),
+\]
+for a given bandit model $\bmu$ and a given confidence level $\delta$. 
+
+\begin{proposition}
+In the linear case, the quantity $T^\star(\bmu)$ is written as
+\[
+  T^\star(\bmu) \eqdef \inf_{\bomega\in\Sigma_K}\max_{\bx\neq \bx^\star} \frac{2\sigma^2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{(\bx\transpose\btheta^\star-(\bx^\star)\transpose\btheta^\star)^2}.
+\]
+\end{proposition}
+
+\begin{proof}
+Let $\texttt{Alt}(\btheta) \eqdef \{\btheta':\exists \bx\in\cX, \bx\transpose\btheta'>(\bx^\star)\transpose\btheta'\}$, and we obtain
+\begin{align*}
+    T^\star(\bmu)^{-1} &= \sup_{\bomega\in\Sigma_K}\inf_{\btheta'\in\texttt{Alt}(\btheta^\star)}\sum_{i=1}^K \omega_i d(\mu_i;\mu_i')\\
+                       &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\inf_{\bx\transpose\btheta'>(\bx^\star)\transpose\btheta'} \frac{\normm{\btheta^\star-\btheta'}_{\bLambda_{\bomega}}^2}{2\sigma^2}.
+\end{align*}
+Then we introduce the Lagrangian with $\eta$ as the Lagrange multiplier, and it then becomes
+\begin{align*}
+    T^\star(\bmu)^{-1} &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\inf_{\btheta'}\sup_{\eta>0} \frac{\normm{\btheta^\star-\btheta'}_{\bLambda_{\bomega}}^2}{2\sigma^2} - \eta(\bx-\bx^\star)\transpose\btheta',
+\end{align*}
+and the inner expression attains its minimum when it comes
+\[
+    \frac{1}{\sigma^2}\bLambda_{\bomega}(\btheta^\star-\btheta') = \eta(\bx^\star-\bx),
+\]
+which implies
+\begin{align*}
+    T^\star(\bmu)^{-1} &=
+    \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\sup_{\eta>0} \eta(\bx^\star-\bx)\transpose\btheta^\star - \frac{\eta^2\normm{\bx-\bx^\star}_{\bLambda_{\bomega}^{-1}}}{2\sigma^2}\\
+    &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\frac{(\bx\transpose\btheta^\star-(\bx^\star)\transpose\btheta^\star)^2}{2\sigma^2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}.
+\end{align*}
+\end{proof}
+
+Using the same lower bound techniques, one can also prove that under any $\delta$-correct strategy satisfying $T_{n,I^\star}/n \rightarrow \beta$ for a given $\beta$,
+\[
+    \liminf_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \geq T^\star_\beta(\bmu),
+\]
+where $T^\star_\beta(\bmu)$ is defined in the same way as $T^\star(\bmu)$, but restricted to the constraint $\omega_{I^\star}=\beta$,
+\[
+    T^\star_{\beta}(\bmu) \eqdef \inf_{\bomega\in\Sigma_K,\omega_{I^\star}=\beta}\max_{\bx\neq \bx^\star} \frac{2\sigma^2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{(\bx\transpose\btheta^\star-(\bx^\star)\transpose\btheta^\star)^2}.
+\]
+
+\paragraph{Notion of optimality}
+We can now define a notion of optimality upon $T^\star_\beta(\bmu)$. A BAI strategy is called \emph{optimal} in the fixed-confidence setting if it satisfies
+\[
+    \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq T^\star(\bmu).
+\]
+And a relaxed notion of optimality that depends on $\beta$ can be also defined. A BAI strategy is called \emph{$\beta$-optimal} if it satisfies 
+\[
+    \frac{T_{n,I^\star}}{n}\rightarrow \beta \quad \text{and} \quad \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq T^\star_\beta(\bmu).
+\]
 
 \paragraph{Alternative.}
 For any answer $i\in\cI$ we define \emph{the alternative to i}, denoted by $\neg i$ the set of parameters where the answer $i$ is not correct, i.e.
@@ -60,7 +122,7 @@ where $\prod_{i\in\cI}(\neg i)$ denotes the Cartesian product of the alternative
 \end{lemma}
 Thus in this formulation the characteristic time is the value of a fictitious zero-sum game where the agent plays a distribution $\tw\in\Sigma_{AI}$ over the arm-answer pairs $(a,i)\in\cA\times\cI$ and nature chooses an alternative $\tlambda^i\in\neg i$ for all the answers $i\in\cI$. The algorithm \LGC that we propose in Section~\ref{sec:lgc.game} is based on this formulation of the characteristic time whereas algorithm \LG is based on the formulation of Theorem~\ref{th:lb_genral}.
 
-\paragraph{Best-arm identification complexity.}
+\subsection{Best-arm identification complexity}
 The inverse of the characteristic time of Theorem~\ref{th:lb_genral} specializes to
 \[
 \Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{V_w^{-1}}^2}

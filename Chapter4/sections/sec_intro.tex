@@ -1,44 +1,26 @@
-%!TEX root = ../Chapter3.tex
+%!TEX root = ../Chapter4.tex
 \section{Introduction}\label{sec:lgc.intro}
 
 %Multi-armed bandits (MAB) probe fundamental \emph{exploration-exploitation} trade-offs in sequential decision learning. We study the pure exploration framework, from among different MAB models, which is subject to the maximization of information gain after an exploration phase. 
 
-Following the previous chapter, we put our focus onto a natural extension of the vanilla BAI problem. In particular, we are interested in the case where noisy linear payoffs depending on some regression parameter $\btheta$ are assumed. Inspired by~\citet{degenne2019game}, we treat the problem as a \emph{two-player zero-sum} game between the agent and the nature (in a sense described in Section~\ref{sec:lgc.lower_bound}), and we search for algorithms that are able to output a correct answer with high confidence to a given query using as few samples as possible.
+Following the previous chapter, we extend our attention to a natural extension of the vanilla BAI problem, namely linear bandits BAI. As already stated once in Chapter~\ref{chap:mab}, linear bandits BAI studies the case where noisy linear payoffs depending on some regression parameter $\btheta$ are assumed.
 
-In this chapter, we consider a general pure-exploration setting (see Appendix~\ref{app:lgc.examples} for details). Nevertheless, for the sake of simplicity, in the main text we primarily focus on BAI.  For stochastic bandits, BAI has been studied within two major theoretical frameworks. The first one,  \emph{fixed-budget} BAI, aims at minimizing the probability of misidentifying the optimal arm within a given number of pulls~\citep{audibert2010budget}. In this work, we consider another setting, \emph{fixed-confidence} BAI, introduced by~\citet{even-dar2003confidence}. Its goal is to ensure that the algorithm returns a wrong arm with probability less than a given risk level, while using a small total number of samples before making the decision. %Note that these two frameworks are very different in general and do not share transferable regret bounds (see~\citealt{carpentier2016budget} for an additional discussion).
+Bandits with linear payoffs (or more generally with contextual payoffs) are of great interest in many real-world applications. Typically, we can think of advertisement display optimization where an e-content provider seeks to identify the best-performing ad display design. Other relevant applications include recommendation systems, path routing, power grid cost minimization, etc. It is arguable whether we need regret minimization or best-arm identification for those situations: a reasonable guess is that it is often subject to the real business needs.
+%Inspired by~\citet{degenne2019game}, we treat the problem as a \emph{two-player zero-sum} game between the agent and the nature (in a sense described in Section~\ref{sec:lgc.lower_bound}), 
+
+In this chapter, we again focus on the fixed-confidence setting (see Definition~\ref{def:mab.bai_confidence}). A quick reminder that in fixed-confidence setting, we search for algorithms that are able to output the correct best arm with high confidence using as few samples as possible.
+
+%In this chapter, we consider a general pure-exploration setting (see Appendix~\ref{app:lgc.examples} for details). Nevertheless, for the sake of simplicity, in the main text we primarily focus on BAI.  For stochastic bandits, BAI has been studied within two major theoretical frameworks. The first one,  \emph{fixed-budget} BAI, aims at minimizing the probability of misidentifying the optimal arm within a given number of pulls~\citep{audibert2010budget}. In this work, we consider another setting, \emph{fixed-confidence} BAI, introduced by~\citet{even-dar2003confidence}. Its goal is to ensure that the algorithm returns a wrong arm with probability less than a given risk level, while using a small total number of samples before making the decision. %Note that these two frameworks are very different in general and do not share transferable regret bounds (see~\citealt{carpentier2016budget} for an additional discussion).
 %Existing fixed-confidence algorithms mostly depend on the risk parameter $\delta \in (0,1)$ \todo{what does that mean?}.
 
-Existing fixed-confidence algorithms are either elimination-based such as \SE~\citep{karnin2013sha}, rely on confidence intervals such as \UGapE~\citep{gabillon2012ugape}, or follow plug-in estimates of the optimal pulling proportions by a lower bound such as \Track~\citep{garivier2016tracknstop}. We pay particular attention to the first two since they have been extended to the linear setting, which is the focus of this paper.
+Recall that fixed-confidence algorithms either are elimination-based such as \SE~\citep{karnin2013sha}, rely on confidence intervals such as \UGapE~\citep{gabillon2012ugape}, or follow plug-in estimates of the optimal pulling proportions by a lower bound such as \Track~\citep{garivier2016tracknstop}. We pay particular attention to the first two since they have been extended to the linear setting, which is the focus of this paper.
 %\textcolor{blue}{mv: possible selling point:  this was has been identified as a challenging ... the usual simple counter-example... that shows that the typical
 %"tricks" don't work well and methods need to work around it. This comes for a price weird complexity terms - unclear to explain the difficulty - (max term in the Soare paper).
 %By being "'optimal" we "naturally" avoid this "pitfall".
 %}
 In particular, a natural extension of pure exploration to linear bandits. Linear bandits were first investigated by~\citet{auer2002linear} in the stochastic setting for \emph{regret minimization} and later considered for fixed-confidence BAI problems by~\citet{soare2014linear}.
 %\vspace{-0.4cm}
-\paragraph{Linear bandits.}
-We consider a \emph{finite-arm linear bandit} problem, where the collection of arms $\cA\subset \R^d$ is given  with $|\cA|=A$, and spans $\R^d$. We assume that $\forall a\in\cA, \normm{a}\leq L$, where $\normm{a}$ denotes the Euclidean norm of the vector $a$. The learning protocol goes as follows: for each round $1\leq t \leq T,$ the agent chooses an arm $a_t\in\cA$ and observes a noisy sample
-\[
-Y_t =\langle \theta,a_t\rangle +\eta_t\,,
-\]
-where $\eta_t \sim \cN(0,\sigma^2)$ is conditionally independent from the past and $\theta$ is some unknown regression parameter. For the sake of simplicity, we use $\sigma^2 = 1$ in the rest of this paper.
 
-\paragraph{Pure exploration for linear bandits.}
-We assume that $\theta$ belongs to some set $\cM\subset\R^d$ known to the agent. % s.t.\,$\forall \theta\in\cM, \normm{\theta}\leq M$.
-For each parameter a \emph{unique correct answer} is given by the function $\istar: \cM \to \cI$ among the $I = |\cI|$ possible ones (the extension of pure exploration to multiple correct answers is studied by~\citealt{degenne2019pure}). Given a parameter~$\theta$, the agent then aims to find the correct answer $\istar(\theta)$ by interacting with the finite-armed linear bandit environment parameterized by~$\theta$.
-
-In particular, we detail the setting of BAI for which the objective is to identify the arm with the largest mean. That is, the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$ for $\theta\in\cM = \R^d$ and the set of possible correct answers is $\cI = \cA$. We provide other pure-exploration examples in Appendix~\ref{app:lgc.examples}.
-
-\paragraph{Algorithm.}
-Let $\cF_{t}=\sigma (a_1,Y_1,\ldots, a_t,Y_t)$ be the information available to the agent after $t$ round. A deterministic pure-exploration algorithm under the fixed-confidence setting is given by three components: (1) a \emph{sampling rule} $(a_t)_{t\geq 1}$, where $a_t\in\cA$ is $\cF_{t-1}$-measurable, (2) a \emph{stopping rule} $\tau_\delta$, a stopping time for the filtration $(\cF_t)_{t\geq 1}$, and (3) a \emph{decision rule} $\hi\in \cI$ which is $\cF_{\tau_\delta}$-measurable.
-Non-deterministic algorithms could also be considered by allowing the rules to depend on additional internal randomization. The algorithms we present are deterministic.
-
-\paragraph{$\delta$-correctness and fixed-confidence objective.}
-An algorithm is $\delta$-correct if it predicts the correct answer with probability at least $1-\delta$, precisely if $\P_\theta \big(\hi \neq \istar(\theta)\big) \leq \delta$ and $\tau_\delta < +\infty$ almost surely for all $\theta \in\cM$. Our goal is to find a $\delta$-correct algorithm that minimizes the \emph{sample complexity}, that is,  $\E_\theta[\tau_\delta]$ the expected number of sample needed to predict an answer.
-
-Pure exploration (in particular BAI) for linear bandits has been previously studied by
-~\citet{soare2014linear,tao2018alba,xu2018linear,zaki2019maxoverlap,fiez2019transductive,kazerouni2019glb}. They all consider the fixed-confidence setting. To the best of our knowledge, only~\citet{hoffman2014bayesgap} study the problem with a fixed-budget.
-
-Beside studying fixed-confidence sample complexity,~\citet{garivier2016tracknstop} and some subsequent works~\citep{qin2017ttei,shang2020t3c} investigate a general criterion of judging the optimality of a BAI sampling rule: Algorithms that achieve the minimal sample complexity when~$\delta$ tends to zero are called asymptotically optimal. \citet{menard2019lma} and~\citet{degenne2019game} further study the problem in a game theoretical point of view, and extend the asymptotic optimality to the general pure exploration for structured bandits. Note that a naive adaptation of the algorithm proposed by~\citet{degenne2019game} may not work smoothly in our setting. In this paper we use some different confidence intervals that benefit better from the linear structure.
 
 \paragraph{Contributions.}
 \textbf{1)}
