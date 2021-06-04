@@ -26,10 +26,45 @@ where $d(\mu,\mu')$ is the KL-divergence defined above and $\cI = \R$ in the Gau
 \end{definition}
 
 The quantity $C_i(\omega_{I^\star},\omega_i)$ can be interpreted as a ``transportation cost''\footnote{for which $W_n(I^\star,i)$ is an empirical counterpart} from the original bandit instance $\bm\mu$ to an alternative instance in which the mean of arm $i$ is larger than that of $I^\star$, when the proportion of samples allocated to each arm is given by the vector $\bomega \in \Sigma_K$. As shown by~\cite{russo2016ttts}, the $\bomega$ that maximizes \eqref{def:GammaBeta} is unique, which allows us to define the $\beta$-\emph{optimal allocation} $\bomega^\beta$ in the following proposition.
-\begin{restatable}{proposition}{restateoptim}\label{prop:optim}
+
+\begin{proposition}\label{prop:optim}
+\begin{leftbar}[propositionbar]
 There is a unique solution $\bomega^\beta$ to the optimization problem \eqref{def:GammaBeta}
 satisfying $\omega_{I^\star}^\beta = \beta$, and for all $i,j \neq I^\star$, $C_i(\beta,\omega_i^\beta) = C_j(\beta,\omega_j^\beta)$.
-\end{restatable}
+\end{leftbar}
+\end{proposition}
+
+\begin{proof}
+We handle the existence and the uniqueness separately as below.
+
+\paragraph{Existence:} For any arm $i\neq I^\star$, $C_i$ is a continuous function, so as to $\min_{i\neq I^\star} C_i$. According to the \emph{extreme value theorem}, function $\min_{i\neq I^\star} C_i(\beta,\cdot)$ must attain its maximum over $[0,1]^{K-1}$ which is compact. Suppose that $\bomega^\beta$ is a such maximizer. We thus have
+\[
+    \Gamma_{\beta}^\star = \max_{\bomega:\omega_{I^\star}=\beta}\min_{i\neq I^\star} C_i(\beta,\omega_i) = \min_{i\neq I^\star} C_i(\beta,\omega_i^\beta).
+\]
+Let us assume that $\bomega^\beta$ does not verify the second condition, which means there exists some $j\neq I^\star$ such that
+\[
+    C_j(\beta,\omega_i^\beta) > C_{i^\star}(\beta,\omega_{i^\star}^\beta)\,,
+\]
+where $i^\star \eqdef \argmin_{i\neq I^\star} C_i(\beta,\omega_i^\beta)$.
+
+Now if we subtract a small quantity $\epsilon>0$, from $C_j(\beta,\omega_j^\beta)$, such that
+\[
+    \epsilon \leq \frac{C_j(\beta,\omega_j^\beta)-C_{i^\star}(\beta,\omega_{i^\star}^\beta)}{2}\,,
+\]
+and add $\epsilon/(K-2)$ to $C_i(\beta,\omega_i^\beta)$ for any $i\neq j,I^\star$, we would not change the order of the $C_i(\beta,\omega_i^\beta)$. Therefore, $i^\star$ remains unchanged, however, the new $C_{i^\star}(\beta,\omega_{i^\star}^\beta)$ would be strictly larger than the previous one which contradicts the definition of $\bomega^\beta$.
+
+\paragraph{Uniqueness:} 
+We now need to show that the solution is unique. Suppose that two different maximizers $\bomega$ and $\bomega'$ exist, and there exists some $i\neq I^\star$ such that $\omega_i > \omega'_i$. Since $C_i(\beta,\cdot)$ is an strictly increasing function, thus we have $C_i(\beta,\omega_i)>C_i(\beta,\omega'_i)$. By consequence, for any $j\neq i$ and $j'\neq i$,
+    \[
+        C_j(\beta,\omega_j) = C_i(\beta,\omega_i) > C_i(\beta,\omega'_i) = C_{j'}(\beta,\omega'_{j'}).
+    \]
+Therefore, for any $j\neq I^\star$ and $j'\neq I^\star$, $\omega_j > \omega'_j$, and
+    \[
+        \sum_{j\neq I^\star} \omega_j > \sum_{j\neq I^\star} \omega'_j.
+    \]
+However, we know that $1-\sum_{j\neq I^\star} \omega_j = \omega_{I^\star} =  \beta = \omega'_{I^\star} = 1-\sum_{j\neq I^\star} \omega'_j$, contradiction!
+
+\end{proof}
 
 For models with more than two arms, there is no closed form expression for $\Gamma_\beta^\star$ or $\Gamma^\star$, even for Gaussian bandits  with variance $\sigma^2$ for which we have
 \[
@@ -38,7 +73,7 @@ For models with more than two arms, there is no closed form expression for $\Gam
 
 %We refer the reader to Appendix TBC for pointers on the practical computation of those quantities. 
 
-\paragraph{Bayesian $\beta$-optimality} \citet{russo2016ttts} proves that  any sampling rule allocating a fraction $\beta$ to the optimal arm ($\Psi_{n,I^\star}/n \rightarrow \beta$) satisfies %$\Pi_n(\overline{\Theta_{I^\star}})
+\paragraph{Bayesian \texorpdfstring{$\beta$}{}-optimality.} \citet{russo2016ttts} proves that  any sampling rule allocating a fraction $\beta$ to the optimal arm ($\Psi_{n,I^\star}/n \rightarrow \beta$) satisfies %$\Pi_n(\overline{\Theta_{I^\star}})
 $1-a_{n, I^\star} \geq e^{-n(\Gamma_{\beta}^\star + o(1))}$ (a.s.) for large values of $n$. We define a  \emph{Bayesian $\beta$-optimal} sampling rule as a sampling rule matching this lower bound, i.e. satisfying $\Psi_{n,I^\star}/n \rightarrow \beta$ and $1- a_{n, I^\star} \leq e^{-n(\Gamma_{\beta}^\star + o(1))}$.
 %$\Pi_n(\overline{\Theta_{I^\star}}) \leq e^{-n(\Gamma_{\beta}^\star + o(1))}$.
 
@@ -47,7 +82,7 @@ However, the result is valid only under strong regularity assumptions, excluding
 
 A fundamental ingredient of these proofs is to establish the convergence of the allocation of measurement effort to the $\beta$-optimal allocation: $\Psi_{n,i}/n \rightarrow \omega_{i}^\beta$ for all $i$, which is equivalent to $T_{n,i}/n \rightarrow \omega_{i}^\beta$ (cf.\ Lemma~\ref{lemma:link}).
 
-\paragraph{$\beta$-optimality in the fixed-confidence setting} In the fixed confidence setting, the performance of an algorithm is evaluated in terms of sample complexity. A lower bound given by \cite{garivier2016tracknstop} states that any $\delta$-correct strategy satisfies $\EE{\tau_\delta} \geq (\Gamma^\star)^{-1} \ln \left({1}/(3\delta)\right)$. 
+\paragraph{\texorpdfstring{$\beta$}{}-optimality in the fixed-confidence setting.} In the fixed confidence setting, the performance of an algorithm is evaluated in terms of sample complexity. A lower bound given by \cite{garivier2016tracknstop} states that any $\delta$-correct strategy satisfies $\EE{\tau_\delta} \geq (\Gamma^\star)^{-1} \ln \left({1}/(3\delta)\right)$. 
 
 Observe that $\Gamma^\star = \max_{\beta \in [0,1]} \Gamma_\beta^\star$. Using the same lower bound techniques, one can also prove that under any $\delta$-correct strategy satisfying $T_{n,I^\star}/n \rightarrow \beta$,
 \[\liminf_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \geq \frac{1}{\Gamma^\star_\beta}.\]
