@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%									Chapitre 2											%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Stochastic Multi-Armed Bandits}\label{chap:mab}
+\chapter{Stochastic Multi-Armed Bandits}\label{CHAP:MAB}
 	\citationChap{
 	blabla
 	}{}
@@ -23,7 +23,7 @@ The study of MAB problems can date back to as early as 1933~\citep{thompson1933}
     \label{fig:mab.covid}
 \end{figure}
 
-As stated in Chapter~\ref{chap:intro}, a common learning objective for stochastic MAB is to maximize the total reward obtained given a sequence of observations. In the previous example, researchers need to decide which vaccine to employ for each patient depending on the previous success rates with the purpose of maximizing the total success rate $\sum_{n=1}^N r_n$ at the end.
+As stated in Chapter~\ref{CHAP:INTRO}, a common learning objective for stochastic MAB is to maximize the total reward obtained given a sequence of observations. In the previous example, researchers need to decide which vaccine to employ for each patient depending on the previous success rates with the purpose of maximizing the total success rate $\sum_{n=1}^N r_n$ at the end.
 
 However, due to the complex nature of medical treatment, it turns out that the MAB model is hardly applied in real clinical trials despite its primary purpose~\citep{reda2020drug}. Nevertheless, the model has been widely employed in many other applications recently, in particular online recommendation systems for example (see e.g.~\citealt{li2010contextual,zeng2016online}). Other application scenarios include...
 
@@ -78,7 +78,7 @@ One important thing to take into consideration before starting any bandit game i
 
 The mostly considered assumption is whether the supports of the reward distributions are bounded, and if so, whether the bounds are known to the learner. In that latter case, we can assume without loss of generality that the rewards are supported on $[0,1]$. Indeed, if the rewards are contained in an arbitrary bounded interval $[a,b]$, then we can simply apply a normalization trick to recover the $[0,1]$ case.
 
-The previous vaccine example of Fig.~\ref{fig:mab.covid} with Bernoulli bandits is a typical example of known bounded rewards. Bounded rewards are widely used in many MAB research work. It is also the case for instance in Chapter~\ref{chap:gpo} of this thesis.
+The previous vaccine example of Fig.~\ref{fig:mab.covid} with Bernoulli bandits is a typical example of known bounded rewards. Bounded rewards are widely used in many MAB research work. It is also the case for instance in Chapter~\ref{CHAP:GPO} of this thesis.
 
 \paragraph{One-dimensional exponential family.}
 
@@ -88,9 +88,9 @@ In practice, we often further consider a specific sub-family of distributions th
 \begin{align}\label{eq:mab.exponential}
     p_{X}(x \mid \theta ) = b(x) \exp \left[\eta (\theta ) \cdot T(x) + A(\theta )\right]\,,
 \end{align}
-where $T(X)$ is the \gls{natural sufficient statistic} and $b,\eta,A$ are known functions. A more formal reminder of one-dimensional exponential family is given in Appendix~\ref{chap:maths}.
+where $T(X)$ is the \gls{natural sufficient statistic} and $b,\eta,A$ are known functions. A more formal reminder of one-dimensional exponential family is given in Appendix~\ref{CHAP:MATHS}.
 
-The MAB community is interested in exponential family not only because it covers a large family of most common distributions, but also because it holds some nice properties for statistical analysis. For example, exponential family has sufficient statistics that can summarize arbitrary amounts of \gls{iid} data with a finite number of samples, which is a great property in bandit analysis. Another important fact is that exponential family distributions have conjugate priors, which is extremely useful in Bayesian statistics. The latter one is for example used in Chapter~\ref{chap:t3c}.
+The MAB community is interested in exponential family not only because it covers a large family of most common distributions, but also because it holds some nice properties for statistical analysis. For example, exponential family has sufficient statistics that can summarize arbitrary amounts of \gls{iid} data with a finite number of samples, which is a great property in bandit analysis. Another important fact is that exponential family distributions have conjugate priors, which is extremely useful in Bayesian statistics. The latter one is for example used in Chapter~\ref{CHAP:T3C}.
 
 \paragraph{Beyond...}
 
@@ -143,7 +143,7 @@ Clearly, minimizing the cumulative regret is equivalent to maximizing the total 
 
 \subsection{Regret lower bound}
 
-In Chapter~\ref{chap:intro} we have mentioned that regret minimization is not always the most appropriate learning objective under some circumstances, but we should rather study MAB from an optimization point of view. However, before we jump into details of MAB for optimization, let us briefly review some fundamental results of regret minimization as they may be relevant for understanding some of our motivations later.
+In Chapter~\ref{CHAP:INTRO} we have mentioned that regret minimization is not always the most appropriate learning objective under some circumstances, but we should rather study MAB from an optimization point of view. However, before we jump into details of MAB for optimization, let us briefly review some fundamental results of regret minimization as they may be relevant for understanding some of our motivations later.
 
 The seminal work of~\cite{robbins1952}... (TODO)
 
@@ -235,7 +235,7 @@ For fixed-confidence BAI, the majority of existing sampling rules rely on the co
 
 \paragraph{Anytime designs.}
 
-The fact that the two frameworks produce sampling rules that depend either on a confidence parameter $\delta$ or a budget parameter $N$ is not desirable in some real applications. To address this problem, \cite{jun2016atlucb} propose to use a \emph{doubling trick} upon fixed-budget algorithms like \SR and \SHA, or use a time-varying confidence parameter when dealing with the fixed-confidence setting. This allows us to stop the learning process \emph{anytime} we want. In other words, the probability of not recommending the true best arm $I^\star$, when the learner stops, needs to decay as fast as possible. \cite{russo2016ttts} provides an interesting alternative that evaluates sampling rules in a Bayesian perspective. We provide further insights on this topic in Chapter~\ref{chap:t3c}. %In this note, our main interest remains on how to develop universal anytime BAI algorithms.
+The fact that the two frameworks produce sampling rules that depend either on a confidence parameter $\delta$ or a budget parameter $N$ is not desirable in some real applications. To address this problem, \cite{jun2016atlucb} propose to use a \emph{doubling trick} upon fixed-budget algorithms like \SR and \SHA, or use a time-varying confidence parameter when dealing with the fixed-confidence setting. This allows us to stop the learning process \emph{anytime} we want. In other words, the probability of not recommending the true best arm $I^\star$, when the learner stops, needs to decay as fast as possible. \cite{russo2016ttts} provides an interesting alternative that evaluates sampling rules in a Bayesian perspective. We provide further insights on this topic in Chapter~\ref{CHAP:T3C}. %In this note, our main interest remains on how to develop universal anytime BAI algorithms.
 
 \subsection{Stopping rules}\label{sec:mab.bai.stopping}
 
@@ -268,7 +268,7 @@ and also we have $Z_{n,i,j} = -Z_{n,j,i}$. The following stopping rule thus emer
 where $d_{n,\delta}$ is an exploration rate that needs to be chosen carefully.
 
 \paragraph{Other options.}
-Other stopping rules also exist, but are often explicitly or implicitly equivalent to the Chernoff stopping rule. For example, in Chapter~\ref{chap:t3c}, we introduce a \gls{Bayesian stopping rule} and we can show that it has implicitly the same behaviour as the Chernoff one. It is also the case for many stopping rules in the linear bandits BAI literature, as we show in Chapter~\ref{chap:lgc} that they are explicitly equivalent to the Chernoff stopping rule up to constant factors.
+Other stopping rules also exist, but are often explicitly or implicitly equivalent to the Chernoff stopping rule. For example, in Chapter~\ref{CHAP:T3C}, we introduce a \gls{Bayesian stopping rule} and we can show that it has implicitly the same behaviour as the Chernoff one. It is also the case for many stopping rules in the linear bandits BAI literature, as we show in Chapter~\ref{CHAP:LGC} that they are explicitly equivalent to the Chernoff stopping rule up to constant factors.
 
 \subsection{Decision rules}\label{sec:mab.bai.decision}
 
@@ -307,11 +307,11 @@ The learner can also recommend arm $i$ with probability $T_{n,i}/n$, this is the
 \end{leftbar}
 \end{definition}
 
-In practice, EBA is often used in the literature. A more detailed discussion of the three decision rules can be found in the work of~\cite{bubeck2009pure}. We do not try to go further on the topic in this thesis. Note, however, that the present rules are obviously not the only options for decision rules. Specific rules can be adopted for certain sampling rules. We will see that it is indeed the case in Chapter~\ref{chap:t3c}.
+In practice, EBA is often used in the literature. A more detailed discussion of the three decision rules can be found in the work of~\cite{bubeck2009pure}. We do not try to go further on the topic in this thesis. Note, however, that the present rules are obviously not the only options for decision rules. Specific rules can be adopted for certain sampling rules. We will see that it is indeed the case in Chapter~\ref{CHAP:T3C}.
 
 \section{Extensions of Best-Arm Identification}\label{sec:mab.extensions}
 
-For real-world applications, sometimes specific need should be met when applying BAI. The problem formulation needs to be adapted with potentially additional assumptions. Furthermore, as stated in Remark~\ref{remark:intro.pure}, BAI can be studied within a more general context of pure exploration. The purpose of this section is thus to provide a brief overview of commonly studied extensions of BAI as well as other pure exploration problems. We pay particular attention to BAI for linear bandits as it is the main topic of Chapter~\ref{chap:lgc}.
+For real-world applications, sometimes specific need should be met when applying BAI. The problem formulation needs to be adapted with potentially additional assumptions. Furthermore, as stated in Remark~\ref{remark:intro.pure}, BAI can be studied within a more general context of pure exploration. The purpose of this section is thus to provide a brief overview of commonly studied extensions of BAI as well as other pure exploration problems. We pay particular attention to BAI for linear bandits as it is the main topic of Chapter~\ref{CHAP:LGC}.
 
 \subsection{Best-arm identification for linear bandits}\label{sec:mab.extensions.linear}
 
@@ -371,7 +371,7 @@ The learning protocol of a general pure exploration problem is summarized in Def
 
 Now we elaborate a bit on another important extension, for which a large number of arms are available. The arm space could be infinite, or even continuous so that it's not even possible to sample each arm once.
 
-Remember that there exists two general learning objectives in a bandit game: regret minimization and pure exploration (see e.g.~\citealt{kaufmann2017survey} for a survey). While regret minimization is also an interesting topic for many-armed bandits, our focus in this thesis sticks to optimization. As introduced in Chapter~\ref{chap:intro}, it is also called \emph{global optimization}.
+Remember that there exists two general learning objectives in a bandit game: regret minimization and pure exploration (see e.g.~\citealt{kaufmann2017survey} for a survey). While regret minimization is also an interesting topic for many-armed bandits, our focus in this thesis sticks to optimization. As introduced in Chapter~\ref{CHAP:INTRO}, it is also called \emph{global optimization}.
 
 More precisely, we consider an (measurable) arm space $\cX$ that contains infinitely-many arms. The learning goal is to optimize an \emph{unknown} function $f: \cX \rightarrow \R$ based on $N$ noisy evaluations, that can be sequentially selected. Each arm $x$ is essentially a data point in the arm space $\cX$, and it gets its mean reward $f(x)$ through the reward function $f$, which is the target function to be optimized. At each round $n$, the learner chooses an arm $x_n \in \mathcal{X}$ and receives a reward $r_n$. We study the noisy setting in which the obtained reward is a noisy evaluation of $f$: $r_n \eqdef f(x_n) + \epsilon_n$, where $\epsilon_n$ is the noise. Note that in the context of GO, practitioners are often more interested by the fixed-budget setting as the target function is usually extremely costly to evaluate, hence only a considerably limited number of function evaluations are allowed. The learning protocol can thus be given as follow.
 
@@ -389,9 +389,9 @@ More precisely, we consider an (measurable) arm space $\cX$ that contains infini
 
 It would be, however, impossible to obtain a sub-linear algorithm if no structure is assumed on the arm space. Two different settings exist in the literature: (1) \gls{infinitely-armed bandits}, and (2) \gls{continuum-armed bandits}. 
 
-The first one is initiated by~\cite{berry1997infinite}, where a specific case of Bernoulli bandits is treated. In their paper, \cite{berry1997infinite} regard the Bernoulli parameters as independent observations from a probability distribution, that we call a \gls{reservoir} in subsequent works. This setting is considered in Chapter~\ref{chap:dttts}.
+The first one is initiated by~\cite{berry1997infinite}, where a specific case of Bernoulli bandits is treated. In their paper, \cite{berry1997infinite} regard the Bernoulli parameters as independent observations from a probability distribution, that we call a \gls{reservoir} in subsequent works. This setting is considered in Chapter~\ref{CHAP:DTTTS}.
 
-Continuum-armed bandits setting, or sometimes also named as \gls{X-armed bandits} (see e.g.~\citealt{bubeck2010x}), considers arms that lie in some \emph{metric} space and their mean rewards form a \emph{deterministic} or \emph{stochastic} function with some \emph{global} or \emph{local} smoothness being assumed. This setting is the focus of Chapter~\ref{chap:gpo}.
+Continuum-armed bandits setting, or sometimes also named as \gls{X-armed bandits} (see e.g.~\citealt{bubeck2010x}), considers arms that lie in some \emph{metric} space and their mean rewards form a \emph{deterministic} or \emph{stochastic} function with some \emph{global} or \emph{local} smoothness being assumed. This setting is the focus of Chapter~\ref{CHAP:GPO}.
 
 \section{Performance Measure}\label{sec:mab.performance}
 
@@ -414,7 +414,7 @@ A BAI strategy $(I_n,J_n,\tau)$ is called $\delta$-correct if for any bandit mod
 \end{leftbar}
 \end{definition}
 
-In reality, we can prove that with a well-chosen threshold in the Chernoff stopping rule, a BAI strategy is $\delta$-correct regardless of the choice of the sampling rule. This result can be formally stated as Theorem~\ref{thm:mab.delta}, and will be discussed again in Chapter~\ref{chap:t3c} with more detail.
+In reality, we can prove that with a well-chosen threshold in the Chernoff stopping rule, a BAI strategy is $\delta$-correct regardless of the choice of the sampling rule. This result can be formally stated as Theorem~\ref{thm:mab.delta}, and will be discussed again in Chapter~\ref{CHAP:T3C} with more detail.
 
 \begin{restatable}{theorem}{restatepac}\label{thm:mab.delta}
 \begin{leftbar}[theorembar]

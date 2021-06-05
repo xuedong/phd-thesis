@@ -3,7 +3,7 @@
 
 %Multi-armed bandits (MAB) probe fundamental \emph{exploration-exploitation} trade-offs in sequential decision learning. We study the pure exploration framework, from among different MAB models, which is subject to the maximization of information gain after an exploration phase. 
 
-Following the previous chapter, we extend our attention to a natural extension of the vanilla BAI problem, namely linear bandits BAI. As already stated once in Chapter~\ref{chap:mab}, linear bandits BAI studies the case where noisy linear payoffs depending on some regression parameter $\btheta$ are assumed.
+Following the previous chapter, we extend our attention to a natural extension of the vanilla BAI problem, namely linear bandits BAI. As already stated once in Chapter~\ref{CHAP:MAB}, linear bandits BAI studies the case where noisy linear payoffs depending on some regression parameter $\btheta$ are assumed.
 
 Bandits with linear payoffs (or more generally with contextual payoffs) are of great interest in many real-world applications. Typically, we can think of advertisement display optimization where an e-content provider seeks to identify the best-performing ad display design. Other relevant applications include recommendation systems, path routing, power grid cost minimization, etc. It is arguable whether we need regret minimization or best-arm identification for those situations: a reasonable guess is that it is often subject to the real business needs.
 %Inspired by~\citet{degenne2019game}, we treat the problem as a \emph{two-player zero-sum} game between the agent and the nature (in a sense described in Section~\ref{sec:lgc.lower_bound}), 

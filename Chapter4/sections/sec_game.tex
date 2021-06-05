@@ -4,6 +4,31 @@
 We present two asymptotically optimal algorithms for the general pure-exploration problem. We also make the additional assumption that the set of parameter is bounded, that is we know $M>0$ such that for all $\theta\in\cM,\, \normm{\theta}\leq M$. This assumption is shared by most of the works on %\todo{rather usual? or used everywhere? Evrywhere i would say since they target minimax regret}
 linear bandits (e.g. \citealt{abbasi-yadkori2011linear, soare2014linear}).
 
+We provide a bounded version of BAI in Section~\ref{app:lgc.examples} where we add the assumption that the parameter set $\cM$ is bounded. In particular we show how it affects the lower bound of Theorem~\ref{th:lb_genral}: the characteristic time $\Tstar(\theta)$ is reduced (or equivalently $\Tstar(\theta)^{-1}$ increases). This is not surprising since we add a new constraint in the optimization problem. This means that the algorithm should stop earlier. The counterpart of this improvement is that it is often difficult to compute the best response for nature. Indeed, for example, in BAI, there is an explicit expression of the best response, see Section~\ref{app:lgc.examples}. When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lem:lagrange_alternative}. To devise an asymptotically optimal algorithm without the boundedness assumption remains an open problem.
+
+
+% , i.e for $i\in\cI$ and $w\in\interior{\Sigma_A}$ in the interior of the probability simplex of dimension $A-1$, find $\lambda^i$ such that
+% \[
+% \lambda^i \in \argmin_{\lambda\neg i}\normm{\theta - \lambda }_{V_{w}}\,.
+% \]
+% For example, in BAI, there is an explicit expression of the best response. Noting that, for $\astar\in\cA$, we have
+% \[
+% \min_{\lambda\neg \astar}\normm{\theta - \lambda }_{V_{w}} = \min_{a\neq \astar}\min_{\langle\lambda,a-\astar\rangle>0} \normm{\theta - \lambda }_{V_{w}}\,,
+% \]
+% the best response is then
+% \begin{align}
+% \lambda^{b} &= \theta - \frac{\max(\langle\theta,\astar-b \rangle,0) }{\normm{\astar-b}_{V_w^{-1}}^2} V_w^{-1}(\astar - b) \label{eq:best_response_bai}
+% \\
+% \text{for }b&\in\argmin_{a\neq \astar}\normm{\theta - \lambda^{a} }_{V_{w}}\nonumber.
+% \end{align}
+% When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lem:lagrange_alternative}.
+
+
+%Note that in the proof of Theorem~\ref{thm:sample_complexity} we only use two times the boundedness assumption, first in the definition of the threshold $\beta(t,\delta)$ (see Theorem~\ref{th:confidence_beta}) to handle the bias induced by the regularization. Second, since the regret of AdaHedge is proportional to the maximum of the upper confidence bounds $U_s^{i,a}$, we need to ensure that they are bounded.
+
+% And there exists pathological pure exploration problems where even the quantity uppper bounded by $U_s^{i,a}$, namely $\normm{\theta-\lambda}_{aa^\top}^2$ where $\lambda\in\argmin_{\lambda'\in\neg i}\normm{\theta -\lambda}$ is unbounded\todo{I don't understand what this means.}. See for example Appendix~G.3 by \citet{menard2019lma}.
+
+
 We describe primarily \LGC, detailed in Algorithm~\ref{alg:lgc}. The principle behind \LG, detailed in Algorithm~\ref{alg:lg}, is similar and significant differences will be highlighted.
 
 
@@ -170,7 +195,7 @@ g_t(\tw) = \frac{1}{2} \sum_{(a,i)\in\cA\times\cI}  \tw^{a,i} U_t^{a,i}\,.
 a_{t+1}          &\in \argmin_{a\in \mathcal A } N_{t}^{a} - W_{t+1}^{a} & \text{ for Algorithm~\ref{alg:lg},}\\
 (a_{t+1},i_{t+1})&\in \argmin_{(a,i)\in \mathcal A \times \mathcal I } N_{t}^{a,i} - \tW_{t+1}^{a,i} & \text{ for Algorithm~\ref{alg:lgc}.}
 \end{align*}
-This procedure guarantees that for all $t\in\NN, u \in \mathcal U$, with $\mathcal U = \mathcal A$ (resp. $\mathcal U =\cI\times\cA$) for Algo.~\ref{alg:lg} (resp. Algo.~\ref{alg:lgc}), $- \log (|\mathcal U|) \le N_t^{u} - W_t^{u} \le 1$. That result is due to~\citet{anon2020structure} and its proof is reproduced in Appendix~\ref{app:lgc.tracking}.
+This procedure guarantees that for all $t\in\NN, u \in \mathcal U$, with $\mathcal U = \mathcal A$ (resp. $\mathcal U =\cI\times\cA$) for Algo.~\ref{alg:lg} (resp. Algo.~\ref{alg:lgc}), $- \log (|\mathcal U|) \le N_t^{u} - W_t^{u} \le 1$. That result is due to~\citet{degenne2020structure}.
 
 \begin{theorem}\label{thm:sample_complexity}
 For a regularization parameter\footnote{This condition is a simple technical trick to simplify the analysis. An $\eta$ independent of $A$,$L$,$M$ will lead to the same results up to minor adaptations of the proof.} $\eta \geq 2(1+\log(A))AL^2+M^2$, for the threshold $\beta(t,\delta)$ given by~\eqref{eq:def_beta}, for an exploration function $h(t)=\beta(t,1/t^3)$, \LG and \LGC are $\delta$-correct and asymptotically optimal. That is, they verify for all $\theta\in \cM$,
@@ -178,4 +203,4 @@ For a regularization parameter\footnote{This condition is a simple technical tri
 \limsup_{\delta\to 0}\frac{\mathbb{E}_\theta[\tau_\delta]}{ \log 1/\delta} \le \Tstar(\theta) \: .
 \end{align*}
 \end{theorem}
-The main ideas used in the proof are explained above. The full proof is in appendix~\ref{app:lgc.proof} with finite $\delta$ upper bounds.
+The main ideas used in the proof are explained above. The full proof is in Appendix~\ref{app:lgc.proof} with finite $\delta$ upper bounds.

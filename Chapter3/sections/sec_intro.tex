@@ -1,11 +1,11 @@
-%!TEX root = ../Chapter2.tex
+%!TEX root = ../Chapter3.tex
 \section{Introduction}\label{sec:t3c.intro}
 
 In this chapter we study the very original setting of BAI. Recall that we consider a finite-armed bandit model $\cX\eqdef\{1,\cdots,K\}$, parameterized by their means $\mu_1, \cdots, \mu_K$. And we focus on the fixed-confidence setting, introduced by~\cite{even-dar2003confidence}, in which given a risk parameter $\delta$, the goal is to ensure that the probability to stop and recommend a wrong arm, $\PP{J_\tau \neq I^\star}$, is smaller than $\delta$, while minimizing the expected total number of samples to make this accurate recommendation, $\EE{\tau}$. 
 
 %The most studied alternative is the fixed-budget setting for which the stopping rule $\tau$ is fixed to some (known) maximal budget $n$, and the goal is to minimize the error probability $\PP{J_n \neq I^\star}$ \citep{audibert2010budget}.
 
-As we already elaborated in Chapter~\ref{chap:mab} that most of the existing sampling rules for the fixed-confidence setting depend on the risk parameter $\delta$, and they either rely on careful construction of confidence intervals or arm eliminations. The first known sampling rule for BAI that does not depend on $\delta$ is the \emph{tracking} rules proposed by~\cite{garivier2016tracknstop}, which is proved to achieve the minimal sample complexity when combined with the Chernoff stopping rule as $\delta$ goes to zero. Such an \emph{anytime} sampling rule (neither depending on a risk $\delta$ or a budget $T$) is very appealing for applications, as advocated by~\cite{jun2016atlucb}, who introduce the anytime best-arm identification framework. 
+As we already elaborated in Chapter~\ref{CHAP:MAB} that most of the existing sampling rules for the fixed-confidence setting depend on the risk parameter $\delta$, and they either rely on careful construction of confidence intervals or arm eliminations. The first known sampling rule for BAI that does not depend on $\delta$ is the \emph{tracking} rules proposed by~\cite{garivier2016tracknstop}, which is proved to achieve the minimal sample complexity when combined with the Chernoff stopping rule as $\delta$ goes to zero. Such an \emph{anytime} sampling rule (neither depending on a risk $\delta$ or a budget $T$) is very appealing for applications, as advocated by~\cite{jun2016atlucb}, who introduce the anytime best-arm identification framework. 
 
 In this chapter, we investigate the problem from a different perspective, and we are in particular interested in another anytime sampling rule for BAI: \gls{ttts}. Besides, we also propose a second anytime sampling rule: \gls{t3c}.
 

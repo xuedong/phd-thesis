@@ -76,7 +76,7 @@ We also define, for any $w\in(\R^+)^A$, the design matrix
 Further, we define $\normm{x}_V\eqdef \sqrt{x^\top Vx}$ for $x\in\R^d$ and a symmetric positive matrix $V\in\R^{d\times d}$. Note that it is a norm only if $V$ is positive definite. We also denote by $\Sigma_K$ the probability simplex of dimension $K-1$ for all $K\ge 2$.
 
 \paragraph{Lower bound.}
-We have the following non-asymptotic lower bound, proved in Appendix~\ref{app:lgc.lower_bound}, on the sample complexity of any $\delta$-correct algorithm. This bound was already proved by \citet{soare2014linear} for the BAI example.
+We have the following non-asymptotic lower bound, proved in Section~\ref{sec:lgc.lower_bound}, on the sample complexity of any $\delta$-correct algorithm. This bound was already proved by \citet{soare2014linear} for the BAI example.
 \begin{theorem}
 \label{th:lb_genral}
 For all $\delta$-correct algorithms, for all $\theta\in \cM$,
@@ -111,7 +111,7 @@ Now we can see the characteristic time $\Tstar(\theta)^{-1}$ as the value of an 
 \Tstar(\theta)^{-1} &= \max_{\rho\in\Sigma_I}\max_{w \in \Sigma_A}  \frac{1}{2}\sum_{i\in \cI }\inf_{\lambda^i\in\neg i}\rho_i\normm{\theta - \lambda^i}_{V_w}^2\\
 & =\max_{\rho\in\Sigma_I}\max_{w \in \Sigma_A}\inf_{\tlambda\in\prod_i(\neg i)}  \frac{1}{2}\sum_{i\in \cI }\rho_i\normm{\theta - \tlambda^i}_{V_w}^2\,,
 \end{align*}
-where $\prod_{i\in\cI}(\neg i)$ denotes the Cartesian product of the alternative sets $\neg i$. But the function that appears in the value of the new game is not anymore convex in $(w,\rho)$ and Sion's minimax theorem does not apply anymore. We can however convexify the problem by letting the agent to play a distribution $\tw\in\Sigma_{AI}$ over the arm-answer pairs $(a,i)$, see Lemma~\ref{lem:sion_convexify} below proved in Appendix~\ref{app:lgc.lower_bound}.
+where $\prod_{i\in\cI}(\neg i)$ denotes the Cartesian product of the alternative sets $\neg i$. But the function that appears in the value of the new game is not anymore convex in $(w,\rho)$ and Sion's minimax theorem does not apply anymore. We can however convexify the problem by letting the agent to play a distribution $\tw\in\Sigma_{AI}$ over the arm-answer pairs $(a,i)$, see Lemma~\ref{lem:sion_convexify} below proved in Section~\ref{sec:lgc.lower_bound}.
 \begin{lemma}
 \label{lem:sion_convexify} For all $\theta\in\cM$,
 \begin{align*}
@@ -127,7 +127,7 @@ The inverse of the characteristic time of Theorem~\ref{th:lb_genral} specializes
 \[
 \Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{V_w^{-1}}^2}
 \]
-for BAI (see Appendix~\ref{app:lgc.examples.bai} for a proof). It is also possible to explicit the characteristic time
+for BAI (see Appendix~\ref{app:lgc.examples} for a proof). It is also possible to explicit the characteristic time
 \[
 \Tstar(\theta) = \min_{w\in\Sigma_A} \max_{a\neq \astar(\theta)} \frac{2\normm{\astar(\theta)-a}_{V_w^{-1}}^2}{\big\langle \theta, \astar(\theta)-a\big\rangle^2}\,.
 \]
@@ -145,14 +145,16 @@ We have the following ordering on the complexities
 \begin{align}\label{eq:complexities}
 \Tstar(\theta) \leq 2 \frac{\xyopt}{\DeltaMin(\theta)^2}\leq 8 \frac{\gopt}{\DeltaMin(\theta)^2} = \frac{8d}{\DeltaMin(\theta)^2}\,\CommaBin
 \end{align}
-where $\DeltaMin = \min_{a\neq\astar(\theta)}\langle\theta,\astar(\theta)-a\rangle$ and  the last equality follows from the Kiefer-Wolfowitz equivalence theorem~\citep{kiefer1959}. Conversely the $\gopt$-complexity and the $\xyopt$-complexity are linked to an \emph{other} pure exploration problem, the thresholding bandits (see Appendix~\ref{app:threshold_bandits}).
+where $\DeltaMin = \min_{a\neq\astar(\theta)}\langle\theta,\astar(\theta)-a\rangle$ and  the last equality follows from the Kiefer-Wolfowitz equivalence theorem~\citep{kiefer1959}. 
+
+%Conversely the $\gopt$-complexity and the $\xyopt$-complexity are linked to an \emph{other} pure exploration problem, the thresholding bandits (see Appendix~\ref{app:threshold_bandits}).
 
 \begin{remark}
 In order to compute all these complexities, it is sufficient to solve the following generic optimal transductive design problem: for $\cB$ a finite set of elements in $\R^d$,
 \[
 \cA\cB=\min_{w\in\Sigma_K}\max_{b\in\cB}\normm{b}^2_{V_w^{-1}}\,.
 \]
-When $\cB=\cA$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956algorithm} which possesses convergence guarantees~\citep{atwood1969optimal,ahipasaoglu2008fw}. But in the general case, up to our knowledge, there is no algorithm with the same kind of guarantees. Previous works used an heuristic based on a straightforward adaptation of the aforementioned algorithm for general sets $\cB$ but it seems to not converge on particular instances, see Appendix~\ref{app:lgc.implem}. We instead propose in the same appendix an algorithm based on Saddle point Frank-Wolfe algorithm that seems to converge on the different instances we tested.
+When $\cB=\cA$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956algorithm} which possesses convergence guarantees~\citep{atwood1969optimal,ahipasaoglu2008fw}. But in the general case, up to our knowledge, there is no algorithm with the same kind of guarantees. Previous works used an heuristic based on a straightforward adaptation of the aforementioned algorithm for general sets $\cB$ but it seems to not converge on particular instances, see Section~\ref{sec:lgc.experiments.implem}. We instead propose in the same section an algorithm based on Saddle point Frank-Wolfe algorithm that seems to converge on the different instances we tested.
 \end{remark}
 
 % TODO:
