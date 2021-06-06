@@ -319,6 +319,29 @@ In practice, EBA is often used in the literature. A more detailed discussion of 
 
 For real-world applications, sometimes specific need should be met when applying BAI. The problem formulation needs to be adapted with potentially additional assumptions. Furthermore, as stated in Remark~\ref{remark:intro.pure}, BAI can be studied within a more general context of pure exploration. The purpose of this section is thus to provide a brief overview of commonly studied extensions of BAI as well as other pure exploration problems. We pay particular attention to BAI for linear bandits as it is the main topic of Chapter~\ref{CHAP:LGC}.
 
+\subsection{Pure exploration game}\label{sec:mab.extensions.pure}
+
+A learner in a general pure exploration game interacts with the environment by sequentially taking actions to identify the \emph{answer} to a pre-specified question. We denote by $\Theta$ the set of possible mean parameters for a specific bandit problem. We further assume that there is a finite set of answers $\cI$. For each parameter in $\Theta$, a \emph{unique correct answer} is given by the function $\Istar:\Theta \to \cI$ among the $|\cI|$ possible ones (the extension of pure exploration to multiple correct answers is studied by~\citealt{degenne2019pure}).
+
+While BAI is the mostly studied setting of pure exploration game, other types of question exist as well, e.g. threshold bandits~\citep{locatelli2016thresholding}, minimum threshold~\citep{kaufmann2018murphy}, signed bandits~\citep{menard2019lma}, pure exploration combinatorial bandits~\citep{chen2014combinatorial}, Monte-Carlo tree search \citep{teraoka2014mc}, etc.
+
+The learning protocol of a general pure exploration problem is summarized in Definition~\ref{def:mab.pure}.
+
+\begin{definition}[pure exploration game]\label{def:mab.pure}
+\begin{leftbar}[defnbar]
+	We are given a set of $K$ arms that is parameterized by a parameter vector $\bmu\in\Theta$. At each time step $n$, the learning process consists of the following actions:
+\begin{itemize}
+	\item a vector of rewards $(r_{1,n}, \cdots, r_{K,n})$ is generated,
+	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
+	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$ (possibly noisy),
+	\item the learner stops according to the stopping rule $\tau$, and
+	\item the learner outputs a guess for the answer $J_\tau \in \cI$ (according to the decision rule) when they stop.
+\end{itemize}
+\end{leftbar}
+\end{definition}
+
+Notably, we can recover the BAI problem from a pure exploration game by setting the pre-specified question to be finding the best arm: $\Istar = \argmax_{i\in[K]}\mu_i$, and by setting the answer set to be equal to the arm set: $\cI = \cX$.
+
 \subsection{Best-arm identification for linear bandits}\label{sec:mab.extensions.linear}
 
 In linear bandits BAI, we consider a \emph{finitely-armed}\footnote{We can also generalize to an infinite number of arms. The setting appears to be much more intricate, and is out of the scope of this thesis.} linear bandit model, where a collection of $K$ arms\footnote{Sometimes called contexts or feature vectors as well.} $\cX\eqdef\{\bx_1,\ldots,\bx_K\}\subset \R^d.$, is given. $d\in\NN$ is the dimension of the arm space. Usually we assume that the arm set $\cX$ spans $\R^d$. Each arm $i$ is parameterized again by its (unknown) mean $\mu_i$. 
@@ -342,7 +365,7 @@ where $\epsilon_n$ is the noise. The learning protocol of linear bandits BAI is 
 	\item a vector of rewards $(r_{1,n} = \bx_1\transpose\btheta^\star+\epsilon_{1,n}, \cdots, r_{K,n} = \bx_K\transpose\btheta^\star+\epsilon_{K,n})$ is generated,
 	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
 	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$ with noise $\epsilon_n \eqdef \epsilon_{I_n,n}$,
-	\item the learner stops according to the stopping rule, and
+	\item the learner stops according to the stopping rule $\tau$, and
 	\item the learner outputs a guess for the best arm $J_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
 \end{itemize}
 \end{leftbar}
@@ -354,24 +377,9 @@ where $\epsilon_n$ is the noise. The learning protocol of linear bandits BAI is 
 \end{leftbar}
 \end{remark}
 
-\subsection{Other variants of best-arm identification and pure exploration}\label{sec:mab.extensions.other}
+\subsection{Other variants of best-arm identification}\label{sec:mab.extensions.other}
 
-Top-m identification~\cite{kalyanakrishnan2010}, threshold bandits~\cite{locatelli2016thresholding}, minimum threshold~\cite{kaufmann2018murphy}, signed bandits~\cite{menard2019lma}, pure exploration combinatorial bandits~\cite{chen2014combinatorial}, Monte-Carlo tree search \cite{teraoka2014mc}, etc.
-
-The learning protocol of a general pure exploration problem is summarized in Definition~\ref{def:mab.pure}.
-
-\begin{definition}[pure exploration]\label{def:mab.pure}
-\begin{leftbar}[defnbar]
-	We are given a set of $K$ arms $\{\bx_1,\cdots,\bx_K\}\in\R^d$ that spans $\R^d$. At each time step $n$, the learning process consists of the following actions:
-\begin{itemize}
-	\item a vector of rewards $(r_{1,n} = \bx_1\transpose\btheta^\star+\epsilon_{1,n}, \cdots, r_{K,n} = \bx_K\transpose\btheta^\star+\epsilon_{K,n})$ is generated,
-	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$ with noise $\epsilon_n \eqdef \epsilon_{I_n,n}$,
-	\item the learner stops according to the stopping rule, and
-	\item the learner outputs a guess for the best arm $J_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
-\end{itemize}
-\end{leftbar}
-\end{definition}
+We mention several variants of BAI. Top-m identification~\citep{kalyanakrishnan2010}
 
 \section{Many-armed bandits}\label{sec:mab.continuum}
 

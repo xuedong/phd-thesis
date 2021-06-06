@@ -23,12 +23,12 @@ where $\epsilon_n$ is the noise and $\btheta$ is some unknown regression paramet
     We assume that $\epsilon_n \sim \cN(0,\sigma^2)$ is conditionally independent from the past\,.
 \end{leftbar}
 \end{assumption}
-For the sake of simplicity, we use $\sigma^2 = 1$ in the rest of this paper.
+For the sake of simplicity, we set $\sigma^2 = 1$ in the rest of this paper.
 
-\paragraph{Pure exploration for linear bandits.}
-We assume that $\btheta$ belongs to some parameter set $\Theta\subset\R^d$ known to the learner. For each parameter a \emph{unique correct answer} is given by the function $\istar: \cM \to \cI$ among the $I = |\cI|$ possible ones (the extension of pure exploration to multiple correct answers is studied by~\citealt{degenne2019pure}). Given a parameter~$\theta$, the agent then aims to find the correct answer $\istar(\theta)$ by interacting with the finite-armed linear bandit environment parameterized by~$\theta$.
+\paragraph{Best-arm identification for linear bandits.}
+We assume that $\btheta$ belongs to some parameter set $\Theta\subset\R^d$ known to the learner. Recall that in a pure exploration game, given a parameter $\btheta$, the learner aims to find the correct answer $\Istar(\btheta)$ by interacting with the finite-armed linear bandit environment parameterized by $\btheta$.
 
-In particular, we detail the setting of BAI for which the objective is to identify the arm with the largest mean. That is, the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$ for $\theta\in\cM = \R^d$ and the set of possible correct answers is $\cI = \cA$. We provide other pure-exploration examples in Appendix~\ref{app:lgc.examples}.
+In particular, we are interested in BAI for which the objective is to identify the arm with the largest mean. That is, the correct answer is given by $\Istar(\theta) \eqdef \argmax_{bx\in\cX} \btheta\transpose\bx$ for $\btheta\in\Theta = \R^d$ and the set of possible correct answers is $\cI = \cX$.
 
 \paragraph{Algorithm.}
 Let $\cF_{t}=\sigma (a_1,Y_1,\ldots, a_t,Y_t)$ be the information available to the agent after $t$ round. A deterministic pure-exploration algorithm under the fixed-confidence setting is given by three components: (1) a \emph{sampling rule} $(a_t)_{t\geq 1}$, where $a_t\in\cA$ is $\cF_{t-1}$-measurable, (2) a \emph{stopping rule} $\tau_\delta$, a stopping time for the filtration $(\cF_t)_{t\geq 1}$, and (3) a \emph{decision rule} $\hi\in \cI$ which is $\cF_{\tau_\delta}$-measurable.
