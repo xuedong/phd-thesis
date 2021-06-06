@@ -141,7 +141,7 @@ In practice, people are essentially interested in bounding: (a) the \emph{expect
 
 Clearly, minimizing the cumulative regret is equivalent to maximizing the total rewards, whence comes the name `regret minimization'. 
 
-\subsection{Regret lower bound}
+\subsection{Regret lower bound}\label{sec:mab.model.lb}
 
 In Chapter~\ref{CHAP:INTRO} we have mentioned that regret minimization is not always the most appropriate learning objective under some circumstances, but we should rather study MAB from an optimization point of view. However, before we jump into details of MAB for optimization, let us briefly review some fundamental results of regret minimization as they may be relevant for understanding some of our motivations later.
 
@@ -155,6 +155,10 @@ The sub-optimality gap $\Delta_i$ of arm $i$ is given by:
 \]
 \end{leftbar}
 \end{definition}
+
+\subsection{Optimal algorithms}\label{sec:mab.model.ucb}
+
+\gls{ofu}.
 
 \section{Best-Arm Identification}\label{sec:mab.bai}
 
@@ -227,11 +231,13 @@ Designing smart sampling rules is the main focus of a large part of the thesis, 
 
 \paragraph{Fixed-budget designs.}
 
-For fixed-budget BAI, all of the existing sampling rules depend on the budget $N$. They either rely on lower and upper confidence bounds on the means of the arms like \UCBE~\citep{audibert2010budget}, and \UGapE~\citep{gabillon2012ugape}, or are based on arm eliminations such as \SR~\citep{audibert2010budget}, and \SHA~\citep{karnin2013sha}.
+For fixed-budget BAI, the sampling rules depend on the budget $N$. A first line of research propose to construct lower and upper confidence bounds on the arm means, and then make use of the OFU principle to choose arms (somewhat similar to \UCB-type algorithms for regret minimization, see Section~\ref{sec:mab.model.ucb}). Those methods include \UCBE~\citep{audibert2010budget}, and \UGapE~\citep{gabillon2012ugape}. Another way of treating the problem is based on arm eliminations such as \SR~\citep{audibert2010budget}, and \SHA~\citep{karnin2013sha}, where less promising arms are gradually eliminated.
 
 \paragraph{Fixed-confidence designs.}
 
 For fixed-confidence BAI, the majority of existing sampling rules rely on the confidence level $\delta$: Again, some of them rely on confidence intervals such as \LUCB~\citep{kalyanakrishnan2012lucb}, \UGapE~\citep{gabillon2012ugape}, \KLLUCB and \KLRacing~\citep{kaufmann2013kl}, \LIL~\citep{jamieson2014lilucb}; others are elimination-based like \SE, \ME~\citep{even-dar2003confidence}, \EGE~\citep{karnin2013sha}. The first algorithm that does not depend on $\delta$, \Track, is proposed by~\cite{garivier2016tracknstop}.
+
+The fixed-confidence setting is an important topic of interest of this thesis, and will be covered more thoroughly in particular in Chapter~\ref{CHAP:T3C} and Chapter~\ref{CHAP:LGC}.
 
 \paragraph{Anytime designs.}
 

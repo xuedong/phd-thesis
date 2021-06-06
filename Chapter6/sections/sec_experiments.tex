@@ -8,7 +8,7 @@ Observe that both the noisy evaluation and the value of $f$ belong to $[0,1]$. T
 
 For the experiments, we adapt the recommendation rule of \DTTTS to the HPO applications considered and always recommend the hyper-parameter configuration that has produced the smallest cross-validation error so far (which is also the recommendation rule used by other approaches, e.g., \Hyperband). For all methods, we report the cross-validation error for the recommended hyper-parameter configuration, as a function of time. We stress again that, unlike in standard bandits, where we could use the simple regret as a performance metric, we do not have access to the ground truth generalization error in real classification tasks. Therefore, we only report a proxy of the true error rate that we are interested in.
 
-\paragraph{Results} We first benchmark\footnote{code at \url{http://researchers.lille.inria.fr/~valko/hp/publications/shang2019simple.code.zip}} our methods on a few simple \UCI datasets using \SVM from \Scikit as the classifier. We  optimize over two hyper-parameters: the \emph{penalty parameter} $C$ and the \emph{kernel coefficient}~$\gamma$\footnote{$\gamma$ is the parameter of the RBF kernel defined as $\exp(-\gamma||\bx-\bx'||^2)$}
+\paragraph{Results} We first benchmark\footnote{Code at \url{http://researchers.lille.inria.fr/~valko/hp/publications/shang2019simple.code.zip}} our methods on a few simple \UCI datasets using \SVM from \Scikit as the classifier. We  optimize over two hyper-parameters: the \emph{penalty parameter} $C$ and the \emph{kernel coefficient}~$\gamma$\footnote{$\gamma$ is the parameter of the RBF kernel defined as $\exp(-\gamma||\bx-\bx'||^2)$}
 for an RBF kernel, for which the pre-defined search bounds are both $\left[10^{-5}, 10^{5} \right]$.
 
 %\begin{table}[ht]
@@ -31,24 +31,24 @@ for an RBF kernel, for which the pre-defined search bounds are both $\left[10^{-
 %\end{table}
 
 %\todo{For the figures, can we have less white space and bigger figures? (probably some margin, or use crop)}
-\begin{figure}[t]
+\begin{figure}[ht]
 	\centering
-	\begin{subfigure}[t]{0.24\textwidth}
+	\begin{subfigure}[t]{0.33\textwidth}
     		\includegraphics[width=\textwidth]{Chapter6/img/uci/wine.pdf}
     		\caption{wine}
     		\label{fig:wine}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.24\textwidth}
+	\begin{subfigure}[t]{0.33\textwidth}
     		\includegraphics[width=\textwidth]{Chapter6/img/uci/breast_cancer.pdf}
     		\caption{breast cancer}
     		\label{fig:breast_cancer}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.24\textwidth}
+	\begin{subfigure}[t]{0.33\textwidth}
     		\includegraphics[width=\textwidth]{Chapter6/img/uci/adult.pdf}
     		\caption{adult}
     		\label{fig:adult}
 	\end{subfigure}
-	\begin{subfigure}[t]{0.24\textwidth}
+	\begin{subfigure}[t]{0.33\textwidth}
     		\includegraphics[width=\textwidth]{Chapter6/img/mnist/mnist.pdf}
     		\caption{\MNIST}
     		\label{fig:mnist}
@@ -56,7 +56,7 @@ for an RBF kernel, for which the pre-defined search bounds are both $\left[10^{-
 	\caption{Mean cross-validation error of different HPO algorithms with (a) \SVM run on the \UCI wine dataset, (b) \SVM run on the \UCI breast cancer dataset, (c) \SVM run on the \UCI adult dataset and (d) \MLP run on the \MNIST dataset.}
 \end{figure}
 
-Fig.\,\ref{fig:wine} shows the mean cross-validation error of \SVM run on the \UCI wine dataset over 24 pulls\footnote{the number of pulls here and later is chosen exactly as in the work of \citet{li2017hyperband}} averaged on 100 runs. The task is to predict the quality score  of wine (between 0 and 10) given 11 attributes. Recall that one iteration corresponds to one arm pull. In this experiment, \DTTTS improves over other benchmark algorithms. Fig.\,\ref{fig:breast_cancer} is the same experiment run on the \UCI breast cancer dataset over 81 pulls. The task is to predict whether a patient has breast cancer based on 32 attributes. We repeat the experiment 100 times. This time, \DTTTS is slightly worse than \Hyperband at the beginning, but improves later. Finally, we optimize \SVM on a relatively more complicated \UCI adult dataset over 162 pulls, for which the result is shown in Fig.\,\ref{fig:adult}. The task is to tell whether the income of an individual is higher than 50k or not given 14 attributes. This experiment is also averaged over 100 runs. \DTTTS is better than other algorithms at the beginning, but is outperformed by \TPE towards the end. We see that, although not always the best, \DTTTS shows a consistent, robust, and quite competitive performance in the 3 tasks. 
+Fig.\,\ref{fig:wine} shows the mean cross-validation error of \SVM run on the \UCI wine dataset over 24 pulls\footnote{The number of pulls here and later is chosen exactly as in the work of \citet{li2017hyperband}} averaged on 100 runs. The task is to predict the quality score  of wine (between 0 and 10) given 11 attributes. Recall that one iteration corresponds to one arm pull. In this experiment, \DTTTS improves over other benchmark algorithms. Fig.\,\ref{fig:breast_cancer} is the same experiment run on the \UCI breast cancer dataset over 81 pulls. The task is to predict whether a patient has breast cancer based on 32 attributes. We repeat the experiment 100 times. This time, \DTTTS is slightly worse than \Hyperband at the beginning, but improves later. Finally, we optimize \SVM on a relatively more complicated \UCI adult dataset over 162 pulls, for which the result is shown in Fig.\,\ref{fig:adult}. The task is to tell whether the income of an individual is higher than 50k or not given 14 attributes. This experiment is also averaged over 100 runs. \DTTTS is better than other algorithms at the beginning, but is outperformed by \TPE towards the end. We see that, although not always the best, \DTTTS shows a consistent, robust, and quite competitive performance in the 3 tasks. 
 
 We now carry out the classic \MNIST digits classification task using multi-layer perceptron (\MLP). We choose to optimize over three hyper-parameters: the \emph{size of hidden layer} (an integer between 5 and 50), the \emph{$\ell_2$ penalty parameter} $\alpha$ (between 0 and 0.9) and the \emph{initial learning rate} (bounded in $\left[10^{-5}, 10^{-1} \right]$). Fig.\,\ref{fig:mnist} shows the result of \MLP run on \MNIST over 108 pulls, this time averaged over 20 runs. \DTTTS is slightly worse than \Hyperband and \HTTTS in the very beginning, but is performing well afterward. %We notice that, although always showing bad performance in the \UCI tasks, \HTTTS shows a good behavior for the \MNIST task.
 
