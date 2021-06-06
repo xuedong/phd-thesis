@@ -3,7 +3,7 @@
 
 \subsection{Computation of the optimal error decay rate}\label{sec:t3c.experiments.rate}
 
-We first describe how to approximate $\Gamma_{\beta}^\star$ under any prior of 1-dimensional exponential family. We then also provide a way to compute numerically $\Gamma_{\beta}^\star$ under Gaussian prior since it can be computed more explicitly.
+We first describe how to approximate $T_{\beta}^\star(\bmu)^{-1}$ under any prior of 1-dimensional exponential family. We then also provide a way to compute numerically $T_{\beta}^\star(\bmu)^{-1}$ under Gaussian prior since it can be computed more explicitly.
 
 \paragraph{General case.}
 For any $i\neq I^\star$, $C_i(\beta,\omega_i)$ is defined as the output to a convex minimization problem for whom the unique solution has an analytic expression
@@ -19,7 +19,7 @@ In fact, $g_i$ is a strictly increasing function (see~\citealt{garivier2016track
 
 According to Proposition~\ref{prop:optim}, the optimal proportion vector $\bomega^\beta$ that we are searching for satisfies the constraint that $\forall i,j\neq I^\star$,
 \[
-    g_i(\omega_i^\beta) = g_j(\omega_j^\beta) = \Gamma_{\beta}^\star.
+    g_i(\omega_i^\beta) = g_j(\omega_j^\beta) = T_{\beta}^\star(\bmu)^{-1}.
 \]
 Since $\omega_i^\beta = g_i^{-1}(\Gamma_{\beta}^\star) = x_i(\Gamma_{\beta}^\star)$, and we know that $\sum_{i\neq I^\star} \omega_i = 1-\beta$, thus the problem of computing $\Gamma_{\beta}^\star$ is equivalent to solve the following equation,
 \[
@@ -98,7 +98,7 @@ that requires only one shot bisection method.
 %    \label{fig:bc}
 %\end{figure}
 
-In Fig.~\ref{fig:t3c.hardness}, we plot expected stopping time of \TCC for $\delta = 0.01$ as a function of $1/\Gamma_\beta^\star$ on 100 randomly generated problem instances. We see on this plot that the empirical stopping time has the right linear scaling in $1/\Gamma_\beta^\star$ (ignoring a few outliers).
+In Fig.~\ref{fig:t3c.hardness}, we plot expected stopping time of \TCC for $\delta = 0.01$ as a function of $T_{\beta}^\star(\bmu)$ on 100 randomly generated problem instances. We see on this plot that the empirical stopping time has the right linear scaling in $T_{\beta}^\star(\bmu)$ (ignoring a few outliers).
 
 \begin{figure}[ht]
     \centering
@@ -115,7 +115,11 @@ We experiment with three different Bayesian sampling rules: \TCC, \TTTS and \TTE
 
 \BC selects the empirical best arm $\hat{I}_n$ with probability $\beta$ and the maximizer of $W_n(\hat{I}_n,j)$ with probability $1-\beta$, but also performs forced exploration (selecting any arm sampled less than $\sqrt{n}$ times at round $n$). \TCC can thus be viewed as a variant of \BC in which no forced exploration is needed to converge to $\bomega^\beta$, due to the noise added by replacing $\hat{I}_n$ with $I_n^{(1)}$.
 
-We consider two simple instances with arms means given by $\bmu_1 = [0.5 \ 0.9 \ 0.4 \ 0.45 \ 0.44999]$, and $\bmu_2 = [1 \ 0.8 \ 0.75 \ 0.7]$ respectively. We run simulations for both Gaussian (with $\sigma=1$) and Bernoulli bandits with a risk parameter $\delta=0.01$. %In the Gaussian case, we set $\sigma=1$.
+We consider two simple instances with arms means given by 
+\[
+    \bmu_1 = [0.5 \ 0.9 \ 0.4 \ 0.45 \ 0.44999] \text{ and } \bmu_2 = [1 \ 0.8 \ 0.75 \ 0.7]
+\]
+respectively. We run simulations for both Gaussian (with $\sigma=1$) and Bernoulli bandits with a risk parameter $\delta=0.01$. %In the Gaussian case, we set $\sigma^2=1$.
 Figure~\ref{fig:confidence} reports the empirical distribution of $\tau_\delta$ under the different sampling rules, estimated over 1000 independent runs. 
 
 \begin{figure*}[ht]

@@ -21,8 +21,8 @@ Among $\delta$-correct strategies, we seek the one with the smallest sample comp
 \]
 where $d(\mu,\mu')$ is the KL-divergence defined above and $\cI = \R$ in the Gaussian case and $\cI = [0,1]$ in the Bernoulli case. We define
 \begin{eqnarray}
-    \Gamma^\star &\eqdef& \max_{\bomega \in \Sigma_K}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i),\nonumber\\
-    \Gamma_{\beta}^\star &\eqdef& \max_{\substack{\bomega \in \Sigma_K\\\omega_{I^\star}=\beta}}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i).\label{def:GammaBeta}\end{eqnarray}
+    T^\star(\bmu)^{-1} &\eqdef& \max_{\bomega \in \Sigma_K}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i),\nonumber\\
+    T_{\beta}^\star(\bmu)^{-1} &\eqdef& \max_{\substack{\bomega \in \Sigma_K\\\omega_{I^\star}=\beta}}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i).\label{def:GammaBeta}\end{eqnarray}
 \end{definition}
 
 The quantity $C_i(\omega_{I^\star},\omega_i)$ can be interpreted as a ``transportation cost''\footnote{for which $W_n(I^\star,i)$ is an empirical counterpart} from the original bandit instance $\bm\mu$ to an alternative instance in which the mean of arm $i$ is larger than that of $I^\star$, when the proportion of samples allocated to each arm is given by the vector $\bomega \in \Sigma_K$. As shown by~\cite{russo2016ttts}, the $\bomega$ that maximizes \eqref{def:GammaBeta} is unique, which allows us to define the $\beta$-\emph{optimal allocation} $\bomega^\beta$ in the following proposition.
@@ -39,7 +39,7 @@ We handle the existence and the uniqueness separately as below.
 
 \paragraph{Existence:} For any arm $i\neq I^\star$, $C_i$ is a continuous function, so as to $\min_{i\neq I^\star} C_i$. According to the \emph{extreme value theorem}, function $\min_{i\neq I^\star} C_i(\beta,\cdot)$ must attain its maximum over $[0,1]^{K-1}$ which is compact. Suppose that $\bomega^\beta$ is a such maximizer. We thus have
 \[
-    \Gamma_{\beta}^\star = \max_{\bomega:\omega_{I^\star}=\beta}\min_{i\neq I^\star} C_i(\beta,\omega_i) = \min_{i\neq I^\star} C_i(\beta,\omega_i^\beta).
+    T_{\beta}^\star(\bmu)^{-1} = \max_{\bomega:\omega_{I^\star}=\beta}\min_{i\neq I^\star} C_i(\beta,\omega_i) = \min_{i\neq I^\star} C_i(\beta,\omega_i^\beta).
 \]
 Let us assume that $\bomega^\beta$ does not verify the second condition, which means there exists some $j\neq I^\star$ such that
 \[
@@ -66,33 +66,33 @@ However, we know that $1-\sum_{j\neq I^\star} \omega_j = \omega_{I^\star} =  \be
 
 \end{proof}
 
-For models with more than two arms, there is no closed form expression for $\Gamma_\beta^\star$ or $\Gamma^\star$, even for Gaussian bandits  with variance $\sigma^2$ for which we have
+For models with more than two arms, there is no closed form expression for $T_{\beta}^\star(\bmu)^{-1}$ or $T^\star(\bmu)^{-1}$, even for Gaussian bandits  with variance $\sigma^2$ for which we have
 \[
-    \Gamma_{\beta}^\star = \max_{\bomega:\omega_{I^\star}=\beta}\min_{i\neq I^\star} \frac{(\mu_{I^\star}-\mu_i)^2}{2\sigma^2(1/\omega_i+1/\beta)}.
+    T_{\beta}^\star(\bmu)^{-1} = \max_{\bomega:\omega_{I^\star}=\beta}\min_{i\neq I^\star} \frac{(\mu_{I^\star}-\mu_i)^2}{2\sigma^2(1/\omega_i+1/\beta)}.
 \]
 
 %We refer the reader to Appendix TBC for pointers on the practical computation of those quantities. 
 
 \paragraph{Bayesian \texorpdfstring{$\beta$}{}-optimality.} \citet{russo2016ttts} proves that  any sampling rule allocating a fraction $\beta$ to the optimal arm ($\Psi_{n,I^\star}/n \rightarrow \beta$) satisfies %$\Pi_n(\overline{\Theta_{I^\star}})
-$1-a_{n, I^\star} \geq e^{-n(\Gamma_{\beta}^\star + o(1))}$ (a.s.) for large values of $n$. We define a  \emph{Bayesian $\beta$-optimal} sampling rule as a sampling rule matching this lower bound, i.e. satisfying $\Psi_{n,I^\star}/n \rightarrow \beta$ and $1- a_{n, I^\star} \leq e^{-n(\Gamma_{\beta}^\star + o(1))}$.
-%$\Pi_n(\overline{\Theta_{I^\star}}) \leq e^{-n(\Gamma_{\beta}^\star + o(1))}$.
+$1-a_{n, I^\star} \geq e^{-n(T_{\beta}^\star(\bmu)^{-1} + o(1))}$ (a.s.) for large values of $n$. We define a  \emph{Bayesian $\beta$-optimal} sampling rule as a sampling rule matching this lower bound, i.e. satisfying $\Psi_{n,I^\star}/n \rightarrow \beta$ and $1- a_{n, I^\star} \leq e^{-n(T_{\beta}^\star(\bmu)^{-1} + o(1))}$.
+%$\Pi_n(\overline{\Theta_{I^\star}}) \leq e^{-n(T_{\beta}^\star(\bmu)^{-1} + o(1))}$.
 
 \citet{russo2016ttts} proves that \TTTS with parameter $\beta$ is Bayesian $\beta$-optimal.
 However, the result is valid only under strong regularity assumptions, excluding the two practically important cases of Gaussian and Bernoulli bandits. In this paper, we complete the picture by establishing Bayesian $\beta$-optimality for those models in Section~\ref{sec:bayesian}. For the Gaussian bandit, Bayesian $\beta$-optimality was established for \TTEI by~\cite{qin2017ttei} with Gaussian priors, but this remained an open problem for \TTTS.
 
 A fundamental ingredient of these proofs is to establish the convergence of the allocation of measurement effort to the $\beta$-optimal allocation: $\Psi_{n,i}/n \rightarrow \omega_{i}^\beta$ for all $i$, which is equivalent to $T_{n,i}/n \rightarrow \omega_{i}^\beta$ (cf.\ Lemma~\ref{lemma:link}).
 
-\paragraph{\texorpdfstring{$\beta$}{}-optimality in the fixed-confidence setting.} In the fixed confidence setting, the performance of an algorithm is evaluated in terms of sample complexity. A lower bound given by \cite{garivier2016tracknstop} states that any $\delta$-correct strategy satisfies $\EE{\tau_\delta} \geq (\Gamma^\star)^{-1} \ln \left({1}/(3\delta)\right)$. 
+\paragraph{\texorpdfstring{$\beta$}{}-optimality in the fixed-confidence setting.} In the fixed confidence setting, the performance of an algorithm is evaluated in terms of sample complexity. A lower bound given by \cite{garivier2016tracknstop} states that any $\delta$-correct strategy satisfies $\EE{\tau_\delta} \geq T^\star(\bmu) \ln \left({1}/(3\delta)\right)$. 
 
-Observe that $\Gamma^\star = \max_{\beta \in [0,1]} \Gamma_\beta^\star$. Using the same lower bound techniques, one can also prove that under any $\delta$-correct strategy satisfying $T_{n,I^\star}/n \rightarrow \beta$,
-\[\liminf_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \geq \frac{1}{\Gamma^\star_\beta}.\]
+Observe that $T^\star(\bmu)^{-1} = \max_{\beta \in [0,1]} T_{\beta}^\star(\bmu)^{-1}$. Using the same lower bound techniques, one can also prove that under any $\delta$-correct strategy satisfying $T_{n,I^\star}/n \rightarrow \beta$,
+\[\liminf_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \geq T_{\beta}^\star(\bmu).\]
 This motivates the relaxed optimality notion that we introduce in this paper: A BAI strategy is called \emph{asymptotically $\beta$-optimal} if it satisfies 
-\[\frac{T_{n,I^\star}}{n}\rightarrow \beta \ \ \ \text{and} \ \ \ \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq \frac{1}{\Gamma^\star_\beta}.\]
+\[\frac{T_{n,I^\star}}{n}\rightarrow \beta \ \ \ \text{and} \ \ \ \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq T_{\beta}^\star(\bmu).\]
 In the paper, we provide the first sample complexity analysis of a BAI algorithm based on \TTTS (with the stopping and recommendation rules described in Section~\ref{sec:t3c.algorithm}), establishing its asymptotic $\beta$-optimality.
 
 As already observed by \cite{qin2017ttei}, any sampling rule converging to the $\beta$-optimal allocation (i.e.\ satisfying $T_{n,i}/n \rightarrow w_i^\beta$ for all $i$) can be shown to satisfy 
 \[
-    \limsup_{\delta \rightarrow 0} \tau_\delta/\ln(1/\delta) \leq (\Gamma_\beta^\star)^{-1}
+    \limsup_{\delta \rightarrow 0} \tau_\delta/\ln(1/\delta) \leq T_{\beta}^\star(\bmu)
 \]
 almost surely, when coupled with the Chernoff stopping rule. The fixed confidence optimality that we define above is stronger as it provides guarantees on $\EE{\tau_\delta}$.
 
@@ -104,16 +104,16 @@ almost surely, when coupled with the Chernoff stopping rule. The fixed confidenc
 % 
 % It is known that, for a given set of arms $\cA$, a unique optimal effort proportion vector $\bomega^\star$ exists. $\bomega^\star$ is the unique solution to the optimization problem
 % \[
-%     \Gamma^\star \eqdef \max_{\bomega}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i),
+%     T^\star(\bmu)^{-1} \eqdef \max_{\bomega}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i),
 % \]
-% and $\Gamma^\star$ represents the fastest error decay rate that any allocation rule can reach~\citep{garivier2016tracknstop,russo2016ttts}.
+% and $T^\star(\bmu)^{-1}$ represents the fastest error decay rate that any allocation rule can reach~\citep{garivier2016tracknstop,russo2016ttts}.
 % 
 % It is easy to show that for a given $\beta$, a unique parameterized optimal effort proportion vector $\bomega^\beta$ exists as well (proof given in Appendix~\ref{app:optimal_weight}).
 % 
 % \begin{restatable}{proposition}{restateoptim}\label{thm:optim}
 % There is a unique solution $\bomega^\beta$ to the optimization problem
 % \[
-%     \Gamma_{\beta}^\star \eqdef \max_{\bomega:\omega_{I^\star}=\beta}\min_{i\neq I^\star} C_i(\beta,\omega_i).
+%     T_{\beta}^\star(\bmu)^{-1} \eqdef \max_{\bomega:\omega_{I^\star}=\beta}\min_{i\neq I^\star} C_i(\beta,\omega_i).
 % \]
 % that satisfies
 % \[
@@ -126,9 +126,9 @@ almost surely, when coupled with the Chernoff stopping rule. The fixed confidenc
 % 
 % In our case, every arm $i$ follows a normal distribution $\cN(\mu_i,\sigma^2)$ with unknown means and known variance, and the priors are assumed to be improper Gaussian priors, thus we have
 % \[
-%     \Gamma_{\beta}^\star = \max_{\bomega:\omega_{I^\star}=\beta}\min_{i\neq I^\star} \frac{(\mu_{I^\star}-\mu_i)^2}{2\sigma^2(1/\omega_i+1/\beta)}.
+%     T_{\beta}^\star(\bmu)^{-1} = \max_{\bomega:\omega_{I^\star}=\beta}\min_{i\neq I^\star} \frac{(\mu_{I^\star}-\mu_i)^2}{2\sigma^2(1/\omega_i+1/\beta)}.
 % \]
 % 
-% There is no analytic expression for $\Gamma_{\beta}^\star$, we thus provide an efficient way to approximate $\Gamma_{\beta}^\star$ under Gaussian priors as well as in the general case in Appendix~\ref{app:rate}.
+% There is no analytic expression for $T_{\beta}^\star(\bmu)^{-1}$, we thus provide an efficient way to approximate $T_{\beta}^\star(\bmu)^{-1}$ under Gaussian priors as well as in the general case in Appendix~\ref{app:rate}.
 
 

@@ -17,7 +17,7 @@ The \TTTS and \TCC sampling rules coupled with either
 \end{itemize}
 form a $\delta$-correct BAI strategy. Moreover, if all the arms means are distinct, it satisfies  
     \[
-        \limsup_{\delta\rightarrow{0}} \frac{\EE{\tau_{\delta}}}{\log(1/\delta)} \leq \frac{1}{\Gamma_{\beta}^\star}.
+        \limsup_{\delta\rightarrow{0}} \frac{\EE{\tau_{\delta}}}{\log(1/\delta)} \leq T_{\beta}^\star(\bmu)\,.
     \]
 \end{leftbar}
 \end{theorem}
@@ -39,7 +39,7 @@ The \textbf{second step} of our analysis is a sufficient condition for $\beta$-o
 \begin{restatable}{lemma}{restatefixedconfidence}\label{lemma:confidence}
     Let $\delta,\beta\in (0,1)$. For any sampling rule which satisfies $\EE{T_{\beta}^\epsilon} < \infty$ for all $\epsilon > 0$, we have
     \[
-        \limsup_{\delta\rightarrow{0}} \frac{\EE{\tau_{\delta}}}{\log(1/\delta)} \leq \frac{1}{\Gamma_{\beta}^\star},
+        \limsup_{\delta\rightarrow{0}} \frac{\EE{\tau_{\delta}}}{\log(1/\delta)} \leq T_{\beta}^\star(\bmu)\,,
     \]
     if the sampling rule is coupled with stopping rule~(\ref{eq:stopping}), 
 \end{restatable}

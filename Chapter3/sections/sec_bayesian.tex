@@ -2,7 +2,7 @@
 \section{Optimal Posterior Convergence
 }\label{sec:bayesian}
 
-Recall that $a_{n, I^\star}$ denotes the posterior mass assigned to the event that action $I^\star$ (i.e.\ the true optimal arm) is optimal at time $n$. As the number of observations tends to infinity, we desire that the posterior distribution converges to the truth. In this section we show equivalently that the posterior mass on the complementory event, $1 - a_{n, I^\star}$, the event that arm $I^\star$ is not optimal, converges to zero at an exponential rate, and that it does so at optimal rate $\Gamma_{\beta}^\star$. 
+Recall that $a_{n, I^\star}$ denotes the posterior mass assigned to the event that action $I^\star$ (i.e.\ the true optimal arm) is optimal at time $n$. As the number of observations tends to infinity, we desire that the posterior distribution converges to the truth. In this section we show equivalently that the posterior mass on the complementory event, $1 - a_{n, I^\star}$, the event that arm $I^\star$ is not optimal, converges to zero at an exponential rate, and that it does so at optimal rate $T_{\beta}^\star(\bmu)^{-1}$. 
 
 \citet{russo2016ttts} proves a similar theorem under three confining boundedness assumptions (cf.\,\citealt{russo2016ttts}, Asssumption 1) on the parameter space, the prior density and the (first derivative of the) log-normalizer of the exponential family. Hence, the theorems in \cite{russo2016ttts} do not apply to the two bandit models most used in practise, which we consider in this paper: the Gaussian and Bernoulli model. 
 
@@ -11,13 +11,13 @@ In the first case, the parameter space is unbounded, in the latter model, the de
 \begin{restatable}{theorem}{restateposteriorgaussian}\label{thm:posterior_gaussian}
     Under \TTTS, for Gaussian bandits with improper Gaussian priors, it holds almost surely that 
     \[
-        \lim_{n\rightarrow{\infty}} -\frac{1}{n}\log(1-a_{n,I^\star}) = \Gamma_{\beta}^\star.
+        \lim_{n\rightarrow{\infty}} -\frac{1}{n}\log(1-a_{n,I^\star}) = T_{\beta}^\star(\bmu)^{-1}\,.
     \]
 \end{restatable}
 
 \begin{restatable}{theorem}{restateposteriorbernoulli}\label{thm:posterior_bernoulli}
 	Under \TTTS, for Bernoulli bandits and uniform priors, it holds almost surely that
 	\[
-	\lim_{n\rightarrow{\infty}} -\frac{1}{n}\log(1-a_{n,I^\star}) = \Gamma_{\beta}^\star.
+	\lim_{n\rightarrow{\infty}} -\frac{1}{n}\log(1-a_{n,I^\star}) = T_{\beta}^\star(\bmu)^{-1}\,.
 	\]
 \end{restatable}
