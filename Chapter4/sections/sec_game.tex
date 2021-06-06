@@ -1,10 +1,17 @@
 %!TEX root = ../Chapter3.tex
 \section{A Gamified Algorithm}\label{sec:lgc.game}
 
-We present two asymptotically optimal algorithms for the general pure-exploration problem. We also make the additional assumption that the set of parameter is bounded, that is we know $M>0$ such that for all $\theta\in\cM,\, \normm{\theta}\leq M$. This assumption is shared by most of the works on %\todo{rather usual? or used everywhere? Evrywhere i would say since they target minimax regret}
-linear bandits (e.g. \citealt{abbasi-yadkori2011linear, soare2014linear}).
+We present two asymptotically optimal algorithms for linear bandits BAI in this section. Indeed, these two algorithms are asymptotically optimal for the general pure exploration game, which is however not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for more details.
 
-We provide a bounded version of BAI in Section~\ref{app:lgc.examples} where we add the assumption that the parameter set $\cM$ is bounded. In particular we show how it affects the lower bound of Theorem~\ref{th:lb_genral}: the characteristic time $\Tstar(\theta)$ is reduced (or equivalently $\Tstar(\theta)^{-1}$ increases). This is not surprising since we add a new constraint in the optimization problem. This means that the algorithm should stop earlier. The counterpart of this improvement is that it is often difficult to compute the best response for nature. Indeed, for example, in BAI, there is an explicit expression of the best response, see Section~\ref{app:lgc.examples}. When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lem:lagrange_alternative}. To devise an asymptotically optimal algorithm without the boundedness assumption remains an open problem.
+Solely in this section, we make the following additional assumption that the set of parameter is bounded,
+\begin{assumption}
+\begin{leftbar}[assumptionbar]
+    We assume that $\forall \btheta\in\Theta, \normm{\theta}\leq M$\,.
+\end{leftbar}
+\end{assumption}
+This assumption is actually shared by most of the works on linear bandits (e.g. \citealt{abbasi-yadkori2011linear, soare2014linear}).
+
+The bounded version of BAI is explicited in Section~\ref{app:lgc.examples}. In particular we show how the boundedness of the parameter space affects the lower bound of Theorem~\ref{th:lb_genral}: The characteristic time $\Tstar(\theta)$ is reduced (or equivalently $\Tstar(\theta)^{-1}$ increases). This is not surprising since we add a new constraint in the optimization problem. This means that the algorithm should stop earlier. The counterpart of this improvement is that it is often difficult to compute the best response for nature. Indeed, for example, in BAI, there is an explicit expression of the best response, see Section~\ref{app:lgc.examples}. When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lem:lagrange_alternative}. To devise an asymptotically optimal algorithm without the boundedness assumption remains an open problem.
 
 
 % , i.e for $i\in\cI$ and $w\in\interior{\Sigma_A}$ in the interior of the probability simplex of dimension $A-1$, find $\lambda^i$ such that
@@ -29,8 +36,7 @@ We provide a bounded version of BAI in Section~\ref{app:lgc.examples} where we a
 % And there exists pathological pure exploration problems where even the quantity uppper bounded by $U_s^{i,a}$, namely $\normm{\theta-\lambda}_{aa^\top}^2$ where $\lambda\in\argmin_{\lambda'\in\neg i}\normm{\theta -\lambda}$ is unbounded\todo{I don't understand what this means.}. See for example Appendix~G.3 by \citet{menard2019lma}.
 
 
-We describe primarily \LGC, detailed in Algorithm~\ref{alg:lgc}. The principle behind \LG, detailed in Algorithm~\ref{alg:lg}, is similar and significant differences will be highlighted.
-
+In this chapter, we study the problem from a \emph{zero-sum game} point of view inspired by~\cite{degenne2019pure}. We describe \LG{}, detailed in Algorithm~\ref{alg:lgc}. The full analysis of the algorithm is omitted as well as a convexified version \LGC{} -- also asymptotically optimal itself -- as they are not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for the complete proofs.
 
 \subsection{Notations}
 \paragraph{Counts.} At each round $t$ the algorithms will play an arm $a_t$ and choose (fictitiously) an answer $i_t$. We denote by $N_t^{a,i} \eqdef\sum_{s=1}^t \ind_{\{(a_t,i_t)=(a,i)\}}$ the number of times the pair $(a,i)$ is chosen up to and including time $t$, and by $N_t^a =\sum_{i\in\cI} N_s^{a,i}$ and $N_t^i =\sum_{a\in\cI} N_s^{a,i}$ the partial sums. The vectors of counts at time $t$ is denoted by $N_t \eqdef (N_t^a)_{a\in\cA}$
@@ -43,9 +49,9 @@ and when it is clear from the context we will also denote by $N_t^a = (N_t^{a,i}
 where $I_d$ is the identity matrix. By convention $\htheta_0 = 0$.
 
 
-\subsection{Algorithms}
+\subsection{The \LG{} algorithm}
 
-\begin{algorithm}[tb]
+\begin{algorithm}[ht]
 \centering
 \caption{\LG}
 \label{alg:lg}
@@ -72,31 +78,31 @@ where $I_d$ is the identity matrix. By convention $\htheta_0 = 0$.
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[tb]
-\centering
-\caption{\LGC}
-\label{alg:lgc}
-\begin{algorithmic}[1]
-    \State {\bfseries Input:} Agent learner $\cL_{\tw}$, threshold $\beta(\cdot,\delta)$
-    \For{t = 1 \ldots}
-        \State \textit{// Stopping rule}
-        \If{ {\small $\max_{i\in \cI} \inf_{\lambda\in\neg i} \frac{1}{2}\normm{\htheta_{t-1}-\lambda}^2_{V_{N_{t-1}}}\geq \beta(t-1,\delta)$}}
-            \State {\bfseries stop} and {\bfseries return} $\hi = \istar(\hat{\theta}_{t-1})$. 
-        \EndIf
-        \State \textit{// Agent plays first}
-        \State \texttt{get} $\tw_{t}$ \texttt{from} $\cL_{\tw}$ 
-        \State \texttt{update} $\tW_{t}=\tW_{t-1}+\tw_{t}$
-        \State \textit{// Best response for the nature}
-        \State $\forall i\in\cI$, $\tlambda^i_{t} \in \argmin_{\lambda\in\neg i}\normm{\htheta_{t-1}-\lambda}^2_{V_{\tw^i_{t}}}$
-        \State \textit{// Feed optimistic gains}
-        \State \texttt{feed learner} $\cL_{\tw}$ \texttt{with} {$g_{t}(\tw) =\sum_{(a,i)\in\cA\times\cI} \tw^{a,i} U_t^{a,i}/2$}
-        \State \textit{// Track the weights}
-        \State \texttt{pull} $(a_{t},i_{t})\in \argmin_{(a,i)\in \mathcal A \times \mathcal I} N_{t-1}^{a,i} - \tW_{t}^{a,i}$
-    \EndFor
-\end{algorithmic}
-\end{algorithm}
+% \begin{algorithm}[tb]
+% \centering
+% \caption{\LGC}
+% \label{alg:lgc}
+% \begin{algorithmic}[1]
+%     \State {\bfseries Input:} Agent learner $\cL_{\tw}$, threshold $\beta(\cdot,\delta)$
+%     \For{t = 1 \ldots}
+%         \State \textit{// Stopping rule}
+%         \If{ {\small $\max_{i\in \cI} \inf_{\lambda\in\neg i} \frac{1}{2}\normm{\htheta_{t-1}-\lambda}^2_{V_{N_{t-1}}}\geq \beta(t-1,\delta)$}}
+%             \State {\bfseries stop} and {\bfseries return} $\hi = \istar(\hat{\theta}_{t-1})$. 
+%         \EndIf
+%         \State \textit{// Agent plays first}
+%         \State \texttt{get} $\tw_{t}$ \texttt{from} $\cL_{\tw}$ 
+%         \State \texttt{update} $\tW_{t}=\tW_{t-1}+\tw_{t}$
+%         \State \textit{// Best response for the nature}
+%         \State $\forall i\in\cI$, $\tlambda^i_{t} \in \argmin_{\lambda\in\neg i}\normm{\htheta_{t-1}-\lambda}^2_{V_{\tw^i_{t}}}$
+%         \State \textit{// Feed optimistic gains}
+%         \State \texttt{feed learner} $\cL_{\tw}$ \texttt{with} {$g_{t}(\tw) =\sum_{(a,i)\in\cA\times\cI} \tw^{a,i} U_t^{a,i}/2$}
+%         \State \textit{// Track the weights}
+%         \State \texttt{pull} $(a_{t},i_{t})\in \argmin_{(a,i)\in \mathcal A \times \mathcal I} N_{t-1}^{a,i} - \tW_{t}^{a,i}$
+%     \EndFor
+% \end{algorithmic}
+% \end{algorithm}
 
-\paragraph{Stopping rule.}
+\paragraph{Stopping rule and decision rules.}
 Our algorithms share the same stopping rule. Following \citet{garivier2016tracknstop}, our algorithms stop if a generalized likelihood ratio exceeds a threshold. It stops if
 \begin{align}
 \label{eq:def_chernoff_stopping}
@@ -104,7 +110,10 @@ Our algorithms share the same stopping rule. Following \citet{garivier2016trackn
 > \beta(t,\delta)\,,
 \end{align}
 and return {\small $\displaystyle \istar_t\! \in\! \argmax_{i\in \mathcal I}\! \inf_{\lambda_i \in \neg i}\Vert \tilde{\theta}_t - \lambda_i \Vert^2_{V_{N_t}}/2$}.
-This stopping and decision rules ensures that the algorithms \LG and \LGC are $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.concentration}.
+
+
+These stopping and decision rules ensure that the \LG{} is $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.concentration}.
+
 \begin{lemma}
 \label{lem:chernoff_stopping rule_pac}
 Regardless of the sampling rule, the stopping rule~\eqref{eq:def_chernoff_stopping} with the threshold

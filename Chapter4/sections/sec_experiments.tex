@@ -267,19 +267,19 @@ In particular we notice that targeting the proportions of pulls $w_{\xyopt}, w_{
 Finally we benchmark our two sampling rules against others from the literature. %Note that the main purpose of this paper is to propose algorithms with asymptotic optimality while being practically usable, but we do not claim to have the best performing ones.
 We test over two synthetic problem instances, with the first being the previous counter-example. We set $d=2$, $\alpha=\pi/6$. Fig.~\ref{fig:sample_complexity_1} shows the empirical stopping time of each algorithms averaged over 100 runs, with a confidence level $\delta=0.1, 0.01, 0.0001$ from left to right. Our two algorithms show competitive performance (the two leftmost boxes on each plot), and are only slightly worse than \LGapE.
 
-\begin{figure*}[ht]
+\begin{figure}[ht]
  \centering
  \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_sin_0-1}
  \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_sin_0-01}
  \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_sin_0-0001}
  \caption{Sample complexity of different linear BAI sampling rules over the usual counter-example with $\delta=0.1, 0.01, 0.0001$ respectively. CG = \LGC,  Lk = \LG, RR = uniform sampling, fix = tracking the fixed weights, GS = \XYS with $\gopt$-allocation, XYS = \XYS with $\xyopt$-allocation, LG = \LGapE. The mean stopping time is represented by a black cross.}
  \label{fig:sample_complexity_1}
-\end{figure*}
+\end{figure}
 
 For the second instance, we consider 20 arms randomly generated from the unit sphere $\mathbb{S}^{d-1}\eqdef\{a\in\R^d; \normm{a}_2=1\}$. We choose the two closest arms $a, a'$ and we set $\theta = a + 0.01(a'-a)$ so that a is the best arm. This setting has already been considered by~\citet{tao2018alba}. We report the same box plots over 100 replications as before with increasing dimension in Fig.~\ref{fig:sample_complexity_2}. More precisely, we set $d=6, 8, 10, 12$ respectively, and always keep a same $\delta = 0.01$. Our algorithms consistently show strong performances compared to other algorithms apart from \LGapE. Moreover, we can see that in these random examples, \LGC works better than the non-confexified one, and is even competitive compared to \LGapE.
 
 
-\begin{figure*}[ht]
+\begin{figure}[ht]
  \centering
  \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_dim_6}
  \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_dim_8}
@@ -287,6 +287,6 @@ For the second instance, we consider 20 arms randomly generated from the unit sp
  \includegraphics[clip, width= 0.34\textwidth]{Chapter4/img/bai_dim_12}
  \caption{Sample complexity of different linear BAI sampling rules over random unit sphere vectors with $d=6, 8, 10, 12$ from left to right.}
  \label{fig:sample_complexity_2}
-\end{figure*}
+\end{figure}
 
 We stress that although the main focus of this chapter is theoretical, with algorithms that are asymptotically optimal, our methods are also competitive with earlier algorithms experimentally.

@@ -1,16 +1,32 @@
 %!TEX root = ../Chapter4.tex
-\section{Problem Formulation and Assumptions}\label{sec:lgc.formulation}
+\section{Problem Setting and Assumptions}\label{sec:lgc.formulation}
+
+In this section, we first recall the problem setting of linear bandits as well as linear bandits BAI. In particular, we specify the assumptions used in this chapter.
+
+\subsection{General setting and assumptions}\label{sec:lgc.formulation.general}
 
 \paragraph{Linear bandits.}
-We consider a \emph{finite-arm linear bandit} problem, where the collection of arms $\cA\subset \R^d$ is given  with $|\cA|=A$, and spans $\R^d$. We assume that $\forall a\in\cA, \normm{a}\leq L$, where $\normm{a}$ denotes the Euclidean norm of the vector $a$. The learning protocol goes as follows: for each round $1\leq t \leq T,$ the agent chooses an arm $a_t\in\cA$ and observes a noisy sample
+We consider a finitely-armed linear bandit problem, where the collection of arms $\cX\subset \R^d$ is given with $|\cX|=K$, and spans $\R^d$. 
+\begin{assumption}
+\begin{leftbar}[assumptionbar]
+    We assume that $\forall \bx\in\cX, \normm{x}\leq L$, where $\normm{\bx}$ denotes the Euclidean norm of the vector $\bx$.
+\end{leftbar}
+\end{assumption}
+
+The learning protocol (see also Definition~\ref{def:mab.linear_bai}) goes as follows: for each round $n$, the learner chooses an arm $\bx_n\in\cX$ and observes a noisy sample
 \[
-Y_t =\langle \theta,a_t\rangle +\eta_t\,,
+    r_t = \btheta\transpose\bx_n +\epsilon_n\,,
 \]
-where $\eta_t \sim \cN(0,\sigma^2)$ is conditionally independent from the past and $\theta$ is some unknown regression parameter. For the sake of simplicity, we use $\sigma^2 = 1$ in the rest of this paper.
+where $\epsilon_n$ is the noise and $\btheta$ is some unknown regression parameter.
+\begin{assumption}
+\begin{leftbar}[assumptionbar]
+    We assume that $\epsilon_n \sim \cN(0,\sigma^2)$ is conditionally independent from the past\,.
+\end{leftbar}
+\end{assumption}
+For the sake of simplicity, we use $\sigma^2 = 1$ in the rest of this paper.
 
 \paragraph{Pure exploration for linear bandits.}
-We assume that $\theta$ belongs to some set $\cM\subset\R^d$ known to the agent. % s.t.\,$\forall \theta\in\cM, \normm{\theta}\leq M$.
-For each parameter a \emph{unique correct answer} is given by the function $\istar: \cM \to \cI$ among the $I = |\cI|$ possible ones (the extension of pure exploration to multiple correct answers is studied by~\citealt{degenne2019pure}). Given a parameter~$\theta$, the agent then aims to find the correct answer $\istar(\theta)$ by interacting with the finite-armed linear bandit environment parameterized by~$\theta$.
+We assume that $\btheta$ belongs to some parameter set $\Theta\subset\R^d$ known to the learner. For each parameter a \emph{unique correct answer} is given by the function $\istar: \cM \to \cI$ among the $I = |\cI|$ possible ones (the extension of pure exploration to multiple correct answers is studied by~\citealt{degenne2019pure}). Given a parameter~$\theta$, the agent then aims to find the correct answer $\istar(\theta)$ by interacting with the finite-armed linear bandit environment parameterized by~$\theta$.
 
 In particular, we detail the setting of BAI for which the objective is to identify the arm with the largest mean. That is, the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$ for $\theta\in\cM = \R^d$ and the set of possible correct answers is $\cI = \cA$. We provide other pure-exploration examples in Appendix~\ref{app:lgc.examples}.
 
@@ -26,7 +42,7 @@ Pure exploration (in particular BAI) for linear bandits has been previously stud
 
 Beside studying fixed-confidence sample complexity,~\citet{garivier2016tracknstop} and some subsequent works~\citep{qin2017ttei,shang2020t3c} investigate a general criterion of judging the optimality of a BAI sampling rule: Algorithms that achieve the minimal sample complexity when~$\delta$ tends to zero are called asymptotically optimal. \citet{menard2019lma} and~\citet{degenne2019game} further study the problem in a game theoretical point of view, and extend the asymptotic optimality to the general pure exploration for structured bandits. Note that a naive adaptation of the algorithm proposed by~\citet{degenne2019game} may not work smoothly in our setting. In this paper we use some different confidence intervals that benefit better from the linear structure.
 
-\paragraph{Linear estimator}
+\paragraph{Linear estimator.}
 Let $\bX_n=(\hat{\bx}_1,\ldots,\hat{\bx}_n)$ be a sequence of sampled arms, and $\bY_n=(y_1,\ldots,y_n)$ be the corresponding observations. To estimate the regression parameter $\btheta^\star$ based on the adaptive sequence of observations $\bY_n$, one may use the \emph{regularized least-squares} estimator
 \begin{align}\label{eq:update_mean}
     \hat{\btheta}_n^{\lambda} = (\lambda \1_d + \bA_{\bX_n})^{-1}\bb_{\bX_n},
@@ -36,7 +52,7 @@ where $\bA_{\bX_n}$ and $\bb_{\bX_n}$ are the design matrix and the response vec
     \bA_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t\hat{\bx}_t\transpose, \quad \bb_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t y_t.
 \]
 
-\paragraph{Useful notation}
+\paragraph{Useful notation.}
 The fixed-confidence optimality, as proved by~\cite{garivier2016tracknstop,russo2016ttts}, is related to the \emph{proportion vector} of pulls of each arm that we denote by $\bomega = (\omega_1,\ldots,\omega_K)$, where $\bomega\in\Sigma_K \eqdef \{\bomega : \sum_{i=1}^K \omega_i = 1\}$. Given a vector of proportions $\bomega$, we can define a counterpart of the design matrix 
 \[
     \bLambda_{\bomega} \eqdef \sum_{i=1}^K \omega_i\bx_i\bx_i\transpose.
@@ -53,7 +69,7 @@ Another important notation that we employ ceaselessly is the Mahalanobis norm wh
     \forall \bx\in\R^d, \quad \normm{\bx}_{\bA} = \sqrt{\bx\transpose\bA\bx}.
 \]
 
-\subsection{Examples}\label{sec:lgc.examples}
+\subsection{Different best-arm identification instances for linear bandits}\label{sec:lgc.formulation.examples}
 
 We gather in this appendix several pure exploration problems for linear bandits. We first state a useful lemma.
 
@@ -81,8 +97,7 @@ We consider the Lagrangian of the problem, and we obtain
 where the infimum in the first equality is reached at $\lambda = \theta + \alpha V_w^{-1} y$ and the supremum in the last equality is reached at $\alpha = (x- \langle\theta,y\rangle)/\normm{y}_{V_w^{-1}}^2$ if $x \geq \langle\theta,y\rangle$ and at $\alpha = 0$ else.
 \end{proof}
 
-\subsection{Best-arm identification}
-\label{app:bai}
+\paragraph{General BAI.}\label{sec:lgc.formulation.examples.general}
 For BAI the goal is to identify the arm with the largest mean. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{a\in\cA} \langle\theta,a\rangle|>1\}$, the set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
 \begin{lemma}
 \label{lem:complexity_bai}
@@ -117,7 +132,7 @@ then we have $\Tstar(\theta) = 2 \cA\cBstar(\theta)$ where
 \cA\cBstar(\theta) \eqdef  \min_{w\in\Sigma_A} \max_{b\in \cBstar} \normm{b}_{V_w^{-1}}^2\,.
 \]
 
-\paragraph{Best response.} There is an explicit formula for the best response in BAI. Indeed if we inspect the proof of Lemma~\ref{lem:complexity_bai} we have
+There is an explicit formula for the best response in BAI. Indeed if we inspect the proof of Lemma~\ref{lem:complexity_bai} we have
 \[
 \inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{V_w}^2}{2} = \min_{a \neq \astar(\theta)} \normm{\theta-\lambda^\star_a}_{V_w^{-1}}\,.
 \]
@@ -138,9 +153,7 @@ and $\lambda^\star_a$ defined below attains the infimum of the left hand term ab
 See proof of Lemma~\ref{lem:lagrange_alternative}.
 \end{proof}
 
-
-\subsubsection{Bounded BAI}
-\label{app:bounded_bai}
+\paragraph{Bounded BAI.}\label{sec:lgc.formulation.examples.bounded}
 One straightforward extension of this setting is to consider the \emph{bounded} BAI. In this case, the set of parameters is $\cM=\{\theta \in \R^d:\ |\argmax_{a\in\cA} \langle\theta,a\rangle|=1 \text{ and } \normm{\theta}\leq M\}$ for some $M>0$. The set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
 This additional assumption reduces the characteristic time to
 \[
@@ -180,8 +193,7 @@ The supremum in $\alpha$ is reached for
 Using this particular $\alpha$ in the definition of $\lambda$ and in the Lagrangian allows us to conclude.
 \end{proof}
 
-\subsubsection{Transductive BAI}
-
+\paragraph{Transductive BAI.}\label{sec:lgc.formulation.examples.transductive}
 We can also consider the transductive BAI~\citep{fiez2019transductive} where the agent wants to find the best arm of a different set $\cB$ that the one he is allow to pull. Precisely the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{b\in\cB} \langle\theta,b\rangle|>1\}$, the set of possible answers is $\cI = \cB$ and the correct answer is given by $\istar(\theta)=\bstar(\theta)\eqdef \argmax_{b\in\cB} \langle\theta,b\rangle$.
 
 The characteristic time in this case is

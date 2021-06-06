@@ -83,7 +83,7 @@ We investigate whether \LTCCG could be optimal in the classical bandit setting w
 \paragraph{\LTCCG}
 We compare its performance to \LGapE over the aforementioned pathological instance with $d=2$, $\lambda=2$ and two values of $\alpha$. More precisely, we report in Table~\ref{table:pulls1} the total number of pulls and also the number of pulls allocated to each arm for each of the sampling rules. The results confirm our intuition in the previous section. 
 
-\begin{table*}[ht]
+\begin{table}[ht]
 \centering
 \begin{tabular}{|c|c|c|}
  \hline
@@ -100,9 +100,9 @@ We compare its performance to \LGapE over the aforementioned pathological instan
 \end{tabular}
 \caption{Average number of pulls of each arm ($d=2, \delta=0.1$).}
 \label{table:pulls1}
-\end{table*}
+\end{table}
 
-\begin{table*}[ht]
+\begin{table}[ht]
 \centering
 \begin{tabular}{|c|c|c|c|}
  \hline
@@ -119,7 +119,7 @@ We compare its performance to \LGapE over the aforementioned pathological instan
 \end{tabular}
 \caption{Average number of pulls of each arm ($d=2, \delta=0.1$).}
 \label{table:pulls2}
-\end{table*}
+\end{table}
 
 We also compare the impact of the dimension $d$ over the performance of our sampling rule and $\LGapE$. We run experiments on the same instance with a value of the angle set to $\alpha=0.1$. This time we let the dimension $d$ varying from 2 to 6. \LTCC{} is always better and the performance gap increases with the dimension. Thus, our algorithm seems to be more robust to the dimension.
 

@@ -90,7 +90,11 @@ This motivates the relaxed optimality notion that we introduce in this paper: A 
 \[\frac{T_{n,I^\star}}{n}\rightarrow \beta \ \ \ \text{and} \ \ \ \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq \frac{1}{\Gamma^\star_\beta}.\]
 In the paper, we provide the first sample complexity analysis of a BAI algorithm based on \TTTS (with the stopping and recommendation rules described in Section~\ref{sec:t3c.algorithm}), establishing its asymptotic $\beta$-optimality.
 
-As already observed by \cite{qin2017ttei}, any sampling rule converging to the $\beta$-optimal allocation (i.e.\ satisfying $T_{n,i}/n \rightarrow w_i^\beta$ for all $i$) can be shown to satisfy $\limsup_{\delta \rightarrow 0} \tau_\delta/\ln(1/\delta) \leq (\Gamma_\beta^\star)^{-1}$ almost surely,  when coupled with the Chernoff stopping rule. The fixed confidence optimality that we define above is stronger as it provides guarantees on $\EE{\tau_\delta}$.
+As already observed by \cite{qin2017ttei}, any sampling rule converging to the $\beta$-optimal allocation (i.e.\ satisfying $T_{n,i}/n \rightarrow w_i^\beta$ for all $i$) can be shown to satisfy 
+\[
+    \limsup_{\delta \rightarrow 0} \tau_\delta/\ln(1/\delta) \leq (\Gamma_\beta^\star)^{-1}
+\]
+almost surely, when coupled with the Chernoff stopping rule. The fixed confidence optimality that we define above is stronger as it provides guarantees on $\EE{\tau_\delta}$.
 
 % \paragraph{(Parameterized) Optimal weight vector} We first define a characteristic function $C_i$ for each arm $i \neq I^\star$,
 % \[
