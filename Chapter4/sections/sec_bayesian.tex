@@ -152,6 +152,7 @@ We investigate whether \LTCCG{} could be optimal in the classical bandit setting
 \end{figure}
 
 \subsection{Empirical performance of \LTCCG{}}
+\paragraph{Results.}
 We compare the performance of \LTCCG{} to \LGapE{} over the aforementioned pathological instance with $d=2$, $c=2$ and two values of $\alpha$. More precisely, we report in Table~\ref{table:pulls1} the total number of pulls and also the number of pulls allocated to each arm for each of the sampling rules. The results confirm our intuition in the previous section. 
 
 \begin{table}[ht]
@@ -200,6 +201,30 @@ We also compare the impact of the dimension $d$ over the performance of our samp
     \caption{Comparison of the sample complexity of \LTCCG{} and \LGapE{} on the pathological instance in $\R^d$ for different values of $d$.}
     \label{fig:dims}
 \end{figure}
+
+\paragraph{Rank-1 multivariate normal distribution sampling.}
+A technical point for the experiments in this section is to sample from a multivariate normal distribution (e.g. for \LTCC{}). We can proceed by the following.
+
+Indeed, a random Gaussian vector 
+\[
+    \bX = (X_1, X_2, \ldots, X_d)\transpose
+\] 
+of mean vector $\bar{\bmu}$ and covariance matrix $\bSigma$ can be formally defined as following,
+\[
+    \bX \sim \cN(\bar{\bmu}, \bSigma) \iff \exists \bar{\bmu}\in\mathbb{R}^d,\bA\in\mathbb{R}^{d\times d'} \ \text{s.t.} \ \bX = \bA \mathbf{Z} + \bar{\bmu},
+\]
+for $Z_i \sim\ \mathcal{N}(0, 1)$ i.i.d. with $i\in\{1,\ldots,d'\}$, and here $\bSigma = \bA\bA\transpose$.
+
+To draw a sample from a multivariate normal distribution, according to the previous definition, one can first find any real matrix $\bA$ such that $\bA\bA\transpose = \bSigma$. Then draw a vector $\bZ$ whose components independently follow standard normal distribution. Finally $\bX = \bA \mathbf{Z} + \bar{\bmu}$ forms a valid sample. The main issue is thus how to find an appropriate matrix $\bA$.
+
+In this section, we need to sample from $\cN(\hat{\btheta}^\lambda_n,\hat{\bSigma}_n)$, where the covariance matrix $\hat{\bSigma}_n$ is a positive-definite matrix. A usual way is to apply the Cholesky decomposition, which is computationally inefficient if it were to be applied at each time step. Fortunately, we can apply rank-1 Cholesky decomposition in our case.  
+
+%We, however, notice that $\bA = (\hat{\bSigma}_n)^{1/2}=\sigma(\bB^{\lambda}_n)^{-1/2}$ is also a valid candidate, and is thus can be also updated iteratively using a similar formula to the Sherman-Morrison formula.
+
+%More precisely, we have
+%\begin{align*}
+%    \forall t\geq 0, \quad (\bB^{\lambda}_{t+1})^{-\frac{1}{2}} = (\bB^{\lambda}_t)^{-\frac{1}{2}} - \ddfrac{\left(1-\sqrt{1-\frac{\normm{\hat{\bx}_{t+1}}_{(\bB^{\lambda}_t)^{-1}}^2}{1+\normm{\hat{\bx}_{t+1}}_{(\bB^{\lambda}_t)^{-1}}^2}}\right)}{\normm{\hat{\bx}_{t+1}}_{(\bB^{\lambda}_t)^{-1}}^2} (\bB^{\lambda}_t)^{-\frac{1}{2}}\hat{\bx}_{t+1}\hat{\bx}_{t+1}\transpose(\bB^{\lambda}_t)^{-\frac{1}{2}}.
+%\end{align*}
 
 % \subsection{Technical tools}
 

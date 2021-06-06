@@ -209,3 +209,119 @@ For a regularization parameter\footnote{This condition is a simple technical tri
 \end{align*}
 \end{theorem}
 The main ideas used in the proof are explained above. The full proof is in Appendix~\ref{app:lgc.proof} with finite $\delta$ upper bounds.
+
+\subsection{Experiments}\label{sec:lgc.game.experiments}
+
+In this section, we provide technical details of our experiments. We also share a few insights over different aspects of implementations of different pure exploration linear bandits algorithms. In particular, we propose a new Frank-Wolfe-typed heuristic to solve generic $\cA\cB$-design.
+
+Besides our algorithms, we implement the following algorithms, all using the same stopping rule (more discussion given in Appendix~\ref{app:lgc.stopping}): uniform sampling, the greedy version of \XYS (including $\gopt$-allocation and $\xyopt$-allocation), \XYA, and the greedy version of \LGapE. We skip \GLUCB/\GLGapE since they are more or less equivalent to \LGapE in the scope of this paper.
+
+\paragraph{Implementation details.}
+We give more clarifications on each individual algorithm implemented.
+
+\begin{itemize}
+	\item For our algorithms \LG and \LGC, we implemented the version with the boundedness assumption.
+	\item For \LGapE We implemented the greedy version, that is, pull the arm 
+	\[
+	    \argmin_{a\in\cA} \normm{a_{i_t}-a_{j_t}}_{(V_{N_t}+aa^\top)^{-1}}^2
+	\]
+	with $i_t = i^\star(\hat\theta_t)$ and $j_t = \argmax_{j\neq i_t}\langle\hat\theta_t,a_{j}-a^\star(\hat\theta_t)\rangle + \normm{a^\star(\hat\theta_t) - a_{j_t}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)}$. Note that this version does not have a theoretical guarantee in the general case. However, as we stated in Section~\ref{sec:lgc.related_work}, the \GLUCB proposed by~\citet{zaki2019maxoverlap} is equivalent to this greedy version of \LGapE, and they provided an analysis for the 2-arm and 3-arm case. \LGapE is designed for $\epsilon$-best-arm identification, we set $\epsilon=0$ in our experiments to make sure that it outputs the optimal one.
+	\item For \XYS, we implemented the greedy incremental version for both $\gopt$-allocation and $\xyopt$-allocation, that allows us to avoid the optimal design-computing step. To implement the non-greedy version, readers are invited to look at next Section~\ref{sec:lgc.experiments.complexity} where we discuss in detail the computation of $\cA\cB$-optimal design.
+	\item For \XYA, it requires a hyper-parameter that characterizes the length of each phase. We set that hyper-parameter to $0.1$ as done by~\citet{soare2014linear}.
+\end{itemize}
+
+% \paragraph{Technical details.} All the algorithms and experiments are implemented in \lstinline{Julia 1.3.1}, and plots are generated using the \lstinline{StatsPlots.jl} package. Other external dependencies are: \lstinline{JLD2.jl, Distributed.jl, IterTools.jl, CPUTime.jl, LaTeXStrings.jl}.
+
+% \paragraph{For reproducibility.} To rerun our code, your need to have Julia installed, then unzip \lstinline{code.zip} and do the following in your terminal.
+
+% \begin{lstlisting}
+%   $ cd PATH/TO/THE/FOLDER/code/linear
+%   $ julia
+%   julia> include("experiment_bai1.jl") # reproduce Fig.1
+%   julia> include("viz_bai1.jl") # visualization
+%   julia> include("experiment_bai2.jl") # reproduce Fig.2
+%   julia> include("viz_bai2.jl") # visualization
+% \end{lstlisting}
+
+%\subsubsection{Arm generation.} In Section~\ref{sec:experiments}, we need to generate arms uniformlly from a unit sphere of arbitrary dimension. This can be done using Algorithm~\ref{alg:generation}, it can be trivially extended to higher dimension.
+%
+%\begin{algorithm}[ht]
+%   \caption{Generating arms from the 2D unit sphere (Box-Mueller)}
+%   \label{alg:generation}
+%\begin{algorithmic}
+%        \State $u \sim \cN(0,1)$
+%        \State $v \sim \cN(0,1)$
+%        \State $(x, y) = (u, v)/\normm{(x, y)}_2$
+%        \RETURN $x, y$
+%\end{algorithmic}
+%\end{algorithm}
+
+\paragraph{Implementation trick.}
+Matrix inversion is a costly step that should be avoided at best. For linear bandits, in particular, we need to inverse the (regularized) design matrix $\bB^{\lambda}_n$, which is renewed with a rank-1 update at each time step. Applying Sherman-Morrison formula allows us thus to only update its inverse incrementally, that releases a huge burden of computation.
+
+Indeed, beginning with $\bB^{\lambda}_0 \eqdef \lambda\1_d$, we have
+\[
+    \forall t\geq 0, \quad \bB^{\lambda}_{t+1} = \bB^{\lambda}_t + \hat{\bx}_{t+1}\hat{\bx}_{t+1}\transpose,
+\]
+thus using Sherman-Morrison formula we have
+\[
+    \forall t\geq 0, \quad (\bB^{\lambda}_{t+1})^{-1} = (\bB^{\lambda}_t)^{-1} - \frac{(\bB^{\lambda}_t)^{-1}\hat{\bx}_{t+1}\hat{\bx}_{t+1}\transpose(\bB^{\lambda}_t)^{-1}}{1+\normm{\hat{\bx}_{t+1}}_{(\bB^{\lambda}_t)^{-1}}^2}.
+\]
+
+The posterior mean vector and covariance matrix can then be easily expressed in terms of $(\bB^{\lambda}_t)^{-1}$. Let $\bz_t \eqdef \sum_{s=1}^t y_s\hat{\bx}_s$, we obtain
+\[
+    \hat{\btheta}_n^{\lambda} = (\bB^{\lambda}_t)^{-1}\bz_t \quad \text{and} \quad \hat{\bSigma}_n = \sigma^2 (\bB^{\lambda}_t)^{-1}\,.
+\]
+
+\paragraph{Experimental setting.}
+
+Usual sampling rules for classical BAI may not work for the linear case. This can be understood on a well-studied instance already discussed by~\citet{soare2014linear,xu2018linear}, which encapsulates the difficulty of BAI in a linear bandit, and thus is the first instance on which we test our algorithms. In this instance, arms are the canonical basis  $a_1 = e_1, a_2 = e_2, a_d = e_d$, plus an additional disturbing arm $a_{d+1} = (\cos(\alpha), \sin(\alpha), 0, \ldots, 0)^\top$, and a true regression parameter $\theta$ equal to $e_1$. In this problem, the best arm is always $a_1$, but when the angle $\alpha$ is small, the disturbing arm $a_{d+1}$ is hard to discriminate from $a_1$. As already argued by~\citet{soare2014linear}, an efficient sampling rule for this problem instance would rather pull $a_2$ in order to reduce the uncertainty in the direction $a_1-a_{d+1}$. Naive adaptation of classical BAI algorithms cannot deal with that situation naturally. We further use a simple set of experiments to justify that intuition. We run our two algorithms and the one of~\citet{degenne2019game} that we call \texttt{DKM} over the problem instance whence $d=2$, $\delta=0.01$ and $\alpha=0.1$. We show the number of pulls for each arm averaged over 100 replications of experiments in Table~\ref{table:pulls}. We see that, indeed, \texttt{DKM} pulls too much $a_3$, while our algorithms focus mostly on $a_2$.
+
+\begin{table}[t!]\centering
+%\def\arraystretch{1.2}
+\begin{tabular}{|c|c|c|c|}
+ \hline
+ & \LG & \LGC & \texttt{DKM} \\
+ \hline
+ \textbf{$a_1$} & $1912$ & $1959$ & $1943$ \\
+ \hline
+ \textbf{$a_2$} & $5119$ & $4818$ & $4987$ \\
+ \hline
+ \textbf{$a_3$} & $104$ & $77$ & $1775$ \\
+ \hline
+ \textbf{Total} & $7135$ & $\bf{6854}$ & $8705$ \\
+ \hline
+\end{tabular}
+\caption{Average number of pulls of \LG and \LGC (against \texttt{DKM}) for each arm.}
+\label{table:pulls}
+\end{table}
+
+\paragraph{Experimental results}
+
+We benchmark our two sampling rules against others from the literature. %Note that the main purpose of this paper is to propose algorithms with asymptotic optimality while being practically usable, but we do not claim to have the best performing ones.
+We test over two synthetic problem instances, with the first being the previous counter-example. We set $d=2$, $\alpha=\pi/6$. Fig.~\ref{fig:sample_complexity_1} shows the empirical stopping time of each algorithms averaged over 100 runs, with a confidence level $\delta=0.1, 0.01, 0.0001$ from left to right. Our two algorithms show competitive performance (the two leftmost boxes on each plot), and are only slightly worse than \LGapE.
+
+\begin{figure}[ht]
+ \centering
+ \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_sin_0-1}
+ \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_sin_0-01}
+ \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_sin_0-0001}
+ \caption{Sample complexity of different linear BAI sampling rules over the usual counter-example with $\delta=0.1, 0.01, 0.0001$ respectively. CG = \LGC,  Lk = \LG, RR = uniform sampling, fix = tracking the fixed weights, GS = \XYS with $\gopt$-allocation, XYS = \XYS with $\xyopt$-allocation, LG = \LGapE. The mean stopping time is represented by a black cross.}
+ \label{fig:sample_complexity_1}
+\end{figure}
+
+For the second instance, we consider 20 arms randomly generated from the unit sphere $\mathbb{S}^{d-1}\eqdef\{a\in\R^d; \normm{a}_2=1\}$. We choose the two closest arms $a, a'$ and we set $\theta = a + 0.01(a'-a)$ so that a is the best arm. This setting has already been considered by~\citet{tao2018alba}. We report the same box plots over 100 replications as before with increasing dimension in Fig.~\ref{fig:sample_complexity_2}. More precisely, we set $d=6, 8, 10, 12$ respectively, and always keep a same $\delta = 0.01$. Our algorithms consistently show strong performances compared to other algorithms apart from \LGapE. Moreover, we can see that in these random examples, \LGC works better than the non-confexified one, and is even competitive compared to \LGapE.
+
+
+\begin{figure}[ht]
+ \centering
+ \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_dim_6}
+ \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_dim_8}
+ \includegraphics[clip, width= 0.33\textwidth]{Chapter4/img/bai_dim_10}
+ \includegraphics[clip, width= 0.34\textwidth]{Chapter4/img/bai_dim_12}
+ \caption{Sample complexity of different linear BAI sampling rules over random unit sphere vectors with $d=6, 8, 10, 12$ from left to right.}
+ \label{fig:sample_complexity_2}
+\end{figure}
+
+We stress that although the main focus of this chapter is theoretical, with algorithms that are asymptotically optimal, our methods are also competitive with earlier algorithms experimentally.
+
