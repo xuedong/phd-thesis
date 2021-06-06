@@ -319,15 +319,15 @@ In practice, EBA is often used in the literature. A more detailed discussion of 
 
 For real-world applications, sometimes specific need should be met when applying BAI. The problem formulation needs to be adapted with potentially additional assumptions. Furthermore, as stated in Remark~\ref{remark:intro.pure}, BAI can be studied within a more general context of pure exploration. The purpose of this section is thus to provide a brief overview of commonly studied extensions of BAI as well as other pure exploration problems. We pay particular attention to BAI for linear bandits as it is the main topic of Chapter~\ref{CHAP:LGC}.
 
-\subsection{Pure exploration game}\label{sec:mab.extensions.pure}
+\subsection{pure-exploration game}\label{sec:mab.extensions.pure}
 
-A learner in a general pure exploration game interacts with the environment by sequentially taking actions to identify the \emph{answer} to a pre-specified question. We denote by $\Theta$ the set of possible mean parameters for a specific bandit problem. We further assume that there is a finite set of answers $\cI$. For each parameter in $\Theta$, a \emph{unique correct answer} is given by the function $\Istar:\Theta \to \cI$ among the $|\cI|$ possible ones (the extension of pure exploration to multiple correct answers is studied by~\citealt{degenne2019pure}).
+A learner in a general pure-exploration game interacts with the environment by sequentially taking actions to identify the \emph{answer} to a pre-specified question. We denote by $\Theta$ the set of possible mean parameters for a specific bandit problem. We further assume that there is a finite set of answers $\cI$. For each parameter in $\Theta$, a \emph{unique correct answer} is given by the function $\Istar:\Theta \to \cI$ among the $|\cI|$ possible ones (the extension of pure exploration to multiple correct answers is studied by~\citealt{degenne2019pure}).
 
-While BAI is the mostly studied setting of pure exploration game, other types of question exist as well, e.g. threshold bandits~\citep{locatelli2016thresholding}, minimum threshold~\citep{kaufmann2018murphy}, signed bandits~\citep{menard2019lma}, pure exploration combinatorial bandits~\citep{chen2014combinatorial}, Monte-Carlo tree search \citep{teraoka2014mc}, etc.
+While BAI is the mostly studied setting of pure-exploration game, other types of question exist as well, e.g. threshold bandits~\citep{locatelli2016thresholding}, minimum threshold~\citep{kaufmann2018murphy}, signed bandits~\citep{menard2019lma}, pure exploration combinatorial bandits~\citep{chen2014combinatorial}, Monte-Carlo tree search \citep{teraoka2014mc}, etc.
 
 The learning protocol of a general pure exploration problem is summarized in Definition~\ref{def:mab.pure}.
 
-\begin{definition}[pure exploration game]\label{def:mab.pure}
+\begin{definition}[pure-exploration game]\label{def:mab.pure}
 \begin{leftbar}[defnbar]
 	We are given a set of $K$ arms that is parameterized by a parameter vector $\bmu\in\Theta$. At each time step $n$, the learning process consists of the following actions:
 \begin{itemize}
@@ -340,7 +340,7 @@ The learning protocol of a general pure exploration problem is summarized in Def
 \end{leftbar}
 \end{definition}
 
-Notably, we can recover the BAI problem from a pure exploration game by setting the pre-specified question to be finding the best arm: $\Istar = \argmax_{i\in[K]}\mu_i$, and by setting the answer set to be equal to the arm set: $\cI = \cX$.
+Notably, we can recover the BAI problem from a pure-exploration game by setting the pre-specified question to be finding the best arm: $\Istar = \argmax_{i\in[K]}\mu_i$, and by setting the answer set to be equal to the arm set: $\cI = \cX$.
 
 \subsection{Best-arm identification for linear bandits}\label{sec:mab.extensions.linear}
 

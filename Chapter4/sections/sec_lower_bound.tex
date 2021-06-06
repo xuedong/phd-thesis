@@ -13,7 +13,7 @@ while minimizing the expected number of samples $\EE{\tau_\delta}$ that is requi
 In this section we extend the lower bound of \citet{garivier2016tracknstop}, to hold for \emph{pure exploration in finitely-armed linear bandit} problems.
 
 \paragraph{Alternative.}
-We first define the notion of \gls{alternative set} in a pure exploration game. For any answer $i\in\cI$ we define the \emph{alternative set} of arm $i$, denoted by $\neg i$ the set of parameters where the answer $i$ is not correct, i.e.
+We first define the notion of \gls{alternative set} in a pure-exploration game. For any answer $i\in\cI$ we define the \emph{alternative set} of arm $i$, denoted by $\neg i$ the set of parameters where the answer $i$ is not correct, i.e.
 \[
     \neg i \eqdef \{\btheta\in\Theta:\ i\neq\Istar(\btheta)\}\,.
 \]
@@ -111,7 +111,7 @@ The inverse of the characteristic time of Proposition~\ref{prop:lgc.lb} can also
 \]
 for BAI.
 
-Since the characteristic time involves many problem dependent quantities that are unknown to the learner, previous works target loose problem-independent upper bounds on the characteristic time. \citet{soare2014linear} (see also \citealt{tao2018alba,fiez2019transductive}) introduce the G-complexity (denoted by $\gopt$) which coincides with the G-optimal design of experimental design theory (see \citealt{pukelsheim2006optimal}) and the $\xyopt$-complexity (denoted by $\xyopt$) inspired by the transductive experimental design theory  \citep{yu2006active},
+Since the characteristic time involves many problem dependent quantities that are unknown to the learner, previous work target loose problem-independent upper bounds on the characteristic time. \citet{soare2014linear} (see also \citealt{tao2018alba,fiez2019transductive}) introduce the G-complexity (denoted by $\gopt$) which coincides with the G-optimal design of experimental design theory (see \citealt{pukelsheim2006optimal}) and the $\xyopt$-complexity (denoted by $\xyopt$) inspired by the transductive experimental design theory  \citep{yu2006active},
 \begin{align*}
     \gopt &=\min_{\bomega\in\Sigma_K} \max_{\bx\in\cX} \normm{\bx}_{\bLambda_{\bomega}^{-1}}^2\,,\\
     \xyopt &=\min_{\bomega\in\Sigma_K} \max_{\by\in\cY_{\texttt{dir}}} \normm{\by}_{\bLambda_{\bomega}^{-1}}^2\,,
@@ -162,112 +162,129 @@ When $\cY=\cX$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956a
 
 \subsection{Some extensions}\label{sec:lgc.complexity.examples}
 
-In this section, we discuss some natural extensions of linear bandits BAI.
+In this section, we present two relevant extensions of linear bandits BAI. We introduce the settings from a pure-exploration point of view.
 
-\paragraph{Best response for BAI.}\label{sec:lgc.formulation.examples.general}
-For BAI the goal is to identify the arm with the largest mean. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{a\in\cA} \langle\theta,a\rangle|>1\}$, the set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
+% \paragraph{Best response for BAI.}\label{sec:lgc.formulation.examples.general}
+% For BAI the goal is to identify the arm with the largest mean. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{a\in\cA} \langle\theta,a\rangle|>1\}$, the set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
+
+% % \begin{lemma}
+% % \label{lem:complexity_bai}
+% % For all $\theta\in \cM$,
+% % \[
+% % \Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}\,,
+% % \]
+% % and
+% % \[
+% % \Tstar(\theta) = \min_{w\in\Sigma_A} \max_{a\neq \astar(\theta)} \frac{2\normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}{\big\langle \theta, \astar(\theta)-a\big\rangle^2}\,.
+% % \]
+% % \end{lemma}
+% % \begin{proof}
+% % Recall that the characteristic time is given by
+% % \[
+% % \Tstar(\theta)^{-1} = \max_{w \in \Delta_A} \inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2}\,.
+% % \]
+% % We just express the set $\neg \astar(\theta)$ as a union of convex sets, and then compute the infimum for each one of them. Using Lemma~\ref{lem:lagrange_alternative}, it yields
+% % \begin{align*}
+% %   \Tstar(\theta)^{-1} &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \inf_{\lambda: \langle\lambda,a\rangle > \langle\lambda,\astar(\theta)\rangle} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2}\\
+% %   &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}\,.
+% % \end{align*}
+% % The formula for $\Tstar(\theta)$ is then straightforward given the one for  $\Tstar(\theta)^{-1}$.
+
+% % \end{proof}
+
+% % In fact the characteristic time is just a particular case of the optimal transductive design. Indeed if we set
+% % \[
+% % \cBstar(\theta) \eqdef \left\{ \frac{1}{\left|\big\langle \theta, \astar(\theta)-a\big\rangle\right|}\big(\astar(\theta)- a\big): a\in\cA/\big\{\astar(\theta)\big\}  \right\}\,,
+% % \]
+% % then we have $\Tstar(\theta) = 2 \cA\cBstar(\theta)$ where
+% % \[
+% % \cA\cBstar(\theta) \eqdef  \min_{w\in\Sigma_A} \max_{b\in \cBstar} \normm{b}_{\bLambda_{\bomega}^{-1}}^2\,.
+% % \]
+
+% There is an explicit formula for the best response in BAI. Indeed if we inspect the proof of Proposition~\ref{prop:lgc.lb} we have
+% \[
+% \inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2} = \min_{a \neq \astar(\theta)} \normm{\theta-\lambda^\star_a}_{\bLambda_{\bomega}^{-1}}\,.
+% \]
+% where $\lambda^\star_a$ is defined in Lemma~\ref{lem:best_response_BAI}.
 
 % \begin{lemma}
-% \label{lem:complexity_bai}
-% For all $\theta\in \cM$,
+% \label{lem:best_response_BAI}
+% For $\theta \in\R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$, we have
 % \[
-% \Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}\,,
+% \min_{\substack{\langle \lambda,a-\astar(\theta)\rangle\geq 0}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}\,,
 % \]
-% and
+% and $\lambda^\star_a$ defined below attains the infimum of the left hand term above
 % \[
-% \Tstar(\theta) = \min_{w\in\Sigma_A} \max_{a\neq \astar(\theta)} \frac{2\normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}{\big\langle \theta, \astar(\theta)-a\big\rangle^2}\,.
+% \lambda^\star_a = \theta - \frac{\max\left(\langle \theta, \astar(\theta)-a\rangle,0\right)}{\normm{\astar(\theta)-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}} \bLambda_{\bomega}^{-1}(a^\star - a)\,.
 % \]
 % \end{lemma}
 % \begin{proof}
-% Recall that the characteristic time is given by
-% \[
-% \Tstar(\theta)^{-1} = \max_{w \in \Delta_A} \inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2}\,.
-% \]
-% We just express the set $\neg \astar(\theta)$ as a union of convex sets, and then compute the infimum for each one of them. Using Lemma~\ref{lem:lagrange_alternative}, it yields
-% \begin{align*}
-%   \Tstar(\theta)^{-1} &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \inf_{\lambda: \langle\lambda,a\rangle > \langle\lambda,\astar(\theta)\rangle} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2}\\
-%   &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}\,.
-% \end{align*}
-% The formula for $\Tstar(\theta)$ is then straightforward given the one for  $\Tstar(\theta)^{-1}$.
-
+% See proof of Lemma~\ref{lemma:lgc.lagrange_alternative}.
 % \end{proof}
 
-% In fact the characteristic time is just a particular case of the optimal transductive design. Indeed if we set
-% \[
-% \cBstar(\theta) \eqdef \left\{ \frac{1}{\left|\big\langle \theta, \astar(\theta)-a\big\rangle\right|}\big(\astar(\theta)- a\big): a\in\cA/\big\{\astar(\theta)\big\}  \right\}\,,
-% \]
-% then we have $\Tstar(\theta) = 2 \cA\cBstar(\theta)$ where
-% \[
-% \cA\cBstar(\theta) \eqdef  \min_{w\in\Sigma_A} \max_{b\in \cBstar} \normm{b}_{\bLambda_{\bomega}^{-1}}^2\,.
-% \]
-
-There is an explicit formula for the best response in BAI. Indeed if we inspect the proof of Proposition~\ref{prop:lgc.lb} we have
-\[
-\inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2} = \min_{a \neq \astar(\theta)} \normm{\theta-\lambda^\star_a}_{\bLambda_{\bomega}^{-1}}\,.
-\]
-where $\lambda^\star_a$ is defined in Lemma~\ref{lem:best_response_BAI}.
-
-\begin{lemma}
-\label{lem:best_response_BAI}
-For $\theta \in\R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$, we have
-\[
-\min_{\substack{\langle \lambda,a-\astar(\theta)\rangle\geq 0}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}\,,
-\]
-and $\lambda^\star_a$ defined below attains the infimum of the left hand term above
-\[
-\lambda^\star_a = \theta - \frac{\max\left(\langle \theta, \astar(\theta)-a\rangle,0\right)}{\normm{\astar(\theta)-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}} \bLambda_{\bomega}^{-1}(a^\star - a)\,.
-\]
-\end{lemma}
-\begin{proof}
-See proof of Lemma~\ref{lemma:lgc.lagrange_alternative}.
-\end{proof}
-
 \paragraph{Bounded BAI.}\label{sec:lgc.formulation.examples.bounded}
-One straightforward extension of this setting is to consider the \emph{bounded} BAI. In this case, the set of parameters is $\cM=\{\theta \in \R^d:\ |\argmax_{a\in\cA} \langle\theta,a\rangle|=1 \text{ and } \normm{\theta}\leq M\}$ for some $M>0$. The set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
+
+One straightforward extension is to consider the \emph{bounded} BAI. In this case, the set of parameters is 
+\[
+    \Theta \eqdef \{\btheta \in \R^d:\ |\argmax_{\bx\in\cX} \bx\transpose\btheta|=1 \text{ and } \normm{\btheta}\leq M\}
+\]
+for some $M>0$. The set of possible answers is $\cI = \cX$ and the correct answer is given by 
+\[
+    \Istar(\theta) = \bx^\star(\theta) \eqdef \argmax_{\bx\in\cX} \bx\transpose\btheta\,.
+\]
+
 This additional assumption reduces the characteristic time to
 \[
-\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \inf_{\substack{\langle \lambda,a-\astar(\theta)\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 \,.
+    \Tstar(\theta)^{-1} = \max_{\bomega\in\Sigma_K} \min_{\bx\neq \bx^\star(\btheta)} \inf_{\substack{(\bx-\bx^\star)\transpose\btheta'>0\\ \normm{\btheta'}\leq M}} \normm{\btheta -\btheta'}_{\bLambda_{\bomega}}^2 \,.
 \]
-But the best response is less trivial to compute, in particular there is no closed formula for $\lambda^\star_a$ as in BAI, see Lemma~\ref{lem:lagrange_bounded_BAI}.
-\begin{lemma}
-  \label{lem:lagrange_bounded_BAI}
-For $\theta, \lambda \in \R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$,
-\begin{align}\label{eq:bounded_bai}
-\min_{\substack{\langle \lambda,a-\astar(\theta)\rangle\geq 0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \sup_{\gamma\geq 0} \frac{\max\left(\langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1} \bLambda_{\bomega} (\astar(\theta)-a)\rangle,0\right)^2 }{2\normm{\astar(\theta)-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}}- \frac{\gamma}{2}\left(\normm{\theta}^2-M^2\right)\,.
-\end{align}
-And if $\gamma$ attains the supremum in the right hand term of~\eqref{eq:bounded_bai}, then
-\[
-\lambda = \theta - \frac{\max\left(\langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1} \bLambda_{\bomega} (\astar(\theta)-a)\rangle,0\right)}{\normm{\astar(\theta)-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}} (\bLambda_{\bomega}+\gamma I_d)^{-1}(a^\star - a)\,,
-\]
-attains the minimum of the left hand term of~\eqref{eq:bounded_bai}.
-\end{lemma}
-\begin{proof}
-We set $\astar(\theta) = \astar$, and introduce the Lagrangian
-\[
- \inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \sup_{\gamma\geq 0, \alpha\geq 0} \inf_{\substack{\langle \lambda,a-\astar\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 +\alpha \langle \theta, \astar-a\rangle + \frac{\gamma}{2}\left(\normm{\lambda}^2-M^2 \right)\,.
-\]
-The infimum above is attained for
-\[
-\lambda = \theta - \alpha (\bLambda_{\bomega} + \gamma I_d)^{-1}(\astar-a)\,.
-\]
-Thus the Lagrangian reduces to
-\[
-\inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \sup_{\gamma\geq 0, \alpha\geq 0}
--\frac{\alpha^2}{2} \normm{\astar-a}^2_{\bLambda_{\bomega}+\gamma I_d} + \alpha \langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1}\bLambda_{\bomega} (\astar-a)\rangle +\frac{\gamma}{2}\left(\normm{\theta}^2-M^2 \right)\,.
-\]
-The supremum in $\alpha$ is reached for
-\[
-\alpha =\frac{\max\left(\langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1} \bLambda_{\bomega} (\astar-a)\rangle,0\right)}{\normm{\astar-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}}\,.
-\]
-Using this particular $\alpha$ in the definition of $\lambda$ and in the Lagrangian allows us to conclude.
-\end{proof}
+
+% But the best response is less trivial to compute, in particular there is no closed formula for $\lambda^\star_a$ as in BAI, see Lemma~\ref{lem:lagrange_bounded_BAI}.
+% \begin{lemma}
+%   \label{lem:lagrange_bounded_BAI}
+% For $\theta, \lambda \in \R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$,
+% \begin{align}\label{eq:bounded_bai}
+% \min_{\substack{\langle \lambda,a-\astar(\theta)\rangle\geq 0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \sup_{\gamma\geq 0} \frac{\max\left(\langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1} \bLambda_{\bomega} (\astar(\theta)-a)\rangle,0\right)^2 }{2\normm{\astar(\theta)-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}}- \frac{\gamma}{2}\left(\normm{\theta}^2-M^2\right)\,.
+% \end{align}
+% And if $\gamma$ attains the supremum in the right hand term of~\eqref{eq:bounded_bai}, then
+% \[
+% \lambda = \theta - \frac{\max\left(\langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1} \bLambda_{\bomega} (\astar(\theta)-a)\rangle,0\right)}{\normm{\astar(\theta)-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}} (\bLambda_{\bomega}+\gamma I_d)^{-1}(a^\star - a)\,,
+% \]
+% attains the minimum of the left hand term of~\eqref{eq:bounded_bai}.
+% \end{lemma}
+% \begin{proof}
+% We set $\astar(\theta) = \astar$, and introduce the Lagrangian
+% \[
+%  \inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \sup_{\gamma\geq 0, \alpha\geq 0} \inf_{\substack{\langle \lambda,a-\astar\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 +\alpha \langle \theta, \astar-a\rangle + \frac{\gamma}{2}\left(\normm{\lambda}^2-M^2 \right)\,.
+% \]
+% The infimum above is attained for
+% \[
+% \lambda = \theta - \alpha (\bLambda_{\bomega} + \gamma I_d)^{-1}(\astar-a)\,.
+% \]
+% Thus the Lagrangian reduces to
+% \[
+% \inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \sup_{\gamma\geq 0, \alpha\geq 0}
+% -\frac{\alpha^2}{2} \normm{\astar-a}^2_{\bLambda_{\bomega}+\gamma I_d} + \alpha \langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1}\bLambda_{\bomega} (\astar-a)\rangle +\frac{\gamma}{2}\left(\normm{\theta}^2-M^2 \right)\,.
+% \]
+% The supremum in $\alpha$ is reached for
+% \[
+% \alpha =\frac{\max\left(\langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1} \bLambda_{\bomega} (\astar-a)\rangle,0\right)}{\normm{\astar-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}}\,.
+% \]
+% Using this particular $\alpha$ in the definition of $\lambda$ and in the Lagrangian allows us to conclude.
+% \end{proof}
 
 \paragraph{Transductive BAI.}\label{sec:lgc.formulation.examples.transductive}
-We can also consider the transductive BAI~\citep{fiez2019transductive} where the agent wants to find the best arm of a different set $\cB$ that the one he is allow to pull. Precisely the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{b\in\cB} \langle\theta,b\rangle|>1\}$, the set of possible answers is $\cI = \cB$ and the correct answer is given by $\istar(\theta)=\bstar(\theta)\eqdef \argmax_{b\in\cB} \langle\theta,b\rangle$.
+Another very closely-related setting is the transductive BAI~\citep{fiez2019transductive} where the learner wants to find the best arm of a different set $\cY$ that the one they are allowed to pull. Precisely the set of parameters is 
+\[
+    \Theta \eqdef \R^d/\{\btheta\in\R^d: |\argmax_{\by\in\cY} \by\transpose\btheta|>1\}\,.
+\]
+The set of possible answers is $\cI = \cY$ and the correct answer is given by 
+\[
+    \Istar(\btheta) = \by^\star(\btheta) \eqdef \argmax_{\by\in\cY} \by\transpose\btheta\,.
+\]
 
 The characteristic time in this case is
 \[
-\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{b\neq \bstar(\theta)} \frac{\big\langle \theta, \bstar(\theta)-b\big\rangle^2}{2 \normm{\bstar(\theta)-b}_{\bLambda_{\bomega}^{-1}}^2}\,.
+    \Tstar(\btheta)^{-1} = \max_{\bomega\in\Sigma_K} \min_{\by\neq \by^\star(\btheta)} \frac{(\by\transpose\btheta-(\by^\star)\transpose\btheta)^2}{2\normm{\by^\star - \by}^2_{\bLambda_{\bomega}^{-1}}}\,.
 \]
 Note that the dependency on the arm set $\cA$ here only appears through the matrix $\bLambda_{\bomega}$.
 
