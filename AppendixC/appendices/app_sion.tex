@@ -1,0 +1,27 @@
+\section{Sion's Minimax Theorem}\label{app:lgc.sion}
+
+Using Sion's minimax theorem we can invert the order of the players if we allow nature to play mixed strategies
+\begin{align}
+\Tstar(\theta)^{-1} &= \max_{w \in \Sigma_A} \inf_{\lambda\in \neg \istar(\theta)} \frac{1}{2} \normm{\theta - \lambda}_{V_w}^2 \label{eq:sion} \\
+%&= \max_{w \in \Sigma_A} \inf_{q\in \cP(\neg \istar(\theta))} \frac{1}{2} \E_{\lambda\sim q}\normm{\theta - \lambda}_{V_w}^2\nonumber\\
+&= \inf_{q\in \cP(\neg \istar(\theta))} \max_{a\in\cA}\frac{1}{2}\E_{\lambda\sim q}\normm{\theta - \lambda}_{aa^\top}^2\nonumber\,,
+\end{align}
+where $\cP(\cX)$ denotes the set of probability distributions over the set $\cX$. The annoying part in this formulation of the characteristic time is that the set $\neg \istar(\theta)$ where the nature plays is a priori unknown (as the parameter is unknown to the agent). Indeed, to find an asymptotically optimal algorithm one should somehow solve this minimax game. But it is easy to remove this dependency noting that $\inf_{\lambda\in\neg i}\normm{\theta -\lambda}=0$ for all $i\neq \istar(\theta)$,
+\[
+\Tstar(\theta)^{-1} = \max_{i\in\cI}\max_{w \in \Sigma_A} \inf_{\lambda\in \neg i } \frac{1}{2}\normm{\theta - \lambda}_{V_w}^2\,.
+\]
+Now we can see the characteristic time $\Tstar(\theta)^{-1}$ as the value of an other game where the agent plays a proportion of allocation of pulls $w$ \emph{and} an answer $i$. The agent could also use mixed strategies for the answer which leads to
+\begin{align*}
+\Tstar(\theta)^{-1} &= \max_{\rho\in\Sigma_I}\max_{w \in \Sigma_A}  \frac{1}{2}\sum_{i\in \cI }\inf_{\lambda^i\in\neg i}\rho_i\normm{\theta - \lambda^i}_{V_w}^2\\
+& =\max_{\rho\in\Sigma_I}\max_{w \in \Sigma_A}\inf_{\tlambda\in\prod_i(\neg i)}  \frac{1}{2}\sum_{i\in \cI }\rho_i\normm{\theta - \tlambda^i}_{V_w}^2\,,
+\end{align*}
+where $\prod_{i\in\cI}(\neg i)$ denotes the Cartesian product of the alternative sets $\neg i$. But the function that appears in the value of the new game is not anymore convex in $(w,\rho)$ and Sion's minimax theorem does not apply anymore. We can however convexify the problem by letting the agent to play a distribution $\tw\in\Sigma_{AI}$ over the arm-answer pairs $(a,i)$, see Lemma~\ref{lem:sion_convexify} below proved in Section~\ref{sec:lgc.lower_bound}.
+\begin{lemma}
+\label{lem:sion_convexify} For all $\theta\in\cM$,
+\begin{align*}
+  \Tstar(\theta)^{-1} &= \max_{\tw \in \Sigma_{AI}} \inf_{\tlambda\in \prod_i (\neg i) }\frac{1}{2} \sum_{(a,i)\in\cA\times\cI}\tw^{a,i}\normm{\theta - \tlambda^i}_{aa^\top}^2\\
+   %&= \max_{\tw \in \Sigma_{AI}}\inf_{\tq\in \prod_i\cP(\neg i) }\!\sum_{(a,i)\in\cA\times\cI}\!\!\!\tw^{a,i}\E_{\lambda^i\sim \tq^i}\normm{\theta - \lambda^i}_{aa^\top}^2\\
+   &= \inf_{\tq\in \prod_i\cP(\neg i) } \frac{1}{2}\max_{(a,i)\in\cA\times\cB}\E_{\tlambda^i\sim \tq^i}\normm{\theta - \tlambda^i}_{aa^\top}^2\,.
+\end{align*}
+\end{lemma}
+Thus in this formulation the characteristic time is the value of a fictitious zero-sum game where the agent plays a distribution $\tw\in\Sigma_{AI}$ over the arm-answer pairs $(a,i)\in\cA\times\cI$ and nature chooses an alternative $\tlambda^i\in\neg i$ for all the answers $i\in\cI$. The algorithm \LGC that we propose in Section~\ref{sec:lgc.game} is based on this formulation of the characteristic time whereas algorithm \LG is based on the formulation of Theorem~\ref{th:lb_genral}.

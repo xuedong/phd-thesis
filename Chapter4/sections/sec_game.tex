@@ -1,7 +1,7 @@
 %!TEX root = ../Chapter3.tex
 \section{A Gamified Algorithm}\label{sec:lgc.game}
 
-We present two asymptotically optimal algorithms for linear bandits BAI in this section. Indeed, these two algorithms are asymptotically optimal for the general pure exploration game, which is however not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for more details.
+In this section, We present an asymptotically optimal algorithm for linear bandits BAI. Note that the present algorithm is asymptotically optimal for the general pure exploration game, which is however not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for more details.
 
 Solely in this section, we make the following additional assumption that the set of parameter is bounded,
 \begin{assumption}
@@ -11,7 +11,7 @@ Solely in this section, we make the following additional assumption that the set
 \end{assumption}
 This assumption is actually shared by most of the works on linear bandits (e.g. \citealt{abbasi-yadkori2011linear, soare2014linear}).
 
-The bounded version of BAI is explicited in Section~\ref{app:lgc.examples}. In particular we show how the boundedness of the parameter space affects the lower bound of Theorem~\ref{th:lb_genral}: The characteristic time $\Tstar(\theta)$ is reduced (or equivalently $\Tstar(\theta)^{-1}$ increases). This is not surprising since we add a new constraint in the optimization problem. This means that the algorithm should stop earlier. The counterpart of this improvement is that it is often difficult to compute the best response for nature. Indeed, for example, in BAI, there is an explicit expression of the best response, see Section~\ref{app:lgc.examples}. When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lem:lagrange_alternative}. To devise an asymptotically optimal algorithm without the boundedness assumption remains an open problem.
+The bounded version of BAI is explicited in Section~\ref{sec:lgc.complexity.examples}. In particular we show how the boundedness of the parameter space affects the lower bound of Theorem~\ref{th:lb_genral}: The characteristic time $\Tstar(\theta)$ is reduced (or equivalently $\Tstar(\theta)^{-1}$ increases). This is not surprising since we add a new constraint in the optimization problem. This means that the algorithm should stop earlier. The counterpart of this improvement is that it is often difficult to compute the best response for nature. Indeed, for example, in BAI, there is an explicit expression of the best response, see Section~\ref{app:lgc.examples}. When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lemma:lgc.lagrange_alternative}. To devise an asymptotically optimal algorithm without the boundedness assumption remains an open problem.
 
 
 % , i.e for $i\in\cI$ and $w\in\interior{\Sigma_A}$ in the interior of the probability simplex of dimension $A-1$, find $\lambda^i$ such that
@@ -28,7 +28,7 @@ The bounded version of BAI is explicited in Section~\ref{app:lgc.examples}. In p
 % \\
 % \text{for }b&\in\argmin_{a\neq \astar}\normm{\theta - \lambda^{a} }_{V_{w}}\nonumber.
 % \end{align}
-% When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lem:lagrange_alternative}.
+% When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lemma:lgc.lagrange_alternative}.
 
 
 %Note that in the proof of Theorem~\ref{thm:sample_complexity} we only use two times the boundedness assumption, first in the definition of the threshold $\beta(t,\delta)$ (see Theorem~\ref{th:confidence_beta}) to handle the bias induced by the regularization. Second, since the regret of AdaHedge is proportional to the maximum of the upper confidence bounds $U_s^{i,a}$, we need to ensure that they are bounded.
@@ -112,7 +112,7 @@ Our algorithms share the same stopping rule. Following \citet{garivier2016trackn
 and return {\small $\displaystyle \istar_t\! \in\! \argmax_{i\in \mathcal I}\! \inf_{\lambda_i \in \neg i}\Vert \tilde{\theta}_t - \lambda_i \Vert^2_{V_{N_t}}/2$}.
 
 
-These stopping and decision rules ensure that the \LG{} is $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.concentration}.
+These stopping and decision rules ensure that the \LG{} is $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.lemmas}.
 
 \begin{lemma}
 \label{lem:chernoff_stopping rule_pac}
@@ -161,15 +161,11 @@ Then if the algorithm did not stop, it verifies, using Lemma~\ref{lem:sion_conve
 \end{align*}
 Solving that equation, we get asymptotically the wanted $t\lesssim T^\star(\theta) \log(1/\delta)$.
 
-We implement the saddle point algorithm by using AdaHedge for the agent (a regret minimizing algorithm of the exponential weights family), and using best-response for the nature, which plays after the agent. Precisely the learner $\cL_w$ for \LGC is AdaHedge on $\Sigma_{AI}$ with the gains
+We implement the saddle point algorithm by using AdaHedge for the agent (a regret minimizing algorithm of the exponential weights family), and using best-response for the nature, which plays after the agent. Precisely \LG uses $|\cI|$ learners $\cL_w^i$, one for each possible guess of $\Istar(\btheta)$ with the gains. For $i\in\cI$, the learner $\cL_w^i$ is also AdaHedge but only on $\Sigma_K$ with the gains (when the guess is $i$)
 \[
-g_t^\theta(\tw) = \frac{1}{2} \sum_{(a,i)\in\cA\times\cI}  \tw^{a,i} \Vert \theta - \tlambda_s^i \Vert^2_{a a^\top}\,.
+    g_t^\theta(w) = \frac{1}{2} \sum_{a\in\cA}  w^{a} \Vert \theta - \lambda_s^i \Vert^2_{a a^\top}\,.
 \]
- Whereas \LG uses $I$ learners $\cL_w^i$, one for each possible guess of $\istar(\theta)$ with the gains. For $i\in\cI$, the learner $\cL_w^i$ is also AdaHedge but only on $\Sigma_A$ with the gains (when the guess is $i$)
- \[
- g_t^\theta(w) = \frac{1}{2} \sum_{a\in\cA}  w^{a} \Vert \theta - \lambda_s^i \Vert^2_{a a^\top}\,.
- \]
- $\varepsilon_t$ is then the sum of the regrets of the two players. Best-response has regret 0, while the regret of AdaHedge is $O(\sqrt{t})$ for bounded gains, as seen in the following lemma, taken from \citet{derooij2014hedge}.
+$\varepsilon_t$ is then the sum of the regrets of the two players. Best-response has regret 0, while the regret of AdaHedge is $O(\sqrt{t})$ for bounded gains, as seen in the following lemma, taken from \citet{derooij2014hedge}.
 %\todo{define the learners $\cL_w^i$ here}
 \begin{lemma}\label{lem:adahedge}
 On the online learning problem with $K$ arms and gains $g_s(w) = \sum_{k\in[K]} w^k  U_s^k$ for $s\in[t]$, AdaHedge, predicting $(w_s)_{s\in[t]}$, has regret

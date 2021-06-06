@@ -1,160 +1,153 @@
 %!TEX root = ../Chapter3.tex
-\section{Fixed-Confidence Optimality}\label{sec:lgc.lower_bound}
+\section{Fixed-Confidence Optimality}\label{sec:lgc.complexity}
 
-As first stated by~\cite{soare2014linear}, we only consider a finite number of arms and we restrict to bandits  with Gaussian rewards and conjugate (Gaussian) priors in this work. Our objective is to propose a BAI strategy that outputs a guess which is accurate enough. Formally, given a risk level $\delta$, we want to show that
+%As first stated by~\cite{soare2014linear}, we only consider a finite number of arms and we restrict to bandits  with Gaussian rewards and conjugate (Gaussian) priors in this work. 
+Just remember that our primary goal is to propose a BAI strategy that outputs quickly and reliably a final guess of the best arm. Formally, given a risk level $\delta$, we want to show that
 \[
-  \PP{a_{\tau_\delta}\neq \bx^\star} \leq \delta,
+  \PP{\bx_{J_{\tau_\delta}}\neq \bx^\star} \leq \delta,
 \]
-while minimizing the expected number of samples $\EE{\tau_\delta}$ that is required. That is the so-called \emph{fixed-confidence} best-arm identification introduced by~\cite{even-dar2003confidence}.
+while minimizing the expected number of samples $\EE{\tau_\delta}$ that is required. To achieve this objective, we first investigate the lower bound of the sample complexity.
 
-\subsection{Lower bound}
+\subsection{Lower bound}\label{sec:lgc.complexity.lb}
 
 In this section we extend the lower bound of \citet{garivier2016tracknstop}, to hold for \emph{pure exploration in finitely-armed linear bandit} problems.
 
-\paragraph{Lower bound} A general lower bound on the sample complexity in the fixed-confidence setting is given by~\cite{garivier2016tracknstop}, which states that for any $\delta$-correct strategy, we have
+\paragraph{Alternative.}
+We first define the notion of \gls{alternative set} in a pure exploration game. For any answer $i\in\cI$ we define the \emph{alternative set} of arm $i$, denoted by $\neg i$ the set of parameters where the answer $i$ is not correct, i.e.
 \[
-    \EE{\tau_\delta} \geq T^\star(\bmu)\log(\frac{1}{3\delta}),
+    \neg i \eqdef \{\btheta\in\Theta:\ i\neq\Istar(\btheta)\}\,.
 \]
-for a given bandit model $\bmu$ and a given confidence level $\delta$. 
 
-\begin{proposition}
-In the linear case, the quantity $T^\star(\bmu)$ is written as
+%We also define, for any $w\in(\R^+)^A$, the design matrix \[\bLambda_{\bomega} \eqdef \sum_{a\in \cA} w^a a a^\top\,.\] Further, we define $\normm{x}_V\eqdef \sqrt{x^\top Vx}$ for $x\in\R^d$ and a symmetric positive matrix $V\in\R^{d\times d}$. Note that it is a norm only if $V$ is positive definite. We also denote by $\Sigma_K$ the probability simplex of dimension $K-1$ for all $K\ge 2$.
+
+\paragraph{Lower bound.} 
+A general result on the (non-asymptotic) sample-complexity lower bound in the fixed-confidence regime~\citep{garivier2016tracknstop}, which we reviewed in Section~\ref{sec:mab.performance.sample}, states that for any $\delta$-correct strategy, we have
 \[
-  T^\star(\bmu) \eqdef \inf_{\bomega\in\Sigma_K}\max_{\bx\neq \bx^\star} \frac{2\sigma^2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{(\bx\transpose\btheta^\star-(\bx^\star)\transpose\btheta^\star)^2}.
+    \EE{\tau_\delta} \geq T^\star(\btheta)\log(\frac{1}{3\delta}),
 \]
+for a given parameter $\btheta$ and a given confidence level $\delta$. And the characteristic time $T^\star(\btheta)$ is written as
+\begin{align}\label{eq:lgc.characteristic2}
+    \Tstar(\btheta)^{-1} \eqdef \max_{\bomega \in \Sigma_K} \inf_{\btheta'\in \neg\Istar(\btheta)} \frac{1}{2}\normm{\btheta - \btheta'}_{\bLambda_{\bomega}}^2\,,
+\end{align}
+and it can be further particularized into~\eqref{eq:lgc.characteristic1} defined in Proposition~\ref{prop:lgc.lb} for linear bandits.
+
+\begin{proposition}\label{prop:lgc.lb}
+\begin{leftbar}[propositionbar]
+In the linear case, the quantity $T^\star(\btheta)$ is written as
+\begin{align}\label{eq:lgc.characteristic1}
+    T^\star(\btheta) \eqdef \inf_{\bomega\in\Sigma_K}\max_{\bx\neq \bx^\star} \frac{2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{(\bx\transpose\btheta-(\bx^\star)\transpose\btheta)^2}\,.
+\end{align}
+\end{leftbar}
 \end{proposition}
 
+\begin{remark}
+\begin{leftbar}[remarkbar]
+    As noted in the seminal work of \citet{chernoff1959}, the complexity $\Tstar(\btheta)^{-1}$ is the value of a fictitious zero-sum game between the agent choosing an optimal proportion of allocation of pulls $\bomega$ and a second player, the nature, that tries to fool the agent by choosing the most confusing alternative $\lambda$ leading to an incorrect answer.
+\end{leftbar}
+\end{remark}
+
+%In fact using the Sion's minimax theorem we can rewrite the characteristic times in various ways which will be useful to prove the lower bound of Theorem~\ref{th:lb_genral}.
+
 \begin{proof}
-Let $\texttt{Alt}(\btheta) \eqdef \{\btheta':\exists \bx\in\cX, \bx\transpose\btheta'>(\bx^\star)\transpose\btheta'\}$, and we obtain
+Using the alternative set of $\Istar(\btheta)$, and by~\eqref{eq:lgc.characteristic2}, we obtain
 \begin{align*}
-    T^\star(\bmu)^{-1} &= \sup_{\bomega\in\Sigma_K}\inf_{\btheta'\in\texttt{Alt}(\btheta^\star)}\sum_{i=1}^K \omega_i d(\mu_i;\mu_i')\\
-                       &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\inf_{\bx\transpose\btheta'>(\bx^\star)\transpose\btheta'} \frac{\normm{\btheta^\star-\btheta'}_{\bLambda_{\bomega}}^2}{2\sigma^2}.
+    T^\star(\btheta)^{-1} &= \max_{\bomega \in \Sigma_K} \inf_{\btheta'\in \neg\Istar(\btheta)} \frac{1}{2}\normm{\btheta - \btheta'}_{\bLambda_{\bomega}}^2\\
+    &= \max_{\bomega\in\Sigma_K}\inf_{\btheta'\in\neg\Istar(\btheta)}\sum_{i=1}^K \omega_i d(\mu_i;\mu_i')\\
+    &= \max_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\inf_{\bx\transpose\btheta'>(\bx^\star)\transpose\btheta'} \frac{\normm{\btheta-\btheta'}_{\bLambda_{\bomega}}^2}{2}.
 \end{align*}
 Then we introduce the Lagrangian with $\eta$ as the Lagrange multiplier, and it then becomes
 \begin{align*}
-    T^\star(\bmu)^{-1} &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\inf_{\btheta'}\sup_{\eta>0} \frac{\normm{\btheta^\star-\btheta'}_{\bLambda_{\bomega}}^2}{2\sigma^2} - \eta(\bx-\bx^\star)\transpose\btheta',
+    T^\star(\btheta)^{-1} &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\inf_{\btheta'}\sup_{\eta>0} \frac{\normm{\btheta-\btheta'}_{\bLambda_{\bomega}}^2}{2} - \eta(\bx-\bx^\star)\transpose\btheta',
 \end{align*}
 and the inner expression attains its minimum when it comes
 \[
-    \frac{1}{\sigma^2}\bLambda_{\bomega}(\btheta^\star-\btheta') = \eta(\bx^\star-\bx),
+    \bLambda_{\bomega}(\btheta-\btheta') = \eta(\bx^\star-\bx),
 \]
 which implies
 \begin{align*}
-    T^\star(\bmu)^{-1} &=
-    \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\sup_{\eta>0} \eta(\bx^\star-\bx)\transpose\btheta^\star - \frac{\eta^2\normm{\bx-\bx^\star}_{\bLambda_{\bomega}^{-1}}}{2\sigma^2}\\
-    &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\frac{(\bx\transpose\btheta^\star-(\bx^\star)\transpose\btheta^\star)^2}{2\sigma^2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}.
+    T^\star(\btheta)^{-1} &=
+    \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\sup_{\eta>0} \eta(\bx^\star-\bx)\transpose\btheta - \frac{\eta^2\normm{\bx-\bx^\star}_{\bLambda_{\bomega}^{-1}}}{2\sigma^2}\\
+    &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\frac{(\bx\transpose\btheta-(\bx^\star)\transpose\btheta)^2}{2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}\,.
 \end{align*}
 \end{proof}
 
-Using the same lower bound techniques, one can also prove that under any $\delta$-correct strategy satisfying $T_{n,I^\star}/n \rightarrow \beta$ for a given $\beta$,
+\paragraph{Asymptotic optimality.}
+We can define the asymptotic optimality upon $T^\star_\beta(\btheta)$. 
+
+\begin{definition}\label{def:lgc.optimality}
+\begin{leftbar}[defnbar]
+A BAI strategy is called optimal in the fixed-confidence setting if it satisfies
 \[
-    \liminf_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \geq T^\star_\beta(\bmu),
+    \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq T^\star(\btheta)\,.
 \]
-where $T^\star_\beta(\bmu)$ is defined in the same way as $T^\star(\bmu)$, but restricted to the constraint $\omega_{I^\star}=\beta$,
+\end{leftbar}
+\end{definition}
+
+\begin{remark}
+\begin{leftbar}[remarkbar]
+Using the same lower-bound techniques, one can also prove that under any $\delta$-correct strategy satisfying $T_{n,I^\star}/n \rightarrow \beta$ for a given $\beta$,
 \[
-    T^\star_{\beta}(\bmu) \eqdef \inf_{\bomega\in\Sigma_K,\omega_{I^\star}=\beta}\max_{\bx\neq \bx^\star} \frac{2\sigma^2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{(\bx\transpose\btheta^\star-(\bx^\star)\transpose\btheta^\star)^2}.
+    \liminf_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \geq T^\star_\beta(\btheta)\,,
+\]
+where $T^\star_\beta(\btheta)$ is defined in the same way as $T^\star(\btheta)$, but restricted to the constraint $\omega_{I^\star}=\beta$,
+\[
+    T^\star_{\beta}(\btheta) \eqdef \inf_{\bomega\in\Sigma_K,\omega_{I^\star}=\beta}\max_{\bx\neq \bx^\star} \frac{2\sigma^2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{(\bx\transpose\btheta-(\bx^\star)\transpose\btheta)^2}\,.
 \]
 
-\paragraph{Notion of optimality}
-We can now define a notion of optimality upon $T^\star_\beta(\bmu)$. A BAI strategy is called \emph{optimal} in the fixed-confidence setting if it satisfies
+% And a relaxed notion of optimality that depends on $\beta$ can be also defined. A BAI strategy is called \emph{$\beta$-optimal} if it satisfies 
+% \[
+%     \frac{T_{n,I^\star}}{n}\rightarrow \beta \quad \text{and} \quad \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq T^\star_\beta(\bmu).
+% \]
+
+Essentially, we can recover the $\beta$-optimality defined in Chapter~\ref{CHAP:T3C}.
+\end{leftbar}
+\end{remark}
+
+\subsection{Best-arm identification complexity}\label{sec:lgc.complexity.complexity}
+
+The inverse of the characteristic time of Proposition~\ref{prop:lgc.lb} can also be written as
 \[
-    \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq T^\star(\bmu).
+    \Tstar(\btheta)^{-1} = \max_{\bomega\in\Sigma_K} \min_{\bx\neq \bx^\star} \frac{(\bx\transpose\btheta-(\bx^\star)\transpose\btheta)^2}{2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}
 \]
-And a relaxed notion of optimality that depends on $\beta$ can be also defined. A BAI strategy is called \emph{$\beta$-optimal} if it satisfies 
+for BAI.
+
+Since the characteristic time involves many problem dependent quantities that are unknown to the learner, previous works target loose problem-independent upper bounds on the characteristic time. \citet{soare2014linear} (see also \citealt{tao2018alba,fiez2019transductive}) introduce the G-complexity (denoted by $\gopt$) which coincides with the G-optimal design of experimental design theory (see \citealt{pukelsheim2006optimal}) and the $\xyopt$-complexity (denoted by $\xyopt$) inspired by the transductive experimental design theory  \citep{yu2006active},
+\begin{align*}
+    \gopt &=\min_{\bomega\in\Sigma_K} \max_{\bx\in\cX} \normm{\bx}_{\bLambda_{\bomega}^{-1}}^2\,,\\
+    \xyopt &=\min_{\bomega\in\Sigma_K} \max_{\by\in\cY_{\texttt{dir}}} \normm{\by}_{\bLambda_{\bomega}^{-1}}^2\,,
+\end{align*}
+where $\cY_{\texttt{dir}}$ is the set of directions induced by $\cX$:
 \[
-    \frac{T_{n,I^\star}}{n}\rightarrow \beta \quad \text{and} \quad \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq T^\star_\beta(\bmu).
+\cY_{\texttt{dir}}\eqdef\{\bx-\bx':\ (\bx,\bx')\in\cX\times\cX\}\,.
 \]
 
-\paragraph{Alternative.}
-For any answer $i\in\cI$ we define \emph{the alternative to i}, denoted by $\neg i$ the set of parameters where the answer $i$ is not correct, i.e.
-$%\[
-\neg i \eqdef \{\theta\in\cM:\ i\neq\istar(\theta)\}\,.
-$%\]
+For the G-optimal complexity we seek for a proportion of pulls $\bomega$ that explores \emph{uniformly} the means of the arms, since the statistical uncertainty for estimating $\bx\transpose\btheta$ scales roughly with $\normm{\bx}_{\bLambda_{\bomega}^{-1}}$. In the $\xyopt$-complexity we try to estimate \emph{uniformly} all the \emph{directions} $\bx-\bx'$, while a potentially more plausible quantity to maximize would be the characteristic time itself. For the latter, we try to estimate all the \emph{directions} $\bx^\star - \bx$ scaled by the squared gaps $(\bx^\star - \bx)\transpose\btheta$. 
 
-We also define, for any $w\in(\R^+)^A$, the design matrix
-\[V_w \eqdef \sum_{a\in \cA} w^a a a^\top\,.\]
-Further, we define $\normm{x}_V\eqdef \sqrt{x^\top Vx}$ for $x\in\R^d$ and a symmetric positive matrix $V\in\R^{d\times d}$. Note that it is a norm only if $V$ is positive definite. We also denote by $\Sigma_K$ the probability simplex of dimension $K-1$ for all $K\ge 2$.
+The fact that previous works maximize over loose upper bounds on the characteristic time is potentially the main reason that they cannot achieve optimality. We can see later (in Section~\ref{sec:lgc.game}) that directly maximizing the weighted gaps would indeed lead to an asymptotically optimal algorithm.
 
-\paragraph{Lower bound.}
-We have the following non-asymptotic lower bound, proved in Section~\ref{sec:lgc.lower_bound}, on the sample complexity of any $\delta$-correct algorithm. This bound was already proved by \citet{soare2014linear} for the BAI example.
-\begin{theorem}
-\label{th:lb_genral}
-For all $\delta$-correct algorithms, for all $\theta\in \cM$,
-\begin{equation*}
-  \label{eq:lb_general}
-  \liminf_{\delta\to 0}\frac{\E_\theta[\tau_{\delta}]}{\log(1/\delta)} \geq \Tstar(\theta) \,,
-\end{equation*}
-where the \emph{characteristic time} $\Tstar(\theta)$ is defined by
+Note that the characteristic time can also be seen as a particular optimal transductive design. Indeed for 
 \[
-\Tstar(\theta)^{-1} \eqdef \max_{w \in \Sigma_A} \inf_{\lambda\in \neg \istar(\theta)} \frac{1}{2}\normm{\theta - \lambda}_{V_w}^2\,.
+    \cY^\star \eqdef \left\{ \frac{\bx^\star(\btheta)- \bx}{\left|(\bx^\star(\btheta)- \bx)\transpose\btheta\right|}: \bx\in\cX/\big\{\bx^\star(\btheta)\big\}  \right\}\,,
 \]
-\end{theorem}
-In particular, we say that a $\delta$-correct algorithm is asymptotically optimal if for all $\theta\in\cM,$
+it holds
 \[
-\limsup_{\delta\to 0}\frac{\E_\theta[\tau_{\delta}]}{\log(1/\delta)} \leq \Tstar(\theta)\,.
+    \Tstar(\btheta) = 2 \cX\cY^\star(\btheta) \eqdef 2 \min_{\bomega\in\Sigma_K} \max_{\by\in\cY^\star(\btheta)} \normm{\by}_{\bLambda_{\bomega}^{-1}}^2\,.
 \]
-As noted in the seminal work of \citet{chernoff1959}, the complexity $\Tstar(\theta)^{-1}$ is the value of a fictitious zero-sum game between the agent choosing an optimal proportion of allocation of pulls $w$ and a second player, the nature, that tries to fool the agent by choosing the most confusing alternative $\lambda$ leading to an incorrect answer.
-%In fact using the Sion's minimax theorem we can rewrite the characteristic times in various ways which will be useful to prove the lower bound of Theorem~\ref{th:lb_genral}.
 
-\paragraph{Minimax theorems.} Using Sion's minimax theorem we can invert the order of the players if we allow nature to play mixed strategies
-\begin{align}
-\Tstar(\theta)^{-1} &= \max_{w \in \Sigma_A} \inf_{\lambda\in \neg \istar(\theta)} \frac{1}{2} \normm{\theta - \lambda}_{V_w}^2 \label{eq:sion} \\
-%&= \max_{w \in \Sigma_A} \inf_{q\in \cP(\neg \istar(\theta))} \frac{1}{2} \E_{\lambda\sim q}\normm{\theta - \lambda}_{V_w}^2\nonumber\\
-&= \inf_{q\in \cP(\neg \istar(\theta))} \max_{a\in\cA}\frac{1}{2}\E_{\lambda\sim q}\normm{\theta - \lambda}_{aa^\top}^2\nonumber\,,
+Besides, we have the following ordering on the complexities
+\begin{align}\label{eq:lgc.complexities}
+    \Tstar(\btheta) \leq 2 \frac{\xyopt}{\DeltaMin(\btheta)^2}\leq 8 \frac{\gopt}{\DeltaMin(\btheta)^2} = \frac{8d}{\DeltaMin(\btheta)^2}\,,
 \end{align}
-where $\cP(\cX)$ denotes the set of probability distributions over the set $\cX$. The annoying part in this formulation of the characteristic time is that the set $\neg \istar(\theta)$ where the nature plays is a priori unknown (as the parameter is unknown to the agent). Indeed, to find an asymptotically optimal algorithm one should somehow solve this minimax game. But it is easy to remove this dependency noting that $\inf_{\lambda\in\neg i}\normm{\theta -\lambda}=0$ for all $i\neq \istar(\theta)$,
-\[
-\Tstar(\theta)^{-1} = \max_{i\in\cI}\max_{w \in \Sigma_A} \inf_{\lambda\in \neg i } \frac{1}{2}\normm{\theta - \lambda}_{V_w}^2\,.
-\]
-Now we can see the characteristic time $\Tstar(\theta)^{-1}$ as the value of an other game where the agent plays a proportion of allocation of pulls $w$ \emph{and} an answer $i$. The agent could also use mixed strategies for the answer which leads to
-\begin{align*}
-\Tstar(\theta)^{-1} &= \max_{\rho\in\Sigma_I}\max_{w \in \Sigma_A}  \frac{1}{2}\sum_{i\in \cI }\inf_{\lambda^i\in\neg i}\rho_i\normm{\theta - \lambda^i}_{V_w}^2\\
-& =\max_{\rho\in\Sigma_I}\max_{w \in \Sigma_A}\inf_{\tlambda\in\prod_i(\neg i)}  \frac{1}{2}\sum_{i\in \cI }\rho_i\normm{\theta - \tlambda^i}_{V_w}^2\,,
-\end{align*}
-where $\prod_{i\in\cI}(\neg i)$ denotes the Cartesian product of the alternative sets $\neg i$. But the function that appears in the value of the new game is not anymore convex in $(w,\rho)$ and Sion's minimax theorem does not apply anymore. We can however convexify the problem by letting the agent to play a distribution $\tw\in\Sigma_{AI}$ over the arm-answer pairs $(a,i)$, see Lemma~\ref{lem:sion_convexify} below proved in Section~\ref{sec:lgc.lower_bound}.
-\begin{lemma}
-\label{lem:sion_convexify} For all $\theta\in\cM$,
-\begin{align*}
-  \Tstar(\theta)^{-1} &= \max_{\tw \in \Sigma_{AI}} \inf_{\tlambda\in \prod_i (\neg i) }\frac{1}{2} \sum_{(a,i)\in\cA\times\cI}\tw^{a,i}\normm{\theta - \tlambda^i}_{aa^\top}^2\\
-   %&= \max_{\tw \in \Sigma_{AI}}\inf_{\tq\in \prod_i\cP(\neg i) }\!\sum_{(a,i)\in\cA\times\cI}\!\!\!\tw^{a,i}\E_{\lambda^i\sim \tq^i}\normm{\theta - \lambda^i}_{aa^\top}^2\\
-   &= \inf_{\tq\in \prod_i\cP(\neg i) } \frac{1}{2}\max_{(a,i)\in\cA\times\cB}\E_{\tlambda^i\sim \tq^i}\normm{\theta - \tlambda^i}_{aa^\top}^2\,.
-\end{align*}
-\end{lemma}
-Thus in this formulation the characteristic time is the value of a fictitious zero-sum game where the agent plays a distribution $\tw\in\Sigma_{AI}$ over the arm-answer pairs $(a,i)\in\cA\times\cI$ and nature chooses an alternative $\tlambda^i\in\neg i$ for all the answers $i\in\cI$. The algorithm \LGC that we propose in Section~\ref{sec:lgc.game} is based on this formulation of the characteristic time whereas algorithm \LG is based on the formulation of Theorem~\ref{th:lb_genral}.
-
-\subsection{Best-arm identification complexity}
-The inverse of the characteristic time of Theorem~\ref{th:lb_genral} specializes to
-\[
-\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{V_w^{-1}}^2}
-\]
-for BAI (see Appendix~\ref{app:lgc.examples} for a proof). It is also possible to explicit the characteristic time
-\[
-\Tstar(\theta) = \min_{w\in\Sigma_A} \max_{a\neq \astar(\theta)} \frac{2\normm{\astar(\theta)-a}_{V_w^{-1}}^2}{\big\langle \theta, \astar(\theta)-a\big\rangle^2}\,.
-\]
-Since the characteristic time involves many problem dependent quantities that are unknown to the agent, previous papers target loose problem-independent upper bounds on the characteristic time. \citet{soare2014linear} (see also \citealt{tao2018alba}, \citealt{fiez2019transductive}) introduce the G-complexity (denoted by $\gopt$) which coincides with the G-optimal design of experimental design theory (see \citealt{pukelsheim2006optimal}) and the $\xyopt$-complexity\footnote{This complexity is denoted as $\cX\cY$ by \citet{soare2014linear}.} (denoted by $\xyopt$) inspired by the transductive experimental design theory  \citep{yu2006active},
-\begin{align*}
-\gopt &=\min_{w\in\Sigma_A} \max_{a\in\cA} \normm{a}_{V_w^{-1}}^2\,,\\
-\xyopt &=\min_{w\in\Sigma_A} \max_{b\in\cB} \normm{b}_{V_w^{-1}}^2\,,
-\end{align*}
-where $\cB_{\texttt{dir}}\eqdef\{a-a':\ (a,a')\in\cA\times\cA\}$. For the G-optimal complexity we seek for a proportion of pulls $w$ that explores \emph{uniformly} the means of the arms, since the statistical uncertainty for estimating $\langle \theta,a\rangle$ scales roughly with $\normm{a}_{V_w^{-1}}$. In the $\cA\cB$-complexity we try to estimate \emph{uniformly} all the \emph{directions} $a-a'$. On the contrary in this paper we try to maximize directly the characteristic times, that is try to estimate all the \emph{directions} $\astar(\theta) - a$ scaled by the squared gaps $\langle\theta,\astar(\theta)-a\rangle$.
-Note that the characteristic time can also be seen as a particular optimal transductive design. Indeed for $\cBstar \eqdef \left\{ (\astar(\theta)- a)/\left|\big\langle \theta, \astar(\theta)-a\big\rangle\right|: a\in\cA/\big\{\astar(\theta)\big\}  \right\}$, it holds
-\[
-\Tstar(\theta) = 2 \cA\cBstar(\theta) \eqdef 2 \min_{w\in\Sigma_A} \max_{b\in\cBstar(\theta)} \normm{b}_{V_w^{-1}}^2\,.
-\]
-We have the following ordering on the complexities
-\begin{align}\label{eq:complexities}
-\Tstar(\theta) \leq 2 \frac{\xyopt}{\DeltaMin(\theta)^2}\leq 8 \frac{\gopt}{\DeltaMin(\theta)^2} = \frac{8d}{\DeltaMin(\theta)^2}\,\CommaBin
-\end{align}
-where $\DeltaMin = \min_{a\neq\astar(\theta)}\langle\theta,\astar(\theta)-a\rangle$ and  the last equality follows from the Kiefer-Wolfowitz equivalence theorem~\citep{kiefer1959}. 
+where $\DeltaMin = \min_{\bx\neq\bx^\star(\btheta)}(\bx^\star(\btheta)- \bx)\transpose\btheta$ and the last equality follows from the Kiefer-Wolfowitz equivalence theorem~\citep{kiefer1959}. 
 
 %Conversely the $\gopt$-complexity and the $\xyopt$-complexity are linked to an \emph{other} pure exploration problem, the thresholding bandits (see Appendix~\ref{app:threshold_bandits}).
 
 \begin{remark}
-In order to compute all these complexities, it is sufficient to solve the following generic optimal transductive design problem: for $\cB$ a finite set of elements in $\R^d$,
+In order to compute all these complexities, it is sufficient to solve the following generic optimal transductive design problem: for $\cY$ a finite set of elements in $\R^d$,
 \[
-\cA\cB=\min_{w\in\Sigma_K}\max_{b\in\cB}\normm{b}^2_{V_w^{-1}}\,.
+\xyopt=\min_{\bomega\in\Sigma_K}\max_{\by\in\cY}\normm{\by}^2_{\bLambda_{\bomega}^{-1}}\,.
 \]
-When $\cB=\cA$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956algorithm} which possesses convergence guarantees~\citep{atwood1969optimal,ahipasaoglu2008fw}. But in the general case, up to our knowledge, there is no algorithm with the same kind of guarantees. Previous works used an heuristic based on a straightforward adaptation of the aforementioned algorithm for general sets $\cB$ but it seems to not converge on particular instances, see Section~\ref{sec:lgc.experiments.implem}. We instead propose in the same section an algorithm based on Saddle point Frank-Wolfe algorithm that seems to converge on the different instances we tested.
+When $\cY=\cX$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956algorithm} which possesses convergence guarantees~\citep{atwood1969optimal,ahipasaoglu2008fw}. But in the general case, up to our knowledge, there is no algorithm with the same kind of guarantees. Previous works used an heuristic based on a straightforward adaptation of the aforementioned algorithm for general sets $\cY$ but it seems to not converge on particular instances, see Section~\ref{sec:lgc.experiments.implem}. We instead propose in the same section an algorithm based on Saddle point Frank-Wolfe algorithm that seems to converge on the different instances we tested.
 \end{remark}
 
 % TODO:
@@ -162,7 +155,172 @@ When $\cB=\cA$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956a
 %   \item compare the three complexity on the problem $\theta = [1,0], a_1 = [1,0 ], a_2 =[1,\epsilon], a_3 = [0,1]$
 %   \item compare also on the same problem
 %   \[
-%   \inf_{\lambda\in \neg \istar(\theta)} \frac{\normm{\theta - \lambda}_{V_w}^2}{2}\,,
+%   \inf_{\lambda\in \neg \istar(\theta)} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2}\,,
 %   \]
 %   for $w = w^\star(\theta), w^G, w^{\cX\cY}$.
 % \end{itemize}
+
+\subsection{Some extensions}\label{sec:lgc.complexity.examples}
+
+In this section, we discuss some natural extensions of linear bandits BAI.
+
+\paragraph{Best response for BAI.}\label{sec:lgc.formulation.examples.general}
+For BAI the goal is to identify the arm with the largest mean. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{a\in\cA} \langle\theta,a\rangle|>1\}$, the set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
+
+% \begin{lemma}
+% \label{lem:complexity_bai}
+% For all $\theta\in \cM$,
+% \[
+% \Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}\,,
+% \]
+% and
+% \[
+% \Tstar(\theta) = \min_{w\in\Sigma_A} \max_{a\neq \astar(\theta)} \frac{2\normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}{\big\langle \theta, \astar(\theta)-a\big\rangle^2}\,.
+% \]
+% \end{lemma}
+% \begin{proof}
+% Recall that the characteristic time is given by
+% \[
+% \Tstar(\theta)^{-1} = \max_{w \in \Delta_A} \inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2}\,.
+% \]
+% We just express the set $\neg \astar(\theta)$ as a union of convex sets, and then compute the infimum for each one of them. Using Lemma~\ref{lem:lagrange_alternative}, it yields
+% \begin{align*}
+%   \Tstar(\theta)^{-1} &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \inf_{\lambda: \langle\lambda,a\rangle > \langle\lambda,\astar(\theta)\rangle} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2}\\
+%   &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}\,.
+% \end{align*}
+% The formula for $\Tstar(\theta)$ is then straightforward given the one for  $\Tstar(\theta)^{-1}$.
+
+% \end{proof}
+
+% In fact the characteristic time is just a particular case of the optimal transductive design. Indeed if we set
+% \[
+% \cBstar(\theta) \eqdef \left\{ \frac{1}{\left|\big\langle \theta, \astar(\theta)-a\big\rangle\right|}\big(\astar(\theta)- a\big): a\in\cA/\big\{\astar(\theta)\big\}  \right\}\,,
+% \]
+% then we have $\Tstar(\theta) = 2 \cA\cBstar(\theta)$ where
+% \[
+% \cA\cBstar(\theta) \eqdef  \min_{w\in\Sigma_A} \max_{b\in \cBstar} \normm{b}_{\bLambda_{\bomega}^{-1}}^2\,.
+% \]
+
+There is an explicit formula for the best response in BAI. Indeed if we inspect the proof of Proposition~\ref{prop:lgc.lb} we have
+\[
+\inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2} = \min_{a \neq \astar(\theta)} \normm{\theta-\lambda^\star_a}_{\bLambda_{\bomega}^{-1}}\,.
+\]
+where $\lambda^\star_a$ is defined in Lemma~\ref{lem:best_response_BAI}.
+
+\begin{lemma}
+\label{lem:best_response_BAI}
+For $\theta \in\R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$, we have
+\[
+\min_{\substack{\langle \lambda,a-\astar(\theta)\rangle\geq 0}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{\bLambda_{\bomega}^{-1}}^2}\,,
+\]
+and $\lambda^\star_a$ defined below attains the infimum of the left hand term above
+\[
+\lambda^\star_a = \theta - \frac{\max\left(\langle \theta, \astar(\theta)-a\rangle,0\right)}{\normm{\astar(\theta)-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}} \bLambda_{\bomega}^{-1}(a^\star - a)\,.
+\]
+\end{lemma}
+\begin{proof}
+See proof of Lemma~\ref{lemma:lgc.lagrange_alternative}.
+\end{proof}
+
+\paragraph{Bounded BAI.}\label{sec:lgc.formulation.examples.bounded}
+One straightforward extension of this setting is to consider the \emph{bounded} BAI. In this case, the set of parameters is $\cM=\{\theta \in \R^d:\ |\argmax_{a\in\cA} \langle\theta,a\rangle|=1 \text{ and } \normm{\theta}\leq M\}$ for some $M>0$. The set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
+This additional assumption reduces the characteristic time to
+\[
+\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \inf_{\substack{\langle \lambda,a-\astar(\theta)\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 \,.
+\]
+But the best response is less trivial to compute, in particular there is no closed formula for $\lambda^\star_a$ as in BAI, see Lemma~\ref{lem:lagrange_bounded_BAI}.
+\begin{lemma}
+  \label{lem:lagrange_bounded_BAI}
+For $\theta, \lambda \in \R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$,
+\begin{align}\label{eq:bounded_bai}
+\min_{\substack{\langle \lambda,a-\astar(\theta)\rangle\geq 0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \sup_{\gamma\geq 0} \frac{\max\left(\langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1} \bLambda_{\bomega} (\astar(\theta)-a)\rangle,0\right)^2 }{2\normm{\astar(\theta)-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}}- \frac{\gamma}{2}\left(\normm{\theta}^2-M^2\right)\,.
+\end{align}
+And if $\gamma$ attains the supremum in the right hand term of~\eqref{eq:bounded_bai}, then
+\[
+\lambda = \theta - \frac{\max\left(\langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1} \bLambda_{\bomega} (\astar(\theta)-a)\rangle,0\right)}{\normm{\astar(\theta)-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}} (\bLambda_{\bomega}+\gamma I_d)^{-1}(a^\star - a)\,,
+\]
+attains the minimum of the left hand term of~\eqref{eq:bounded_bai}.
+\end{lemma}
+\begin{proof}
+We set $\astar(\theta) = \astar$, and introduce the Lagrangian
+\[
+ \inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \sup_{\gamma\geq 0, \alpha\geq 0} \inf_{\substack{\langle \lambda,a-\astar\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 +\alpha \langle \theta, \astar-a\rangle + \frac{\gamma}{2}\left(\normm{\lambda}^2-M^2 \right)\,.
+\]
+The infimum above is attained for
+\[
+\lambda = \theta - \alpha (\bLambda_{\bomega} + \gamma I_d)^{-1}(\astar-a)\,.
+\]
+Thus the Lagrangian reduces to
+\[
+\inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{\bLambda_{\bomega}}^2 = \sup_{\gamma\geq 0, \alpha\geq 0}
+-\frac{\alpha^2}{2} \normm{\astar-a}^2_{\bLambda_{\bomega}+\gamma I_d} + \alpha \langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1}\bLambda_{\bomega} (\astar-a)\rangle +\frac{\gamma}{2}\left(\normm{\theta}^2-M^2 \right)\,.
+\]
+The supremum in $\alpha$ is reached for
+\[
+\alpha =\frac{\max\left(\langle \theta, (\bLambda_{\bomega}+\gamma I_d)^{-1} \bLambda_{\bomega} (\astar-a)\rangle,0\right)}{\normm{\astar-a}^2_{(\bLambda_{\bomega}+\gamma I_d)^{-1}}}\,.
+\]
+Using this particular $\alpha$ in the definition of $\lambda$ and in the Lagrangian allows us to conclude.
+\end{proof}
+
+\paragraph{Transductive BAI.}\label{sec:lgc.formulation.examples.transductive}
+We can also consider the transductive BAI~\citep{fiez2019transductive} where the agent wants to find the best arm of a different set $\cB$ that the one he is allow to pull. Precisely the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{b\in\cB} \langle\theta,b\rangle|>1\}$, the set of possible answers is $\cI = \cB$ and the correct answer is given by $\istar(\theta)=\bstar(\theta)\eqdef \argmax_{b\in\cB} \langle\theta,b\rangle$.
+
+The characteristic time in this case is
+\[
+\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{b\neq \bstar(\theta)} \frac{\big\langle \theta, \bstar(\theta)-b\big\rangle^2}{2 \normm{\bstar(\theta)-b}_{\bLambda_{\bomega}^{-1}}^2}\,.
+\]
+Note that the dependency on the arm set $\cA$ here only appears through the matrix $\bLambda_{\bomega}$.
+
+
+% \subsection{Threshold bandits}
+% \label{app:threshold_bandits}
+% In this example the goal is to identify the set of arms whose mean is above a threshold $\iota\in \R$ known by the agent. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\ \exists a\in \cA,\, \langle \theta,a\rangle = \iota\}$, the set of possible answers is $\cI = \cP(\cA)$, the power set of the set of arms and the correct answer is given by $\istar(\theta)=\{a\in\cA:\ \langle \theta,a\rangle \geq \iota\}$.
+% We can also express in this example the characteristic time in a more explicit way.
+% \begin{lemma}
+% \label{lem:complexity_threshold_bandits}
+% For all $\theta\in \cM$,
+% \[
+% \Tstar(\theta)^{-1} =  \max_{w\in\Sigma_A} \min_{a\in\cA} \frac{\big(\iota -\langle \theta,a\rangle\big)^2}{2 \normm{a}_{\bLambda_{\bomega}^{-1}}^2}\,,
+% \]
+% and $\Tstar(\theta)= 2\cA\cA(\iota)$, where we define $\cA(\iota)\eqdef \{ |\iota- \langle\theta,a\rangle|^{-1} a:\ a\in\cA\}$ and
+% \[
+% \cA\cA(\iota) \eqdef  \min_{w\in\Sigma_A} \max_{a\in\cA(\iota)}\normm{a}_{\bLambda_{\bomega}^{-1}}^2\,.
+% \]
+% \end{lemma}
+% \begin{proof}
+% We proceed as the proof of Lemma~\ref{lem:complexity_bai}. We have, using Lemma~\ref{lem:lagrange_alternative},
+% \begin{align*}
+%   \Tstar(\theta)^{-1} &= \max_{w \in \Delta_A} \min_{a\in\cA} \inf_{\lambda:\ \text{sign}(\iota-\langle\lambda,a\rangle)\langle\lambda,a\rangle > \iota} \frac{\normm{\theta - \lambda}_{\bLambda_{\bomega}}^2}{2}\\
+%   &= \max_{w \in \Delta_A} \min_{a\in\cA}  \frac{\big(\iota -\langle \theta,a\rangle\big)^2}{2 \normm{a}_{\bLambda_{\bomega}^{-1}}^2}\,.
+% \end{align*}
+% \end{proof}
+% Note that we recover in this example a weighted version of the G-complexity ($\gopt$-complexity) defined in Section~\ref{sec:lower_bound}. In particular if $\theta=0$ and $\iota=1$ then
+% \[
+% \Tstar(\theta) =2\gopt = 2d\,.
+% \]
+% That makes sense since in this case, one shall estimate \emph{uniformly} the mean of each arms.
+
+
+% \subsubsection{Transductive threshold bandits}
+% \label{app:transductive_threshold_bandits}
+% We can generalize the previous example to any set of arms. Indeed if we fix a finite set of vector $\cB\in\R^d$ the goal is then to identify all the elements $b$ of this set such that $\langle \theta, b \rangle \geq \iota$ for a known threshold $\tau \in \R$. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\ \exists b\in \cB,\, \langle \theta,b\rangle = \iota\}$, the set of possible answers is $\cI = \cP(\cB)$ and the correct answer is given by
+% $\istar(\theta)=\{b\in\cB:\ \langle \theta,b\rangle \geq \iota\}$. The characteristic time makes appear, unsurprisingly, in this case, the transductive optimal design \citep{yu2006active}.
+% \begin{lemma} For all $\theta \in\cM$,
+%   \label{lem:complexity_transductive_threshold_bandits}
+%   \[
+%   \Tstar(\theta)^{-1} =  \max_{w\in\Sigma_A} \min_{b\in\cB} \frac{\big(\iota -\langle \theta,b\rangle\big)^2}{2 \normm{b}_{\bLambda_{\bomega}^{-1}}^2}\,,
+%   \]
+%   and $\Tstar(\theta)= 2\cA\cB(\iota)$, where we defined $\cB(\iota)\eqdef \{ |\iota- \langle\theta,b\rangle|^{-1} b:\ b\in\cB\}$ and
+%   \[
+%   \cA\cB(\iota) \eqdef  \min_{w\in\Sigma_A} \max_{b\in\cB(\iota)}\normm{b}_{\bLambda_{\bomega}^{-1}}^2\,.
+%   \]
+% \end{lemma}
+% \begin{proof}
+%   Simple adaptation of the proof of Lemma~\ref{lem:complexity_threshold_bandits}.
+% \end{proof}
+% Again, in particular, if $\theta=0$ and $\tau=1$ we recover the complexity of the optimal transductive design
+% \[
+% \Tstar(\theta)^{-1} = 2 \cA\cB\,.
+% \]
+
+

@@ -6,18 +6,22 @@ In this section, we first recall the problem setting of linear bandits as well a
 \subsection{General setting and assumptions}\label{sec:lgc.formulation.general}
 
 \paragraph{Linear bandits.}
-We consider a finitely-armed linear bandit problem, where the collection of arms $\cX\subset \R^d$ is given with $|\cX|=K$, and spans $\R^d$. 
+We consider a finitely-armed linear bandit problem, where the collection of arms $\cX\eqdef\{\bx_1,\cdots,\bx_K\}\subset \R^d$ is given with $|\cX|=K$, and spans $\R^d$. When there is no ambiguity, we can also use the index $i\in[K]$ to represent arm $\bx_i$. The (unknown) mean of each arm is given by
+\[
+    \mu_i = \bx_i\transpose\btheta\,.
+\]
+
 \begin{assumption}
 \begin{leftbar}[assumptionbar]
-    We assume that $\forall \bx\in\cX, \normm{x}\leq L$, where $\normm{\bx}$ denotes the Euclidean norm of the vector $\bx$.
+    We assume that $\forall \bx\in\cX, \normm{\bx}\leq L$, where $\normm{\bx}$ denotes the Euclidean norm of the vector $\bx$.
 \end{leftbar}
 \end{assumption}
 
-The learning protocol (see also Definition~\ref{def:mab.linear_bai}) goes as follows: for each round $n$, the learner chooses an arm $\bx_n\in\cX$ and observes a noisy sample
+The learning protocol (see also Definition~\ref{def:mab.linear_bai}) goes as follows: for each round $n$, the learner chooses an arm $\hbx_n\in\cX$ and observes a noisy sample
 \[
-    r_t = \btheta\transpose\bx_n +\epsilon_n\,,
+    r_n = \hbx_n\transpose\btheta +\epsilon_n\,,
 \]
-where $\epsilon_n$ is the noise and $\btheta$ is some unknown regression parameter.
+where $\epsilon_n$ is the noise and $\btheta$ is the true regression parameter (unknown to the learner).
 \begin{assumption}
 \begin{leftbar}[assumptionbar]
     We assume that $\epsilon_n \sim \cN(0,\sigma^2)$ is conditionally independent from the past\,.
@@ -26,31 +30,31 @@ where $\epsilon_n$ is the noise and $\btheta$ is some unknown regression paramet
 For the sake of simplicity, we set $\sigma^2 = 1$ in the rest of this paper.
 
 \paragraph{Best-arm identification for linear bandits.}
-We assume that $\btheta$ belongs to some parameter set $\Theta\subset\R^d$ known to the learner. Recall that in a pure exploration game, given a parameter $\btheta$, the learner aims to find the correct answer $\Istar(\btheta)$ by interacting with the finite-armed linear bandit environment parameterized by $\btheta$.
+We assume that $\btheta$ belongs to some parameter set $\Theta\subset\R^d$ known to the learner. Recall that in a pure exploration game, given a parameter $\btheta$, the learner aims to find the correct answer $\Istar(\btheta)\in\cI$ by interacting with the finite-armed linear bandit environment parameterized by $\btheta$ (see also Section~\ref{sec:mab.extensions.pure}).
 
-In particular, we are interested in BAI for which the objective is to identify the arm with the largest mean. That is, the correct answer is given by $\Istar(\theta) \eqdef \argmax_{bx\in\cX} \btheta\transpose\bx$ for $\btheta\in\Theta = \R^d$ and the set of possible correct answers is $\cI = \cX$.
+In particular, we are interested in BAI for which the objective is to identify the arm with the largest mean. That is, the correct answer given $\btheta$ is given by 
+\[
+\Istar(\btheta) = \bx^\star(\btheta) \eqdef \argmax_{\bx\in\cX} \bx\transpose\btheta
+\]
+for $\btheta\in\Theta = \R^d$ and the set of possible correct answers is $\cI = \cX$. When clear from the context, we can simply denote $\bx^\star(\btheta)$ by $\bx$.
 
 \paragraph{Algorithm.}
-Let $\cF_{t}=\sigma (a_1,Y_1,\ldots, a_t,Y_t)$ be the information available to the agent after $t$ round. A deterministic pure-exploration algorithm under the fixed-confidence setting is given by three components: (1) a \emph{sampling rule} $(a_t)_{t\geq 1}$, where $a_t\in\cA$ is $\cF_{t-1}$-measurable, (2) a \emph{stopping rule} $\tau_\delta$, a stopping time for the filtration $(\cF_t)_{t\geq 1}$, and (3) a \emph{decision rule} $\hi\in \cI$ which is $\cF_{\tau_\delta}$-measurable.
-Non-deterministic algorithms could also be considered by allowing the rules to depend on additional internal randomization. The algorithms we present are deterministic.
+Let $\cF_{n}=\sigma (\hbx_1,r_1,\cdots, \hbx_n,r_n)$ be the information available to the learner after $n$ round. We restate the definition of a BAI algorithm under the fixed-confidence setting, which is given by three components: (1) a \emph{sampling rule} $(\hbx_n)_{n\geq 1}$, where $\hbx_n\in\cX$ is $\cF_{n-1}$-measurable, (2) a \emph{stopping rule} $\tau_\delta$, a stopping time for the filtration $(\cF_n)_{n\geq 1}$, and (3) a \emph{decision rule} $J_\tau\in \cX$ which is $\cF_{\tau_\delta}$-measurable.
+%Non-deterministic algorithms could also be considered by allowing the rules to depend on additional internal randomization. The algorithms we present are deterministic.
 
 \paragraph{$\delta$-correctness and fixed-confidence objective.}
-An algorithm is $\delta$-correct if it predicts the correct answer with probability at least $1-\delta$, precisely if $\P_\theta \big(\hi \neq \istar(\theta)\big) \leq \delta$ and $\tau_\delta < +\infty$ almost surely for all $\theta \in\cM$. Our goal is to find a $\delta$-correct algorithm that minimizes the \emph{sample complexity}, that is,  $\E_\theta[\tau_\delta]$ the expected number of sample needed to predict an answer.
-
-Pure exploration (in particular BAI) for linear bandits has been previously studied by
-~\citet{soare2014linear,tao2018alba,xu2018linear,zaki2019maxoverlap,fiez2019transductive,kazerouni2019glb}. They all consider the fixed-confidence setting. To the best of our knowledge, only~\citet{hoffman2014bayesgap} study the problem with a fixed-budget.
-
-Beside studying fixed-confidence sample complexity,~\citet{garivier2016tracknstop} and some subsequent works~\citep{qin2017ttei,shang2020t3c} investigate a general criterion of judging the optimality of a BAI sampling rule: Algorithms that achieve the minimal sample complexity when~$\delta$ tends to zero are called asymptotically optimal. \citet{menard2019lma} and~\citet{degenne2019game} further study the problem in a game theoretical point of view, and extend the asymptotic optimality to the general pure exploration for structured bandits. Note that a naive adaptation of the algorithm proposed by~\citet{degenne2019game} may not work smoothly in our setting. In this paper we use some different confidence intervals that benefit better from the linear structure.
+As already stated several times in the previous chapters, we say that an algorithm is $\delta$-correct if it predicts the correct best arm with probability at least $1-\delta$, precisely if $\PPt{\big(\bx_{J_\tau} \neq \Istar(\btheta)\big) \leq \delta}$ and $\tau_\delta < +\infty$ almost surely for all $\btheta \in\Theta$. Our goal is to find a $\delta$-correct algorithm that minimizes the \emph{sample complexity}, that is,  $\E_\btheta[\tau_\delta]$ the expected number of sample needed to predict an answer.
 
 \paragraph{Linear estimator.}
-Let $\bX_n=(\hat{\bx}_1,\ldots,\hat{\bx}_n)$ be a sequence of sampled arms, and $\bY_n=(y_1,\ldots,y_n)$ be the corresponding observations. To estimate the regression parameter $\btheta^\star$ based on the adaptive sequence of observations $\bY_n$, one may use the \emph{regularized least-squares} estimator
+A crucial step in linear bandits is to estimate the regression parameter $\btheta$. Let $\bX_n=(\hat{\bx}_1,\ldots,\hat{\bx}_n)$ be a sequence of sampled arms, and $\br_n=(r_1,\ldots,r_n)$ be the corresponding observations. To estimate $\btheta^\star$ based on the adaptive sequence of observations $\br_n$, one may use the \gls{regularized least-square estimation}
 \begin{align}\label{eq:update_mean}
-    \hat{\btheta}_n^{\lambda} = (\lambda \1_d + \bA_{\bX_n})^{-1}\bb_{\bX_n},
+    \hat{\btheta}_n^{\lambda} = (\lambda \1_d + \bA_{\bX_n})^{-1}\bb_{\bX_n}\,,
 \end{align}
 where $\bA_{\bX_n}$ and $\bb_{\bX_n}$ are the design matrix and the response vector respectively given by
 \[
-    \bA_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t\hat{\bx}_t\transpose, \quad \bb_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t y_t.
+    \bA_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t\hat{\bx}_t\transpose, \quad \bb_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t r_t\,,
 \]
+and $\lambda\in\R$ is the regularization parameter.
 
 \paragraph{Useful notation.}
 The fixed-confidence optimality, as proved by~\cite{garivier2016tracknstop,russo2016ttts}, is related to the \emph{proportion vector} of pulls of each arm that we denote by $\bomega = (\omega_1,\ldots,\omega_K)$, where $\bomega\in\Sigma_K \eqdef \{\bomega : \sum_{i=1}^K \omega_i = 1\}$. Given a vector of proportions $\bomega$, we can define a counterpart of the design matrix 
@@ -60,197 +64,11 @@ The fixed-confidence optimality, as proved by~\cite{garivier2016tracknstop,russo
 
 It is easy to switch between the design matrix and the proportion vector. Indeed, given a sequence of sampled arms $\bX_n$, the corresponding proportion vector can be written as
 \[
-    \forall i\in [1,\ldots,K], \quad \omega_{\bX_n,i} = \frac{T_{n+1,i}}{n},
+    \forall i\in [K], \quad \omega_{\bX_n,i} = \frac{T_{n+1,i}}{n},
 \]
-where $T_{n,i} \eqdef \sum_{t=1}^{n-1} \1\{\hat{\bx_t} = i\}$ is the number of pulls of arm $i$ before round $n$. Therefore, the corresponding design matrix can be written as $\bA_{\bX_n}=n\bLambda_{\bomega_{\bX_n}}$.
+where recall that $T_{n,i} \eqdef \sum_{t=1}^{n-1} \1\{\hat{\bx_t} = i\}$ is the number of pulls of arm $i$ before round $n$. Therefore, the corresponding design matrix can be written as $\bA_{\bX_n}=n\bLambda_{\bomega_{\bX_n}}$.
 
 Another important notation that we employ ceaselessly is the Mahalanobis norm which is defined, given a positive semi-definite matrix $\bA\in\R^{d\times d}$, by
 \[
     \forall \bx\in\R^d, \quad \normm{\bx}_{\bA} = \sqrt{\bx\transpose\bA\bx}.
 \]
-
-\subsection{Different best-arm identification instances for linear bandits}\label{sec:lgc.formulation.examples}
-
-We gather in this appendix several pure exploration problems for linear bandits. We first state a useful lemma.
-
-\begin{lemma}\label{lem:lagrange_alternative}
-For $\theta, \lambda \in \R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$, $y\in\R^d\,$, $x\in\R$, we have
-\begin{align*}
-\inf_{\lambda:\ \langle \lambda,y\rangle \geq x} \frac{\normm{\theta-\lambda}^2_{V_w}}{2} = \begin{cases}
-\dfrac{(x - \langle\theta,y\rangle)^2}{2 \normm{y}_{V_w^{-1}}^2} &\text{if } x \geq \langle\theta,y\rangle \\
-0 &\text{otherwise}
-\end{cases}\,.
-\end{align*}
-\end{lemma}
-
-\begin{proof}
-We consider the Lagrangian of the problem, and we obtain
-\begin{align*}
-  \inf_{\lambda:\ \langle \lambda,y \rangle \geq x} \frac{\normm{\theta-\lambda}^2_{V_w}}{2}
-  &= \sup_{\alpha \geq 0}\inf_{\lambda \in \R^d} \frac{\normm{\theta-\lambda}^2_{V_w}}{2}+ \alpha (x-\langle\lambda,y\rangle)\\
-  &=  \sup_{\alpha \geq 0} \alpha (x-\langle\theta,y\rangle) - \alpha^2 \frac{\normm{y}^2_{V_w^{-1}}}{2}\\
-  &= \begin{cases}
-  \dfrac{(x - \langle\lambda,y\rangle)^2}{2 \normm{y}_{V_w^{-1}}^2} &\text{if } x \geq \langle\theta,y\rangle \\
-  0 & \text{otherwise}
-  \end{cases}\,,
-\end{align*}
-where the infimum in the first equality is reached at $\lambda = \theta + \alpha V_w^{-1} y$ and the supremum in the last equality is reached at $\alpha = (x- \langle\theta,y\rangle)/\normm{y}_{V_w^{-1}}^2$ if $x \geq \langle\theta,y\rangle$ and at $\alpha = 0$ else.
-\end{proof}
-
-\paragraph{General BAI.}\label{sec:lgc.formulation.examples.general}
-For BAI the goal is to identify the arm with the largest mean. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{a\in\cA} \langle\theta,a\rangle|>1\}$, the set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
-\begin{lemma}
-\label{lem:complexity_bai}
-For all $\theta\in \cM$,
-\[
-\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{V_w^{-1}}^2}\,,
-\]
-and
-\[
-\Tstar(\theta) = \min_{w\in\Sigma_A} \max_{a\neq \astar(\theta)} \frac{2\normm{\astar(\theta)-a}_{V_w^{-1}}^2}{\big\langle \theta, \astar(\theta)-a\big\rangle^2}\,.
-\]
-\end{lemma}
-\begin{proof}
-Recall that the characteristic time is given by
-\[
-\Tstar(\theta)^{-1} = \max_{w \in \Delta_A} \inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{V_w}^2}{2}\,.
-\]
-We just express the set $\neg \astar(\theta)$ as a union of convex sets, and then compute the infimum for each one of them. Using Lemma~\ref{lem:lagrange_alternative}, it yields
-\begin{align*}
-  \Tstar(\theta)^{-1} &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \inf_{\lambda: \langle\lambda,a\rangle > \langle\lambda,\astar(\theta)\rangle} \frac{\normm{\theta - \lambda}_{V_w}^2}{2}\\
-  &= \max_{w \in \Delta_A} \min_{a \neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{V_w^{-1}}^2}\,.
-\end{align*}
-The formula for $\Tstar(\theta)$ is then straightforward given the one for  $\Tstar(\theta)^{-1}$.
-
-\end{proof}
-In fact the characteristic time is just a particular case of the optimal transductive design. Indeed if we set
-\[
-\cBstar(\theta) \eqdef \left\{ \frac{1}{\left|\big\langle \theta, \astar(\theta)-a\big\rangle\right|}\big(\astar(\theta)- a\big): a\in\cA/\big\{\astar(\theta)\big\}  \right\}\,,
-\]
-then we have $\Tstar(\theta) = 2 \cA\cBstar(\theta)$ where
-\[
-\cA\cBstar(\theta) \eqdef  \min_{w\in\Sigma_A} \max_{b\in \cBstar} \normm{b}_{V_w^{-1}}^2\,.
-\]
-
-There is an explicit formula for the best response in BAI. Indeed if we inspect the proof of Lemma~\ref{lem:complexity_bai} we have
-\[
-\inf_{\lambda\in \neg \astar(\theta)} \frac{\normm{\theta - \lambda}_{V_w}^2}{2} = \min_{a \neq \astar(\theta)} \normm{\theta-\lambda^\star_a}_{V_w^{-1}}\,.
-\]
-where $\lambda^\star_a$ is defined in Lemma~\ref{lem:best_response_BAI}.
-
-\begin{lemma}
-\label{lem:best_response_BAI}
-For $\theta \in\R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$, we have
-\[
-\min_{\substack{\langle \lambda,a-\astar(\theta)\rangle\geq 0}} \normm{\theta -\lambda }_{V_w}^2 = \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2 \normm{\astar(\theta)-a}_{V_w^{-1}}^2}\,,
-\]
-and $\lambda^\star_a$ defined below attains the infimum of the left hand term above
-\[
-\lambda^\star_a = \theta - \frac{\max\left(\langle \theta, \astar(\theta)-a\rangle,0\right)}{\normm{\astar(\theta)-a}^2_{(V_w+\gamma I_d)^{-1}}} V_w^{-1}(a^\star - a)\,.
-\]
-\end{lemma}
-\begin{proof}
-See proof of Lemma~\ref{lem:lagrange_alternative}.
-\end{proof}
-
-\paragraph{Bounded BAI.}\label{sec:lgc.formulation.examples.bounded}
-One straightforward extension of this setting is to consider the \emph{bounded} BAI. In this case, the set of parameters is $\cM=\{\theta \in \R^d:\ |\argmax_{a\in\cA} \langle\theta,a\rangle|=1 \text{ and } \normm{\theta}\leq M\}$ for some $M>0$. The set of possible answers is $\cI = \cA$ and the correct answer is given by $\istar(\theta)=\astar(\theta)\eqdef \argmax_{a\in\cA} \langle\theta,a\rangle$.
-This additional assumption reduces the characteristic time to
-\[
-\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{a\neq \astar(\theta)} \inf_{\substack{\langle \lambda,a-\astar(\theta)\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 \,.
-\]
-But the best response is less trivial to compute, in particular there is no closed formula for $\lambda^\star_a$ as in BAI, see Lemma~\ref{lem:lagrange_bounded_BAI}.
-\begin{lemma}
-  \label{lem:lagrange_bounded_BAI}
-For $\theta, \lambda \in \R^d\,$, $w$ in the interior of the probability simplex $\interior{\Sigma_A}$,
-\begin{align}\label{eq:bounded_bai}
-\min_{\substack{\langle \lambda,a-\astar(\theta)\rangle\geq 0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 = \sup_{\gamma\geq 0} \frac{\max\left(\langle \theta, (V_w+\gamma I_d)^{-1} V_w (\astar(\theta)-a)\rangle,0\right)^2 }{2\normm{\astar(\theta)-a}^2_{(V_w+\gamma I_d)^{-1}}}- \frac{\gamma}{2}\left(\normm{\theta}^2-M^2\right)\,.
-\end{align}
-And if $\gamma$ attains the supremum in the right hand term of~\eqref{eq:bounded_bai}, then
-\[
-\lambda = \theta - \frac{\max\left(\langle \theta, (V_w+\gamma I_d)^{-1} V_w (\astar(\theta)-a)\rangle,0\right)}{\normm{\astar(\theta)-a}^2_{(V_w+\gamma I_d)^{-1}}} (V_w+\gamma I_d)^{-1}(a^\star - a)\,,
-\]
-attains the minimum of the left hand term of~\eqref{eq:bounded_bai}.
-\end{lemma}
-\begin{proof}
-We set $\astar(\theta) = \astar$, and introduce the Lagrangian
-\[
- \inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 = \sup_{\gamma\geq 0, \alpha\geq 0} \inf_{\substack{\langle \lambda,a-\astar\rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 +\alpha \langle \theta, \astar-a\rangle + \frac{\gamma}{2}\left(\normm{\lambda}^2-M^2 \right)\,.
-\]
-The infimum above is attained for
-\[
-\lambda = \theta - \alpha (V_w + \gamma I_d)^{-1}(\astar-a)\,.
-\]
-Thus the Lagrangian reduces to
-\[
-\inf_{\substack{\langle \lambda,a-\astar \rangle>0\\ \normm{\lambda}\leq M}} \normm{\theta -\lambda }_{V_w}^2 = \sup_{\gamma\geq 0, \alpha\geq 0}
--\frac{\alpha^2}{2} \normm{\astar-a}^2_{V_w+\gamma I_d} + \alpha \langle \theta, (V_w+\gamma I_d)^{-1}V_w (\astar-a)\rangle +\frac{\gamma}{2}\left(\normm{\theta}^2-M^2 \right)\,.
-\]
-The supremum in $\alpha$ is reached for
-\[
-\alpha =\frac{\max\left(\langle \theta, (V_w+\gamma I_d)^{-1} V_w (\astar-a)\rangle,0\right)}{\normm{\astar-a}^2_{(V_w+\gamma I_d)^{-1}}}\,.
-\]
-Using this particular $\alpha$ in the definition of $\lambda$ and in the Lagrangian allows us to conclude.
-\end{proof}
-
-\paragraph{Transductive BAI.}\label{sec:lgc.formulation.examples.transductive}
-We can also consider the transductive BAI~\citep{fiez2019transductive} where the agent wants to find the best arm of a different set $\cB$ that the one he is allow to pull. Precisely the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\  |\argmax_{b\in\cB} \langle\theta,b\rangle|>1\}$, the set of possible answers is $\cI = \cB$ and the correct answer is given by $\istar(\theta)=\bstar(\theta)\eqdef \argmax_{b\in\cB} \langle\theta,b\rangle$.
-
-The characteristic time in this case is
-\[
-\Tstar(\theta)^{-1} = \max_{w\in\Sigma_A} \min_{b\neq \bstar(\theta)} \frac{\big\langle \theta, \bstar(\theta)-b\big\rangle^2}{2 \normm{\bstar(\theta)-b}_{V_w^{-1}}^2}\,.
-\]
-Note that the dependency on the arm set $\cA$ here only appears through the matrix $V_w$.
-
-
-% \subsection{Threshold bandits}
-% \label{app:threshold_bandits}
-% In this example the goal is to identify the set of arms whose mean is above a threshold $\iota\in \R$ known by the agent. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\ \exists a\in \cA,\, \langle \theta,a\rangle = \iota\}$, the set of possible answers is $\cI = \cP(\cA)$, the power set of the set of arms and the correct answer is given by $\istar(\theta)=\{a\in\cA:\ \langle \theta,a\rangle \geq \iota\}$.
-% We can also express in this example the characteristic time in a more explicit way.
-% \begin{lemma}
-% \label{lem:complexity_threshold_bandits}
-% For all $\theta\in \cM$,
-% \[
-% \Tstar(\theta)^{-1} =  \max_{w\in\Sigma_A} \min_{a\in\cA} \frac{\big(\iota -\langle \theta,a\rangle\big)^2}{2 \normm{a}_{V_w^{-1}}^2}\,,
-% \]
-% and $\Tstar(\theta)= 2\cA\cA(\iota)$, where we define $\cA(\iota)\eqdef \{ |\iota- \langle\theta,a\rangle|^{-1} a:\ a\in\cA\}$ and
-% \[
-% \cA\cA(\iota) \eqdef  \min_{w\in\Sigma_A} \max_{a\in\cA(\iota)}\normm{a}_{V_w^{-1}}^2\,.
-% \]
-% \end{lemma}
-% \begin{proof}
-% We proceed as the proof of Lemma~\ref{lem:complexity_bai}. We have, using Lemma~\ref{lem:lagrange_alternative},
-% \begin{align*}
-%   \Tstar(\theta)^{-1} &= \max_{w \in \Delta_A} \min_{a\in\cA} \inf_{\lambda:\ \text{sign}(\iota-\langle\lambda,a\rangle)\langle\lambda,a\rangle > \iota} \frac{\normm{\theta - \lambda}_{V_w}^2}{2}\\
-%   &= \max_{w \in \Delta_A} \min_{a\in\cA}  \frac{\big(\iota -\langle \theta,a\rangle\big)^2}{2 \normm{a}_{V_w^{-1}}^2}\,.
-% \end{align*}
-% \end{proof}
-% Note that we recover in this example a weighted version of the G-complexity ($\gopt$-complexity) defined in Section~\ref{sec:lower_bound}. In particular if $\theta=0$ and $\iota=1$ then
-% \[
-% \Tstar(\theta) =2\gopt = 2d\,.
-% \]
-% That makes sense since in this case, one shall estimate \emph{uniformly} the mean of each arms.
-
-
-% \subsubsection{Transductive threshold bandits}
-% \label{app:transductive_threshold_bandits}
-% We can generalize the previous example to any set of arms. Indeed if we fix a finite set of vector $\cB\in\R^d$ the goal is then to identify all the elements $b$ of this set such that $\langle \theta, b \rangle \geq \iota$ for a known threshold $\tau \in \R$. Thus, the set of parameters is $\cM=\cR^d/\{\theta\in\R^d:\ \exists b\in \cB,\, \langle \theta,b\rangle = \iota\}$, the set of possible answers is $\cI = \cP(\cB)$ and the correct answer is given by
-% $\istar(\theta)=\{b\in\cB:\ \langle \theta,b\rangle \geq \iota\}$. The characteristic time makes appear, unsurprisingly, in this case, the transductive optimal design \citep{yu2006active}.
-% \begin{lemma} For all $\theta \in\cM$,
-%   \label{lem:complexity_transductive_threshold_bandits}
-%   \[
-%   \Tstar(\theta)^{-1} =  \max_{w\in\Sigma_A} \min_{b\in\cB} \frac{\big(\iota -\langle \theta,b\rangle\big)^2}{2 \normm{b}_{V_w^{-1}}^2}\,,
-%   \]
-%   and $\Tstar(\theta)= 2\cA\cB(\iota)$, where we defined $\cB(\iota)\eqdef \{ |\iota- \langle\theta,b\rangle|^{-1} b:\ b\in\cB\}$ and
-%   \[
-%   \cA\cB(\iota) \eqdef  \min_{w\in\Sigma_A} \max_{b\in\cB(\iota)}\normm{b}_{V_w^{-1}}^2\,.
-%   \]
-% \end{lemma}
-% \begin{proof}
-%   Simple adaptation of the proof of Lemma~\ref{lem:complexity_threshold_bandits}.
-% \end{proof}
-% Again, in particular, if $\theta=0$ and $\tau=1$ we recover the complexity of the optimal transductive design
-% \[
-% \Tstar(\theta)^{-1} = 2 \cA\cB\,.
-% \]
-

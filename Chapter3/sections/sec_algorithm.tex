@@ -5,11 +5,11 @@ In this section, we give an overview of the sampling rule \TTTS and introduce \T
 
 \subsection{Sampling rules}
 
-Both \TTTS and \TCC employ a Bayesian machinery and make use of a prior distribution $\Pi_1$ over a set of parameters $\Theta$, that contains the unknown true parameter vector $\bmu$. Upon acquiring observations $(Y_{1,I_1},\cdots,Y_{n-1,I_{n-1}})$, we update our beliefs according to Bayes' rule and obtain a posterior distribution $\Pi_{n}$ which we assume to have density $\pi_n$ w.r.t.\,the Lebesgue measure. %The posterior distribution can be computed by conjugacy when using common probability distributions for the prior. For example, \citet{russo2016ttts} uses \emph{correlated} and \emph{bounded} one-dimensional exponential family priors.
+Both \TTTS and \TCC employ a Bayesian machinery and make use of a prior distribution $\Pi_1$ over a set of parameters $\Theta$, that contains the unknown true parameter vector $\bmu$. Upon acquiring observations $(r_{I_1,1},\cdots,r_{I_{n-1},n-1})$, we update our beliefs according to Bayes' rule and obtain a posterior distribution $\Pi_{n}$ which we assume to have density $\pi_n$ w.r.t.\,the Lebesgue measure. %The posterior distribution can be computed by conjugacy when using common probability distributions for the prior. For example, \citet{russo2016ttts} uses \emph{correlated} and \emph{bounded} one-dimensional exponential family priors.
 \citeauthor{russo2016ttts}'s analysis is restricted to strong regularity properties on the models and priors that exclude two important useful cases we consider in this paper: (1) the observations of each arm~$i$ follow a Gaussian distribution $\cN(\mu_i,\sigma^2)$ with common known variance $\sigma^2$, with imposed Gaussian prior $\cN(\mu_{1,i},\sigma_{1,i}^2)$, (2) all arms receive Bernoulli rewards with unknown means, with a uniform prior on each arm.
 
 \paragraph{Gaussian model.} For Gaussian bandits with a $\mathcal{N}(0,\kappa^2)$ prior on each mean, the posterior distribution of $\mu_i$ at round $n$ is Gaussian with mean and variance that are respectively given by
-\[\frac{\sum_{\ell=1}^{n-1} \1\{I_\ell = i\} Y_{\ell,I_\ell}}{T_{n,i} + \sigma^2/\kappa^2}\quad\text{ and }\quad \frac{\sigma^2}{T_{n,i} + \sigma^2/\kappa^2},\]
+\[\frac{\sum_{\ell=1}^{n-1} \1\{I_\ell = i\} r_{I_\ell,\ell}}{T_{n,i} + \sigma^2/\kappa^2}\quad\text{ and }\quad \frac{\sigma^2}{T_{n,i} + \sigma^2/\kappa^2},\]
 where $T_{n,i}\eqdef\sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}}$ is the number of selections of arm $i$ before round $n$.
 % 
 % \begin{align*}
@@ -30,7 +30,7 @@ where $T_{n,i}\eqdef\sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}}$ is the number of
 % \end{align*}
 For the sake of simplicity, we consider improper Gaussian priors with $\mu_{1,i}=0$ and $\sigma_{1,i}=+\infty$ for all $i\in\cX$, for which
 \[
-    \mu_{n,i}  = \frac{1}{T_{n,i}} \sum_{\ell=1}^{n-1} \1\{I_\ell = i\}Y_{\ell,I_\ell} \quad \text{and} \quad \sigma_{n,i}^2 = \frac{\sigma^2}{T_{n,i}}.
+    \mu_{n,i}  = \frac{1}{T_{n,i}} \sum_{\ell=1}^{n-1} \1\{I_\ell = i\}r_{I_\ell,\ell} \quad \text{and} \quad \sigma_{n,i}^2 = \frac{\sigma^2}{T_{n,i}}.
 \]
 Observe that in that case the posterior mean $\mu_{n,i}$ coincides with the empirical mean.
 
@@ -72,20 +72,20 @@ where
 \[
     W_{n,i,j}\eqdef T_{n,i} d\left(\mu_{n,i},\mu_{n,i,j}\right)
 \]
-for any $i,j$ and $d(\mu ; \mu' )$ denotes the KL-divergence between the distribution with mean $\mu$ and that of mean $\mu'$. In the Gaussian case, $d(\mu;\mu') = (\mu-\mu')^2/(2\sigma^2)$ while in the Bernoulli case $d(\mu;\mu') = \mu \ln (\mu/\mu') + (1-\mu)\ln (1-\mu)/(1-\mu')$.
+for any $i,j$. One may notice that we actually recover the generalized likelihood ratio statistic stated in Section~\ref{sec:mab.bai.stopping}.
+
+In the Gaussian case, $d(\mu;\mu') = (\mu-\mu')^2/(2\sigma^2)$ while in the Bernoulli case $d(\mu;\mu') = \mu \ln (\mu/\mu') + (1-\mu)\ln (1-\mu)/(1-\mu')$.
 %\begin{equation}\left\{\begin{array}{ccl}
 %W_n(i,j)\!\!\! &=& \!\!0 \ \text{ if } \ \mu_{n,j} \geq \mu_{n,i},\\
 %W_n(i,j)\!\!\! &=& \!\!T_{n,i} d\left(\mu_{n,i},\mu_{n,i,j}\right) + T_{n,j} d\left(\mu_{n,j},\mu_{n,i,j}\right) \text{ else.} 
 %\end{array}\right.\label{def:Transportation}\end{equation}
 In particular, for Gaussian bandits 
 \[
-    W_n(i,j) = \dfrac{(\mu_{n,i}-\mu_{n,j})^2}{2\sigma^2(1/T_{n,i}+1/T_{n,j})}\1\{\mu_{n,j}<\mu_{n,i}\}.
+    W_n(i,j) = \dfrac{(\mu_{n,i}-\mu_{n,j})^2}{2\sigma^2(1/T_{n,i}+1/T_{n,j})}\1\{\mu_{n,j}<\mu_{n,i}\}\,.
 \]
 
 
-The pseudo-code of \TTTS and \TCC are shown in Algorithm~\ref{alg:ttts_sampling_rule} and Algorithm~\ref{alg:t3c_sampling_rule}. Note that under the Gaussian model with improper priors, one should pull each arm once at the beginning for the sake of obtaining proper posteriors. 
-
-%\todomi{make readable withouth colors and make a reference to $W_n$ definition in the pseudocode}
+The pseudo-code of \TTTS and \TCC are shown in Algorithm~\ref{alg:ttts_sampling_rule} and Algorithm~\ref{alg:t3c_sampling_rule}. Note that under the Gaussian model with improper priors, one should pull each arm once at the beginning for the sake of obtaining proper posteriors.
 
 \begin{algorithm}[ht]
 \centering
@@ -170,7 +170,7 @@ $W_n$ in Line 9 of Algorithm~\ref{alg:t3c_sampling_rule} is the transportation c
 
 In order to explain how \TCC can be seen as an approximation of the re-sampling performed by \TTTS, we first need to define the \emph{optimal action probabilities}. 
 
-\paragraph{Optimal action probability} The optimal action probability $a_{n,i}$ is defined as the posterior probability that arm $i$ is optimal. Formally, letting $\Theta_i$ be the subset of $\Theta$ such that arm $i$ is the optimal arm,
+\paragraph{Optimal action probability.} The optimal action probability $a_{n,i}$ is defined as the posterior probability that arm $i$ is optimal. Formally, letting $\Theta_i$ be the subset of $\Theta$ such that arm $i$ is the optimal arm,
 \[
     \Theta_i \eqdef \left\{ \btheta\in\Theta \biggm| \theta_i > \max_{j\neq i}\theta_j \right\},
 \]
