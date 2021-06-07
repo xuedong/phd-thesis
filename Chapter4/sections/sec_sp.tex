@@ -1,8 +1,8 @@
-\section{Saddle-Point Approaches}\label{sec:lgc.sp}
+\section{Other Saddle-Point Approaches}\label{sec:lgc.sp}
 
-\subsection{Linear \texorpdfstring{\Track}{}}
+\subsection{Linear \texorpdfstring{\Track{}}{}}
 
-It is seemingly unlikely that \LTCCG could be asymptotically optimal according to Fig.~\ref{fig:convergence} despite its decent practical performance. On the other hand, the linear version of \Track seems to be a more plausible candidate of being asymptotically optimal provided that a numerical solver for computing the optimal weights exists. Degenne et al. (2020) provide a Frank-Wolfe-typed heuristic (see Appendix~\ref{app:lgc.approx} for details). No convergence guarantee is given though.
+It is seemingly unlikely that \LTCCG{} could be asymptotically optimal according to Fig.~\ref{fig:convergence} despite its decent practical performance. On the other hand, the linear version of \Track seems to be a more plausible candidate of being asymptotically optimal provided that a numerical solver for computing the optimal weights exists. Degenne et al. (2020) provide a Frank-Wolfe-typed heuristic (see Appendix~\ref{app:lgc.approx} for details). No convergence guarantee is given though.
 
 \Track remains unchanged in the linear case, since it only cares about tracking the optimal weights. We hereby recall that the \CT rule consists of playing
 \[
@@ -76,36 +76,3 @@ We now compare our saddle-point-based algorithms against \LGapE. To make a fair 
     \caption{Average stopping time (Left: $d=2,\alpha=\pi/4,\delta=0.0000001$, Right: $d=2,\alpha=0.1,\delta=0.1$), with SFW-T = \SLTCC, SFW-L = \SLGapE, T-G = \LTCC, LG = \LGapE.}
     \label{fig:exp1}
 \end{figure}
-
-\subsection{Additional experiments}
-
-In this section, we always keep each context normalized. We provide more experimental illustrations on different types of problems.
-
-\paragraph{Arms with mild gaps}
-We construct a set of $n$ arms proposed by~\cite{fiez2019transductive}: $\bx_1=(1,0)\transpose$, $\bx_2=(\cos(3\pi/4),\sin(3\pi/4))\transpose$, and for $i = 3,\ldots,n$, $\bx_i=(\sin(\pi/4+\phi_i),\cos(\pi/4+\phi_i))\transpose$ where $\phi_i\sim\cN(0,0.09)$. We fix the true regression parameter $\theta^\star$ to be $\be_1$. This set of arms has some nice properties, that $\bx_1$ is the optimal arm, and $\bx_2$ is the arm that gives more information on identifying the best arm. We first report results with a moderate $n=6$ as an example where the generated expected means are $[1.0, -0.71, 0.84, -0.95, 0.93, 0.99]$.
-
-\begin{table*}[t!]
-\centering
-\def\arraystretch{1.2}
-\begin{tabular}{|c|c|c|c|}
- \hline
- & \LTCC & \LTCCG & \LGapE \\
- \hline
- \textbf{$\bx_1=(1,0)\transpose$} & $170872.19$ & $1.06$ & $1.13$ \\
- \hline
- \textbf{$\bx_2=(\cos(3\pi/4),\sin(3\pi/4))\transpose$} & $1.25$ & $1.0$ & $1.0$ \\
- \hline
- \textbf{$\bx_3=(\sin(\pi/4+\phi_3),\cos(\pi/4+\phi_3))\transpose$} & $92.18$ & $28693.26$ & $120657.6$ \\
- \hline
- \textbf{$\bx_4=(\sin(\pi/4+\phi_4),\cos(\pi/4+\phi_4))\transpose$} & $1.12$ & $26197.03$ & $110157.63$ \\
- \hline
- \textbf{$\bx_5=(\sin(\pi/4+\phi_5),\cos(\pi/4+\phi_5))\transpose$} & $77.04$ & $1.0$ & $1.0$ \\
- \hline
- \textbf{$\bx_6=(\sin(\pi/4+\phi_6),\cos(\pi/4+\phi_6))\transpose$} & $170892.82$ & $1.36$ & $1.83$ \\
- \hline
- \textbf{Total} & $341936.6$ & $\textbf{54894.71}$ & $230820.19$ \\
- \hline
-\end{tabular}
-\caption{average number of pulls of each arm ($d=2, \delta=0.1$).}
-\label{table:pulls3}
-\end{table*}

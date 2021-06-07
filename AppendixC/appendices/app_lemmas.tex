@@ -33,14 +33,14 @@ where the infimum in the first equality is reached at $\lambda = \theta + \alpha
 We restate here the Theorem~20.4 (in combination with the Equation~20.10) by \citet{lattimore2018bandits}.
 \begin{theorem}
 \label{th:confidence_beta}
-For all $\eta >0$ and $\delta\in(0,1)$,
+For all $\lambda >0$ and $\delta\in(0,1)$,
 \[
-\P_{\theta}\!\!\left(\exists t\in\NN,\, \frac{1}{2}\normm{\htheta_t-\theta}^2_{V_{N_t}+\eta I_d} \geq \beta(t,\delta)\right) \leq \delta\,,
- \]
- where
- \begin{align*}
-\beta(t,\delta) &\eqdef  \left( \sqrt{\log\!\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\!\left(1+\frac{t L^2}{\eta d} \right)} +\sqrt{\frac{\eta}{2}}M\right)^2\\
-&=\log\!\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\!\left(1+\frac{t L^2}{\eta d} \right) +  M\sqrt{\eta}\sqrt{2\log\!\left( \frac{1}{\delta}\right)+d\log\!\left(1+\frac{t L^2}{\eta d} \right)}+\frac{\eta M^2}{2}\,.
+    \PPt{\exists n\in\NN,\, \frac{1}{2}\normm{\hat{\btheta}_n-\btheta}^2_{\bLambda_{N_n}+\lambda I_d} \geq \beta(n,\delta)} \leq \delta\,,
+\]
+where
+\begin{align*}
+    \beta(n,\delta) &\eqdef  \left( \sqrt{\log\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\left(1+\frac{n L^2}{\lambda d} \right)} +\sqrt{\frac{\lambda}{2}}M\right)^2\\
+    &=\log\!\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\left(1+\frac{n L^2}{\lambda d} \right) +  M\sqrt{\lambda}\sqrt{2\log\left( \frac{1}{\delta}\right)+d\log\!\left(1+\frac{n L^2}{\lambda d} \right)}+\frac{\lambda M^2}{2}\,.
 %\left(\sqrt{\log\!\left(\frac{1}{\delta}\right) + \frac{d}{2}\log\!\left(1+ \frac{tL^2}{\eta d}\right)}   +\sqrt{\frac{\eta}{2}}M\right)^2\,.
 \end{align*}
 \end{theorem}

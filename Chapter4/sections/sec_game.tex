@@ -1,19 +1,9 @@
 %!TEX root = ../Chapter3.tex
 \section{A Gamified Algorithm}\label{sec:lgc.game}
 
-The first attempt using Bayesian machinery does not end up with a satisfying solution. In this section, we turn our thoughts to another idea and take inspiration from the \emph{zero-sum game} (see e.g.~\citealt{degenne2019pure}). We describe \LG{}, detailed in Algorithm~\ref{alg:lg}. As noted in the seminal work of \citet{chernoff1959}, the complexity $\Tstar(\btheta)^{-1}$ is the value of a fictitious zero-sum game between the agent choosing an optimal proportion of allocation of pulls $\bomega$ and a second player, the nature, that tries to fool the agent by choosing the most confusing alternative $\btheta'$ leading to an incorrect answer. \LG{} is an asymptotically optimal algorithm for linear bandits BAI. Note that the present algorithm is asymptotically optimal for the general pure exploration game, which is however not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for more details.
+The first attempt using Bayesian machinery does not end up with a satisfying solution. In this section, we turn our thoughts to another idea and take inspiration from the \emph{zero-sum game} (see e.g.~\citealt{degenne2019pure}). We describe \LG{}, detailed in Algorithm~\ref{alg:lg}. As noted in the seminal work of \citet{chernoff1959}, the complexity $\Tstar(\btheta)^{-1}$ is the value of a fictitious zero-sum game between the learner choosing an optimal proportion of allocation of pulls $\bomega$ and a second player, the nature, that tries to fool the agent by responding with the most confusing alternative $\btheta'$ leading to an incorrect answer. \LG{} is an asymptotically optimal algorithm for linear bandits BAI. Note that the present algorithm is asymptotically optimal for the general pure exploration game, which is however not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for more details.
 
 %The full analysis of the algorithm is omitted as well as a convexified version \LGC{} -- also asymptotically optimal itself -- as they are not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for the complete proofs.
-
-Solely in this section, we make the following additional assumption that the set of parameter is bounded,
-\begin{assumption}
-\begin{leftbar}[assumptionbar]
-    We assume that $\forall \btheta\in\Theta, \normm{\theta}\leq M$\,.
-\end{leftbar}
-\end{assumption}
-This assumption is actually shared by most of the works on linear bandits (e.g. \citealt{abbasi-yadkori2011linear, soare2014linear}).
-
-The bounded version of BAI is explained in Section~\ref{sec:lgc.complexity.examples}. In particular we show how the boundedness of the parameter space affects the lower bound of Proposition~\ref{prop:lgc.lb}: The characteristic time $\Tstar(\theta)$ is reduced (or equivalently $\Tstar(\theta)^{-1}$ increases). This is not surprising since we add a new constraint in the optimization problem. This means that the algorithm should stop earlier. The counterpart of this improvement is that it is often difficult to compute the best response for nature. Indeed, for example, in BAI, there is an explicit expression of the best response, see Section~\ref{app:lgc.examples}. When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lemma:lgc.lagrange_alternative}. To devise an asymptotically optimal algorithm without the boundedness assumption remains an open problem.
 
 
 % , i.e for $i\in\cI$ and $w\in\interior{\Sigma_A}$ in the interior of the probability simplex of dimension $A-1$, find $\lambda^i$ such that
@@ -112,7 +102,7 @@ Our algorithms share the same stopping rule. Following \citet{garivier2016trackn
 and return {\small $\displaystyle \istar_t\! \in\! \argmax_{i\in \mathcal I}\! \inf_{\lambda_i \in \neg i}\Vert \tilde{\theta}_t - \lambda_i \Vert^2_{V_{N_t}}/2$}.
 
 
-These stopping and decision rules ensure that the \LG{} is $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.lemmas}.
+Similarly to \TCC{}/\TTTS{} of Chapter~\ref{CHAP:T3C}, these stopping and decision rules ensure that the \LG{} is $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.lemmas}.
 
 \begin{lemma}
 \label{lem:chernoff_stopping rule_pac}
@@ -195,24 +185,24 @@ g_t(\tw) = \frac{1}{2} \sum_{(a,i)\in\cA\times\cI}  \tw^{a,i} U_t^{a,i}\,.
 \]
 
 
-\paragraph{Tracking.} In both Algorithm~\ref{alg:lg} and~\ref{alg:lgc}, the agent plays weight vectors in a simplex. Since the bandit procedure allows only to pull one arm at each stage, our algorithm needs a procedure to transcribe weights into pulls. This is what we call tracking, following \citet{garivier2016tracknstop}. The choice of arm (or arm and answer) is
+\paragraph{Tracking.} In Algorithm~\ref{alg:lg}, the learner plays weight vectors in a simplex. Since the bandit procedure allows only to pull one arm at each stage, our algorithm needs a procedure to transcribe weights into pulls. This is what we call tracking, following~\citet{garivier2016tracknstop}. The choice of arm (or arm and answer) is
 \begin{align*}
-a_{t+1}          &\in \argmin_{a\in \mathcal A } N_{t}^{a} - W_{t+1}^{a} & \text{ for Algorithm~\ref{alg:lg},}\\
-(a_{t+1},i_{t+1})&\in \argmin_{(a,i)\in \mathcal A \times \mathcal I } N_{t}^{a,i} - \tW_{t+1}^{a,i} & \text{ for Algorithm~\ref{alg:lgc}.}
+    \hbx_{n+1} \in \argmin_{\bx\in \cX } N_{n}^{\bx} - W_{n+1}^{\bx}\,.
 \end{align*}
-This procedure guarantees that for all $t\in\NN, u \in \mathcal U$, with $\mathcal U = \mathcal A$ (resp. $\mathcal U =\cI\times\cA$) for Algo.~\ref{alg:lg} (resp. Algo.~\ref{alg:lgc}), $- \log (|\mathcal U|) \le N_t^{u} - W_t^{u} \le 1$. That result is due to~\citet{degenne2020structure}.
+This procedure guarantees that for all $n\in\NN, u \in \mathcal U$, with $\mathcal U = \mathcal A$ for Algorithm~\ref{alg:lg}, $- \log (|\mathcal U|) \le N_n^{u} - W_n^{u} \le 1$. This result is due to~\citet{degenne2020structure}.
 
 \begin{theorem}\label{thm:sample_complexity}
-For a regularization parameter\footnote{This condition is a simple technical trick to simplify the analysis. An $\eta$ independent of $A$,$L$,$M$ will lead to the same results up to minor adaptations of the proof.} $\eta \geq 2(1+\log(A))AL^2+M^2$, for the threshold $\beta(t,\delta)$ given by~\eqref{eq:def_beta}, for an exploration function $h(t)=\beta(t,1/t^3)$, \LG and \LGC are $\delta$-correct and asymptotically optimal. That is, they verify for all $\theta\in \cM$,
+For a regularization parameter\footnote{This condition is a simple technical trick to simplify the analysis. An $\lambda$ independent of $K$,$L$,$M$ will lead to the same results up to minor adaptations of the proof.} $\lambda \geq 2(1+\log(K))KL^2+M^2$, for the threshold $\beta(n,\delta)$ given by~\eqref{eq:def_beta}, for an exploration function $h(n)=\beta(n,1/n^3)$, \LG{} is $\delta$-correct and asymptotically optimal. That is, it verifies for all $\btheta\in \Theta$,
 \begin{align*}
-\limsup_{\delta\to 0}\frac{\mathbb{E}_\theta[\tau_\delta]}{ \log 1/\delta} \le \Tstar(\theta) \: .
+    \limsup_{\delta\to 0}\frac{\mathbb{E}_\btheta[\tau_\delta]}{ \log 1/\delta} \le \Tstar(\btheta) \,.
 \end{align*}
 \end{theorem}
-The main ideas used in the proof are explained above. The full proof is in Appendix~\ref{app:lgc.proof} with finite $\delta$ upper bounds.
+
+\cite{degenne2020game} present another sampling rule \LGC{} that is also asymptotically optimal in the fixed-confidence regime. The idea is to introduce a convex formulation of the problem, which leads to an algorithm with a more direct analysis than previous lower-bound inspired methods. The full description and analysis of \LGC{} is omitted as the primary goal here is just to show a feasible way of designing optimal sampling rules from a game-theoretical point of view. Lecturers can refer to~\cite{degenne2020game} for more details on \LGC{}. Nonetheless, we still include \LGC{} in the following experiment part.
 
 \subsection{Experiments}\label{sec:lgc.game.experiments}
 
-In this section, we provide technical details of our experiments. We also share a few insights over different aspects of implementations of different pure exploration linear bandits algorithms. In particular, we propose a new Frank-Wolfe-typed heuristic to solve generic $\cA\cB$-design.
+We provide experimental illustrations of our algorithm technical details of our experiments. We also share a few insights over different aspects of implementations of different pure exploration linear bandits algorithms. In particular, we propose a new Frank-Wolfe-typed heuristic to solve generic $\cA\cB$-design.
 
 Besides our algorithms, we implement the following algorithms, all using the same stopping rule (more discussion given in Appendix~\ref{app:lgc.stopping}): uniform sampling, the greedy version of \XYS (including $\gopt$-allocation and $\xyopt$-allocation), \XYA, and the greedy version of \LGapE. We skip \GLUCB/\GLGapE since they are more or less equivalent to \LGapE in the scope of this paper.
 
@@ -226,7 +216,7 @@ We give more clarifications on each individual algorithm implemented.
 	    \argmin_{a\in\cA} \normm{a_{i_t}-a_{j_t}}_{(V_{N_t}+aa^\top)^{-1}}^2
 	\]
 	with $i_t = i^\star(\hat\theta_t)$ and $j_t = \argmax_{j\neq i_t}\langle\hat\theta_t,a_{j}-a^\star(\hat\theta_t)\rangle + \normm{a^\star(\hat\theta_t) - a_{j_t}}_{V_{N_t}^{-1}} \sqrt{2\beta(t,\delta)}$. Note that this version does not have a theoretical guarantee in the general case. However, as we stated in Section~\ref{sec:lgc.related_work}, the \GLUCB proposed by~\citet{zaki2019maxoverlap} is equivalent to this greedy version of \LGapE, and they provided an analysis for the 2-arm and 3-arm case. \LGapE is designed for $\epsilon$-best-arm identification, we set $\epsilon=0$ in our experiments to make sure that it outputs the optimal one.
-	\item For \XYS, we implemented the greedy incremental version for both $\gopt$-allocation and $\xyopt$-allocation, that allows us to avoid the optimal design-computing step. To implement the non-greedy version, readers are invited to look at next Section~\ref{sec:lgc.experiments.complexity} where we discuss in detail the computation of $\cA\cB$-optimal design.
+	\item For \XYS, we implemented the greedy incremental version for both $\gopt$-allocation and $\xyopt$-allocation, that allows us to avoid the step of computing optimal design. To implement the non-greedy version, readers are invited to look at next Section~\ref{sec:lgc.experiments.complexity} where we discuss in detail the computation of $\cX\cY$-optimal design.
 	\item For \XYA, it requires a hyper-parameter that characterizes the length of each phase. We set that hyper-parameter to $0.1$ as done by~\citet{soare2014linear}.
 \end{itemize}
 
@@ -273,11 +263,13 @@ The posterior mean vector and covariance matrix can then be easily expressed in 
     \hat{\btheta}_n^{\lambda} = (\bB^{\lambda}_t)^{-1}\bz_t \quad \text{and} \quad \hat{\bSigma}_n = \sigma^2 (\bB^{\lambda}_t)^{-1}\,.
 \]
 
-\paragraph{Experimental setting.}
+\paragraph{Experimental results.}
 
-Usual sampling rules for classical BAI may not work for the linear case. This can be understood on a well-studied instance already discussed by~\citet{soare2014linear,xu2018linear}, which encapsulates the difficulty of BAI in a linear bandit, and thus is the first instance on which we test our algorithms. In this instance, arms are the canonical basis  $a_1 = e_1, a_2 = e_2, a_d = e_d$, plus an additional disturbing arm $a_{d+1} = (\cos(\alpha), \sin(\alpha), 0, \ldots, 0)^\top$, and a true regression parameter $\theta$ equal to $e_1$. In this problem, the best arm is always $a_1$, but when the angle $\alpha$ is small, the disturbing arm $a_{d+1}$ is hard to discriminate from $a_1$. As already argued by~\citet{soare2014linear}, an efficient sampling rule for this problem instance would rather pull $a_2$ in order to reduce the uncertainty in the direction $a_1-a_{d+1}$. Naive adaptation of classical BAI algorithms cannot deal with that situation naturally. We further use a simple set of experiments to justify that intuition. We run our two algorithms and the one of~\citet{degenne2019game} that we call \texttt{DKM} over the problem instance whence $d=2$, $\delta=0.01$ and $\alpha=0.1$. We show the number of pulls for each arm averaged over 100 replications of experiments in Table~\ref{table:pulls}. We see that, indeed, \texttt{DKM} pulls too much $a_3$, while our algorithms focus mostly on $a_2$.
+Sampling rules for classical BAI without any adaptation may not work for the linear case. This can be understood, again, on the well-studied hard instance mentioned in Section~\ref{sec:lgc.complexity.complexity}, which encapsulates the difficulty of BAI in a linear bandit, and thus is the first instance on which we test our algorithms.
 
-\begin{table}[t!]\centering
+As already argued by~\citet{soare2014linear}, an efficient sampling rule for this problem instance would rather pull $\bx_2$ in order to reduce the uncertainty in the direction $\bx_1-\bx_{d+1}$. Naive application of classical BAI algorithms cannot deal with that situation naturally. We further use a simple set of experiments to justify that intuition. We run \LG{} (along with \LGC{}) and the one of~\citet{degenne2019game} that we call \texttt{DKM} over the problem instance whence $d=2, c=2, \delta=0.01$ and $\alpha=0.1$. We show the number of pulls for each arm averaged over 100 replications of experiments in Table~\ref{table:pulls}. We see that, indeed, \texttt{DKM} pulls too much $\bx_3$, while our \LG{} focuses mostly on $\bx_2$.
+
+\begin{table}[ht]\centering
 %\def\arraystretch{1.2}
 \begin{tabular}{|c|c|c|c|}
  \hline
@@ -292,14 +284,12 @@ Usual sampling rules for classical BAI may not work for the linear case. This ca
  \textbf{Total} & $7135$ & $\bf{6854}$ & $8705$ \\
  \hline
 \end{tabular}
-\caption{Average number of pulls of \LG and \LGC (against \texttt{DKM}) for each arm.}
+\caption{Average number of pulls of \LG{} and \LGC{} (against \texttt{DKM}) for each arm.}
 \label{table:pulls}
 \end{table}
 
-\paragraph{Experimental results}
-
-We benchmark our two sampling rules against others from the literature. %Note that the main purpose of this paper is to propose algorithms with asymptotic optimality while being practically usable, but we do not claim to have the best performing ones.
-We test over two synthetic problem instances, with the first being the previous counter-example. We set $d=2$, $\alpha=\pi/6$. Fig.~\ref{fig:sample_complexity_1} shows the empirical stopping time of each algorithms averaged over 100 runs, with a confidence level $\delta=0.1, 0.01, 0.0001$ from left to right. Our two algorithms show competitive performance (the two leftmost boxes on each plot), and are only slightly worse than \LGapE.
+Next, we benchmark our sampling rules against others from the literature. %Note that the main purpose of this paper is to propose algorithms with asymptotic optimality while being practically usable, but we do not claim to have the best performing ones.
+We test over two synthetic problem instances, with the first being the previous instance. We set $d=2, c=2, \alpha=\pi/6$. Fig.~\ref{fig:sample_complexity_1} shows the empirical stopping time of each algorithms averaged over 100 runs, with a confidence level $\delta=0.1, 0.01, 0.0001$ from left to right. Our two algorithms show competitive performance (the two leftmost boxes on each plot), and are only slightly worse than \LGapE{}.
 
 \begin{figure}[ht]
  \centering
@@ -310,7 +300,8 @@ We test over two synthetic problem instances, with the first being the previous 
  \label{fig:sample_complexity_1}
 \end{figure}
 
-For the second instance, we consider 20 arms randomly generated from the unit sphere $\mathbb{S}^{d-1}\eqdef\{a\in\R^d; \normm{a}_2=1\}$. We choose the two closest arms $a, a'$ and we set $\theta = a + 0.01(a'-a)$ so that a is the best arm. This setting has already been considered by~\citet{tao2018alba}. We report the same box plots over 100 replications as before with increasing dimension in Fig.~\ref{fig:sample_complexity_2}. More precisely, we set $d=6, 8, 10, 12$ respectively, and always keep a same $\delta = 0.01$. Our algorithms consistently show strong performances compared to other algorithms apart from \LGapE. Moreover, we can see that in these random examples, \LGC works better than the non-confexified one, and is even competitive compared to \LGapE.
+For the second instance, we consider 20 arms randomly generated from the unit sphere $\mathbb{S}^{d-1}\eqdef\{a\in\R^d; \normm{a}_2=1\}$. We choose the two closest arms $a, a'$ and we set $\theta = a + 0.01(a'-a)$ so that a is the best arm. This setting has already been considered by~\citet{tao2018alba}. We report the same box plots over 100 replications as before with increasing dimension in Fig.~\ref{fig:sample_complexity_2}. More precisely, we set $d=6, 8, 10, 12$ respectively, and always keep a same $\delta = 0.01$. Our algorithms consistently show strong performances compared to other algorithms apart from \LGapE.
+%Moreover, we can see that in these random examples, \LGC works better than the non-confexified one, and is even competitive compared to \LGapE.
 
 
 \begin{figure}[ht]
@@ -323,5 +314,5 @@ For the second instance, we consider 20 arms randomly generated from the unit sp
  \label{fig:sample_complexity_2}
 \end{figure}
 
-We stress that although the main focus of this chapter is theoretical, with algorithms that are asymptotically optimal, our methods are also competitive with earlier algorithms experimentally.
+%We stress that although the main focus of this chapter is theoretical, with algorithms that are asymptotically optimal, our methods are also competitive with earlier algorithms experimentally.
 

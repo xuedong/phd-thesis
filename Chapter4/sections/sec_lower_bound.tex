@@ -148,7 +148,13 @@ When $\cY=\cX$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956a
 
 \paragraph{Empirical evaluation.}
 
-We use the usual hard instance to illustrate how various complexities differ in practice. In Table~\ref{table:optimal_weights} we compare the different complexities mentioned in this paper: the characteristic time $\Tstar(\btheta)$ and its associated optimal weights $\bomega^\star_{\cX\cY^\star(\btheta)}$, the $\xyopt$-complexity and its associated optimal design $\bomega^\star_{\xyopt}$, the G-optimal complexity $\gopt$ and its associated optimal design $\bomega^\star_{\cX\cX}$. For each weight vector 
+We use the following problem instance to illustrate how various complexities differ in practice. In this instance, contexts are the canonical basis  $\bx_1 = \be_1, \bx_2 = \be_2, \cdots, \bx_d = \be_d$, plus an additional disturbing context 
+\[
+    \bx_{d+1} = (\cos(\alpha), \sin(\alpha), 0, \ldots, 0)\transpose\,,
+\] 
+and a true regression parameter which is proportional to $\be_1$: $\btheta^\star = c\be_1$. This instance is frequently used in the literature of linear bandits BAI (see e.g.~\citealt{soare2014linear,xu2018linear}) and is considered as a hard instance to test the performance of linear BAI algorithms. In this problem, the best arm is always $\be_1$, but when the angle $\alpha$ is small, the disturbing context is hard to discriminate from $\be_1$. In this section, we set $d=2, c=2, \delta=0.01$ and $\alpha=0.1$.
+
+In Table~\ref{table:optimal_weights} we compare the different complexities previously mentioned: the characteristic time $\Tstar(\btheta)$ and its associated optimal weights $\bomega^\star_{\cX\cY^\star(\btheta)}$, the $\xyopt$-complexity and its associated optimal design $\bomega^\star_{\xyopt}$, the G-optimal complexity $\gopt$ and its associated optimal design $\bomega^\star_{\cX\cX}$. For each weight vector 
 \[
     \bomega \in\left\{\bomega^\star_{\cX\cY^\star(\btheta)},\bomega_{\xyopt}, \bomega_{\gopt}\right\}\,,
 \]

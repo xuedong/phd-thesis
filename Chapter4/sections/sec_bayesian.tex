@@ -20,10 +20,12 @@ Combining \eqref{eq:update_variance} and \eqref{eq:update_mean}, we obtain $\kap
     W_n(i,j) = \dfrac{(\bx_i\transpose\hat{\btheta}^\lambda_n-\bx_j\transpose\hat{\btheta}^\lambda_n)^2}{2\normm{\bx_i-\bx_j}_{\hat{\bSigma}_n}^2}\1\{\bx_j\transpose\hat{\btheta}^\lambda_n<\bx_i\transpose\hat{\btheta}^\lambda_n\}.
 \end{align}
 
+The pseudo-code of the two sampling rules are given in Algorithm~\ref{alg:lt3s_lt3c}.
+
 \begin{algorithm}[ht]
 \centering
 \caption{Sampling rule (\textcolor{blue}{\LTCS{}}/\textcolor{red}{\LTCC{})}}
-\label{alg:sampling_rule}
+\label{alg:lt3s_lt3c}
 %\footnotesize
 \begin{algorithmic}[1]
    \State {\bfseries Input:} $\beta$ %(and the $W_n$ function for \textcolor{red}{\TCC})
@@ -40,7 +42,7 @@ Combining \eqref{eq:update_variance} and \eqref{eq:update_mean}, we obtain $\kap
 	        \State \textcolor{blue}{\texttt{until} $I^{(2)} \neq I^{(1)}$}%\tikzmark{bottom}%\Comment{\textcolor{blue}{\TTTS{}}}
 	        %\State \textcolor{red}{//$W_n$ below is defined in (\ref{def:Transportation})}%
 	        \State \textcolor{red}{$I^{(2)} \leftarrow \argmin_{i\neq I^{(1)}}W_n(I^{(1)},i), $ \text{(see \eqref{def:transportation} for the definition)}}\Comment{\textcolor{red}{\LTCC}}%\tikzmark{right}  
-		    \State \text{evaluate arm} $I^{(2)}$
+		    \State \text{Evaluate arm} $I^{(2)}$
 	    \EndIf
 	    \State \text{Update mean and variance according to \eqref{eq:update_mean} and \eqref{eq:update_variance}}
 	    \State $n = n+1$
@@ -71,11 +73,9 @@ This stopping rule is coupled with the decision rule
     J_n = \argmax_{j}\bx_j\transpose\hat{\btheta}_n^{\lambda}\,.
 \]
 
-\subsection{\TTTS{} and \TCC{} can fail}\label{sec:lgc.bayesian.fail}
+\subsection{\LTCS{} and \LTCC{} can fail}\label{sec:lgc.bayesian.fail}
 
-The previous sampling rules may not be good enough for the linear case actually. This can be understood on a well-studied instance already discussed by~\cite{soare2014linear,xu2018linear}, which encapsulates the difficulty of BAI in a linear bandit. In this instance, contexts are the canonical basis  $\bx_1 = \be_1, \bx_2 = \be_2, \bx_d = \be_d$, plus an additional disturbing context \[\bx_{d+1} = (\cos(\alpha), \sin(\alpha), 0, \ldots, 0)\transpose,\] and a true regression parameter which is proportional to $\be_1$: $\btheta^\star = c\be_1$. In this problem, the best arm is always $\be_1$, but when the angle $\alpha$ is small, the disturbing context is hard to discriminate from $\be_1$. 
-
-We run some simulations with \TTTS{} and \TCC{} on this instance with $d=2$, $\alpha=0.01$ and $c=2$. Both algorithms appear to be alternating between sampling $\bx_1$ and the disturbing context $\bx_2$ and take very long time before stopping. Note that in this instance, it would be more informative to select $\bx_2$ a lot in order to lead how to discriminate between $\bx_1$ and $\bx_3$ (which is what our competitor \LGapE{} is doing). To explain why this happens, we display in Fig.~\ref{fig:instance} the confidence ellipsoid of the posterior after how many 10000 iterations of \TCC{} as a blue dot region. We can see that the confidence region of the posterior is around the axe $x=2$, thus a vector sampled from the posterior will most of the time have a larger dot product with $\bx_1$ and arm $\bx_3$, and $\bx_2$ will seldom be chosen as the leader or the challenger. 
+\LTCS{} and \LTCC{} may not be good enough for the linear case actually. To understand that, we run some simulations with the two sampling rules on the problem instance of Section~\ref{sec:lgc.complexity.complexity} with $d=2, c=2$, and $\alpha=0.01$. Both algorithms appear to be alternating between sampling $\bx_1$ and the disturbing context $\bx_2$ and take very long time before stopping. Note that in this instance, it would be more informative to select $\bx_2$ a lot in order to lead how to discriminate between $\bx_1$ and $\bx_3$ (which is what our competitor \LGapE{} is doing). To explain why this happens, we display in Fig.~\ref{fig:instance} the confidence ellipsoid of the posterior after how many 10000 iterations of \LTCC{} as a blue dot region. We can see that the confidence region of the posterior is around the axe $x=2$, thus a vector sampled from the posterior will most of the time have a larger dot product with $\bx_1$ and arm $\bx_3$, and $\bx_2$ will seldom be chosen as the leader or the challenger. 
 
 \begin{figure}[ht]
     \centering
@@ -86,7 +86,7 @@ We run some simulations with \TTTS{} and \TCC{} on this instance with $d=2$, $\a
 
 \subsection{A "greedy" fix of \LTCC{}}\label{sec:lgc.bayesian.fix}
 
-In order to overcome the previous issue, one can think of the following greedy version of $\LTCC$. It is inspired by the \emph{greedy} rule already used in (a heuristic version of) \LGapE~\citep{xu2018linear}, and is motivated by the following observation: in order to learn to discriminate between some arm $I^{(1)}$ and a challenger $I^{(2)}$, it may be more informative to select another arm. More specifically, the arm from which a new pull would reduce the most the variance in the estimation of $\bx_{I^{(1)}} - \bx_{I^{(2)}}$. In a standard bandit, this is simply the least pulled arm between $I^{(1)}$ and $I^{(2)}$, but in the linear case it may be another arm! 
+A potential fix of the previous issue is the greedy version of $\LTCC$ whose pseudo-code is displayed in Algorithm~\ref{alg:lt3cg}. It is inspired by the \emph{greedy} rule already used in (a heuristic version of) \LGapE~\citep{xu2018linear}, and is motivated by the following observation: in order to learn to discriminate between some arm $I^{(1)}$ and a challenger $I^{(2)}$, it may be more informative to select another arm. More specifically, the arm from which a new pull would reduce the most the variance in the estimation of $\bx_{I^{(1)}} - \bx_{I^{(2)}}$. In a standard bandit, this is simply the least pulled arm between $I^{(1)}$ and $I^{(2)}$, but in the linear case it may be another arm!
 
 \begin{algorithm}[ht]
 \centering
@@ -152,8 +152,9 @@ We investigate whether \LTCCG{} could be optimal in the classical bandit setting
 \end{figure}
 
 \subsection{Empirical performance of \LTCCG{}}
-\paragraph{Results.}
-We compare the performance of \LTCCG{} to \LGapE{} over the aforementioned pathological instance with $d=2$, $c=2$ and two values of $\alpha$. More precisely, we report in Table~\ref{table:pulls1} the total number of pulls and also the number of pulls allocated to each arm for each of the sampling rules. The results confirm our intuition in the previous section. 
+
+\paragraph{The usual hard instance.}
+We compare the performance of \LTCCG{} to \LGapE{} over the aforementioned hard instance with $d=2$, $c=2$ and two values of $\alpha$. More precisely, we report in Table~\ref{table:pulls1} the total number of pulls and also the number of pulls allocated to each arm for each of the sampling rules. The results confirm our intuition in the previous section. 
 
 \begin{table}[ht]
 \centering
@@ -193,6 +194,46 @@ We compare the performance of \LTCCG{} to \LGapE{} over the aforementioned patho
 \label{table:pulls2}
 \end{table}
 
+\paragraph{Arms with mild gaps.}
+We can also provide more experimental illustrations on different types of problem.
+
+We construct a set of $K$ arms proposed by~\cite{fiez2019transductive}:
+\[
+    \bx_1=(1,0)\transpose, \bx_2=(\cos(3\pi/4),\sin(3\pi/4))\transpose\,,
+\]
+and for $k = 3,\ldots,K$, 
+\[
+    \bx_k=(\sin(\pi/4+\phi_k),\cos(\pi/4+\phi_k))\transpose
+\]
+where $\phi_i\sim\cN(0,0.09)$. We fix the true regression parameter $\theta$ to be $\be_1$. This set of arms has some nice properties, that $\bx_1$ is the optimal arm, and $\bx_2$ is the arm that gives more information on identifying the best arm. We first report results with a moderate $K=6$ as an example where the generated expected means are $[1.0, -0.71, 0.84, -0.95, 0.93, 0.99]$.
+
+\begin{table*}[ht]
+\centering
+\def\arraystretch{1.2}
+\begin{tabular}{|c|c|c|c|}
+ \hline
+ & \LTCC & \LTCCG & \LGapE \\
+ \hline
+ \textbf{$\bx_1=(1,0)\transpose$} & $170872.19$ & $1.06$ & $1.13$ \\
+ \hline
+ \textbf{$\bx_2=(\cos(3\pi/4),\sin(3\pi/4))\transpose$} & $1.25$ & $1.0$ & $1.0$ \\
+ \hline
+ \textbf{$\bx_3=(\sin(\pi/4+\phi_3),\cos(\pi/4+\phi_3))\transpose$} & $92.18$ & $28693.26$ & $120657.6$ \\
+ \hline
+ \textbf{$\bx_4=(\sin(\pi/4+\phi_4),\cos(\pi/4+\phi_4))\transpose$} & $1.12$ & $26197.03$ & $110157.63$ \\
+ \hline
+ \textbf{$\bx_5=(\sin(\pi/4+\phi_5),\cos(\pi/4+\phi_5))\transpose$} & $77.04$ & $1.0$ & $1.0$ \\
+ \hline
+ \textbf{$\bx_6=(\sin(\pi/4+\phi_6),\cos(\pi/4+\phi_6))\transpose$} & $170892.82$ & $1.36$ & $1.83$ \\
+ \hline
+ \textbf{Total} & $341936.6$ & $\textbf{54894.71}$ & $230820.19$ \\
+ \hline
+\end{tabular}
+\caption{average number of pulls of each arm ($d=2, \delta=0.1$).}
+\label{table:pulls3}
+\end{table*}
+
+\paragraph{Impact of the dimension.}
 We also compare the impact of the dimension $d$ over the performance of our sampling rule and $\LGapE$. We run experiments on the same instance with a value of the angle set to $\alpha=0.1$. This time we let the dimension $d$ varying from 2 to 6. \LTCC{} is always better and the performance gap increases with the dimension. Thus, our algorithm seems to be more robust to the dimension.
 
 \begin{figure}[ht]
