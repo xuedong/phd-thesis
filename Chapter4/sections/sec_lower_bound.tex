@@ -1,4 +1,4 @@
-%!TEX root = ../Chapter3.tex
+%!TEX root = ../Chapter4.tex
 \section{Fixed-Confidence Optimality and Complexities}\label{sec:lgc.complexity}
 
 %As first stated by~\cite{soare2014linear}, we only consider a finite number of arms and we restrict to bandits  with Gaussian rewards and conjugate (Gaussian) priors in this work. 
@@ -221,7 +221,7 @@ where $\cY$ is the transductive set, i.e. a finite set of elements in $\R^d$. Tr
 	\label{tab:transductive_sets}
 \end{table}
 
-\paragraph{Frank-Wolfe.} We can use a Frank-Wolfe heuristic to compute the optimizer of~\eqref{eq:complexity_general} shown in Algorithm~\ref{alg:fw_aa}. This heuristic is used for example by~\citet{fiez2019transductive}. Note that this heuristic has been proved to have a linear convergence guarantee when $\cY = \cX$~\citep{ahipasaoglu2008fw}. It is not clear, however, that the same guarantee holds for other transductive sets.
+\paragraph{Frank-Wolfe.} We can use a Frank-Wolfe heuristic to compute the optimizer of~\eqref{eq:complexity_general} shown in Algorithm~\ref{alg:fw_aa}. This heuristic is used for example by~\citet{fiez2019transductive}. Note that it has been proved to have a linear convergence guarantee when $\cY = \cX$~\citep{ahipasaoglu2008fw}. It is not clear, however, that the same guarantee holds for other transductive sets.
 
 A simple sanity check to test whether a solver works smoothly is  to solve $\cX\cY^\star(\btheta)$ for classical multi-armed bandits (i.e. when $\cX= \{\be_1,\be_2,\ldots,\be_d\}$), for which a solver with guarantee exists (see \citealt{garivier2018explore}). In particular we found instances where Algorithm~\ref{alg:fw_aa} does not converge toward the optimal weights, for example: $\cX= \{\be_1,\be_2,\be_3\}, \theta = (0.9, 0.5, 0.5)$.
 

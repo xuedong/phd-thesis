@@ -1,4 +1,4 @@
-%!TEX root = ../Chapter3.tex
+%!TEX root = ../Chapter4.tex
 \section{Related Work}\label{sec:lgc.related_work}
 
 We survey previous work on linear BAI. The major focus is put on sampling rules in this section. We stress that all the stopping rules employed in the linear BAI literature are equivalent up to the choice of their exploration rate (More discussion in Appendix~\ref{app:lgc.stopping}). As aforementioned, existing sampling rules are either based on \SE or \UGapE. Elimination-based sampling rules usually operate in phases and progressively discard sub-optimal directions. Gap-based sampling rules always play the most informative arm that reduces the uncertainty of the gaps between the empirical best arm and the others.
@@ -16,13 +16,13 @@ at the cost of having no guarantees. An elimination-like alternative called \XYA
 
 \paragraph{\LGapE and variants.} \LGapE~\citep{xu2018linear} is the first gap-based sampling rule for linear BAI. \LGapE is inspired by \UGapE~\citep{gabillon2012ugape}. It is, however, not clear whether \LGapE is asymptotically optimal or not. Similar to \XYS, \LGapE either requires to solve a time-consuming optimization problem at each step, or can use a greedy version that pulls arm 
 \[
-    \argmin_{\bx\in\cX} \normm{\bx_{i_n}-\bx_{j_n}}_{(\bLambda_{\bomega}+\bx\bx\transpose)^{-1}}^2
+    \argmin_{\bx\in\cX} \normm{\bx_{i_n}-\bx_{j_n}}_{(\bA_n+\bx\bx\transpose)^{-1}}^2
 \]
 instead, again at the cost of losing guarantees. Here $i_n = \Istar(\hat\btheta_n)$ and $\hbx_{j_n}$ is the most ambiguous arm w.r.t. $\hbx_{i_n}$, i.e. 
 \[
-    \argmax_{j\neq i_n} (\bx_{j}-\bx^\star(\hat\btheta_n))\transpose\hat\btheta_n + \normm{\bx^\star(\hat\btheta_n) - \bx_{j_n}}_{\bA_{N_t}^{-1}} \sqrt{2\beta(n,\delta)}\,,
+    \argmax_{j\neq i_n} (\bx_{j}-\bx^\star(\hat\btheta_n^\lambda))\transpose\hat\btheta_n^\lambda + \normm{\bx^\star(\hat\btheta_n^\lambda) - \bx_{j_n}}_{\bA_n^{-1}} \sqrt{2d_{n,\delta}}\,,
 \]
-with $\beta(n,\delta)$ the stopping rule threshold.
+with $d_{n,\delta}$ the stopping rule threshold.
 
 On the other hand,~\citet{zaki2019maxoverlap} propose a new algorithm based on \LUCB. With a careful examination, we note that the sampling rule of \GLUCB is equivalent to that of the greedy \LGapE using the Sherman-Morrison formula. Later, \citet{kazerouni2019glb} provide a natural extension of \LGapE to the \emph{generalized linear bandits} setting, where the rewards depend on a strictly increasing \emph{inverse link function}. \GLGapE reduces to \LGapE when the inverse link function is the identity function.
 

@@ -9,9 +9,9 @@ We consider a finitely-armed linear bandit problem, where the collection of arms
     \mu_i = \bx_i\transpose\btheta\,.
 \]
 
-\begin{assumption}
+\begin{assumption}\label{ass:lgc.bounded_arm}
 \begin{leftbar}[assumptionbar]
-    We assume that $\forall \bx\in\cX, \normm{\bx}\leq L$, where $\normm{\bx}$ denotes the Euclidean norm of the vector $\bx$.
+    We assume that $\exists L>0$, $\forall \bx\in\cX, \normm{\bx}\leq L$, where $\normm{\bx}$ denotes the Euclidean norm of the vector $\bx$.
 \end{leftbar}
 \end{assumption}
 
@@ -20,7 +20,7 @@ The learning protocol (see also Definition~\ref{def:mab.linear_bai}) goes as fol
     r_n = \hbx_n\transpose\btheta +\epsilon_n\,,
 \]
 where $\epsilon_n$ is the noise and $\btheta$ is the true regression parameter (unknown to the learner).
-\begin{assumption}
+\begin{assumption}\label{ass:lgc.noise}
 \begin{leftbar}[assumptionbar]
     We assume that $\epsilon_n \sim \cN(0,\sigma^2)$ is conditionally independent from the past\,.
 \end{leftbar}
@@ -52,7 +52,7 @@ where $\bA_{\bX_n}$ and $\bb_{\bX_n}$ are the design matrix and the response vec
 \[
     \bA_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t\hat{\bx}_t\transpose, \quad \bb_{\bX_n} \eqdef \sum_{t=1}^n \hat{\bx}_t r_t\,,
 \]
-and $\lambda\in\R$ is the regularization parameter.
+and $\lambda\in\R$ is the regularization parameter. When clear from the context, we can simply denote $\bA_{\bX_n}$ by $\bA_n$ and $\bb_{\bX_n}$ by $\bb_n$.
 
 \paragraph{Useful notation.}
 The fixed-confidence optimality, as proved by~\cite{garivier2016tracknstop,russo2016ttts}, is related to the \emph{proportion vector} of pulls of each arm that we denote by $\bomega = (\omega_1,\ldots,\omega_K)$, where $\bomega\in\Sigma_K \eqdef \{\bomega : \sum_{i=1}^K \omega_i = 1\}$. Given a vector of proportions $\bomega$, we can define a counterpart of the design matrix 

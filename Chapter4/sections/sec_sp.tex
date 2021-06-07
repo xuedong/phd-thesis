@@ -1,17 +1,24 @@
+%!TEX root = ../Chapter4.tex
 \section{Other Saddle-Point Approaches}\label{sec:lgc.sp}
+
+Methods based on approaching the saddle point of the lower bound look promising, one concern about \LG{} (or \LGC{}) could be its computational complexity though. In BAI, the one step complexity of \LG{} is dominated by the computation of the best response for nature, which requires a full matrix inversion. Alternatives that involve rank-1 updates should be considered.
+
+We end this chapter by some more discussions on other possible saddle-point methods.
 
 \subsection{Linear \texorpdfstring{\Track{}}{}}
 
-It is seemingly unlikely that \LTCCG{} could be asymptotically optimal according to Fig.~\ref{fig:convergence} despite its decent practical performance. On the other hand, the linear version of \Track seems to be a more plausible candidate of being asymptotically optimal provided that a numerical solver for computing the optimal weights exists. Degenne et al. (2020) provide a Frank-Wolfe-typed heuristic (see Appendix~\ref{app:lgc.approx} for details). No convergence guarantee is given though.
+Although never formally proved, the linear version of \Track seems to be another plausible candidate of being asymptotically optimal provided that a numerical solver for computing the optimal weights exists. Fortunately, the Algorithm~\ref{alg:fw_ab} proposed in Section~\ref{sec:lgc.complexity.complexity} seems to be one. 
 
 \Track remains unchanged in the linear case, since it only cares about tracking the optimal weights. We hereby recall that the \CT rule consists of playing
 \[
     \hat\bx \in \argmax_{i\in[K]} \sum_{t=0}^n \omega_i^{\epsilon_t}(\hat\bmu_t)-T_{t,i}\,,
 \]
-where $\bomega^\epsilon$ is a $L^\infty$ projection of $\bomega^\star$ onto the simplex $\Sigma_K^\epsilon \eqdef \{\bomega\in [\epsilon,1]^K : \sum_{i=1}^K \omega_i = 1\}$. The draw back of \Track is that we need to compute a plug-in estimate of the optimal weights at each stage, with the current solver it is extremely time-consuming.
+where $\bomega^\epsilon$ is a $L^\infty$ projection of $\bomega^\star$ onto the simplex $\Sigma_K^\epsilon \eqdef \{\bomega\in [\epsilon,1]^K : \sum_{i=1}^K \omega_i = 1\}$. The draw back of \Track is that we need to compute a plug-in estimate of the optimal weights at each stage, which is computationally unfavorable.
 
 \subsection{Saddle-point Frank-Wolfe}
-It is natural to look into a saddle-point version of \LGapE (resp. \LTCC) that we call \SLGapE (resp. \SLTCC), as shown in Algorithm~\ref{alg:slgape} (resp. Algorithm~\ref{alg:slt3c}) based on the Frank-Wolfe solver (see Algorithm~\ref{alg:solver} in Appendix~\ref{app:lgc.approx}). We define a so called \emph{active transductive set} as
+On the other hand, the Frank-Wolfe heuristic in Algorithm~\ref{alg:fw_ab} is an efficient rank-1 solver. It is thus natural to investigate if it can be incorporated into existing algorithms. 
+
+In particular, we can propose two new algorithms by adding the solver on top of \LGapE (resp. \LTCC) that we call \SLGapE (resp. \SLTCC), as shown in Algorithm~\ref{alg:slgape} (resp. Algorithm~\ref{alg:slt3c}). We define a so called \emph{active transductive set} as
 \begin{align}\label{def:active_transductive}
     \hat\cY(\bx,\btheta) \eqdef \left\{ \frac{(\bx- \bx')}{\left|(\bx-\bx')\transpose\btheta\right|}: \bx'\in\cX/\big\{\bx\big\}  \right\}\,.
 \end{align}
@@ -64,15 +71,16 @@ It is natural to look into a saddle-point version of \LGapE (resp. \LTCC) that w
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Experiment illustrations}
+\subsection{Experimental illustrations}
 
-\paragraph{Saddle-point sampling rules}
-We now compare our saddle-point-based algorithms against \LGapE. To make a fair comparison, we use always the same exploration rate for all the stopping rules. Indeed the stopping rules are equivalent if they keep the same exploration rate as argued by Degenne et al. (2020). We first use the previous pathological instance with $\lambda=1$, the results are reported as box plots of average stopping time in Fig.~\ref{fig:exp1}.
+We compare our saddle-point-based algorithms against \LGapE{}. To make a fair comparison, we use always the same exploration rate for all the stopping rules. Indeed the stopping rules are equivalent if they keep the same exploration rate as argued in Appendix~\ref{app:lgc.stopping}. We use the previous hard instance with $c=1$, the results are reported as box plots of average stopping time in Figure~\ref{fig:exp1}.
 
-\begin{figure}[t!]
+It seems that they can achieve the same level of empirical performance as \LGapE{}, their theoretical behaviour thus turns out to be an interesting research direction for the future.
+
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.33\textwidth]{Chapter4/img/exp_sin_-0000001}
     \includegraphics[width=0.33\textwidth]{Chapter4/img/exp_sin_-1}
-    \caption{Average stopping time (Left: $d=2,\alpha=\pi/4,\delta=0.0000001$, Right: $d=2,\alpha=0.1,\delta=0.1$), with SFW-T = \SLTCC, SFW-L = \SLGapE, T-G = \LTCC, LG = \LGapE.}
+    \caption{Average stopping time (Left: $d=2,\alpha=\pi/4,\delta=0.0000001$, Right: $d=2,\alpha=0.1,\delta=0.1$), with SFW-T = \SLTCC{}, SFW-L = \SLGapE{}, T-G = \LTCC{}, LG = \LGapE{}.}
     \label{fig:exp1}
 \end{figure}
