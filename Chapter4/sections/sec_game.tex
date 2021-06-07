@@ -1,7 +1,9 @@
 %!TEX root = ../Chapter3.tex
 \section{A Gamified Algorithm}\label{sec:lgc.game}
 
-In this section, We present an asymptotically optimal algorithm for linear bandits BAI. Note that the present algorithm is asymptotically optimal for the general pure exploration game, which is however not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for more details.
+The first attempt using Bayesian machinery does not end up with a satisfying solution. In this section, we turn our thoughts to another idea and take inspiration from the \emph{zero-sum game} (see e.g.~\citealt{degenne2019pure}). We describe \LG{}, detailed in Algorithm~\ref{alg:lg}. As noted in the seminal work of \citet{chernoff1959}, the complexity $\Tstar(\btheta)^{-1}$ is the value of a fictitious zero-sum game between the agent choosing an optimal proportion of allocation of pulls $\bomega$ and a second player, the nature, that tries to fool the agent by choosing the most confusing alternative $\btheta'$ leading to an incorrect answer. \LG{} is an asymptotically optimal algorithm for linear bandits BAI. Note that the present algorithm is asymptotically optimal for the general pure exploration game, which is however not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for more details.
+
+%The full analysis of the algorithm is omitted as well as a convexified version \LGC{} -- also asymptotically optimal itself -- as they are not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for the complete proofs.
 
 Solely in this section, we make the following additional assumption that the set of parameter is bounded,
 \begin{assumption}
@@ -11,7 +13,7 @@ Solely in this section, we make the following additional assumption that the set
 \end{assumption}
 This assumption is actually shared by most of the works on linear bandits (e.g. \citealt{abbasi-yadkori2011linear, soare2014linear}).
 
-The bounded version of BAI is explicited in Section~\ref{sec:lgc.complexity.examples}. In particular we show how the boundedness of the parameter space affects the lower bound of Theorem~\ref{th:lb_genral}: The characteristic time $\Tstar(\theta)$ is reduced (or equivalently $\Tstar(\theta)^{-1}$ increases). This is not surprising since we add a new constraint in the optimization problem. This means that the algorithm should stop earlier. The counterpart of this improvement is that it is often difficult to compute the best response for nature. Indeed, for example, in BAI, there is an explicit expression of the best response, see Section~\ref{app:lgc.examples}. When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lemma:lgc.lagrange_alternative}. To devise an asymptotically optimal algorithm without the boundedness assumption remains an open problem.
+The bounded version of BAI is explained in Section~\ref{sec:lgc.complexity.examples}. In particular we show how the boundedness of the parameter space affects the lower bound of Proposition~\ref{prop:lgc.lb}: The characteristic time $\Tstar(\theta)$ is reduced (or equivalently $\Tstar(\theta)^{-1}$ increases). This is not surprising since we add a new constraint in the optimization problem. This means that the algorithm should stop earlier. The counterpart of this improvement is that it is often difficult to compute the best response for nature. Indeed, for example, in BAI, there is an explicit expression of the best response, see Section~\ref{app:lgc.examples}. When the constraint $\normm{\lambda}\leq M$ is added there is no explicit expression anymore and one needs to solve an uni-dimensional optimization problem, see Lemma~\ref{lemma:lgc.lagrange_alternative}. To devise an asymptotically optimal algorithm without the boundedness assumption remains an open problem.
 
 
 % , i.e for $i\in\cI$ and $w\in\interior{\Sigma_A}$ in the interior of the probability simplex of dimension $A-1$, find $\lambda^i$ such that
@@ -35,18 +37,16 @@ The bounded version of BAI is explicited in Section~\ref{sec:lgc.complexity.exam
 
 % And there exists pathological pure exploration problems where even the quantity uppper bounded by $U_s^{i,a}$, namely $\normm{\theta-\lambda}_{aa^\top}^2$ where $\lambda\in\argmin_{\lambda'\in\neg i}\normm{\theta -\lambda}$ is unbounded\todo{I don't understand what this means.}. See for example Appendix~G.3 by \citet{menard2019lma}.
 
-
-In this chapter, we study the problem from a \emph{zero-sum game} point of view inspired by~\cite{degenne2019pure}. We describe \LG{}, detailed in Algorithm~\ref{alg:lgc}. The full analysis of the algorithm is omitted as well as a convexified version \LGC{} -- also asymptotically optimal itself -- as they are not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for the complete proofs.
-
 \subsection{Notations}
-\paragraph{Counts.} At each round $t$ the algorithms will play an arm $a_t$ and choose (fictitiously) an answer $i_t$. We denote by $N_t^{a,i} \eqdef\sum_{s=1}^t \ind_{\{(a_t,i_t)=(a,i)\}}$ the number of times the pair $(a,i)$ is chosen up to and including time $t$, and by $N_t^a =\sum_{i\in\cI} N_s^{a,i}$ and $N_t^i =\sum_{a\in\cI} N_s^{a,i}$ the partial sums. The vectors of counts at time $t$ is denoted by $N_t \eqdef (N_t^a)_{a\in\cA}$
+
+At each round $t$ the algorithms will play an arm $a_t$ and choose (fictitiously) an answer $i_t$. We denote by $N_t^{a,i} \eqdef\sum_{s=1}^t \ind_{\{(a_t,i_t)=(a,i)\}}$ the number of times the pair $(a,i)$ is chosen up to and including time $t$, and by $N_t^a =\sum_{i\in\cI} N_s^{a,i}$ and $N_t^i =\sum_{a\in\cI} N_s^{a,i}$ the partial sums. The vectors of counts at time $t$ is denoted by $N_t \eqdef (N_t^a)_{a\in\cA}$
 and when it is clear from the context we will also denote by $N_t^a = (N_t^{a,i})_{i\in\cI}$ and $N_t^i = (N_t^{a,i})_{i\in\cI}$ the vectors of partial counts.
 
-\paragraph{Regularized least square estimator.} We fix a regularization parameter $\eta > 0$. The regularized least square estimator for the parameter $\theta\in \mathcal M$ at time $t$ is
-\[
-\htheta_{t} = (V_{N_t} + \eta I_d)^{-1} \sum_{s=1}^t Y_s a_s\,,
-\]
-where $I_d$ is the identity matrix. By convention $\htheta_0 = 0$.
+%\paragraph{Regularized least square estimator.} We fix a regularization parameter $\eta > 0$. The regularized least square estimator for the parameter $\theta\in \mathcal M$ at time $t$ is
+%\[
+%\htheta_{t} = (V_{N_t} + \eta I_d)^{-1} \sum_{s=1}^t Y_s a_s\,,
+%\]
+%where $I_d$ is the identity matrix. By convention $\htheta_0 = 0$.
 
 
 \subsection{The \LG{} algorithm}
@@ -60,20 +60,20 @@ where $I_d$ is the identity matrix. By convention $\htheta_0 = 0$.
     \For{t = 1 \ldots}
         \State \textit{// Stopping rule}
         \If{{$\max_{i\in\cI}\inf_{\lambda\in\neg i} \frac{1}{2}\normm{\htheta_{t-1}-\lambda}^2_{V_{N_{t-1}}}\geq\! \beta(t-1,\delta)$}}
-            \State \texttt{stop} 
+            \State \text{Stop} 
             \State {\bfseries Return} $\hi = \istar(\hat{\theta}_{t-1})$
         \EndIf
         \State \textit{// Best answer}
         \State $i_{t} = \istar(\hat{\theta}_{t-1})$
         \State \textit{// Agent plays first}
-        \State \texttt{get} $w_{t}$ \texttt{from} $\cL^{i_t}_w$
-        \State \texttt{update} $W_{t}=W_{t-1}+w_{t}$
+        \State \text{Get} $w_{t}$ \text{from} $\cL^{i_t}_w$
+        \State \text{Update} $W_{t}=W_{t-1}+w_{t}$
         \State \textit{// Best response for the nature}
         \State $\lambda_{t} \in \argmin_{\lambda\in\neg i_t}\normm{\htheta_{t-1}-\lambda}^2_{V_{w_{t}}}$
         \State \textit{// Feed optimistic gains}
-        \State \texttt{feed learner} $\cL_w^{i_{t}}$ \texttt{with} $g_{t}(w) = \sum_{a\in\cA}w^a U_t^a/2$
+        \State \text{Feed learner} $\cL_w^{i_{t}}$ \texttt{with} $g_{t}(w) = \sum_{a\in\cA}w^a U_t^a/2$
         \State \textit{// Track the weights}
-        \State \texttt{pull} $a_{t}\in \argmin_{a\in \mathcal A } N_{t-1}^{a} - W_{t}^{a}$
+        \State \text{Pull} $a_{t}\in \argmin_{a\in \mathcal A } N_{t-1}^{a} - W_{t}^{a}$
    \EndFor
 \end{algorithmic}
 \end{algorithm}

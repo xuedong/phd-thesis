@@ -36,8 +36,8 @@ It is natural to look into a saddle-point version of \LGapE (resp. \LTCC) that w
         \State $\hat\by \leftarrow{} \dfrac{(\hat{\bx}^{(1)}- \hat{\bx}^{(2)})}{(\hat{\bx}^{(1)}-\hat{\bx}^{(2)})\transpose\btheta}$
         \State $\bLambda\leftarrow{} \mathbf{\Lambda}+ \mathbf{\hat\bx}\mathbf{\hat\bx}\transpose$
 		\State $\mathbf{\tLambda} \leftarrow{} \mathbf{\tLambda} + \mathbf{\hat\by}\mathbf{\hat\by}\transpose$
-		\State \texttt{evaluate arm} $\hat{\bx}$
-	    \State \texttt{update mean and variance according to \eqref{eq:update_mean} and \eqref{eq:update_variance}}
+		\State \text{Evaluate arm} $\hat{\bx}$
+	    \State \text{Update mean and variance according to \eqref{eq:update_mean} and \eqref{eq:update_variance}}
 	    \State $n = n+1$
    \EndFor
 \end{algorithmic}
@@ -52,13 +52,13 @@ It is natural to look into a saddle-point version of \LGapE (resp. \LTCC) that w
    \State {\bfseries Initialize:} $\mathbf{\tLambda} \leftarrow{} I_d, \mathbf{\Lambda}\leftarrow{} I_d$
 
    \For{$n \leftarrow 1,2,\cdots$}
-        \State \texttt{sample} $\btheta \sim \Pi_n$
+        \State \text{Sample} $\btheta \sim \Pi_n$
         \State $\mathbf{\hat{\bx}}\in\argmax_{\bx\in\cX}  \norm{\bx}_{\mathbf{\Lambda}^{-1} \mathbf{\tLambda} \mathbf{\Lambda}^{-1} }^2$
         \State $\mathbf{\hat{\by}}\in\argmax_{\by\in\hat\cY(\hat\bx,\btheta)}\normm{\by}^2_{\mathbf{\Lambda}^{-1}}$
         \State $\mathbf{\Lambda}\leftarrow{} \mathbf{\Lambda}+ \mathbf{\hat\bx}\mathbf{\hat\bx}\transpose$
 		\State $\mathbf{\tLambda} \leftarrow{} \mathbf{\tLambda} + \mathbf{\hat\by}\mathbf{\hat\by}\transpose$
-		\State \texttt{evaluate arm} $\hat{\bx}$
-	    \State \texttt{update mean and variance according to \eqref{eq:update_mean} and \eqref{eq:update_variance}}
+		\State \text{Evaluate arm} $\hat{\bx}$
+	    \State \text{Update mean and variance according to \eqref{eq:update_mean} and \eqref{eq:update_variance}}
 	    \State $n = n+1$
    \EndFor
 \end{algorithmic}

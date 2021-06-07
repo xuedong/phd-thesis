@@ -97,11 +97,11 @@ In order to overcome the previous issue, one can think of the following greedy v
     %(and the $W_n$ function for \textcolor{red}{\TCC})
    %\STATE {\bfseries Initialization:} $\forall \blambda\in\Omega, S_{\blambda}=0, F_{\blambda}=0$
    \For{$n \leftarrow 1,2,\cdots$}
-        \State \text{sample} $\btheta_1 \sim \Pi_n$
+        \State \text{Sample} $\btheta_1 \sim \Pi_n$
         \State $\hat{\bx}^{(1)} \leftarrow \argmax_{\bx\in\cX} \bx\transpose\btheta_1$ \text{(indexed by $I^{(1)}$)}
 	        \State $I^{(2)} \leftarrow \argmin_{i\neq I^{(1)}}W_n(I^{(1)},i)$ \text{(see \eqref{def:transportation} for the definition)}\Comment{$I^{(2)} \leftarrow \hat{\bx}^{(2)}$}
-		    \State \text{evaluate arm} $\hat{\bx} \eqdef \argmin_{\bx\in\cX} \normm{\hat{\bx}^{(1)} - \hat{\bx}^{(2)}}_{(\bA_{\bX_n}+\bx\bx\transpose)^{-1}}$
-	    \State \text{update mean and variance according to \eqref{eq:update_mean} and \eqref{eq:update_variance}}
+		    \State \text{Evaluate arm} $\hat{\bx} \eqdef \argmin_{\bx\in\cX} \normm{\hat{\bx}^{(1)} - \hat{\bx}^{(2)}}_{(\bA_{\bX_n}+\bx\bx\transpose)^{-1}}$
+	    \State \text{Update mean and variance according to \eqref{eq:update_mean} and \eqref{eq:update_variance}}
 	    \State $n = n+1$
    \EndFor
 \end{algorithmic}

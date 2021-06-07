@@ -22,9 +22,9 @@ We first define the notion of \gls{alternative set} in a pure-exploration game. 
 
 \paragraph{Lower bound.} 
 A general result on the (non-asymptotic) sample-complexity lower bound in the fixed-confidence regime~\citep{garivier2016tracknstop}, which we reviewed in Section~\ref{sec:mab.performance.sample}, states that for any $\delta$-correct strategy, we have
-\[
+\begin{align}\label{eq:lgc.lb}
     \EE{\tau_\delta} \geq T^\star(\btheta)\log(\frac{1}{3\delta}),
-\]
+\end{align}
 for a given parameter $\btheta$ and a given confidence level $\delta$. And the characteristic time $T^\star(\btheta)$ is written as
 \begin{align}\label{eq:lgc.characteristic2}
     \Tstar(\btheta)^{-1} \eqdef \max_{\bomega \in \Sigma_K} \inf_{\btheta'\in \neg\Istar(\btheta)} \frac{1}{2}\normm{\btheta - \btheta'}_{\bLambda_{\bomega}}^2\,,
@@ -35,16 +35,10 @@ and it can be further particularized into~\eqref{eq:lgc.characteristic1} defined
 \begin{leftbar}[propositionbar]
 In the linear case, the quantity $T^\star(\btheta)$ is written as
 \begin{align}\label{eq:lgc.characteristic1}
-    T^\star(\btheta) \eqdef \inf_{\bomega\in\Sigma_K}\max_{\bx\neq \bx^\star} \frac{2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{(\bx\transpose\btheta-(\bx^\star)\transpose\btheta)^2}\,.
+    T^\star(\btheta) \eqdef \inf_{\bomega\in\Sigma_K}\max_{\bx\neq \bx^\star} \frac{2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{\left(\bx\transpose\btheta-(\bx^\star)\transpose\btheta\right)^2}\,.
 \end{align}
 \end{leftbar}
 \end{proposition}
-
-\begin{remark}
-\begin{leftbar}[remarkbar]
-    As noted in the seminal work of \citet{chernoff1959}, the complexity $\Tstar(\btheta)^{-1}$ is the value of a fictitious zero-sum game between the agent choosing an optimal proportion of allocation of pulls $\bomega$ and a second player, the nature, that tries to fool the agent by choosing the most confusing alternative $\lambda$ leading to an incorrect answer.
-\end{leftbar}
-\end{remark}
 
 %In fact using the Sion's minimax theorem we can rewrite the characteristic times in various ways which will be useful to prove the lower bound of Theorem~\ref{th:lb_genral}.
 
@@ -67,7 +61,7 @@ which implies
 \begin{align*}
     T^\star(\btheta)^{-1} &=
     \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\sup_{\eta>0} \eta(\bx^\star-\bx)\transpose\btheta - \frac{\eta^2\normm{\bx-\bx^\star}_{\bLambda_{\bomega}^{-1}}}{2\sigma^2}\\
-    &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\frac{(\bx\transpose\btheta-(\bx^\star)\transpose\btheta)^2}{2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}\,.
+    &= \sup_{\bomega\in\Sigma_K}\min_{\bx\neq\bx^\star}\frac{\left(\bx\transpose\btheta-(\bx^\star)\transpose\btheta\right)^2}{2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}\,.
 \end{align*}
 \end{proof}
 
@@ -91,7 +85,7 @@ Using the same lower-bound techniques, one can also prove that under any $\delta
 \]
 where $T^\star_\beta(\btheta)$ is defined in the same way as $T^\star(\btheta)$, but restricted to the constraint $\omega_{I^\star}=\beta$,
 \[
-    T^\star_{\beta}(\btheta) \eqdef \inf_{\bomega\in\Sigma_K,\omega_{I^\star}=\beta}\max_{\bx\neq \bx^\star} \frac{2\sigma^2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{(\bx\transpose\btheta-(\bx^\star)\transpose\btheta)^2}\,.
+    T^\star_{\beta}(\btheta) \eqdef \inf_{\bomega\in\Sigma_K,\omega_{I^\star}=\beta}\max_{\bx\neq \bx^\star} \frac{2\sigma^2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}{\left(\bx\transpose\btheta-(\bx^\star)\transpose\btheta\right)^2}\,.
 \]
 
 % And a relaxed notion of optimality that depends on $\beta$ can be also defined. A BAI strategy is called \emph{$\beta$-optimal} if it satisfies 
@@ -107,7 +101,7 @@ Essentially, we can recover the $\beta$-optimality defined in Chapter~\ref{CHAP:
 
 The inverse of the characteristic time of Proposition~\ref{prop:lgc.lb} can also be written as
 \[
-    \Tstar(\btheta)^{-1} = \max_{\bomega\in\Sigma_K} \min_{\bx\neq \bx^\star} \frac{(\bx\transpose\btheta-(\bx^\star)\transpose\btheta)^2}{2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}
+    \Tstar(\btheta)^{-1} = \max_{\bomega\in\Sigma_K} \min_{\bx\neq \bx^\star} \frac{\left(\bx\transpose\btheta-(\bx^\star)\transpose\btheta\right)^2}{2\normm{\bx^\star - \bx}^2_{\bLambda_{\bomega}^{-1}}}
 \]
 for BAI.
 
@@ -148,32 +142,35 @@ In order to compute all these complexities, it is sufficient to solve the follow
 \[
 \xyopt=\min_{\bomega\in\Sigma_K}\max_{\by\in\cY}\normm{\by}^2_{\bLambda_{\bomega}^{-1}}\,.
 \]
-When $\cY=\cX$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956algorithm} which possesses convergence guarantees~\citep{atwood1969optimal,ahipasaoglu2008fw}. But in the general case, up to our knowledge, there is no algorithm with the same kind of guarantees. Previous works used an heuristic based on a straightforward adaptation of the aforementioned algorithm for general sets $\cY$ but it seems to not converge on particular instances, see Section~\ref{sec:lgc.experiments.implem}. We instead propose in the same section an algorithm based on Saddle point Frank-Wolfe algorithm that seems to converge on the different instances we tested.
+When $\cY=\cX$ we can use an algorithm inspired by Frank-Wolfe \citep{frank1956algorithm} which possesses convergence guarantees~\citep{atwood1969optimal,ahipasaoglu2008fw}. But in the general case, up to our knowledge, there is no algorithm with the same kind of guarantees. Previous works used an heuristic based on a straightforward adaptation of the aforementioned algorithm for general sets $\cY$ but it seems to not converge on particular instances (see Section~\ref{sec:lgc.experiments.complexity}). We instead propose in the same section an algorithm based on saddle-point Frank-Wolfe algorithm that seems to converge on the different instances we tested.
 \end{leftbar}
 \end{remark}
 
 \paragraph{Empirical evaluation.}
 
-We use the usual hard instance to illustrate how various complexities differ in practice. In Table~\ref{table:optimal_weights} we compare the different complexities mentioned in this paper: the characteristic time $\Tstar(\theta)$ and its associated optimal weights $\wstar_{\cA\cBstar(\theta)}$, the $\xyopt$-complexity and its associated optimal design $\wstar_{\xyopt}$, the G-optimal complexity $\gopt$ and its associated optimal design $\wstar_{\cA\cA}$. For each weight vector $w \in\{\wstar_{\cA\cBstar(\theta)},w_{\xyopt}, w_{\gopt}\}$,
- we also provide the lower bound $T_w$ given by Theorem~\ref{th:lb_genral}, i.e.
- \[
- T_w = \max_{a\neq \astar(\theta)} \frac{\big\langle \theta, \astar(\theta)-a\big\rangle^2}{2\normm{\astar(\theta)-a}_{V_w^{-1}}^2} \log(1/\delta).
+We use the usual hard instance to illustrate how various complexities differ in practice. In Table~\ref{table:optimal_weights} we compare the different complexities mentioned in this paper: the characteristic time $\Tstar(\btheta)$ and its associated optimal weights $\bomega^\star_{\cX\cY^\star(\btheta)}$, the $\xyopt$-complexity and its associated optimal design $\bomega^\star_{\xyopt}$, the G-optimal complexity $\gopt$ and its associated optimal design $\bomega^\star_{\cX\cX}$. For each weight vector 
+\[
+    \bomega \in\left\{\bomega^\star_{\cX\cY^\star(\btheta)},\bomega_{\xyopt}, \bomega_{\gopt}\right\}\,,
 \]
-In particular we notice that targeting the proportions of pulls $w_{\xyopt}, w_{\gopt}$ leads to a much larger lower bound than the one obtained with the optimal weights.
+we also provide the lower bound $T_{\bomega}$ given by~\eqref{eq:lgc.lb}, i.e.
+\[
+    T_{\bomega} = \max_{\bx\neq \bx^\star(\btheta)} \frac{\left((\bx^\star(\btheta)-\bx)\transpose\btheta\right)^2}{2\normm{\bx^\star(\btheta)-\bx}_{\bLambda_{\bomega}^{-1}}^2} \log(1/\delta)\,.
+\]
+In particular we notice that targeting the proportions of pulls $\bomega_{\xyopt}, \bomega_{\gopt}$ leads to a much larger lower bound than the one obtained with the optimal weights.
 \begin{table}[t!]
 \centering
 %\def\arraystretch{1.2}
 \begin{tabular}{|c|c|c|c|}
  \hline
-   & $\wstar_{\cA\cBstar}$ & $\wstar_{\xyopt}$  & $\wstar_{\gopt}$   \\
+   & $\bomega^\star_{\cX\cY^\star}$ & $\bomega^\star_{\xyopt}$  & $\bomega^\star_{\gopt}$   \\
  \hline
- \textbf{$a_1$} & $0.047599$ & $0.499983$ & $0.499983$ \\
+ \textbf{$\bx_1$} & $0.047599$ & $0.499983$ & $0.499983$ \\
  \hline
- \textbf{$a_2$} & $0.952354$ & $0.499983$ & $0.499983$ \\
+ \textbf{$\bx_2$} & $0.952354$ & $0.499983$ & $0.499983$ \\
  \hline
- \textbf{$a_3$} & $0.000047$ & $0.000033$ & $0.000033$ \\
+ \textbf{$\bx_3$} & $0.000047$ & $0.000033$ & $0.000033$ \\
  \hline
- \textbf{$T_w$} & $369$ & $2882$ & $2882$ \\
+ \textbf{$T_{\bomega}$} & $369$ & $2882$ & $2882$ \\
  \hline
    & $\Tstar(\theta)$ & $2\xyopt/\DeltaMin^2$ & $8\gopt/\DeltaMin^2$\\
  \hline
@@ -196,11 +193,11 @@ In particular we notice that targeting the proportions of pulls $w_{\xyopt}, w_{
 
 \subsection{Computation of different complexities}\label{sec:lgc.experiments.complexity}
 
-As mentioned in Section~\ref{sec:lgc.lower_bound}, computing the solution to a specified optimization problem is required in many existing linear BAI algorithms. We survey some methods that can potentially be useful to handle that issue.
+As mentioned in Section~\ref{sec:lgc.complexity.lb}, computing the solution to a specified optimization problem is required in many existing linear BAI algorithms. We survey some methods that can potentially be useful to handle that issue.
 
 We recall that the three notions of complexity $\gopt, \xyopt, \cX\cY^\star(\btheta)$ can be written in a unified form,
 \begin{align}\label{eq:complexity_general}
-    \cX\cY = \min_{\bomega\in\Sigma_K} \max_{\by\in\cY}\normm{\by}_{V_w^{-1}}^2,
+    \cX\cY = \min_{\bomega\in\Sigma_K} \max_{\by\in\cY}\normm{\by}_{\bLambda_{\bomega}^{-1}}^2,
 \end{align}
 where $\cY$ is the transductive set, i.e. a finite set of elements in $\R^d$. Transductive sets corresponding to different complexity types mentioned in this paper can be found in Table~\ref{tab:transductive_sets}.
 
@@ -211,7 +208,7 @@ where $\cY$ is the transductive set, i.e. a finite set of elements in $\R^d$. Tr
 		\thead{Allocation type} & \thead{Arm set} & \thead{Transductive set} \\ \midrule
 		(1) $\gopt$-allocation & $\cX$ & $\cX$\\
 		(2) $\xyopt$-allocation & $\cX$ & $\cY_{\texttt{dir}} = \{\bx-\bx':\ (\bx,\bx')\in\cX\times\cX\}$ \\
-		(3) $\cX\cY^\star(\btheta)$-allocation & $\cX$ & $\cY^\star(\theta) = \left\{ (\bx^\star(\btheta)- \bx)/\left|\big\langle \theta, \bx^star(\theta)-\bx\big\rangle\right|: \bx\in\cX/\big\{\bx^\star(\btheta)\big\}  \right\}$ \\
+		(3) $\cX\cY^\star(\btheta)$-allocation & $\cX$ & $\cY^\star(\btheta) = \left\{ (\bx^\star(\btheta)- \bx)/\left|(\bx^\star(\btheta)-\bx)\transpose\btheta\right|: \bx\in\cX/\big\{\bx^\star(\btheta)\big\}  \right\}$ \\
 		\bottomrule
 	\end{tabular}
 	\caption{Some examples of different transductive sets.}
@@ -244,15 +241,15 @@ A simple sanity check to test whether a solver works smoothly is  to solve $\cX\
 \caption{Frank-Wolfe heuristic for computing $\gopt$-design}
 \label{alg:fw_aa}
 \begin{algorithmic}
-   \State {\bfseries Input:} arm set $\cX\subset\R^d$, transductive set $\cY\subset\R^d$, maximum iterations $n$
-   \State  {\bfseries Initialize:} $w \leftarrow{} (1, 1, \ldots, 1)\in\R^A, V \leftarrow{} I_d, t \leftarrow{} 0$
-   \While{$t<n$}
-        \State $\ta\in\argmin_{a\in\cX}\max_{b\in\cY}\langle a,b\rangle_{V^{-1}}^2$%\normm{b}^2_{(V+a_i a_i^\top)^{-1}}$
-        \State $V \leftarrow{} V + \ta \ta^\top$
-        \State $w \leftarrow{} \frac{t}{t+1}w+\frac{1}{t+1}e_{\ta}$
-        \State $t \leftarrow{} t+1$
+   \State {\bfseries Input:} arm set $\cX\subset\R^d$, transductive set $\cY\subset\R^d$, maximum iterations $N$
+   \State  {\bfseries Initialize:} $\bomega \leftarrow{} (1, 1, \ldots, 1)\in\R^A, \Lambda \leftarrow{} I_d, t \leftarrow{} 0$
+   \While{$n<N$}
+        \State $\tbx\in\argmin_{\bx\in\cX}\max_{\by\in\cY}\langle \bx,\by\rangle_{\Lambda^{-1}}^2$%\normm{b}^2_{(V+a_i a_i^\top)^{-1}}$
+        \State $\Lambda \leftarrow{} \Lambda + \tbx \tbx\transpose$
+        \State $\bomega \leftarrow{} \frac{n}{n+1}\bomega+\frac{1}{n+1}\be_{\tbx}$
+        \State $n \leftarrow{} n+1$
    \EndWhile
-   \State {\bfseries Return} $w$
+   \State {\bfseries Return} $\bomega$
 \end{algorithmic}
 \end{algorithm}
 
@@ -281,22 +278,22 @@ We propose a variant of the previous heuristic that takes into account a count f
 \caption{Saddle Frank-Wolfe heuristic for computing generic $\cX\cY$-design}
 \label{alg:fw_ab}
 \begin{algorithmic}
-   \State {\bfseries Input:} arm set $\cX\subset\R^d$, transductive set $\cY\subset\R^d$, maximum iterations $n$
-   \State  {\bfseries Initialize:} $w \leftarrow{} (1, 1, \ldots, 1)\in\R^A, \tV \leftarrow{} I_d, V \leftarrow{} I_d, t \leftarrow{} 0$
-   \While{$t<n$}
-        \State $\ta\in\argmax_{a\in\cX}  \norm{a}_{V^{-1} \tV V^{-1} }^2$
-        \State $\tb\in\argmax_{b\in\cY}\normm{b}^2_{V^{-1}}$
-        \State $V \leftarrow{} V + \ta\ta^\top$
-		\State $\tV \leftarrow{} \tV + \tb\tb^\top$
-        \State $w \leftarrow{} \frac{t}{t+1}w+\frac{1}{t+1}e_{\ta}$
-        \State $t \leftarrow{} t+1$
+   \State {\bfseries Input:} arm set $\cX\subset\R^d$, transductive set $\cY\subset\R^d$, maximum iterations $N$
+   \State  {\bfseries Initialize:} $\bomega \leftarrow{} (1, 1, \ldots, 1)\in\R^d, \tLambda \leftarrow{} I_d, \Lambda \leftarrow{} I_d, n \leftarrow{} 0$
+   \While{$n<N$}
+        \State $\tbx\in\argmax_{\bx\in\cX} \norm{\bx}_{\Lambda^{-1} \tLambda \Lambda^{-1} }^2$
+        \State $\tby\in\argmax_{\by\in\cY} \normm{\by}^2_{\Lambda^{-1}}$
+        \State $\Lambda \leftarrow{} \Lambda + \tbx\tbx\transpose$
+		\State $\tLambda \leftarrow{} \tLambda + \tby\tby\transpose$
+        \State $\bomega \leftarrow{} \frac{n}{n+1}\bomega+\frac{1}{n+1}\be_{\tbx}$
+        \State $n \leftarrow{} n+1$
    \EndWhile
-   \State {\bfseries Return} $w$
+   \State {\bfseries Return} $\bomega$
 \end{algorithmic}
 \end{algorithm}
 
 \paragraph{Entropic mirror descent.}
-An entropic mirror descent alternative is used by~\citet{tao2018alba} to compute $\gopt$. The entropic mirror descent approach requires the knowldge of the Lipschitz constant of $\log\det V_w$. Unfortunately, that Lipschitzness property does not seem to hold. \citet{lu2018convex} propose a solution to overcome the Lipschitz issue, but only for $\gopt$-design. Whether it still works for general $\cX\cY$-design remains an open question.
+An entropic mirror descent alternative is used by~\citet{tao2018alba} to compute $\gopt$. The entropic mirror descent approach requires the knowldge of the Lipschitz constant of $\log\det \bLambda_{\bomega}$. Unfortunately, that Lipschitzness property does not seem to hold. \citet{lu2018convex} propose a solution to overcome the Lipschitz issue, but only for $\gopt$-design. Whether it still works for general $\cX\cY$-design remains an open question.
 
 %\begin{algorithm}[ht]
 %   \caption{Entropic mirror descent heuristic for computing $\gopt$-design}
@@ -304,9 +301,9 @@ An entropic mirror descent alternative is used by~\citet{tao2018alba} to compute
 %\begin{algorithmic}
 %   \State {\bfseries Input:} arm set $\cX\subset\R^d$, transductive set $\cY\subset\R^d$, tolerance constant $\epsilon$, Lipschitz constant $L$
 %   \State  {\bfseries Initialize:} $w \leftarrow{} (1/A, 1/A, \ldots, 1/A), t \leftarrow{} 1$
-%   \While{$|\max_{a\in\cX}a^\top V_w^{-1} a - d| \geq \epsilon$}
+%   \While{$|\max_{a\in\cX}a^\top \bLambda_{\bomega}^{-1} a - d| \geq \epsilon$}
 %        \State $\gamma \leftarrow{} \frac{2\sqrt{A}}{L} \frac{1}{\sqrt{t}}$
-%        \State Compute gradient $\nabla^i \leftarrow{} \Tr(V_w^{-1}a_ia_i^\top)$
+%        \State Compute gradient $\nabla^i \leftarrow{} \Tr(\bLambda_{\bomega}^{-1}a_ia_i^\top)$
 %        \State $w^{a_i} \leftarrow{} \frac{w^{a_i}\exp(\gamma \nabla^i)}{\sum_{i=1}^A w^{a_i}\exp(\gamma \nabla^i)}$
 %        \State $t \leftarrow{} t+1$
 %   \EndWhile
