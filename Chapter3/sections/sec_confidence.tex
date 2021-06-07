@@ -26,28 +26,34 @@ form a $\delta$-correct BAI strategy. Moreover, if all the arms means are distin
 %\rh{OK; it was not needed/stated before indeed}
 We now give the proof of Theorem~\ref{thm:confidence_main}, which is divided into three parts. The \textbf{first step} of the analysis is to prove the $\delta$-correctness of the studied BAI strategies.
 
-\begin{restatable}{theorem}{restatepac}\label{thm:pac_gaussian}
+\begin{theorem}\label{thm:t3c.pac}
+\begin{leftbar}[theorembar]
     Regardless of the sampling rule, the stopping rule~(\ref{eq:stopping}) with the threshold $c_{n,\delta}$ and the Chernoff stopping rule with threshold $d_{n,\delta}$ defined in Theorem~\ref{thm:confidence_main} satisfy $        \PP{\tau_{\delta} < \infty \wedge J_{\tau_{\delta}} \neq I^\star} \leq \delta$.
-\end{restatable}
+\end{leftbar}
+\end{theorem}
 
 To prove that \TTTS and \TCC allow to reach a $\beta$-optimal sample complexity, one needs to quantify how fast the measurement effort for each arm is concentrating to its corresponding optimal weight. For this purpose,  we introduce the random variable
 \[
-    T_{\beta}^\epsilon \eqdef \inf \left\{ N\in\NN: \max_{i\in\cA} \vert T_{n,i}/n-\omega_i^\beta \vert \leq \epsilon, \forall n \geq N \right\}.
+    T_{\beta}^\epsilon \eqdef \inf \left\{ N\in\NN: \max_{i\in\cA} \vert T_{n,i}/n-\omega_i^\beta \vert \leq \epsilon, \forall n \geq N \right\}\,.
 \]
 The \textbf{second step} of our analysis is a sufficient condition for $\beta$-optimality, stated in Lemma~\ref{lemma:confidence}. Its proof is given in Appendix~\ref{app:t3c.confidence}. The same result was proven for the Chernoff stopping rule by \cite{qin2017ttei}.
 
 \begin{restatable}{lemma}{restatefixedconfidence}\label{lemma:confidence}
+\begin{leftbar}[lemmabar]
     Let $\delta,\beta\in (0,1)$. For any sampling rule which satisfies $\EE{T_{\beta}^\epsilon} < \infty$ for all $\epsilon > 0$, we have
     \[
         \limsup_{\delta\rightarrow{0}} \frac{\EE{\tau_{\delta}}}{\log(1/\delta)} \leq T_{\beta}^\star(\bmu)\,,
     \]
     if the sampling rule is coupled with stopping rule~(\ref{eq:stopping}), 
+\end{leftbar}
 \end{restatable}
 
 Finally, it remains to show that \TTTS and \TCC meet the sufficient condition, and therefore the \textbf{last step}, which is the core component and the most technical part our analysis, consists of showing the following.
 
 \begin{theorem}\label{thm:sufficient_condition}
+\begin{leftbar}[theorembar]
     Under \TTTS or \TCC, $\EE{T_{\beta}^\epsilon} < +\infty$.
+\end{leftbar}
 \end{theorem}
 
 %Theorem~\ref{thm:confidence_main} is then straightforward combining the previous three steps. 
@@ -59,23 +65,23 @@ In the rest of this section, we prove Theorem~\ref{thm:pac_gaussian} and sketch 
 Our analysis hinges on properties of the Gaussian posteriors, in particular on the following tails bounds, which follow from Lemma 1 of \cite{qin2017ttei}.
 
 \begin{lemma}\label{lemma:gaussiantails}
+\begin{leftbar}[lemmabar]
 For any $i,j\in\cA$, if $\mu_{n,i}\leq \mu_{n,j}$
-{\small
 \begin{flalign}
     \Pi_n\left[\theta_i\geq \theta_j\right] &\leq \frac{1}{2} \expp{-\frac{\left( \mu_{n,j}-\mu_{n,i} \right)^2}{2\sigma_{n,i,j}^2}},\label{gaussian_upper}\\
     \Pi_n\left[\theta_i\geq\theta_j\right] &\geq \frac{1}{\sqrt{2\pi}} \exp \left\{-\frac{\left(\mu_{n,j}-\mu_{n,i} +  \sigma_{n,i,j}\right)^2}{2\sigma_{n,i,j}^2}\right\}, \label{gaussian_lower}
 \end{flalign}
-}%
  %\begin{eqnarray}
  %     \Pi_n\left[\theta_i\geq \theta_j\right]\!\!\!\! &\leq & \!\!\!\!\frac{1}{2} \expp{\!-\frac{\left( \mu_{n,j}\!-\mu_{n,i} \right)^2}{2\sigma_{n,i,j}^2}\!},\label{gaussian_upper}\\
  %     \Pi_n\left[\theta_i\geq\theta_j\right]\!\!\!\! &\geq& \!\!\!\!\frac{1}{\sqrt{2\pi}}\! \exp\! \left\{\!-\frac{\left(\mu_{n,j}\!-\mu_{n,i}\! + \! \sigma_{n,i,j}\right)^2}{2\sigma_{n,i,j}^2}\!\!\right\}, \label{gaussian_lower} \hspace{0.2cm}
  %\end{eqnarray}
 where $\sigma_{n,i,j}^2 \eqdef \sigma^2/T_{n,i} + \sigma^2/T_{n,j}$.
+\end{leftbar}
 \end{lemma}
 
 This lemma is crucial to control $a_{n,i}$ and $\psi_{n,i}$, the optimal action and selection probabilities. 
 
-\subsection{Proof of Theorem~\ref{thm:pac_gaussian}} \label{subsec:proofPAC}
+\subsection{Proof of Theorem~\ref{thm:t3c.pac}}\label{sec:t3c.confidence.pac}
 
 We upper bound the desired probability as follows
 \begin{flalign*}
@@ -128,15 +134,18 @@ We present a unified proof sketch of Theorem~\ref{thm:sufficient_condition} for 
 
 We first state two important concentration results, that hold under any sampling rule. 
 
-\begin{restatable}{lemma}{restatewone}[Lemma 5 of~\citealt{qin2017ttei}]\label{lemma:means}
+\begin{restatable}{lemma}{restatewone}
+\begin{leftbar}[lemmabar][Lemma 5 of~\citealt{qin2017ttei}]\label{lemma:means}
     There exists a random variable $W_1$, such that for all $i\in\cA$,
     \[
-        \forall n\in\NN, \quad |\mu_{n,i} - \mu_{i}| \leq \sigma W_1 \sqrt{\frac{\log(e+T_{n,i})}{1+T_{n,i}}} \text{ a.s.},
+        \forall n\in\NN, \quad |\mu_{n,i} - \mu_{i}| \leq \sigma W_1 \sqrt{\frac{\log(e+T_{n,i})}{1+T_{n,i}}} \text{ a.s.}\,,
     \]
     and $\EE{e^{\lambda W_1}} < \infty$ for all $\lambda > 0$.
+\end{leftbar}
 \end{restatable}
 
 \begin{restatable}{lemma}{restatewtwo}\label{lemma:link}
+\begin{leftbar}[lemmabar]
 %\begin{enumerate}
 %    \item For all $\delta \in (0,1]$,
 %        \begin{align*}
@@ -145,10 +154,11 @@ We first state two important concentration results, that hold under any sampling
 %        \end{align*}
 There exists a random variable $W_2$, such that for all $i\in\cA$,
     \[
-        \forall n\in\NN, |T_{n,i}-\Psi_{n,i}| \leq W_2\sqrt{(n+1)\log(e^2+n)} \text{ a.s.},
+        \forall n\in\NN, |T_{n,i}-\Psi_{n,i}| \leq W_2\sqrt{(n+1)\log(e^2+n)} \text{ a.s.}\,,
     \]
 and $\EE{e^{\lambda W_2}} < \infty$ for any $\lambda > 0$.
 %\end{enumerate}
+\end{leftbar}
 \end{restatable}
 
 Lemma~\ref{lemma:means} controls the concentration of the posterior means towards the true means and Lemma~\ref{lemma:link} establishes that $T_{n,i}$ and $\Psi_{n,i}$ are close. Both results rely on uniform deviation inequalities for martingales.
@@ -160,7 +170,9 @@ Our analysis uses the same principle as that of \TTEI: We establish that $T_\bet
 The first step to exhibit such an upper bound $N$ is to establish that every arm is pulled sufficiently often. 
 
 \begin{restatable}{lemma}{restatesuffexploration}\label{lemma:sufficient_exploration}
-Under \TTTS or \TCC, there exists $N_1 = \text{Poly}(W_1,W_2)$ s.t. $\forall n \geq N_1$, for all $i$, $\ T_{n,i} \geq \sqrt{{n}/{K}}$, almost surely.
+\begin{leftbar}[lemmabar]
+    Under \TTTS or \TCC, there exists $N_1 = \text{Poly}(W_1,W_2)$ s.t. $\forall n \geq N_1$, for all $i$, $\ T_{n,i} \geq \sqrt{{n}/{K}}$, almost surely.
+\end{leftbar}
 \end{restatable}
 
 Due to the randomized nature of \TTTS and \TCC, the proof of Lemma~\ref{lemma:sufficient_exploration} is significantly more involved than for a deterministic rule like \TTEI. Intuitively, the posterior of each arm would be well concentrated once the arm is sufficiently pulled. If the optimal arm is under-sampled, then it would be chosen as the first candidate with large probability. If a sub-optimal arm is under-sampled, then its posterior distribution would possess a relatively wide tail that overlaps with or cover the somehow narrow tails of other overly-sampled arms. The probability of that sub-optimal arm being chosen as the challenger would be large enough then.
@@ -170,10 +182,12 @@ Due to the randomized nature of \TTTS and \TCC, the proof of Lemma~\ref{lemma:su
 Combining Lemma~\ref{lemma:sufficient_exploration} with Lemma~\ref{lemma:means} straightforwardly leads to the following result.
 
 \begin{restatable}{lemma}{restatemeans}\label{lemma:tracking_means}
+\begin{leftbar}[lemmabar]
     Under \TTTS or \TCC, fix a constant $\epsilon > 0$, there exists $N_2 = \text{Poly}(1/\epsilon,W_1,W_2)$ s.t. $\forall n \geq N_2$,
     \[
-        \forall i \in \cA, \quad |\mu_{n,i}-\mu_i| \leq \epsilon.
+        \forall i \in \cA, \quad |\mu_{n,i}-\mu_i| \leq \epsilon\,.
     \]
+\end{leftbar}
 \end{restatable}
 
 We can then deduce a very nice property about the optimal action probability for sub-optimal arms from the previous two lemmas. Indeed, we can show that
@@ -185,24 +199,28 @@ for $n$ larger than some $\text{Poly}(W_1,W_2)$. In the previous inequality, $\D
 Plugging this in the expression of $\psi_{n,i}$, one can easily quantify how fast $\psi_{n,I^\star}$ converges to $\beta$, which eventually yields the following result. 
 
 \begin{restatable}{lemma}{restatetrackingbest}\label{lemma:tracking_best}
+\begin{leftbar}[lemmabar]
     Under \TTTS or \TCC, fix $\epsilon > 0$, then there exists $N_3 = \text{Poly}(1/\epsilon,W_1,W_2)$ s.t. $\forall n \geq N_3$,
     \[
-        \left|\frac{T_{n,I^\star}}{n} - \beta\right| \leq \epsilon. 
+        \left|\frac{T_{n,I^\star}}{n} - \beta\right| \leq \epsilon\,. 
     \]
+\end{leftbar}
 \end{restatable}
 
 The last, more involved, step is to establish that the fraction of measurement allocation to every sub-optimal arm $i$ is indeed similarly close to its optimal proportion $\omega_i^\beta$.
 
 \begin{restatable}{lemma}{restatetrackingother}\label{lemma:tracking_other}
+\begin{leftbar}[lemmabar]
     Under \TTTS or \TCC, fix a constant $\epsilon > 0$, there exists $N_4 = \text{Poly}(1/\epsilon,W_1,W_2)$ s.t. $\forall n \geq N_4$,
     \[
-        \forall i\neq I^\star, \quad \left|\frac{T_{n,i}}{n} - \omega_i^\beta\right| \leq \epsilon. 
+        \forall i\neq I^\star, \quad \left|\frac{T_{n,i}}{n} - \omega_i^\beta\right| \leq \epsilon\,. 
     \]
+\end{leftbar}
 \end{restatable}
 
 The major step in the proof of Lemma~\ref{lemma:tracking_other} for each sampling rule, is to establish that if some arm is over-sampled, then its probability to be selected is exponentially small. Formally, we show that for $n$ larger than some $\text{Poly}(1/\epsilon,W_1,W_2)$,
 \[
-    \frac{\Psi_{n,i}}{n} \geq \omega_{i}^\beta + \xi \ \ \ \Rightarrow \ \ \ \psi_{n,i} \leq \expp{- f(n,\xi)},
+    \frac{\Psi_{n,i}}{n} \geq \omega_{i}^\beta + \xi \ \ \ \Rightarrow \ \ \ \psi_{n,i} \leq \expp{- f(n,\xi)}\,,
 \]
 for some function $f(n,\xi)$ to be specified for each sampling rule, satisfying $f(n)\geq C_\xi\sqrt{n}$ (a.s.). This result leads to the concentration of $\Psi_{n,i}/n$, thus can be easily converted to the concentration of $T_{n,i}/n$ by Lemma~\ref{lemma:link}.
 

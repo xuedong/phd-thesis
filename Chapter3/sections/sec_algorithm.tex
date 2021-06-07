@@ -34,7 +34,7 @@ For the sake of simplicity, we consider improper Gaussian priors with $\mu_{1,i}
 \]
 Observe that in that case the posterior mean $\mu_{n,i}$ coincides with the empirical mean.
 
-\paragraph{Beta-Bernoulli model.} For Bernoulli bandits with a uniform ($\cB eta(1,1)$) prior on each mean, the posterior distribution of $\mu_i$ at round $n$ is a Beta distribution with shape parameters $\alpha_{n,i} = \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}} +1$ and $\beta_{n,i} = T_{n,i} - \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}} + 1$. 
+\paragraph{Beta-Bernoulli model.} For Bernoulli bandits with a uniform ($\cB eta(1,1)$) prior on each mean, the posterior distribution of $\mu_i$ at round $n$ is a Beta distribution with shape parameters $\alpha_{n,i} = \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} r_{I_\ell,\ell} +1$ and $\beta_{n,i} = T_{n,i} - \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} r_{I_\ell,\ell} + 1$. 
 %We can calculate the posterior mean of arm $i$ at time $n$ by
 %\begin{align*}
 %\mu_{n, i} = \frac{\alpha_{n,i}}{\alpha_{n,i} + \beta_{n, i}} = \frac{1 + \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}}}{2 + T_{n,i}}.
@@ -74,12 +74,12 @@ where
 \]
 for any $i,j$. One may notice that we actually recover the generalized likelihood ratio statistic stated in Section~\ref{sec:mab.bai.stopping}.
 
-In the Gaussian case, $d(\mu;\mu') = (\mu-\mu')^2/(2\sigma^2)$ while in the Bernoulli case $d(\mu;\mu') = \mu \ln (\mu/\mu') + (1-\mu)\ln (1-\mu)/(1-\mu')$.
+Recall that we have closed-form expressions for the \texttt{KL}-divergence in some cases. In particular, in the Gaussian case, $d(\mu;\mu') = (\mu-\mu')^2/(2\sigma^2)$ while in the Bernoulli case $d(\mu;\mu') = \mu \ln (\mu/\mu') + (1-\mu)\ln (1-\mu)/(1-\mu')$.
 %\begin{equation}\left\{\begin{array}{ccl}
 %W_n(i,j)\!\!\! &=& \!\!0 \ \text{ if } \ \mu_{n,j} \geq \mu_{n,i},\\
 %W_n(i,j)\!\!\! &=& \!\!T_{n,i} d\left(\mu_{n,i},\mu_{n,i,j}\right) + T_{n,j} d\left(\mu_{n,j},\mu_{n,i,j}\right) \text{ else.} 
 %\end{array}\right.\label{def:Transportation}\end{equation}
-In particular, for Gaussian bandits 
+For Gaussian bandits, we can further obtain a nice closed-form expression for the transportation cost, 
 \[
     W_n(i,j) = \dfrac{(\mu_{n,i}-\mu_{n,j})^2}{2\sigma^2(1/T_{n,i}+1/T_{n,j})}\1\{\mu_{n,j}<\mu_{n,i}\}\,.
 \]
@@ -208,7 +208,7 @@ Using the transportation cost $W_n(i,j)$ defined in \eqref{def:Transportation}, 
 \end{equation}
 This stopping rule coupled with the recommendation rule $J_n = \argmax_{i} \mu_{n,i}$. 
 
-As explained in that paper, $W_{n}(i,j)$ can be interpreted as a (log) Generalized Likelihood Ratio statistic for rejecting the hypothesis $\cH_0 : (\mu_i < \mu_j)$. Through our Bayesian lens, we rather have in mind the approximation $\Pi_n(\theta_j > \theta_i) \simeq \expp{-W_n(i,j)}$, valid when $\mu_{n,i}> \mu_{n,j}$, which permits to analyze the two stopping rules using similar tools, as will be seen in the proof of Theorem~\ref{thm:pac_gaussian}. 
+As explained in that paper, $W_{n}(i,j)$ can be interpreted as a (log) Generalized Likelihood Ratio statistic for rejecting the hypothesis $\cH_0 : (\mu_i < \mu_j)$. Through our Bayesian lens, we rather have in mind the approximation $\Pi_n(\theta_j > \theta_i) \simeq \expp{-W_n(i,j)}$, valid when $\mu_{n,i}> \mu_{n,j}$, which permits to analyze the two stopping rules using similar tools, as will be seen in the proof of Theorem~\ref{thm:t3c.pac}. 
 
 As shown later in Section~\ref{sec:t3c.confidence}, $\tau_\delta$ and $\tau_\delta^{\text{Ch.}}$ prove to be fairly similar for some corresponding choices of the thresholds $c_{n,\delta}$ and $d_{n,\delta}$. This endorses the use of the Chernoff stopping rule in practice, which does not require the (heavy) computation of optimal action probabilities. Still, our sample complexity analysis applies to the two stopping rules, and we believe that a frequentist sample complexity analysis of a fully Bayesian BAI strategy is a nice theoretical contribution.
 
@@ -234,3 +234,5 @@ while for \TCC
 \[
     \psi_{n,i} = \beta a_{n,i} + (1-\beta) \sum_{j\neq i} a_{n,j}\frac{\1\{W_n(j,i)=\min_{k\neq j} W_n(j,k)\}}{\#\left|\argmin_{k\neq j } W_n(j,k)\right|}.
 \]
+
+Besides, we let $\Sigma_K = \{\bomega : \sum_{k=1}^K \omega_k = 1\}$ be the probability simplex of dimension $K$.

@@ -9,15 +9,19 @@ Recall that $a_{n, I^\star}$ denotes the posterior mass assigned to the event th
 In the first case, the parameter space is unbounded, in the latter model, the derivative of the log-normalizer (which is $e^{\eta} / (1 + e^\eta)$) is unbounded. Here we provide two theorems, proving that under \TTTS, the optimal, exponential posterior convergence rates are obtained for the Gaussian model with uninformative (improper) Gaussian priors (proof given in Appendix~\ref{app:posterior_gaussian}), and the Bernoulli model with $\cB eta(1,1)$ priors (proof given in Appendix~\ref{app:posterior_beta}).
 
 \begin{restatable}{theorem}{restateposteriorgaussian}\label{thm:posterior_gaussian}
+\begin{leftbar}[theorembar]
     Under \TTTS, for Gaussian bandits with improper Gaussian priors, it holds almost surely that 
     \[
         \lim_{n\rightarrow{\infty}} -\frac{1}{n}\log(1-a_{n,I^\star}) = T_{\beta}^\star(\bmu)^{-1}\,.
     \]
+\end{leftbar}
 \end{restatable}
 
 \begin{restatable}{theorem}{restateposteriorbernoulli}\label{thm:posterior_bernoulli}
+\begin{leftbar}[theorembar]
 	Under \TTTS, for Bernoulli bandits and uniform priors, it holds almost surely that
 	\[
 	\lim_{n\rightarrow{\infty}} -\frac{1}{n}\log(1-a_{n,I^\star}) = T_{\beta}^\star(\bmu)^{-1}\,.
 	\]
+\end{leftbar}
 \end{restatable}

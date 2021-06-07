@@ -15,14 +15,17 @@ Among $\delta$-correct strategies, we seek the one with the smallest sample comp
 % For that purpose, we need to introduce two different notions of optimality, that we now formally define and contrast: (1) Bayesian $\beta$-optimality and (2) $\beta$-optimality in the fixed-confidence setting. Before that, we first present some necessary preliminary notions.
 
 
-\begin{definition} Let $\Sigma_K = \{\bomega : \sum_{k=1}^K \omega_k = 1\}$ and define for all $i\neq I^\star$
+\begin{definition}
+\begin{leftbar}[defnbar]
+Define for all $i\neq I^\star$
 \[
-    C_i(\omega,\omega') \eqdef \min_{x\in \cI} \ \omega d(\mu_{I^\star};x) + \omega' d(\mu_i;x),
+    C_i(\omega,\omega') \eqdef \min_{x\in \cI} \ \omega d(\mu_{I^\star};x) + \omega' d(\mu_i;x)\,,
 \]
 where $d(\mu,\mu')$ is the KL-divergence defined above and $\cI = \R$ in the Gaussian case and $\cI = [0,1]$ in the Bernoulli case. We define
 \begin{eqnarray}
-    T^\star(\bmu)^{-1} &\eqdef& \max_{\bomega \in \Sigma_K}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i),\nonumber\\
-    T_{\beta}^\star(\bmu)^{-1} &\eqdef& \max_{\substack{\bomega \in \Sigma_K\\\omega_{I^\star}=\beta}}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i).\label{def:GammaBeta}\end{eqnarray}
+    T^\star(\bmu)^{-1} &\eqdef& \max_{\bomega \in \Sigma_K}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i)\,,\nonumber\\
+    T_{\beta}^\star(\bmu)^{-1} &\eqdef& \max_{\substack{\bomega \in \Sigma_K\\\omega_{I^\star}=\beta}}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i)\,.\label{def:GammaBeta}\end{eqnarray}
+\end{leftbar}
 \end{definition}
 
 The quantity $C_i(\omega_{I^\star},\omega_i)$ can be interpreted as a ``transportation cost''\footnote{for which $W_n(I^\star,i)$ is an empirical counterpart} from the original bandit instance $\bm\mu$ to an alternative instance in which the mean of arm $i$ is larger than that of $I^\star$, when the proportion of samples allocated to each arm is given by the vector $\bomega \in \Sigma_K$. As shown by~\cite{russo2016ttts}, the $\bomega$ that maximizes \eqref{def:GammaBeta} is unique, which allows us to define the $\beta$-\emph{optimal allocation} $\bomega^\beta$ in the following proposition.
