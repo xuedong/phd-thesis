@@ -1,9 +1,13 @@
 % !TEX root = ../Chapter5.tex
-\section{\HCT{} under Local Smoothness w.r.t. \texorpdfstring{$\cP$}{}}\label{sec:gpo.hct}
+\section{\gls{hct}{} under Local Smoothness w.r.t. \texorpdfstring{$\cP$}{}}\label{sec:gpo.hct}
 
-Analyzing \HOO{} under Assumption~\ref{ass1} is not trivial. A key lemma in the analysis of \HOO  (Lemma~3 by \citealt{bubeck2011pure}) that controls the variance of near-optimal cells \emph{is not true} under local smoothness assumptions as Assumption~\ref{ass1}. Indeed, \HOO could induce a very deep covering tree,  while producing too many nodes that are neither near-optimal nor sub-optimal. The concept of near-optimal and sub-optimal nodes is then characterized by the \emph{sub-optimality gap} of each node which measures the distance between the local maximum of the node and the global maximum. Intuitively, nodes that are neither near-optimal nor sub-optimal represent the nodes of whom the sub-optimality gap is neither too large nor too small. To control the regret due to these nodes,~\cite{bubeck2011pure} use global smoothness (weakly Lipschitz) assumption. Assumption~\ref{ass1} is weaker, only local, and does not offer such comfort. If we want to control the regret due to these nodes without Lemma~3 of \citet{bubeck2011pure}, one possible way is to control the depth of the covering tree to ensure that we do not have too many of them. In particular, another algorithm known as \gls{hct} proposed by~\cite{azar2014online} implies a controlled depth of the tree which allows it to be analyzed under Assumption~\ref{ass1} as opposed to \HOO{}. We now give a brief description of \HCT{} and present a new analysis of it.
+Not let us turn our attention to finding a valid base algorithm for \gls{gpo}. The first idea is to refer to the original base algorithm of \gls{poo}, namely \gls{hoo}. 
 
-\subsection{Description of \HCT{}}
+Analyzing \gls{hoo}{} under Assumption~\ref{ass:gpo.local}, however, is not trivial. A key lemma in the analysis of \gls{hoo} (Lemma~3 by~\citealt{bubeck2011pure}) that controls the variance of near-optimal cells \emph{is not true} under local smoothness assumptions as Assumption~\ref{ass:gpo.local}. Indeed, \gls{hoo} could induce a very deep covering tree, while producing too many nodes that are neither near-optimal nor sub-optimal. The concept of near-optimal and sub-optimal nodes is then characterized by the \emph{sub-optimality gap} of each node which measures the distance between the local maximum of the node and the global maximum. Intuitively, nodes that are neither near-optimal nor sub-optimal represent the nodes of whom the sub-optimality gap is neither too large nor too small. 
+
+To control the regret due to these nodes,~\cite{bubeck2011pure} use global smoothness (weakly Lipschitz) assumption. Assumption~\ref{ass:gpo.local} is weaker, only local, and does not offer such comfort. If we want to control the regret due to these nodes without Lemma~3 of \citet{bubeck2011pure}, one possible way is to control the depth of the covering tree to ensure that we do not have too many of them. In particular, another algorithm known as \gls{hct} proposed by~\cite{azar2014online} implies a controlled depth of the tree which allows it to be analyzed under Assumption~\ref{ass:gpo.local} as opposed to \gls{hoo}{}. We now give a brief description of \gls{hct}{} and present a new analysis of it.
+
+\subsection{Description of \gls{hct}{}}
 \begin{algorithm}[ht]
 \centering
 \caption{Algorithm of \HCT{}}
@@ -11,22 +15,22 @@ Analyzing \HOO{} under Assumption~\ref{ass1} is not trivial. A key lemma in the 
 \begin{algorithmic}[1]
     \State {\bfseries Input:} $K$, $\nu>0$, $\rho\in(0,1)$, $c>0$, tree partitioning $\{\mathcal{P}_{h,i}\}$, confidence $\delta$
     \State {\bfseries Initialization:} $\mathcal{T}_1 \gets \{(0,1),(1,1),\ldots,(1,K)\}$, $U_{1,1}(1) \gets \cdots \gets U_{1,K}(1) \gets +\infty$
-    \For{$t \gets 1 \ldots n$}
-        \If{$t=t^+$}
-            \For{$(h,i)\in\mathcal{T}_t$}
-                \State $U_{h,i}(t) \gets \hat{\mu}_{h,i}(t) + \nu\rho^{h} + c\sqrt{\frac{\operatorname{log}\left(1/\tilde{\delta}(t^+)\right)}{T_{h,i}(t)}}$
+    \For{$n \gets 1 \ldots N$}
+        \If{$n=n^+$}
+            \For{$(h,i)\in\mathcal{T}_n$}
+                \State $U_{h,i}(n) \gets \hat{\mu}_{h,i}(n) + \nu\rho^{h} + c\sqrt{\frac{\operatorname{log}\left(1/\tilde{\delta}(n^+)\right)}{T_{h,i}(n)}}$
             \EndFor
-            \State \texttt{UpdateBackward}$(\cT_t, t)$
+            \State \texttt{UpdateBackward}$(\cT_n, n)$
         \EndIf
-        \State $(h_t,i_t),P_t \gets$ \texttt{OptTraverse}($\cT_t, t$)
-        \State \text{Evaluate} $x_{h_t,i_t}$ and obtain $r_t$
-        \State $T_{h_t,i_t}(t) \gets T_{h_t,i_t}(t)+1$
-        \State \text{Update} $\hat{\mu}_{h_t,i_t}(t)$
-        \State $U_{h_t,i_t}(t) \gets \hat{\mu}_{h_t,i_t}(t) + \nu\rho^{h_t} + c\sqrt{\frac{\operatorname{log}\left(1/\tilde{\delta}(t^+)\right)}{T_{h_t,i_t}(t)}}$
-        \State \texttt{UpdateBackward}($P_t, t$)
-        \State $\tau_{h_t}(t) \gets \ceil{\frac{c^2\operatorname{log}(1/\tilde{\delta}(t^+))}{\nu^2}\rho^{-2h_t}}$
-        \If{$T_{h_t,i_t}(t)\geq\tau_{h_t}(t)$ and $(h_t,i_t)$ is a leaf}
-            \State \text{Expand} the node $(h_t,i_t)$
+        \State $(h_n,i_n),P_n \gets$ \texttt{OptTraverse}($\cT_n, n$)
+        \State \text{Evaluate} $x_{h_n,i_n}$ and obtain $r_n$
+        \State $T_{h_n,i_n}(n) \gets T_{h_n,i_n}(n)+1$
+        \State \text{Update} $\hat{\mu}_{h_n,i_n}(n)$
+        \State $U_{h_n,i_n}(n) \gets \hat{\mu}_{h_n,i_n}(n) + \nu\rho^{h_n} + c\sqrt{\frac{\operatorname{log}\left(1/\tilde{\delta}(n^+)\right)}{T_{h_n,i_n}(n)}}$
+        \State \texttt{UpdateBackward}($P_n, n$)
+        \State $\tau_{h_n}(n) \gets \ceil{\frac{c^2\operatorname{log}(1/\tilde{\delta}(n^+))}{\nu^2}\rho^{-2h_n}}$
+        \If{$T_{h_n,i_n}(n)\geq\tau_{h_n}(n)$ and $(h_n,i_n)$ is a leaf}
+            \State \text{Expand} the node $(h_n,i_n)$
         \EndIf
     \EndFor
 \end{algorithmic}
@@ -34,13 +38,13 @@ Analyzing \HOO{} under Assumption~\ref{ass1} is not trivial. A key lemma in the 
 
 \begin{algorithm}[ht]
 \centering
-\caption{Subroutine \texttt{OptTraverse} of \HCT{}}
+\caption{Snippet \texttt{OptTraverse} of \HCT{}}
 \label{alg:hct_opt}
 \begin{algorithmic}[1]
-    \State {\bfseries Input:} a tree $\cT$, round $t$
-    \State {\bfseries Initialization:} $(h,i)\leftarrow (0,1)$; $P\leftarrow \{(0,1)\}$; $T_{0,1}(t)=\tau_0(t)=1$
-    \While{$(h,i)$ is not a leaf of $\cT$ and $T_{h,i}(t)\geq\tau_h(t)$}
-        \State $j \gets \underset{j\in\{0,\ldots,K-1\}}{\argmax} \left\{B_{h+1,Ki-j}(t)\right\}$
+    \State {\bfseries Input:} a tree $\cT$, round $n$
+    \State {\bfseries Initialization:} $(h,i)\leftarrow (0,1)$; $P\leftarrow \{(0,1)\}$; $T_{0,1}(n)=\tau_0(n)=1$
+    \While{$(h,i)$ is not a leaf of $\cT$ and $T_{h,i}(n)\geq\tau_h(n)$}
+        \State $j \gets \underset{j\in\{0,\ldots,K-1\}}{\argmax} \left\{B_{h+1,Ki-j}(n)\right\}$
         \State $(h,i) \gets (h+1,Ki-j)$
         \State $P\leftarrow P\cup\{(h,i)\}$
     \EndWhile
@@ -50,124 +54,186 @@ Analyzing \HOO{} under Assumption~\ref{ass1} is not trivial. A key lemma in the 
 
 \begin{algorithm}[ht]
 \centering
-\caption{Subroutine \texttt{UpdateBackward} of \HCT{}}
+\caption{Snippet \texttt{UpdateBackward} of \HCT{}}
 \label{alg:hct_update}
 \begin{algorithmic}[1]
-    \State {\bfseries Input:} a tree $\cT$, round $t$ \\ \hfil \emph{note that $P_t$ can also be considered as a tree, thus input of this function}
+    \State {\bfseries Input:} a tree $\cT$, round $n$ \\ \hfil \emph{note that $P_n$ can also be considered as a tree, thus input of this function}
     \For{$(h,i)\in\cT$ backward from each leaf of $\cT$}
         \If{$(h,i)$ is a leaf of $\cT$}
-            \State $B_{h,i}(t) \gets U_{h,i}(t)$
+            \State $B_{h,i}(n) \gets U_{h,i}(n)$
         \Else 
-            \State $B_{h,i}(t) \gets \min\left\{U_{h,i}(t),\underset{j\in\{0,\ldots,K-1\}}{\max} \left\{B_{h+1,Ki-j}(t)\right\} \right\}$
+            \State $B_{h,i}(n) \gets \min\left\{U_{h,i}(n),\underset{j\in\{0,\ldots,K-1\}}{\max} \left\{B_{h+1,Ki-j}(n)\right\} \right\}$
         \EndIf
     \EndFor
 \end{algorithmic}
 \end{algorithm}
 
-The pseudocode of \HCT (Algorithm~\ref{alg:hct}) and two detailed snippets (Algorithm~\ref{alg:hct_opt} and Algorithm~\ref{alg:hct_update}) describe the process of traversing the covering tree.
-The algorithm stores a finite subtree $\cT_t$ at each round~$t$ which is initialized by $\cT_0 = \{(0,1)\}$. Each cell is associated with a representative point $x_{h,i}$ and the algorithm keeps track of some statistics regarding this point. One of these statistics is the empirical mean reward $\hat{\mu}_{h,i}(t)$ which is the average on the first $T_{h,i}(t)$ rewards received when querying $x_{h,i}$.
+The pseudo-code of \gls{hct} (Algorithm~\ref{alg:hct}) and two detailed snippets (Algorithm~\ref{alg:hct_opt} and Algorithm~\ref{alg:hct_update}) describe the process of traversing the covering tree.
+The algorithm stores a finite subtree $\cT_n$ at each round~$t$ which is initialized by $\cT_0 = \{(0,1)\}$. Each cell is associated with a representative point $x_{h,i}$ and the algorithm keeps track of some statistics regarding this point. One of these statistics is the empirical mean reward $\hat{\mu}_{h,i}(n)$ which is the average on the first $T_{h,i}(n)$ rewards received when querying $x_{h,i}$.
 %\[
-%	\hat{\mu}_{h,i}(t) \triangleq \frac{1}{T_{h,i}(t)}\sum_{s=1}^{T_{h,i}(t)}r_{(h,i),s},
+%	\hat{\mu}_{h,i}(n) \triangleq \frac{1}{T_{h,i}(n)}\sum_{s=1}^{T_{h,i}(n)}r_{(h,i),s},
 %\]
-The \HCT algorithm also keeps track of an upper confidence bound $U$-value for the cell $(h,i)$,
+The \gls{hct} algorithm also keeps track of an upper confidence bound $U$-value for the cell $(h,i)$,
 \[
-	U_{h,i}(t) \triangleq \hat{\mu}_{h,i}(t) + \nu\rho^{h} + c\sqrt{\frac{\operatorname{log}(1/\tilde{\delta}(t^+))}{T_{h,i}(t)}}\CommaBin
+	U_{h,i}(n) \triangleq \hat{\mu}_{h,i}(n) + \nu\rho^{h} + c\sqrt{\frac{\operatorname{log}(1/\tilde{\delta}(n^+))}{T_{h,i}(n)}}\CommaBin
 \]
-where $t^+\triangleq2^{\lceil \operatorname{log}_2(t) \rceil}$, $\tilde{\delta}(t)\triangleq\min\{c_1\delta/t,1/2\}$, and its corresponding $B$-value,
+where $n^+\triangleq2^{\lceil \operatorname{log}_2(n) \rceil}$, $\tilde{\delta}(n)\triangleq\min\{c_1\delta/t,1/2\}$, and its corresponding $B$-value,
 \begin{equation*}
-	B_{h,i}(t) \triangleq
+	B_{h,i}(n) \triangleq
 	\left\{ \begin{array}{ll}
-				\min\left\{U_{h,i}(t),\underset{j\in\{0,\ldots,K-1\}}{\max} \left\{B_{h+1,Ki-j}(t)\right\} \right\} & \operatorname{if}~(h,i) \text{ is an internal node,}\\
-				U_{h,i}(t) & \operatorname{otherwise,}
+				\min\left\{U_{h,i}(n),\underset{j\in\{0,\ldots,K-1\}}{\max} \left\{B_{h+1,Ki-j}(n)\right\} \right\} & \operatorname{if}~(h,i) \text{ is an internal node,}\\
+				U_{h,i}(n) & \operatorname{otherwise,}
 			\end{array}\right.
 \end{equation*}
-which is designed to be a tighter upper confidence bound than the $U$-value. Here, $c$ and $c_1$ are two constants, and $\nu\rho^h$ represents the \emph{resolution}\footnote{The term \emph{resolution} refers to the maximum variation in the cell. If it is too large, then we need to shrink the volume, thus increase the resolution.} of the region $\cP_{h,i}$. Observe that $U_{h,i}(t)$ and $B_{h,i}(t)$ are not updated at every round, but are constant on time intervals of the form $[2^k,2^{k+1})$.
+which is designed to be a tighter upper confidence bound than the $U$-value. Here, $c$ and $c_1$ are two constants, and $\nu\rho^h$ represents the \emph{resolution}\footnote{The term \emph{resolution} refers to the maximum variation in the cell. If it is too large, then we need to shrink the volume, thus increase the resolution.} of the region $\cP_{h,i}$. Observe that $U_{h,i}(n)$ and $B_{h,i}(n)$ are not updated at every round, but are constant on time intervals of the form $[2^k,2^{k+1})$.
 
-At each round $t$, the algorithm traverses the current covering tree along an \emph{optimistic path}~$P_t$ before choosing a point (\texttt{OptTraverse} function). This optimistic path~$P_t$ is obtained by repeatedly selecting cells that have a larger $B$-value until a leaf or a node that is sampled less than a certain number of times is reached. If a leaf is reached, then this leaf is sampled and expanded (i.e., we split the leaf into $K$ equal-sized regions and initialize their $U$-values to $+\infty$); otherwise, the node that is not sampled enough is re-sampled. All the $B$-values along the optimistic path are then updated backwardly from the current node to the root (\texttt{UpdateBackward} function). More precisely, \HCT{} samples one node a certain number of times $\tau_h(t)$ in order to sufficiently reduce the uncertainty before expanding it. Hence, $\tau_h(t)$ is defined such that the uncertainty over the rewards in $\mathcal{P}_{h,i}$ is roughly equal to the resolution of the node,
+At each round $n$, the algorithm traverses the current covering tree along an \emph{optimistic path}~$P_n$ before choosing a point (\texttt{OptTraverse} function). This optimistic path~$P_n$ is obtained by repeatedly selecting cells that have a larger $B$-value until a leaf or a node that is sampled less than a certain number of times is reached. If a leaf is reached, then this leaf is sampled and expanded (i.e., we split the leaf into $K$ equal-sized regions and initialize their $U$-values to $+\infty$); otherwise, the node that is not sampled enough is re-sampled. All the $B$-values along the optimistic path are then updated backwardly from the current node to the root (\texttt{UpdateBackward} function). More precisely, \gls{hct}{} samples one node a certain number of times $\tau_h(n)$ in order to sufficiently reduce the uncertainty before expanding it. Hence, $\tau_h(n)$ is defined such that the uncertainty over the rewards in $\mathcal{P}_{h,i}$ is roughly equal to the resolution of the node,
 \[
-	\tau_h(t) \triangleq \ceil{\frac{c^2\operatorname{log}(1/\tilde{\delta}(t^+))}{\nu^2}\rho^{-2h}}.
+	\tau_h(n) \triangleq \ceil{\frac{c^2\operatorname{log}(1/\tilde{\delta}(n^+))}{\nu^2}\rho^{-2h}}.
 \]
 
-\subsection{Analysis of \HCT \textbf{under a local \emph{metricless} assumption}}\label{sec:gpo.analysis}
-We now state our main theorem. We prove that \HCT achieves an expected regret bound under Assumption~\ref{ass1} which matches the regret bound given by~\cite{azar2014online} up to constants. Moreover, compared to that result, the near-optimality dimension $d$ featured in Theorem~\ref{thm:hct} is the one of Definition~\ref{defNearOpt} that is defined with respect to the partitioning and not with respect to a metric. For a fixed budget $n$, we introduce the notation $\HCT{}(\nu,\rho)$ to refer to the instantiation of $\HCT{}$ parameterized by $\nu$, $\rho$, $c=2\sqrt{1/(1-\rho)}$ and $\delta = 1/n$.
+\subsection{Analysis of \gls{hct} \textbf{under a local \emph{metricless} assumption}}\label{sec:gpo.analysis}
 
-\begin{restatable}{theorem}{restathm}\label{thm:hct}
-	Assume that function~$f$ satisfies Assumption~\ref{ass1}. Then, setting $\delta \eqdef 1/n$, the cumulative regret of ${\HCT}(\nu,\rho)$ after $n$ function evaluations is upper bounded as 
+We now show that \gls{hct} is indeed a valid candidate underlying algorithm for \gls{gpo}. 
+
+We state our main result in Theorem~\ref{thm:gpo.hct}. We prove that \gls{hct} achieves an expected cumulative regret bound under Assumption~\ref{ass:gpo.local} which matches the regret bound given by~\cite{azar2014online} up to constants.
+
+Moreover, compared to that result, the \gls{near-optimality dimension} $d$ featured in Theorem~\ref{thm:gpo.hct} is the one of Definition~\ref{defNearOpt} that is defined with respect to the partitioning and not with respect to a metric. For a fixed budget $N$, we introduce the notation $\gls{hct}{}(\nu,\rho)$ to refer to the instance of $\gls{hct}{}$ parameterized by $\nu$, $\rho$, $c=2\sqrt{1/(1-\rho)}$ and $\delta = 1/N$.
+
+\begin{restatable}{theorem}{restathmhct}\label{thm:gpo.hct}
+\begin{leftbar}[theorembar]
+	Assume that function~$f$ satisfies Assumption~\ref{ass:gpo.local}. Then, setting $\delta \eqdef 1/N$, the cumulative regret of ${\gls{hct}}(\nu,\rho)$ after $N$ function evaluations is upper bounded as 
 \[
-	\mathbb{E}[R_n^{\HCT{}(\nu,\rho)}] \leq \alpha C (\operatorname{log}n)^{1/(d(\nu,C,\rho)+2)}n^{(d(\nu,C,\rho)+1)/(d(\nu,C,\rho)+2)}\!,
+	\mathbb{E}[R_N^{\gls{hct}{}(\nu,\rho)}] \leq \alpha C (\log N)^{1/(d(\nu,C,\rho)+2)}N^{(d(\nu,C,\rho)+1)/(d(\nu,C,\rho)+2)}\,,
 \]
 where $\alpha$ is a numerical constant and $C$ is the constant associated to $d(\nu,C,\rho)$.
 %\in\cC(\nu,\rho)$.
-\end{restatable}\noindent
-As a consequence, by simply applying  the recommendation strategy that follows the distribution of previous plays, we get the following simple-regret bound.
+\end{leftbar}
+\end{restatable}
+
+As a consequence, according to Remark~\ref{remark:mab.simple}, we get the following simple-regret bound.
 \begin{corollary}\label{col}
-The simple regret  of {\HCT} after $n$ function evaluations under Assumption~\ref{ass1} satisfies
+\begin{leftbar}[corollarybar]
+The simple regret of \gls{hct} after $N$ function evaluations under Assumption~\ref{ass:gpo.local} satisfies
 \[
-	\mathbb{E}[S_n^{\HCT{}(\nu,\rho)}] \leq \alpha C(\operatorname{log}n)^{1/(d(\nu,C,\rho)+2)}n^{-1/(d(\nu,C,\rho)+2)}.
+	\mathbb{E}[S_N^{\gls{hct}{}(\nu,\rho)}] \leq \alpha C(\log N)^{1/(d(\nu,C,\rho)+2)}N^{-1/(d(\nu,C,\rho)+2)}\,.
 \]
+\end{leftbar}
 \end{corollary}
-We now sketch the proof. The full proof follows the analysis of~\cite{azar2014online} and is detailed in Appendix~\ref{app:gpo.hct}.
-As  mentioned above, \HCT has a controlled depth. Indeed, given the threshold $\tau_h(t)$ required at depth $h$, in Section~\ref{proof:lemma_depth}, we prove that the depth of the covering tree is bounded as stated in the following lemma.
+
+\begin{remark}\label{remark:gpo.hct}
+\begin{leftbar}[remarkbar]
+One may notice that to validate \gls{gpo}, we only need to bound the simple regret of \gls{hct}. The reason that we provide a cumulative regret bound is that we can show that \gls{hct} is also a valid base algorithm for \gls{poo}, thus validate \gls{poo} as well. As indeed the problem raised in the analysis of \gls{hoo} under Assumption~\ref{ass:gpo.local} does make the validity of \gls{poo} questionable.
+\end{leftbar}
+\end{remark}
+
+We now sketch the proof. The full proof is detailed in Appendix~\ref{app:gpo.hct}. As  mentioned above, \gls{hct} has a controlled depth. Indeed, given the threshold $\tau_h(n)$ required at depth $h$, in Section~\ref{proof:lemma_depth}, we prove that the depth of the covering tree is bounded as stated in the following lemma:
 \begin{restatable}{lemma}{restalemmadepth}\label{lemma_depth}
-The depth of the covering tree produced by \HCT after $n$ function evaluations satisfies \[H(n) \leq H_{\max}(n) \triangleq \ceil{\frac{1}{2(1-\rho)} \operatorname{log}\left( \frac{n\nu^2}{c^2\rho^2} \right)}\!\cdot\]
+\begin{leftbar}[lemmabar]
+The depth of the covering tree produced by \gls{hct} after $N$ function evaluations satisfies 
+\[
+    H(N) \leq H_{\max}(N) \triangleq \ceil{\frac{1}{2(1-\rho)} \log\left( \frac{N\nu^2}{c^2\rho^2} \right)}\,.
+\]
+\end{leftbar}
 \end{restatable}
 \noindent
 Defining the mean reward $\mu_{h,i} \triangleq f(x_{h,i})$, we introduce a favorable event under which the mean reward of all expanded nodes is within a confidence interval,
 \[
-	\xi_t \triangleq \left\{ \forall (h,i)\in\mathcal{L}_t,  |\hat{\mu}_{h,i}(t) - \mu_{h,i}| \leq c\sqrt{\operatorname{log}(1/\tilde{\delta}(t))/T_{h,i}(t)} \right\}\CommaBin
+	\xi_n \triangleq \left\{ \forall (h,i)\in\mathcal{L}_n,  |\hat{\mu}_{h,i}(n) - \mu_{h,i}| \leq c\sqrt{\operatorname{log}(1/\tilde{\delta}(n))/T_{h,i}(n)} \right\}\CommaBin
 \]
-where $\cL_t$ is the set of all possible nodes in trees of maximum depth $H_{\max}(t)$.
+where $\cL_n$ is the set of all possible nodes in trees of maximum depth $H_{\max}(n)$.
 
-We split the regret into two parts depending on whether $\xi_t$ holds or not.
-In Appendix~\ref{proof:lemma_failing}, we prove that the failing confidence term is with high probability bounded by $\sqrt{n}$. In the case when  $\xi_t$ holds, we bound the regret in Appendix~\ref{proof:thm}
-by treating separately the two parts, $\Delta_{h_t,i_t}$ and $\hat{\Delta}_t$, of the instantaneous regret $\Delta_t$,
+We split the regret into two parts depending on whether $\xi_n$ holds or not.
+In Appendix~\ref{proof:lemma_failing}, we prove that the failing confidence term is with high probability bounded by $\sqrt{n}$. In the case when  $\xi_n$ holds, we bound the regret in Appendix~\ref{proof:thm}
+by treating separately the two parts, $\Delta_{h_n,i_n}$ and $\hat{\Delta}_n$, of the instantaneous regret $\Delta_n$,
 \[
-\Delta_t \eqdef f^\star - r_t = f^\star - f(x_{h_t,i_t}) + f(x_{h_t,i_t}) - r_t = \Delta_{h_t,i_t} + \hat{\Delta}_t.
+\Delta_n \eqdef f^\star - r_n = f^\star - f(x_{h_n,i_n}) + f(x_{h_n,i_n}) - r_n = \Delta_{h_n,i_n} + \hat{\Delta}_n.
 \]
-Next, we bound $ \hat{\Delta}_t$ by Azuma-Hoeffding concentration inequality \citep{azuma1967}.
-Then, we bound $ \Delta_{h_t,i_t}$  with the help of the following lemma, which is the major difference compared to the original \HCT analysis by~\cite{azar2014online}. In particular, the lemma states that
-if Assumption~\ref{ass1} is verified then
+Next, we bound $ \hat{\Delta}_n$ by Azuma-Hoeffding concentration inequality \citep{azuma1967}.
+Then, we bound $ \Delta_{h_n,i_n}$  with the help of the following lemma, which is the major difference compared to the original \gls{hct} analysis by~\cite{azar2014online}. In particular, the lemma states that
+if Assumption~\ref{ass:gpo.local} is verified then
  $f^\star$ is upper-bounded by the $U$-value of any optimal node.
-\begin{lemma}\label{upper}
-	Under Assumption~\ref{ass1} and under event $\xi_t$, we have that for any optimal node $(h^\star,i^\star)$, $U_{h^\star,i^\star}(t)$ is an upper bound on $f^\star$.
+\begin{lemma}\label{lemma:gpo.upper}
+\begin{leftbar}[lemmabar]
+Under Assumption~\ref{ass:gpo.local} and under event $\xi_n$, we have that for any optimal node $(h^\star,i^\star)$, $U_{h^\star,i^\star}(n)$ is an upper bound on $f^\star$.
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
-Since $t^+ \geq t$, we have
+Since $n^+ \geq n$, we have
 \[
-	U_{h^\star,i^\star}(t) \eqdef \hat{\mu}_{h^\star,i^\star}(t) + \nu\rho^{h^\star} + c\sqrt{\frac{\operatorname{log}(1/\tilde{\delta}(t^+))}{T_{h^\star,i^\star}(t)}} \geq \hat{\mu}_{h^\star,i^\star}(t) + \nu\rho^{h^\star} + c\sqrt{\frac{\operatorname{log}(1/\tilde{\delta}(t))}{T_{h^\star,i^\star}(t)}}\cdot
+	U_{h^\star,i^\star}(n) \eqdef \hat{\mu}_{h^\star,i^\star}(n) + \nu\rho^{h^\star} + c\sqrt{\frac{\operatorname{log}(1/\tilde{\delta}(n^+))}{T_{h^\star,i^\star}(n)}} \geq \hat{\mu}_{h^\star,i^\star}(n) + \nu\rho^{h^\star} + c\sqrt{\frac{\operatorname{log}(1/\tilde{\delta}(n))}{T_{h^\star,i^\star}(n)}}\cdot
 \]
-Moreover, as we are under event $\xi_t$, we also have
+Moreover, as we are under event $\xi_n$, we also have
 \[
-	\hat{\mu}_{h^\star,i^\star}(t) + c\sqrt{\frac{\operatorname{log}(1/\tilde{\delta}(t))}{T_{h^\star,i^\star}(t)}} \geq f\left(x_{h^\star,i^\star}\right).
+	\hat{\mu}_{h^\star,i^\star}(n) + c\sqrt{\frac{\operatorname{log}(1/\tilde{\delta}(n))}{T_{h^\star,i^\star}(n)}} \geq f\left(x_{h^\star,i^\star}\right).
 \]
-Therefore, $U_{h^\star,i^\star}(t) \geq f(x_{h^\star,i^\star}) + \nu\rho^{h^\star} \geq f^\star$.
+Therefore, $U_{h^\star,i^\star}(n) \geq f(x_{h^\star,i^\star}) + \nu\rho^{h^\star} \geq f^\star$.
 \end{proof}
-\noindent With the help of Lemma~\ref{upper} (see Step 2 in Appendix~\ref{proof:thm}), we can then upper bound $\Delta_{h_t,i_t}$ as
+\noindent With the help of Lemma~\ref{lemma:gpo.upper} (see Step 2 in Appendix~\ref{proof:thm}), we can then upper bound $\Delta_{h_n,i_n}$ as
 \[
-\Delta_{h_t,i_t} \leq 3c\sqrt{\frac{\operatorname{log}(2/\tilde{\delta}(t))}{T_{h_t,i_t}(t)}}\cdot%\CommaBin
+\Delta_{h_n,i_n} \leq 3c\sqrt{\frac{\operatorname{log}(2/\tilde{\delta}(n))}{T_{h_n,i_n}(n)}}\cdot%\CommaBin
 \]
 To bound the total regret of the all nodes selected, we divide them
 into two categories, depending on whether their depth is smaller or equal than $\bar H$
 (to be optimized later) or not.
 
 For the nodes in depths $h \leq \bar H$, we  use
-Lemma~\ref{upper} again, now to show that \texttt{OptTraverse} only selects nodes
+Lemma~\ref{lemma:gpo.upper} again, now to show that \texttt{OptTraverse} only selects nodes
  %\begin{equation*} %\label{eq14}
-%\Delta_{h_t^p,i_t^p} \leq 3\nu\rho^{h_t^p},
+%\Delta_{h_n^p,i_n^p} \leq 3\nu\rho^{h_n^p},
 %\end{equation*}
-that have a parent which is $(3\nu\rho^{h_t-1})$-optimal.
+that have a parent which is $(3\nu\rho^{h_n-1})$-optimal.
 For the nodes for which  $h > \bar H$, we bound the regret using the
-selection rule of \HCT.
-
+selection rule of \gls{hct}.
 
 The sums of the regrets from the two categories are proportional
 and inversely proportional to an increasing function of $\bar H$.
 By finding the value of $\bar H$ for which the sum of the two
 terms reaches its minimum and adding the regret coming
 from the situations where the favorable event does not hold,
-gives us the following cumulative regret for \HCT: With probability $1-\delta$,
+gives us the following cumulative regret for \gls{hct}: With probability $1-\delta$,
 \[
-	R_n^{\HCT(\nu,\rho)} \leq \cO\left( (\operatorname{log}(n/\delta))^{1/(d(\nu,C,\rho)+2)}n^{(d(\nu,C,\rho)+1)/(d(\nu,C,\rho)+2)} \right).
+	R_N^{\gls{hct}(\nu,\rho)} \leq \cO\left( (\log(N/\delta))^{1/(d(\nu,C,\rho)+2)}N^{(d(\nu,C,\rho)+1)/(d(\nu,C,\rho)+2)} \right).
 \]
-However, the analysis of \POO requires a bound on the expected regret of the underlying subroutine. For that purpose, we simply set $\delta \eqdef 1/n$ and that gives us the statement of Theorem~\ref{thm:hct}, and consequently Corollary~\ref{col}.
+However, the analysis of \gls{poo} requires a bound on the expected regret of the underlying subroutine. For that purpose, we simply set $\delta \eqdef 1/N$ and that gives us the statement of Theorem~\ref{thm:gpo.hct}, and consequently Corollary~\ref{col}.
+
+\subsection{Upper bound on the simple regret of \gls{pct}{}}
+
+Building on our new analysis of the \HCT{} algorithm, we are able to provide theoretical guarantees for a new algorithm instance of \gls{poo}, namely the $\gls{poo}(\HCT)$ algorithm, as a side result. We refer to the new algorithm instance as \gls{pct}. More precisely we define $\gls{pct}(\delta)$ as \gls{poo} run on top of \HCT using confidence parameter~$\delta$.
+
+Let $(\nu^\star,C^\star,\rho^\star)$ be a triple of parameters for which Assumption~\ref{ass:gpo.local} is true, we prove that \gls{pct} achieves a regret that is comparable to the one obtained by \gls{hct}.
+
+%\todo[inline]{below a formula for $N(n)$ is needed}
+
+\begin{theorem}\label{thm:gpo.pct}
+\begin{leftbar}[theorembar]
+Assume that the target function $f$ satisfies Assumption~\ref{ass:gpo.local} and $\nu^\star \leq \nu_{\max}$ and $\rho^\star \leq \rho_{\max}$. For $\delta = M(N)/N$ with $M(N) = \lceil (1/2)D_{\max}\log(N/\log N)\rceil/N$, the simple regret of $\gls{pct}(\delta)$ after $N$ function evaluations is bounded as
+\[
+	\mathbb{E}[S_N^{\gls{pct}(\delta)}]  \leq \beta D_{\max}(\nu_{\max}/\nu^\star)^{D_{\max}} \left( ((\log^2 N)/N)^{1/(d(\nu^{\star},C^\star,\rho^{\star})+2)} \right),
+\]
+where $\beta$ is a constant independent of $\nu_{\max}$ and $\rho_{\max}$.\footnote{More generally, Theorem~\ref{thm:gpo.pct} holds for any $\nu \leq \nu_{\max}$ and $\rho \leq \rho_{\max}$.}
+\end{leftbar}
+\end{theorem}
+
+By Corollary~\ref{col}, we know that the simple regret of \HCT after $N$ function evaluations run with $(\nu^\star,C^\star,\rho^\star)$ is of order $\cO\left( (\log N/N)^{1/(d(\nu^{\star},C^\star,\rho^{\star})+2)} \right)$. As a consequence, the performance of \gls{pct} is at most a $\sqrt{\log n}$ factor away from that of the best \HCT instance.
+
+Theorem~\ref{thm:gpo.pct} follows from Corollary~\ref{col} and Proposition~\ref{prop:WrapperPOO} below. This wrapper result highlights how cumulative regret guarantees for \emph{any} base algorithm translate into simple regret guarantees for the corresponding $\gls{poo}(\cA)$ algorithm. Its proof almost replicates the analysis of \gls{poo}{}(\HOO) by \cite{grill2015poo} and we provide it in Appendix~\ref{app:gpo.poo} for the sake of completeness.  
+
+\begin{proposition}\label{prop:WrapperPOO}
+\begin{leftbar}[propositionbar]
+If for all $(\nu,\rho)$ the $\cA(\nu,\rho)$ algorithm has its \emph{cumulative regret} bounded as
+\begin{equation}
+    \mathbb{E}\left[R_n^{\cA(\nu,\rho)}\right] \leq \alpha C(\log n)^{1/(d(\nu,C,\rho)+2)}n^{(d(\nu,C,\rho)+1)/(c+2)},\label{centralConditionPOO}
+\end{equation}
+for any function $f$ satisfying Assumption~\ref{ass:gpo.local} with parameters $(\nu,C,\rho)$, then there exists a constant $\beta$ that is independent of $\nu_{\max}$ and $\rho_{\max}$ such that 
+\[
+    \mathbb{E}\left[S_n^{\gls{poo}(\cA)}\right]  \leq \beta D_{\max}(\nu_{\max}/\nu^\star)^{D_{\max}} \left( (\log^2 n)/n)^{1/(d(\nu^\star,C^\star,\rho^\star)+2)} \right)\,,
+\]
+for any function $f$ satisfying Assumption~\ref{ass:gpo.local} with parameters $\nu^\star \leq \nu_{\max}$ and $\rho^\star\leq \rho_{\max}$.
+\end{leftbar}
+\end{proposition}
+
+
+In Theorem~\ref{thm:gpo.gpo}, we provide a general analysis of the \gls{gpo} algorithm, showing that it attains an (order)-
+optimal simple regret without knowing the parameter triple $(\nu^\star,C^\star,\rho^\star)$ provided that its base algorithm does. As a consequence \gls{gpo}(\gls{hct}) is an alternative to \gls{pct} with similar simple regret guarantees.

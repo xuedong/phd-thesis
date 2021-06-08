@@ -1,32 +1,46 @@
-% !TEX root = ../Chapter4.tex
+% !TEX root = ../Chapter5.tex
 \section{General analysis of \POO}\label{app:gpo.poo}
 
 We prove Proposition~\ref{prop:WrapperPOO} in this section. The analysis of \POO originally proposed by \cite{grill2015poo} consists in two main parts, that can be adapted to any base algorithm satisfying assumption~\eqref{centralConditionPOO} on its cumulative regret. In the following, we assume that $\nu^\star \leq \nu_{\max}$ and $\rho^\star \leq \rho_{\max}$. 
 
 The first part of the analysis consists in proving that there exists a parameter $\overline{\rho}$ such that $(\nu_{\max},\overline{\rho}) \in \cG$ and the instance $\cA(\nu_{\max},\overline{\rho})$ has its simple regret bounded in terms of the \emph{true parameters} $(\nu^\star,\rho^\star)$.  One important ingredient is the following lemma, which upper bounds the difference between the near-optimality dimension $d(\nu_{\max},C,\rho)$ and $d(\nu^\star,C^\star,\rho^\star)$ for $\rho > \rho^\star$. 
 \begin{lemma}[Appendix B.1 of~\citealt{grill2015poo}]\label{lemma:near-optimality}
-	Under Assumption~\ref{ass1}, for any choice of $\rho^\star$ and $\rho$ s.t. $0<\rho^\star<\rho<1$, we have
+	Under Assumption~\ref{ass:gpo.local}, for any choice of $\rho^\star$ and $\rho$ s.t. $0<\rho^\star<\rho<1$, we have
 	\[
 		d(\nu_{\max},C,\rho) - d(\nu^\star,C^\star,\rho^\star) \leq \log K \left(\frac{1}{\log(1/\rho)} - \frac{1}{\log(1/\rho^\star)}\right)\!.	
 	\]	
 \end{lemma}
-Lemma~\ref{lemma:near-optimality} endorses the choice of grid $\cG = \{(\nu_{\max},\rho_{\max}^{2N/(2i+1)})_i\}$, which ensures that 
+Lemma~\ref{lemma:near-optimality} endorses the choice of grid $\cG = \{(\nu_{\max},\rho_{\max}^{2M/(2i+1)})_i\}$, which ensures that 
 \[
 	\bar{\rho} \eqdef \underset{\rho_i\geq\rho^\star}{\argmin} \left[d(\nu_{\max},C_i,\rho_i) - d(\nu^\star,C^\star,\rho^\star)\right].
 \]
 satisfies $d(\nu_{\max},\overline{C},\overline{\rho}) - d(\nu^\star,C^\star,\rho^\star) \leq D_{\max}/N$, where $\overline{C}$ is associated to $\overline{\rho}$. A close examination of Appendix B.2 and B.3 of~\cite{grill2015poo} shows that under the assumption  
 \begin{equation}\label{TheAssumption}
-    \log \mathbb{E}\left[S_t^{\cA(\nu_{\max},\bar{\rho})}\right] \leq \log\alpha + \frac{\log C(\nu_{\max},\bar{\rho})}{d(\nu_{\max},\overline{C},\bar{\rho})+2} - \frac{\log(t/\log t)}{d(\nu_{\max},\overline{C},\bar{\rho})+2},
+    \log \mathbb{E}\left[S_n^{\cA(\nu_{\max},\bar{\rho})}\right] \leq \log\alpha + \frac{\log C(\nu_{\max},\bar{\rho})}{d(\nu_{\max},\overline{C},\bar{\rho})+2} - \frac{\log(n/\log n)}{d(\nu_{\max},\overline{C},\bar{\rho})+2}\,,
 \end{equation}
 the simple regret of $\cA(\nu_{\max},\bar{\rho})$ can also be related to $(\nu^\star,C^\star,\rho^\star)$: for some constant $\alpha'$, 
-\begin{equation}\label{THEBound}\mathbb{E}\left[S_t^{\cA(\nu_{\max},\bar{\rho})}\right] \leq \alpha' D_{\max}(\nu_{\max}/\nu^\star)^{D_{\max}} \left( (\log^2 t)/t)^{1/(d(\nu^\star,C^\star,\rho^\star)+2)} \right)\end{equation}
-under assumption described by \eqref{centralConditionPOO} on the cumulative regret of the base algorithms. Note that~\eqref{TheAssumption} holds as the recommendation rule ensures that $\EE{S_t}=\EE{R_t}/t$.  
+\begin{equation}\label{THEBound}
+    \mathbb{E}\left[S_n^{\cA(\nu_{\max},\bar{\rho})}\right] \leq \alpha' D_{\max}(\nu_{\max}/\nu^\star)^{D_{\max}} \left( (\log^2 n)/n)^{1/(d(\nu^\star,C^\star,\rho^\star)+2)} \right)
+\end{equation}
+under assumption described by \eqref{centralConditionPOO} on the cumulative regret of the base algorithms. Note that~\eqref{TheAssumption} holds as the recommendation rule ensures that $\EE{S_n}=\EE{R_n}/n$.  
 
-The second part of the analysis controls the simple regret of $\POO(\cA)$ by showing that the error made when choosing $s^\star \neq (\nu_{\max},\overline{\rho})$ is negligible. We highlight that for this part, having cumulative regret guarantees is crucial. Denoting by $(x_{i,j})_{1\leq i \leq n/N}$ the successive points selected by algorithm $j$ and $(r_{i,j})_{1\leq i \leq n/N}$ the reward observed, the final output of $\POO(\cA)$ can be written \[\hat{x} = x_{I,\hat\jmath} \ \ \text{where} \ \ I \sim \cU(\{1,\dots,n/N\}) \  \text{ and} \ \ \hat\jmath = \argmax_{j} \hat{\mu}_j\] with $\hat{\mu}_j = (N/n)\sum_{i=1}^{n/N} r_{i,j}$. One can also define $\tilde\jmath = \argmax_{j} \mu_j$ with $\mu_j =\frac{N}{n}\sum_{i=1}^{n/N} f(x_{i,j})$ and $\overline{\jmath}$ to be the index of the instance such that $\rho_{\overline{\jmath}} = \overline{\rho}$. First, some concentration results (see Appendix B.4 of~\citealt{grill2015poo}) show that for all $j$, $\EE{|\hat{\mu}_{j} - \mu_j|} \leq C/\sqrt{n/N}$. The simple regret can then be upper bounded as 
+The second part of the analysis controls the simple regret of $\POO(\cA)$ by showing that the error made when choosing $s^\star \neq (\nu_{\max},\overline{\rho})$ is negligible. We highlight that for this part, having cumulative regret guarantees is crucial. Denoting by $(x_{i,j})_{1\leq i \leq N/M}$ the successive points selected by algorithm $j$ and $(r_{i,j})_{1\leq i \leq N/M}$ the reward observed, the final output of $\POO(\cA)$ can be written as 
+\[
+    \hat{x} = x_{I,\hat\jmath} \ \ \text{where} \ \ I \sim \cU(\{1,\dots,N/M\}) \  \text{ and} \ \ \hat\jmath = \argmax_{j} \hat{\mu}_j
+\] 
+with 
+\[
+    \hat{\mu}_j = \frac{M}{N}\sum_{i=1}^{N/M} r_{i,j}\,.
+\]
+One can also define $\tilde\jmath = \argmax_{j} \mu_j$ with 
+\[
+    \mu_j =\frac{M}{N}\sum_{i=1}^{N/M} f(x_{i,j})
+\]
+and $\overline{\jmath}$ to be the index of the instance such that $\rho_{\overline{\jmath}} = \overline{\rho}$. First, some concentration results (see Appendix B.4 of~\citealt{grill2015poo}) show that for all $j$, $\EE{|\hat{\mu}_{j} - \mu_j|} \leq C/\sqrt{N/M}$. The simple regret can then be upper bounded as 
 \begin{eqnarray*}
- \EE{S_n^{\POO(\cA)}} & = & \EE{f^\star - f(\hat{x})} = \EE{f^\star - \frac{N}{n}\sum_{i=1}^{n/N}f(x_{i,\hat{\jmath}})} = \EE{f^\star - \mu_{\hat\jmath}}\\
+ \EE{S_N^{\POO(\cA)}} & = & \EE{f^\star - f(\hat{x})} = \EE{f^\star - \frac{M}{N}\sum_{i=1}^{N/M}f(x_{i,\hat{\jmath}})} = \EE{f^\star - \mu_{\hat\jmath}}\\
  & = & \EE{f^\star - \mu_{\overline{\jmath}}} + \EE{\mu_{\overline{\jmath}} - \mu_{\tilde{\jmath}}} + \EE{\mu_{\tilde{\jmath}} - \hat{\mu}_{\tilde{\jmath}}} + \EE{\hat{\mu}_{\tilde{\jmath}}-\hat{\mu}_{\hat{\jmath}}}
 + \EE{\hat{\mu}_{\hat{\jmath}} - \mu_{\hat{\jmath}}}\end{eqnarray*}
 The second and fourth terms in this sum are negative by definition of $\tilde{j}$ and $\hat{j}$ respectively, while the third and last terms are $O(\sqrt{{N}/{n}})$ using the concentration result mentioned above. As for the first term, one has 
-\[\EE{f^\star - \mu_{\overline{\jmath}}} = \frac{N}{n}\EE{\sum_{t=1}^T (f^\star - r_{i,\overline{\jmath}})} = \frac{N}{n} \EE{R_{n/N}^{\cA(\nu_{\max},\overline{\rho})}} = \EE{S_{n/N}^{\cA(\nu_{\max},\overline{\rho})}},\]
+\[\EE{f^\star - \mu_{\overline{\jmath}}} = \frac{M}{N}\EE{\sum_{t=1}^T (f^\star - r_{i,\overline{\jmath}})} = \frac{M}{N} \EE{R_{N/M}^{\cA(\nu_{\max},\overline{\rho})}} = \EE{S_{N/M}^{\cA(\nu_{\max},\overline{\rho})}},\]
 where again the recommendation rule matters. Using the upper bound \eqref{THEBound} obtained in the first part of the analysis permits to conclude by noting that the first term is actually the leading term. 

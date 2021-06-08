@@ -194,7 +194,7 @@ In the fixed-budget setting, the learner tries to maximize the probability of re
 \end{leftbar}
 \end{definition}
 
-The ultimate objective is thus to make the probability of $J_N$ not being the optimal arm, i.e. $\PP{j_N\neq I^\star}$, as small as possible. We postpone the discussion about the performance measure to Section~\ref{sec:mab.performance.optim}.
+The ultimate objective is thus to make the probability of $J_N$ not being the optimal arm, i.e. $\PP{J_N\neq I^\star}$, as small as possible. We postpone the discussion about the performance measure to Section~\ref{sec:mab.performance.simple}.
 
 \paragraph{Fixed-confidence setting.}
 
@@ -411,10 +411,6 @@ Continuum-armed bandits setting, or sometimes also named as \gls{X-armed bandits
 
 Now that we have described how the learning settings of MAB for optimization are formalized, it remains to define appropriate metrics to assess the performance of the learner.
 
-\subsection{Optimization error}\label{sec:mab.performance.optim}
-
-In the fixed-budget setting, the performance measure is quite natural.
-
 \subsection{$\delta$-correctness and PAC learning}\label{sec:mab.performance.pac}
 
 In the fixed-confidence setting, a sampling rule is always accompanied by a $\delta$-dependent stopping rule $\tau_{\delta}$. As stated in Section~\ref{sec:mab.bai.frameworks}, we seek to construct BAI strategies that output the true best arm as the final guess with high confidence on any bandit models of interest. This objective can be translated into building strategies that are $\delta$-correct.
@@ -460,9 +456,9 @@ A BAI strategy $(I_n,J_n,\tau)$ is called $(\epsilon,\delta)$-PAC if for any ban
 
 \subsection{Simple regret}\label{sec:mab.performance.simple}
 
-Finally, in the context of continuum-armed bandits, there are two common performance criteria. Depending on the applications, cumulative regret can be of interest. However, from an optimization point of view, people are often more interested in the \gls{simple regret} defined below. 
+In the context of continuum-armed bandits, there are two common performance criteria. Depending on the applications, cumulative regret can be of interest. However, from an optimization point of view, people are often more interested in the \gls{simple regret} (also called \emph{optimization error}) defined below. 
 
-\begin{definition}[simple regret]\label{def:stoch_mab.simple_regret}
+\begin{definition}[simple regret]\label{def:mab.simple_regret}
 \begin{leftbar}[defnbar]
 	At the end of round $N$, a given policy which observes a sequence of rewards $(r_n)_{1 \leq n \leq N}$ and a recommendation $j_N$ suffers from a simple regret:
 	\[
@@ -471,12 +467,14 @@ Finally, in the context of continuum-armed bandits, there are two common perform
 \end{leftbar}
 \end{definition}
 
-\begin{remark}
+\begin{remark}\label{remark:mab.simple}
 \begin{leftbar}[remarkbar]
 As observed by~\cite{bubeck2009pure}, a good cumulative regret naturally implies a good simple regret. Indeed, if we recommend $J_n$ according to the decision rule EDP (see Definition~\ref{def:mab.edp}), we immediately get 
 \[
     \EE{S_n} \leq \frac{\EE{R_n}}{n}\,.
 \]
+The converse is not necessarily true.
 \end{leftbar}
 \end{remark}
 
+Finally, one can observe that simple regret is also commonly used for fixed-budget BAI for whom the goal is to minimize the error probability.

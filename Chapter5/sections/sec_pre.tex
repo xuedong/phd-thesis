@@ -1,40 +1,73 @@
 % !TEX root = ../Chapter5.tex
-\section{Smoothness Assumptions for Black-Box Optimization}\label{sec:gpo.pre}
+\section{Required Assumptions}\label{sec:gpo.pre}
 
+\subsection{General assumptions}\label{sec:gpo.pre.general}
 %We introduce notions and assumptions related to our instantiation of \POO.
 %\subsection{Problem formulation of black-box optimization}
-Let $\mathcal{X}$ be a measurable space. Our goal is to find the maximum of an unknown noisy function $f:\mathcal{X}\rightarrow\mathbb{R}$ of which the cost of evaluation is high, given a total budget of $n$ evaluations. At each round~$t$, a learner selects a point $x_t\in\mathcal{X}$ and observes a reward $r_t\triangleq f(x_t)+\epsilon_t$, bounded by $[0,1]$, from the environment where the noise $\epsilon_t$ is assumed to be independent from previous observations and such that $\mathbb{E}[\epsilon_t|x_t] = 0$.
-%\footnote{our analysis can be easily extended to cover centered sub-Gaussian noise}.
-After~$n$ evaluations, the algorithm outputs a guess for the maximizer, denoted by $x(n)$. We assume that there exists at least one $x^\star \in \mathcal{X}$ s.t.\,$f(x^\star) \triangleq \sup_{x\in\mathcal{X}} f(x)$, denoted by $f^\star$ in the following. We measure the performance by the \emph{simple regret}, also called the \textit{optimization error},
+Let $\cX$ be a measurable space. Our goal is to find the maximum of an unknown noisy function $f:\cX\rightarrow\R$ of which the cost of evaluation is high, given a total budget of $N$ evaluations. At each round $n$, a learner selects a point $x_n\in\cX$ and observes a reward $r_n\triangleq f(x_n)+\epsilon_n$. We make the following assumption on the noise in this thesis. More discussions on the role and impact of noise are provided by~\cite{bartlett2019simple}.
+\begin{assumption}
+\begin{leftbar}[assumptionbar][bounded, independent and conditionally centered noise]
+We assume that the noise $\epsilon_n$ is bounded by $[0,1]$, independent from previous observations and such that 
 \[
-	S_n \triangleq f^\star - f(x(n)).
+    \EE{\epsilon_n|x_n} = 0\,.
 \]
-Another related notion is the cumulative regret, defined as
+\end{leftbar}
+\end{assumption}
+
+%\footnote{our analysis can be easily extended to cover centered sub-Gaussian noise}.
+After $N$ evaluations, the algorithm outputs a guess for the maximizer, denoted by $x(N)$. $x(N)$ is indeed the decision rule $J_N$ in the learning protocol of a general pure-exploration problem. We assume that there exists at least one $x^\star \in \cX$ s.t.\,$f(x^\star) \triangleq \sup_{x\in\cX} f(x)$, denoted by $f^\star$ in the following. We measure the performance by the simple regret. We can particularize Definition~\ref{def:mab.simple_regret} of simple regret into the setting of this chapter:
 \[
-	R_n \triangleq nf^\star - \sum_{t=1}^n f(x_t).
+	S_N \triangleq f^\star - f(x(N))\,.
+\]
+Likewise, we can also particularize the notion of cumulative regret into our setting:
+\[
+	R_N \triangleq Nf^\star - \sum_{n=1}^N f(x_n)\,.
 \]
 
-\subsection{Covering tree that guides the optimization}
+\subsection{Covering tree that guides the optimization}\label{sec:gpo.pre.tree}
 
 Hierarchical bandits rely on the existence of hierarchical partitioning $\mathcal{P}\triangleq\{\mathcal{P}_{h,i}\}_{h,i}$ defined recursively, where
 \[
 	\mathcal{P}_{0,1} = \mathcal{X},  \ \ \ \
 	\mathcal{P}_{h,i} = \bigcup_{j=0}^{K-1} \mathcal{P}_{h+1,Ki-j}.
 \]
-Such a partition can be naturally represented by a tree, where $K$ denotes the maximum number of children of a node in that tree. Many of known algorithms depend on a metric/dissimilarity over the search space to define the regularity assumptions that link the partitioning to some near-optimality dimension, that is independent of the partitioning. However, this was shown to be artificial~\citep{grill2015poo}, since (i) the metric is not fully exploited by the algorithms and (ii) the notion of near-optimality dimension independent of partitioning is ill-defined.
+Such a partition can be naturally represented by a tree, where $K$ denotes the maximum number of children of a node in that tree. Many of known algorithms depend on a metric/dissimilarity over the search space to define the regularity assumptions that link the partitioning to some \gls{near-optimality dimension}, that is independent of the partitioning. However, this was shown to be artificial~\citep{grill2015poo}, since (i) the metric is not fully exploited by the algorithms and (ii) the notion of near-optimality dimension independent of partitioning is ill-defined.
 Hence, it is natural to make smoothness assumptions directly related only to the partitioning.
 
-We now present \emph{the only regularity assumption} on the target function $f$ that is expressed in terms of the partitioning $\cP$. We stress again that requiring only local smoothness assumptions is an improvement since (i) it covers a larger class of functions, (ii) it only constrains~$f$ along the optimal path of the covering tree which is a plausible property in an optimization scenario, and (iii) shows that the optimization is actually easier than it was previously believed.
-\begin{assumption}[local smoothness w.r.t.\,$\cP$]\label{ass1}
+We now present \emph{the only regularity assumption} on the target function $f$ that is expressed in terms of the partitioning $\cP$ given in Assumption~\ref{ass:gpo.local}.
+
+\begin{assumption}
+\begin{leftbar}[assumptionbar][local smoothness w.r.t.\,$\cP$]\label{ass:gpo.local}
 For $x^\star$ be a global maximizer, we denote by $i_h^\star$ be the index of the only cell at depth~$h$ that contains $x^\star$.
 Then, there exist a global maximizer $x^\star$ and two constants $\nu > 0,$ $\rho\in (0,1)$ s.t.,
 \[
 	\forall h\geq 0, \forall x\in\mathcal{P}_{h,i_h^\star}, \ \  f(x)\geq f^\star - \nu\rho^h.
 \]
+\end{leftbar}
 \end{assumption}
-Note that this assumption is the same as the one of~\cite{grill2015poo}. Multiple maximizers may exist, but this assumption  needs to be satisfied only by one of them.
+Note that this assumption is the same as the one of~\cite{grill2015poo}. Multiple maximizers may exist, but this assumption needs to be satisfied only by one of them.
 
-As first observed by~\cite{auer2007improved}, the difficulty of a GO  should depend on the size of near-optimal regions and on how fast they shrink. \citet{auer2007improved} use a margin condition that quantifies this difficulty by the volume of near-optimal regions. In this work, we use a similar notion of near-optimality dimension instead. This notion is directly related to the partitioning.
+We stress again that requiring only a \textbf{local} smoothness assumption is an improvement since (i) it is a one-side local Lipschitz-type of assumption that naturally covers a larger class of functions, (ii) it only constrains $f$ along the optimal path of the covering tree which is a plausible property in an optimization scenario, and (iii) shows that the optimization is actually easier than it was previously believed. 
+
+Besides, in this chapter, we aim to design algorithms that does not rely on any metric. Previous methods all depend on a metric, and their smoothness assumptions are summarized in Table~\ref{table:hoo}.
+
+\begin{table*}[ht]
+\centering
+%\def\arraystretch{1.5}
+\begin{tabular}[r]{|r|cc|} 
+\hline
+& \textbf{global} smoothness & \textbf{local} smoothness \\ \hline
+\specialcell{\textbf{known} smoothness} &\Zooming, \HOO & \DOO, \HCT \\
+\hline
+\specialcell{\textbf{unknown} smoothness} &\TZ &
+\SOO, \StoSOO, \ATB \\
+\hline
+\end{tabular}
+\caption{Smoothness assumptions for hierarchical bandits algorithms.}
+\label{table:hoo}
+\end{table*}
+
+As first observed by~\cite{auer2007improved}, the difficulty of a \gls{go} should depend on the size of near-optimal regions and on how fast they shrink. \citet{auer2007improved} use a margin condition that quantifies this difficulty by the volume of near-optimal regions. In this work, we use a similar notion of \gls{near-optimality dimension}\footnote{The present definition is slightly different from the original \POO paper, where a coefficient 3 is present instead of 2 due to a technical detail.} instead. This notion is directly related to the partitioning.
 %\begin{definition}[near-optimality dimension w.r.t.\,$\cP$]\label{defNearOpt} We define the near-optimality dimension of~f with respect to \,$\cP$ as
 %\[
 %	d(\nu,\rho) \triangleq \inf\{d'\in\mathbb{R}^+ : \exists C > 0,\forall h \geq 0, \mathcal{N}_h(3\nu\rho^h) \leq C\rho^{-d'h}\},\footnote{This definition is slightly different from the original \POO paper, where a coefficient 3 is present instead of 2 due to a technical detail.}
@@ -47,12 +80,14 @@ As first observed by~\cite{auer2007improved}, the difficulty of a GO  should dep
 %\]
 %and we let $C(\nu,\rho) \eqdef \inf\cC(\nu,\rho)$.
 
-\begin{definition}[near-optimality dimension w.r.t.\,$\cP$]\label{defNearOpt} 
+\begin{definition}
+\begin{leftbar}[defnbar][near-optimality dimension w.r.t.\,$\cP$]\label{defNearOpt} 
 For any $\nu > 0$, $C>1$, and $\rho \in (0,1)$, we define the near-optimality dimension of~f with respect to \,$\cP$ as
 \[
-	d(\nu,C, \rho) \triangleq \inf\left\{d'\in\mathbb{R}^+ : \forall h \geq 0, \mathcal{N}_h(3\nu\rho^h) \leq C\rho^{-d'h}\right\}\!\CommaBin\!\footnote{This definition is slightly different from the original \POO paper, where a coefficient 3 is present instead of 2 due to a technical detail.}
+	d(\nu,C, \rho) \triangleq \inf\left\{d'\in\mathbb{R}^+ : \forall h \geq 0, \mathcal{N}_h(3\nu\rho^h) \leq C\rho^{-d'h}\right\}\,,
 \]
 where $\mathcal{N}_h(\epsilon)$ is the number of cells $\mathcal{P}_{h,i}$ such that $\sup_{x\in\mathcal{P}_{h,i}}f(x) \geq f^\star - \epsilon$.
+\end{leftbar}
 \end{definition}
 $\mathcal{N}_h(3\nu\rho^h)$ can be thought as the number of cells that any algorithm needs to sample in order to find the maximum. A smaller $d(\nu,C,\rho)$ implies an easier optimization problem.
 % In addition, we define a set $\cC$ depending on $\nu$ and $\rho$,
