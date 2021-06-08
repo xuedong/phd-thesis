@@ -3,7 +3,14 @@
 
 In this chapter, we deviate our focus a bit. We are still interested in identifying the best arm, but this time among an infinite number of candidates. The search space can be countably infinite or even continuous. This is the \emph{global optimization} (GO). 
 
-GO has applications in several domains including hyper-parameter tuning \citep{jamieson2016hyperband, li2017hyperband,samothrakis2013} which is the main topic of Chapter~\ref{CHAP:DTTTS}. GO usually consists of a data-driven optimization process over an expensive-to-evaluate function. It is also known as \emph{black-box optimization} since the inner behavior of a function is often unknown.
+GO has applications in several domains including hyper-parameter tuning \citep{jamieson2016hyperband, li2017hyperband,samothrakis2013} which is the main topic of Chapter~\ref{CHAP:DTTTS}. GO usually consists of a data-driven optimization process over an expensive-to-evaluate function. It is also known as \gls{bbo} since the inner behavior of a function is often unknown.
+
+Contrary to Chapter~\ref{CHAP:T3C} and Chapter~\ref{CHAP:LGC}, we are interested in a budgeted setting in this Chapter as we are subject to a high resource-consuming target, hence a pre-defined budget limit can be favored. In budgeted function optimization, a learner optimizes a function $f: \cX \rightarrow \R$ depending on a number of function evaluations limited by $N$ which are sequentially selected. For each of the $N$ evaluations, at round $n$, the learner
+picks an element $x_n\in\cX$ and observes a real number $r_n$, where 
+\[
+    r_n = f(x_n) + \epsilon_n\,,
+\]
+with $\epsilon_n$ is the noise (see also Definition~\ref{def:mab.go}). Based on $epsilon_n$, we can distinguish \emph{deterministic} feedback setting and \emph{stochastic} feed setting. 
 
 In GO, we optimize an unknown and costly-to-evaluate function $f: \mathcal{X} \rightarrow \mathbb{R}$ based on~$n$ noisy evaluations, that can be sequentially selected. This setting is a generalization of \textit{multi-armed bandits}, where the arm space $\mathcal{X}$ is some measurable space (\citealt{bubeck2011pure}). Each \emph{arm} $x \in \mathcal{X}$ gets its mean reward $f(x)$ through the reward function $f$, which is  the function to be optimized. At each round $t$, the learner chooses an arm $x_t \in \mathcal{X}$ and receives a reward~$r_t$. We study the noisy setting in which the obtained reward is a noisy evaluation of $f$: $r_t \triangleq f(x_t) + \epsilon_t$, where $\epsilon_t$ is a bounded noise.
 

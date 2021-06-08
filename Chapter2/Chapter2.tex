@@ -319,7 +319,7 @@ In practice, EBA is often used in the literature. A more detailed discussion of 
 
 For real-world applications, sometimes specific need should be met when applying BAI. The problem formulation needs to be adapted with potentially additional assumptions. Furthermore, as stated in Remark~\ref{remark:intro.pure}, BAI can be studied within a more general context of pure exploration. The purpose of this section is thus to provide a brief overview of commonly studied extensions of BAI as well as other pure exploration problems. We pay particular attention to BAI for linear bandits as it is the main topic of Chapter~\ref{CHAP:LGC}.
 
-\subsection{pure-exploration game}\label{sec:mab.extensions.pure}
+\subsection{Pure-exploration game}\label{sec:mab.extensions.pure}
 
 A learner in a general pure-exploration game interacts with the environment by sequentially taking actions to identify the \emph{answer} to a pre-specified question. We denote by $\Theta$ the set of possible mean parameters for a specific bandit problem. We further assume that there is a finite set of answers $\cI$. For each parameter in $\Theta$, a \emph{unique correct answer} is given by the function $\Istar:\Theta \to \cI$ among the $|\cI|$ possible ones (the extension of pure exploration to multiple correct answers is studied by~\citealt{degenne2019pure}).
 
@@ -385,7 +385,7 @@ We mention several variants of BAI. Top-m identification~\citep{kalyanakrishnan2
 
 Now we elaborate a bit on another important extension, for which a large number of arms are available. The arm space could be infinite, or even continuous so that it's not even possible to sample each arm once.
 
-Remember that there exists two general learning objectives in a bandit game: regret minimization and pure exploration (see e.g.~\citealt{kaufmann2017survey} for a survey). While regret minimization is also an interesting topic for many-armed bandits, our focus in this thesis sticks to optimization. As introduced in Chapter~\ref{CHAP:INTRO}, it is also called \emph{global optimization}.
+Remember that there exists two general learning objectives in a bandit game: regret minimization and pure exploration (see e.g.~\citealt{kaufmann2017survey} for a survey). While regret minimization is also an interesting topic for many-armed bandits, our focus in this thesis sticks to optimization. As introduced in Chapter~\ref{CHAP:INTRO}, when the search space is infinite, it is also called \emph{global optimization}.
 
 More precisely, we consider an (measurable) arm space $\cX$ that contains infinitely-many arms. The learning goal is to optimize an \emph{unknown} function $f: \cX \rightarrow \R$ based on $N$ noisy evaluations, that can be sequentially selected. Each arm $x$ is essentially a data point in the arm space $\cX$, and it gets its mean reward $f(x)$ through the reward function $f$, which is the target function to be optimized. At each round $n$, the learner chooses an arm $x_n \in \mathcal{X}$ and receives a reward $r_n$. We study the noisy setting in which the obtained reward is a noisy evaluation of $f$: $r_n \eqdef f(x_n) + \epsilon_n$, where $\epsilon_n$ is the noise. Note that in the context of GO, practitioners are often more interested by the fixed-budget setting as the target function is usually extremely costly to evaluate, hence only a considerably limited number of function evaluations are allowed. The learning protocol can thus be given as follow.
 
@@ -460,7 +460,7 @@ A BAI strategy $(I_n,J_n,\tau)$ is called $(\epsilon,\delta)$-PAC if for any ban
 
 \subsection{Simple regret}\label{sec:mab.performance.simple}
 
-Finally, in the context of continuum-armed bandits, there two common performance criteria. Depending on the applications, cumulative regret can be of interest. However, from an optimization point of view, people are often more interested in the \gls{simple regret} defined below. 
+Finally, in the context of continuum-armed bandits, there are two common performance criteria. Depending on the applications, cumulative regret can be of interest. However, from an optimization point of view, people are often more interested in the \gls{simple regret} defined below. 
 
 \begin{definition}[simple regret]\label{def:stoch_mab.simple_regret}
 \begin{leftbar}[defnbar]
@@ -470,3 +470,13 @@ Finally, in the context of continuum-armed bandits, there two common performance
 	\]
 \end{leftbar}
 \end{definition}
+
+\begin{remark}
+\begin{leftbar}[remarkbar]
+As observed by~\cite{bubeck2009pure}, a good cumulative regret naturally implies a good simple regret. Indeed, if we recommend $J_n$ according to the decision rule EDP (see Definition~\ref{def:mab.edp}), we immediately get 
+\[
+    \EE{S_n} \leq \frac{\EE{R_n}}{n}\,.
+\]
+\end{leftbar}
+\end{remark}
+

@@ -3,10 +3,10 @@
 
 Analyzing \HOO under Assumption~\ref{ass1} is not trivial. A key lemma in the analysis of \HOO  (Lemma~3 by \citealt{bubeck2011pure}) that controls the variance of near-optimal cells \emph{is not true} under local smoothness assumptions as Assumption~\ref{ass1}. Indeed, \HOO could induce a very deep covering tree,  while producing too many nodes that are neither near-optimal nor sub-optimal. The concept of near-optimal and sub-optimal nodes is then characterized by the \emph{sub-optimality gap} of each node which measures the distance between the local maximum of the node and the global maximum. Intuitively, nodes that are neither near-optimal nor sub-optimal represent the nodes of whom the sub-optimality gap is neither too large nor too small. To control the regret due to these nodes,~\cite{bubeck2011pure} use global smoothness (weakly Lipschitz) assumption. Assumption~\ref{ass1} is weaker, only local, and does not offer such comfort. If we want to control the regret due to these nodes without Lemma~3 of \citet{bubeck2011pure}, one possible way is to control the depth of the covering tree to ensure that we do not have too many of them. In particular, another algorithm known as \HCT \citep{azar2014online} implies a controlled depth of the tree which allows it to be analyzed under Assumption~\ref{ass1} as opposed to \HOO. We now give a brief description of \HCT and present a new analysis of it.
 
-\subsection{Description of \HCT}
+\subsection{Description of \HCT{}}
 \begin{algorithm}[ht]
 \centering
-\caption{High confidence tree (\HCT, \citealt{azar2014online})}
+\caption{Algorithm of \HCT{}}
 \label{alg:hct}
 \begin{algorithmic}[1]
     \State {\bfseries Input:} $K$, $\nu>0$, $\rho\in(0,1)$, $c>0$, tree partitioning $\{\mathcal{P}_{h,i}\}$, confidence $\delta$
@@ -19,14 +19,14 @@ Analyzing \HOO under Assumption~\ref{ass1} is not trivial. A key lemma in the an
             \State \texttt{UpdateBackward}$(\cT_t, t)$
         \EndIf
         \State $(h_t,i_t),P_t \gets$ \texttt{OptTraverse}($\cT_t, t$)
-        \State \texttt{evaluate} $x_{h_t,i_t}$ and obtain $r_t$
+        \State \text{Evaluate} $x_{h_t,i_t}$ and obtain $r_t$
         \State $T_{h_t,i_t}(t) \gets T_{h_t,i_t}(t)+1$
-        \State \texttt{update} $\hat{\mu}_{h_t,i_t}(t)$
+        \State \text{Update} $\hat{\mu}_{h_t,i_t}(t)$
         \State $U_{h_t,i_t}(t) \gets \hat{\mu}_{h_t,i_t}(t) + \nu\rho^{h_t} + c\sqrt{\frac{\operatorname{log}\left(1/\tilde{\delta}(t^+)\right)}{T_{h_t,i_t}(t)}}$
         \State \texttt{UpdateBackward}($P_t, t$)
         \State $\tau_{h_t}(t) \gets \ceil{\frac{c^2\operatorname{log}(1/\tilde{\delta}(t^+))}{\nu^2}\rho^{-2h_t}}$
         \If{$T_{h_t,i_t}(t)\geq\tau_{h_t}(t)$ and $(h_t,i_t)$ is a leaf}
-            \State \texttt{Expand}($(h_t,i_t)$)
+            \State \text{Expand} the node $(h_t,i_t)$
         \EndIf
     \EndFor
 \end{algorithmic}
@@ -34,8 +34,8 @@ Analyzing \HOO under Assumption~\ref{ass1} is not trivial. A key lemma in the an
 
 \begin{algorithm}[ht]
 \centering
-\caption{\texttt{OptTraverse}
-\label{alg:hct_opt}}
+\caption{Subroutine \texttt{OptTraverse} of \HCT{}}
+\label{alg:hct_opt}
 \begin{algorithmic}[1]
     \State {\bfseries Input:} a tree $\cT$, round $t$
     \State {\bfseries Initialization:} $(h,i)\leftarrow (0,1)$; $P\leftarrow \{(0,1)\}$; $T_{0,1}(t)=\tau_0(t)=1$
@@ -50,7 +50,8 @@ Analyzing \HOO under Assumption~\ref{ass1} is not trivial. A key lemma in the an
 
 \begin{algorithm}[ht]
 \centering
-\caption{\texttt{UpdateBackward} \label{alg:hct_update}}
+\caption{Subroutine \texttt{UpdateBackward} of \HCT{}}
+\label{alg:hct_update}
 \begin{algorithmic}[1]
     \State {\bfseries Input:} a tree $\cT$, round $t$ \\ \hfil \emph{note that $P_t$ can also be considered as a tree, thus input of this function}
     \For{$(h,i)\in\cT$ backward from each leaf of $\cT$}
