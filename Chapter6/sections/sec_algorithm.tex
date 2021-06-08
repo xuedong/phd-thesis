@@ -4,9 +4,9 @@ In this section, we introduce a new algorithm for BAI in an infinite bandit mode
 
 As a Bayesian algorithm, \TTTS uses a prior distribution $\Pi_0$ over the vector of means of the $K$ arms, $\bm\mu \triangleq (\mu_1,\dots,\mu_K)$, which can be updated to a posterior distribution $\Pi_t$ after $t$ observations. Under the Bernoulli bandit model, arm $i$ produces a reward $Y_{t,i}=1$ with probability $\mu_i$, and $Y_{t,i}=0$ with probability $1-\mu_i$ when sampled at round $t$. Given independent uniform prior for the mean of each arm, the posterior distribution on $\bm\mu$ is a product of $K$ Beta distributions: $\Pi_t = \bigotimes_{i=1}^{K} \texttt{Beta}(1+S_{t,i},N_{t,i}-S_{t,i}+1)$, where $N_{t,i}$ is the number of selections of arm $i$ until round $t$ and $S_{t,i}$ is the sum of rewards obtained from that arm. At each round $t$, \TTTS chooses one arm from the following two candidates to evaluate: (1) it first samples a parameter ${\bm\theta}$ from $\Pi_{t-1}$, and the first candidate is defined as $I_t^{\,(1)} \eqdef \argmax_{i\in\cA} {\theta}_i$, (2) it repeatedly samples new ${\bm\theta}'$ until $I_t^{\,(2)} \eqdef \argmax_{i\in\cA} \theta_i'$ is different from $I_t^{\,(1)}$. \TTTS depends on a parameter $\beta \in (0,1)$. In particular, the algorithm selects $I_t = I_t^{\,(1)}$ with probability $\beta$ and $I_t = I_t^{\,(2)}$ with probability $1-\beta$.
 
-\TTTS can also be used for bandit settings in which the rewards are bounded in $[0,1]$ by using a binarization trick first proposed by \cite{agrawal2012analysis}: When a reward $Y_{t,i} \in [0,1]$ is observed, the algorithm is updated with a fake reward  $Y'_{t,i} \sim \texttt{Ber}(Y_{t,i}) \in \{0,1\}$. \TTTS can thus be used for BAI for a \emph{finite} number of arms that with rewards in $[0,1]$. We now present a simple way of extending \TTTS to deal with an infinite number of arms.
+\TTTS can also be used for bandit settings in which the rewards are bounded in $[0,1]$ by using a binarization trick first proposed by \cite{agrawal2012analysis}: When a reward $Y_{t,i} \in [0,1]$ is observed, the algorithm is updated with a fake reward  $Y'_{t,i} \sim \texttt{Ber}(Y_{t,i}) \in \{0,1\}$. \TTTS can thus be used for BAI for a \emph{finite} number of arms that with rewards in $[0,1]$. We now present a simple way of extending \TTTS{} to deal with an infinite number of arms, namely \gls{dttts}.
 
-\paragraph{Dynamic \TTTS}
+\paragraph{Dynamic \TTTS{}.}
 
 %The rationale behind \DTTTS is the following. 
 
@@ -14,9 +14,9 @@ In an infinite bandit algorithm, at each round, we either query a new arm from t
 
 Leveraging the fact the the maximum of $k$ uniform distribution has a \texttt{Beta}($k,1$) distribution and that \TTTS only depends on the maxima of posterior samples, we give the following equivalent implementation for \DTTTS (Algorithm~\ref{alg:dttts}). Letting $\cL_t$ be the list of arms that have been queried  from the reservoir and sampled \textit{at least once} before round $t$, at round $t$ we run \TTTS on the set $\cA_t \triangleq \cL_t \cup \{\mu_0\}$ where $\mu_0$ is a pseudo-arm with posterior distribution \texttt{Beta}($t-k_t, 1$), where $k_t\triangleq|\cL_t|$.  
 
-\begin{algorithm}[tb]
+\begin{algorithm}[ht]
 \centering
-\caption{Sampling rule of Dynamic \TTTS (\DTTTS)}
+\caption{Sampling rule of Dynamic \DTTTS{}}
 \label{alg:dttts}
 \begin{algorithmic}[1] %[1] enables line numbers
     \State {\bfseries Input: } $\beta$; $B$ (total budget); $\nu_0$
@@ -33,11 +33,11 @@ Leveraging the fact the the maximum of $k$ uniform distribution has a \texttt{Be
 	        \State $I^{\,(1)} \gets I^{\,(2)}$
 	    \EndIf
 	    \If{$I^{\,(1)} \neq 0$}
-	        \State $Y \leftarrow$ \texttt{evaluate arm} $I^{\,(1)}$; $X \sim \texttt{Ber}(Y)$ 
+	        \State $Y \leftarrow$ \text{Evaluate arm} $I^{\,(1)}$; $X \sim \texttt{Ber}(Y)$ 
 	        \State $S_{I^{\,(1)}} \gets S_{I^{\,(1)}} + X$; $N_{I^{\,(1)}} \gets N_{I^{\,(1)}} + 1$; $S_0 \gets S_0 + 1$
 	    \Else
             \State $\mu_{m+1}\sim \nu_0$; $\cA \gets \cA \cup \{\mu_{m+1}\}$; 
-            \State $Y \leftarrow$ \texttt{evaluate arm} $m+1$; $X \sim \texttt{Ber}(Y)$
+            \State $Y \leftarrow$ \text{Evaluate arm} $m+1$; $X \sim \texttt{Ber}(Y)$
            	\State $S_{m+1} \gets X$; $N_{m+1}
            	\gets 1$; $m \gets m + 1$
  	   \EndIf

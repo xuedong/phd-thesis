@@ -2,9 +2,9 @@
 
 We present here another way of extending \TTTS to deal with an infinite number of arms, namely \texttt{Hyper}-\TTTS or \HTTTS, a variant of \Hyperband in which \texttt{SHA} is replaced by \TTTS. This algorithm, whose sampling rule is formally stated as Algorithm~\ref{alg:httts}, runs $s_{\max}$ batches of \TTTS with different number of arms $n$ and each batch with a same budget $T=\ceil{B/s_{\max}}$ with $B$ the total budget. The number of arms within each bracket is decreasing with an exponential rate of~$\gamma$. One inconvenience of this algorithm is that $s_{\max}$ and~$\gamma$ still need to be tuned (in practice, we use the same tuning as the one of \Hyperband). \DTTTS is thus proposed to circumvent this issue. 
 
-\begin{algorithm}[tb]
+\begin{algorithm}[ht]
 \centering
-\caption{Hyper \TTTS (\HTTTS)}
+\caption{Sampling rule of \HTTTS{}}
 \label{alg:httts}
 \begin{algorithmic}[1] %[1] enables line numbers
     \State {\bfseries Input: } $\beta$; $\gamma$; $B$; $s_{\operatorname{max}}$; $\nu_0$
@@ -14,18 +14,18 @@ We present here another way of extending \TTTS to deal with an infinite number o
     	\State $K = \ceil{\frac{s_{\operatorname{max}}+1}{s+1}\gamma^s}$
     	\State $\cA \leftarrow \{i=1,\ldots,K: \mu_i\sim\nu_0\}$; $t=0$
     	\While{$t < T$}
-    		\State \texttt{sample} $\btheta \sim \Pi_t$
+    		\State \text{Sample} $\btheta \sim \Pi_t$
             \State $I^{(1)} \leftarrow \argmax_{i\in\cA}\theta_i$
-    	    \State \texttt{sample} $b \sim \operatorname{Bernoulli}(\beta)$
+    	    \State \text{Sample} $b \sim \operatorname{Bernoulli}(\beta)$
     	    \If{$b = 1$}
-    	        \State $Y \leftarrow$ \texttt{evaluate arm} $I^{(1)}$
+    	        \State $Y \leftarrow$ \text{Evaluate arm} $I^{(1)}$
     	    \Else
     	        \While{$I^{(2)}\neq I^{(1)}$} 
     	            \State $\forall i\in\cA, \theta_i' \sim \texttt{Beta}(S_i+1,N_i-S_i+1)$
     	            \State $I^{(2)} \leftarrow \argmax_{i \in \cA}\theta_i'$ 
     	        \EndWhile
     	        \State $I^{(1)} \gets I^{(2)}$
-    		    \State $Y \leftarrow$ \texttt{evaluate arm} $I^{(1)}$
+    		    \State $Y \leftarrow$ \text{Evaluate arm} $I^{(1)}$
     	    \EndIf
     	    \State $X \sim \texttt{Bernoulli}(Y)$ 
     	    \State $S_{I^{(1)}} \gets S_{I^{(1)}} + X$; $N_{I^{(1)}} \gets N_{I^{(1)}} + 1$

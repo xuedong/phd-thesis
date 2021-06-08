@@ -69,25 +69,25 @@ We recognize the density of a shifted Beta distribution with $k$ and $n+1-k$ as 
 
 Now we show some synthetic results after the previous tricks. Fig.~\ref{fig:shift_fix} shows the expected simple regret of \DTTTS compared to \ISHA, again, under $\texttt{Beta}(0.5,0.5)$, $\texttt{SB}_{0.8}(0.5,0.5)$, $\texttt{SB}_{0.6}(0.5,0.5)$, $\texttt{SB}_{0.4}(0.5,0.5)$ and $\texttt{SB}_{0.2}(0.5,0.5)$ reservoir respectively. We can see that the performance of \DTTTS for shifted cases has been significantly enhanced.
 
-\begin{figure}[t]
+\begin{figure}[ht]
   \centering
-  \begin{subfigure}[t]{0.25\textwidth}
+  \begin{subfigure}[t]{0.33\textwidth}
     \centering\includegraphics[width=\textwidth]{Chapter6/img/shift/no_shift_fix.pdf}
     \caption{no shift}
   \end{subfigure}%
-  \begin{subfigure}[t]{0.25\textwidth}
+  \begin{subfigure}[t]{0.33\textwidth}
     \centering\includegraphics[width=\textwidth]{Chapter6/img/shift/shift_-8_fix.pdf}
     \caption{shift by 0.8}
   \end{subfigure}
-    \begin{subfigure}[t]{0.25\textwidth}
+    \begin{subfigure}[t]{0.33\textwidth}
     \centering\includegraphics[width=\textwidth]{Chapter6/img/shift/shift_-6_fix.pdf}
     \caption{shift by 0.6}
   \end{subfigure}%
-  \begin{subfigure}[t]{0.25\textwidth}
+  \begin{subfigure}[t]{0.33\textwidth}
     \centering\includegraphics[width=\textwidth]{Chapter6/img/shift/shift_-4_fix.pdf}
     \caption{shift by 0.4}
   \end{subfigure}
-  \begin{subfigure}[t]{0.25\textwidth}
+  \begin{subfigure}[t]{0.33\textwidth}
     \centering\includegraphics[width=\textwidth]{Chapter6/img/shift/shift_-2_fix.pdf}
     \caption{shift by 0.2}
   \end{subfigure}%
@@ -97,7 +97,7 @@ Now we show some synthetic results after the previous tricks. Fig.~\ref{fig:shif
 
 We can also compare the number of effectively sampled arms under shifted Beta reservoirs before and after the fix, as shown in Fig.~\ref{fig:arms_fix}. Fig.~\ref{fig:arms_shift_restate} is the same figure as Fig.~\ref{fig:arms_shift}, and Fig.~\ref{fig:arms_shift_fix} is the number of effectively sampled arms after the previous fix under a $\texttt{Beta}(0.5,0.5)$, $\texttt{SB}_{0.8}(0.5,0.5)$, $\texttt{SB}_{0.6}(0.5,0.5)$, $\texttt{SB}_{0.4}(0.5,0.5)$ and $\texttt{SB}_{0.2}(0.5,0.5)$ reservoir respectively. Indeed, we can see that now the exploration effort of \DTTTS under shifted Beta priors is more or less at the same level as that under a normal Beta reservoir. 
 
-\begin{figure}[t]
+\begin{figure}[ht]
   \centering
   \begin{subfigure}[t]{0.45\textwidth}
     \centering\includegraphics[width=\textwidth]{Chapter6/img/infinite/pulls_shift.png}

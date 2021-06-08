@@ -18,7 +18,7 @@ where $\bomega^\epsilon$ is a $L^\infty$ projection of $\bomega^\star$ onto the 
 \subsection{Saddle-point Frank-Wolfe}
 On the other hand, the Frank-Wolfe heuristic in Algorithm~\ref{alg:fw_ab} is an efficient rank-1 solver. It is thus natural to investigate if it can be incorporated into existing algorithms. 
 
-In particular, we can propose two new algorithms by adding the solver on top of \LGapE (resp. \LTCC) that we call \SLGapE (resp. \SLTCC), as shown in Algorithm~\ref{alg:slgape} (resp. Algorithm~\ref{alg:slt3c}). We define a so called \emph{active transductive set} as
+In particular, we can propose two new algorithms by adding the solver on top of \LGapE{} and \LTCC that we call \gls{slgape} and \gls{slt3c} respectively, as shown in Algorithm~\ref{alg:slgape} and Algorithm~\ref{alg:slt3c}. We define a so called \emph{active transductive set} as
 \begin{align}\label{def:active_transductive}
     \hat\cY(\bx,\btheta) \eqdef \left\{ \frac{(\bx- \bx')}{\left|(\bx-\bx')\transpose\btheta\right|}: \bx'\in\cX/\big\{\bx\big\}  \right\}\,.
 \end{align}

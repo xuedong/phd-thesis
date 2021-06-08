@@ -3,9 +3,9 @@
 
 The first line that we would like to discover is extensions of Bayesian algorithms from Chapter~\ref{CHAP:T3C}.
 
-\subsection{Naive adaptation of \TTTS{} and \TCC{}}\label{sec:lgc.bayesian.t3c}
+\subsection{Direct adaptation of \TTTS{} and \TCC{}}\label{sec:lgc.bayesian.t3c}
 
-We first consider two Bayesian sampling rules inspired by \TTTS{} (resp. \TCC{}) called \LTCS{} (resp. \LTCC{}). Both sampling rules make use of a prior distribution $\Pi_1$ over a set of parameters $\Theta$, that contains the unknown true regression parameter $\btheta$. Upon observing a sequence of payoffs $(r_1,,\ldots,r_{n-1})$, we update our beliefs over the regression parameter and obtain a posterior distribution $\Pi_{n}$ whose density w.r.t.\,the Lebesgue measure is denoted by $\pi_n$.
+We first consider two Bayesian sampling rules inspired by \TTTS{} and \TCC{} called \gls{lt3s} and \gls{lt3c} respectively. Both sampling rules make use of a prior distribution $\Pi_1$ over a set of parameters $\Theta$, that contains the unknown true regression parameter $\btheta$. Upon observing a sequence of payoffs $(r_1,,\ldots,r_{n-1})$, we update our beliefs over the regression parameter and obtain a posterior distribution $\Pi_{n}$ whose density w.r.t.\,the Lebesgue measure is denoted by $\pi_n$.
 
 Furthermore, we assume that $\btheta$ is sampled from $\cN(0,\kappa^2\1_d)$ with $\kappa^2$ to be precised below. The posterior distribution $\Pi_n$, given the sequence of sampled arms $\bX_n$, can be written as $\cN(\hat{\btheta}^\lambda_n,\hat{\bSigma}_n)$ %(see e.g.~\citealt{bishop2006prml}, Chapter 3 Section 3 for a detailed computation of the posterior)
 with
