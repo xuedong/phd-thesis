@@ -7,7 +7,17 @@
 
 \section{Reminders on Probability}\label{app:maths.proba}
 
+$\cU([a,b])$ denotes a uniform distribution on the support $[a,b]$.
+
 \subsection{One-dimensional exponential family}\label{app:maths.proba.exponential}
+
+$\cB eta(\cdot,\cdot)$ denotes a Beta distribution.
+
+$\cB ern(\cdot)$ denotes a Bernoulli distribution.
+
+$\cB(\cdot)$ denotes a Binomial distribution.
+
+$\cN(\cdot,\cdot)$ denotes a normal distribution.
 
 %\subsection{Gaussian process}\label{app:maths.proba.gp}
 
@@ -113,21 +123,24 @@ A very important property of KL divergence is its non-negativity, which is estab
 
 \subsection{Two special cases: Gaussian and Bernoulli}\label{app:maths.information.examples}
 
-\begin{example}[KL divergence between two Gaussian distributions]
+\begin{example}[KL-divergence between two Gaussian distributions]\label{ex:maths.kl_gaussian}
 \begin{leftbar}[examplebar]
 	We compute the KL divergence between two normal distributions $\mathbb{P}\sim\cN(\mu_1,\sigma_1)$ and $\mathbb{Q}\sim\cN(\mu_2,\sigma_2)$.
 	\[
 		KL(\mathbb{P} \lVert \mathbb{Q}) = \log \frac{\sigma_2}{\sigma_1} + \frac{\sigma_1^2+(\mu_1-\mu_2)^2}{2\sigma_2^2} - \frac{1}{2}.
 	\]
-In particular, if $\sigma\eqdef\sigma_1=\sigma_2$, then
+In particular, if $\sigma\eqdef\sigma_1=\sigma_2$, then the two distributions are parameterized by their means, we can thus denote by
 	\[
-		KL(\mathbb{P} \lVert \mathbb{Q}) = \frac{(\mu_1-\mu_2)^2}{2\sigma^2}.
+		d(\mu_1;\mu_2) \eqdef KL(\mathbb{P} \lVert \mathbb{Q}) = \frac{(\mu_1-\mu_2)^2}{2\sigma^2}.
 	\]
 \end{leftbar}
 \end{example}
 
-\begin{example}[KL divergence between two Bernoulli distributions]
+\begin{example}[KL divergence between two Bernoulli distributions]\label{ex:maths.kl_bernoulli}
 \begin{leftbar}[examplebar]
-    We compute the KL divergence between two Bernoulli distributions
+    We compute the KL divergence between two Bernoulli distributions $\mathbb{P}\sim\cB ern(\mu_1)$ and $\mathbb{Q}\sim\cB ern(\mu_2)$, we denote by
+     \[
+        kl(\mu_1;\mu_2) \eqdef KL(\mathbb{P} \lVert \mathbb{Q}) =  \mu_1 \ln \left( \frac{\mu_1}{\mu_2} \right) + (1-\mu_1) \ln  \left( \frac{1-\mu_1}{1-\mu_2} \right).
+    \]
 \end{leftbar}
 \end{example}

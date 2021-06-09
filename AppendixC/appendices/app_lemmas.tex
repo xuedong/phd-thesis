@@ -7,10 +7,11 @@
 For $\btheta, \btheta' \in \R^d\,$, $\bomega$ in the interior of the probability simplex $\interior{\Sigma_K}$, $\by\in\R^d\,$, $x\in\R$, we have
 
 \begin{align*}
-    \inf_{\btheta':\ \by\transpose\btheta' \geq x} \frac{\normm{\btheta-\btheta'}^2_{\bLambda_{\bomega}}}{2} = \begin{cases}
-    \ddfrac{(x - \by\transpose\btheta')^2}{2 \normm{\by}_{\bLambda_{\bomega}^{-1}}^2} &\text{if } x \geq \by\transpose\btheta' \\
-0 &\text{otherwise}
-\end{cases}\,.
+    \inf_{\btheta':\ \by\transpose\btheta' \geq x} \frac{\normm{\btheta-\btheta'}^2_{\bLambda_{\bomega}}}{2} = 
+    \begin{cases}
+        \ddfrac{(x - \by\transpose\btheta')^2}{2 \normm{\by}_{\bLambda_{\bomega}^{-1}}^2} &\text{if } x \geq \by\transpose\btheta' \\
+        0 &\text{otherwise}
+    \end{cases}\,.
 \end{align*}
 \end{lemma}
 
@@ -18,14 +19,21 @@ For $\btheta, \btheta' \in \R^d\,$, $\bomega$ in the interior of the probability
 We consider the Lagrangian of the problem, and we obtain
 \begin{align*}
   \inf_{\btheta':\ \by\transpose\btheta' \geq x} \frac{\normm{\btheta-\btheta'}^2_{\bLambda_{\bomega}}}{2}
-  &= \sup_{\alpha \geq 0}\inf_{\lambda \in \R^d} \ddfrac{\normm{\theta-\lambda}^2_{\bLambda_{\bomega}}}{2}+ \alpha (x-\langle\lambda,y\rangle)\\
-  &=  \sup_{\alpha \geq 0} \alpha (x-\langle\theta,y\rangle) - \alpha^2 \frac{\normm{y}^2_{\bLambda_{\bomega}^{-1}}}{2}\\
+  &= \sup_{\eta \geq 0}\inf_{\btheta' \in \R^d} \ddfrac{\normm{\btheta-\btheta'}^2_{\bLambda_{\bomega}}}{2}+ \eta (x-\by\transpose\btheta')\\
+  &=  \sup_{\eta \geq 0} \eta (x-\by\transpose\btheta) - \eta^2 \frac{\normm{\by}^2_{\bLambda_{\bomega}^{-1}}}{2}\\
   &= \begin{cases}
     \ddfrac{(x - \by\transpose\btheta')^2}{2 \normm{\by}_{\bLambda_{\bomega}^{-1}}^2} &\text{if } x \geq \by\transpose\btheta' \\
     0 &\text{otherwise}
     \end{cases}\,,
 \end{align*}
-where the infimum in the first equality is reached at $\lambda = \theta + \alpha \bLambda_{\bomega}^{-1} y$ and the supremum in the last equality is reached at $\alpha = (x- \langle\theta,y\rangle)/\normm{y}_{\bLambda_{\bomega}^{-1}}^2$ if $x \geq \langle\theta,y\rangle$ and at $\alpha = 0$ else.
+where the infimum in the first equality is reached at $\btheta' = \btheta + \eta \bLambda_{\bomega}^{-1} \by$ and the supremum in the last equality is reached at
+\[
+    \eta =
+    \begin{cases}
+        \ddfrac{(x- \by\transpose\btheta)}{\normm{\by}_{\bLambda_{\bomega}^{-1}}^2} &\text{if } x \geq \by\transpose\btheta \\
+        0 &\text{otherwise}
+    \end{cases}\,.
+\]
 \end{proof}
 
 \subsection{Concentration results}\label{app:lgc.lemmas.concentration}
@@ -35,11 +43,11 @@ We restate here the Theorem~20.4 (in combination with the Equation~20.10) by \ci
 \label{th:confidence_beta}
 For all $\lambda >0$ and $\delta\in(0,1)$,
 \[
-    \PPt{\exists n\in\NN,\, \frac{1}{2}\normm{\hat{\btheta}_n-\btheta}^2_{\bLambda_{N_n}+\lambda I_d} \geq \beta(n,\delta)} \leq \delta\,,
+    \PPt{\exists n\in\NN,\, \frac{1}{2}\normm{\hat{\btheta}_n^\lambda-\btheta}^2_{\bLambda_{T_n}+\lambda I_d} \geq d_{n,\delta}} \leq \delta\,,
 \]
 where
 \begin{align*}
-    \beta(n,\delta) &\eqdef  \left( \sqrt{\log\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\left(1+\frac{n L^2}{\lambda d} \right)} +\sqrt{\frac{\lambda}{2}}M\right)^2\\
+    d_{n,\delta} &\eqdef  \left( \sqrt{\log\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\left(1+\frac{n L^2}{\lambda d} \right)} +\sqrt{\frac{\lambda}{2}}M\right)^2\\
     &=\log\!\left( \frac{1}{\delta}\right)+\frac{d}{2}\log\left(1+\frac{n L^2}{\lambda d} \right) +  M\sqrt{\lambda}\sqrt{2\log\left( \frac{1}{\delta}\right)+d\log\!\left(1+\frac{n L^2}{\lambda d} \right)}+\frac{\lambda M^2}{2}\,.
 %\left(\sqrt{\log\!\left(\frac{1}{\delta}\right) + \frac{d}{2}\log\!\left(1+ \frac{tL^2}{\eta d}\right)}   +\sqrt{\frac{\eta}{2}}M\right)^2\,.
 \end{align*}
@@ -52,10 +60,10 @@ Let $W_{-1}$ be the negative branch of the Lambert W function and for $x>1$, let
 Let $\zeta$ be the Riemann function defined by $\zeta(x) = \sum_{n=1}^{+\infty}\frac{1}{n^x}$ .
 
 \begin{theorem}\label{thm:maximal_concentration_inequality}
-For all $\alpha>1$ and $\gamma>1$, with probability $1-\delta$, for all $t\in \N$,
+For all $\eta>1$ and $\gamma>1$, with probability $1-\delta$, for all $t\in \N$,
 \begin{align*}
 \frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert_{V_t}^2
-&\le \frac{d}{2} \overline{W}\left( 1 + \frac{2}{d}\log \frac{\gamma^{d/2}\zeta(\alpha)^K\prod_{k=1}^K(\log_\gamma(\gamma N_t^k))^\alpha}{\delta} \right)
+&\le \frac{d}{2} \overline{W}\left( 1 + \frac{2}{d}\log \frac{\gamma^{d/2}\zeta(\eta)^K\prod_{k=1}^K(\log_\gamma(\gamma N_t^k))^\eta}{\delta} \right)
 \end{align*}
 \end{theorem}
 
@@ -68,7 +76,7 @@ TODO: the proof uses $N_t^k \ge 1$. It should be in the hypotheses.}
 %Let $L = \max_a \Vert a \Vert$ . With probability $1- \delta$, for all $t\in \N$,
 %\begin{align*}
 %\frac{1}{2}\Vert \theta - \hat{\theta}_t \Vert_{(V_t^{-1} + I_d/t)^{-1}}^2
-%\le \log\frac{1}{\delta} + \frac{d}{2}\log\left( 1 + e\frac{t^2 L^2}{d} \right) + \log(\zeta(\alpha)(1+\log t)^\alpha) \: .
+%\le \log\frac{1}{\delta} + \frac{d}{2}\log\left( 1 + e\frac{t^2 L^2}{d} \right) + \log(\zeta(\eta)(1+\log t)^\eta) \: .
 %\end{align*}
 %\end{theorem}
 %\todo[inline]{TODO proof. Same as the other one, but with $M_0 = \eta I_d$ and grid over that $\eta$ to have $\eta\approx 1/t$}
@@ -89,7 +97,7 @@ With probability $1- \delta$, for all $t\in \N$,
 \le \frac{d}{2}\overline{W}\left(
 	1 + \frac{2}{d}\log\frac{1}{\delta}
 	+ \log \frac{t e L^2}{d \lambda_{\min}(A) }
-	+ \frac{2}{d}\log(\zeta(\alpha)\log(et)^\alpha)
+	+ \frac{2}{d}\log(\zeta(\eta)\log(et)^\eta)
  \right) \: .
 \end{align*}
 For all $t\in\N$, with probability $1- \delta$, for all $s\le t$,
@@ -204,7 +212,7 @@ For $\rho_0 = \mathcal N(\theta, M_0^{-1})$ , this is
 \end{proof}
 
 \begin{proof}[Proof of Theorem~\ref{thm:maximal_concentration_inequality}]
-Let $\gamma > 1$, $\alpha > 1$. Let $\zeta$ be the Riemann function defined by $\zeta(x) = \sum_{n=1}^{+\infty}\frac{1}{n^x}$ . For $i\in \N$, let $w_i = \frac{1}{\zeta(\alpha)(1+i)^\alpha}$. For a tuple $I=(i_1,\ldots,i_K)\in \N^K$, let $W_I = \prod_{k=1}^K w_{i_k}$. Note that $\sum_{I \in \N^K} W_I = 1$ .
+Let $\gamma > 1$, $\eta > 1$. Let $\zeta$ be the Riemann function defined by $\zeta(x) = \sum_{n=1}^{+\infty}\frac{1}{n^x}$ . For $i\in \N$, let $w_i = \frac{1}{\zeta(\eta)(1+i)^\eta}$. For a tuple $I=(i_1,\ldots,i_K)\in \N^K$, let $W_I = \prod_{k=1}^K w_{i_k}$. Note that $\sum_{I \in \N^K} W_I = 1$ .
 
 Let $M_{0,I} = \eta_I \sum_{k=1}^K \gamma^i a_k a_k^\top$ where $\eta_I > 0$ will be defined later.
 
@@ -217,18 +225,18 @@ With probability $1- \delta W_I$,
 With probability $1- \delta$ this is true for all $I \in \N^K$. In particular, it is true for $I=(i_1,\ldots,i_K)$ such that for all $k \in [K]$, $\gamma^{i_k} \le N_t^k < \gamma^{i_k+1}$ . For that $I$, we get that $\eta_I V_t \frac{1}{\gamma} \preceq M_{0,I} \preceq \eta_I V_t$ (where $A\preceq B$ means that $B-A$ is positive semi-definite) and
 \begin{align*}
 \frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
-&\le \log\frac{\zeta(\alpha)^K\prod_{k=1}^K(1+i_k)^\alpha}{\delta} + \frac{1}{2} \frac{\eta_I}{1+\eta_I} \Vert \theta - \hat{\theta}_t \Vert_{V_t}^2 + \frac{d}{2} \log (\gamma(1 + \frac{1}{\eta_I}))
+&\le \log\frac{\zeta(\eta)^K\prod_{k=1}^K(1+i_k)^\eta}{\delta} + \frac{1}{2} \frac{\eta_I}{1+\eta_I} \Vert \theta - \hat{\theta}_t \Vert_{V_t}^2 + \frac{d}{2} \log (\gamma(1 + \frac{1}{\eta_I}))
 \\
 \Rightarrow
 \frac{1}{2} \Vert \theta - \hat{\theta}_t \Vert^2_{V_t}
-&\le (1 + \eta_I)\left(\log\frac{\zeta(\alpha)^K\prod_{k=1}^K(1+i_k)^\alpha}{\delta} + \frac{d}{2} \log (\gamma(1 + \frac{1}{\eta_I})) \right)
+&\le (1 + \eta_I)\left(\log\frac{\zeta(\eta)^K\prod_{k=1}^K(1+i_k)^\eta}{\delta} + \frac{d}{2} \log (\gamma(1 + \frac{1}{\eta_I})) \right)
 \end{align*}
 
 The minimal value of the r.h.s. over $\eta_I$ is
 \begin{align*}
-\frac{d}{2} \overline{W}\left( 1 + \frac{2}{d}\log \frac{\gamma^{d/2}\zeta(\alpha)^K\prod_{k=1}^K(1+i_k)^\alpha}{\delta} \right)
+\frac{d}{2} \overline{W}\left( 1 + \frac{2}{d}\log \frac{\gamma^{d/2}\zeta(\eta)^K\prod_{k=1}^K(1+i_k)^\eta}{\delta} \right)
 \end{align*}
-We make that choice for $\eta_I$ and remark that $(1+i_k)^\alpha \le (1+\log_\gamma N_t^k)^\alpha$ to get the result of the theorem.
+We make that choice for $\eta_I$ and remark that $(1+i_k)^\eta \le (1+\log_\gamma N_t^k)^\eta$ to get the result of the theorem.
 
 
 \end{proof}

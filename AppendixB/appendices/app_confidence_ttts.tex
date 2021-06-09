@@ -1,17 +1,17 @@
-\section{Fixed-Confidence Analysis for \TTTS}\label{app:confidence_ttts}
+\section{Fixed-Confidence Analysis for \texorpdfstring{\TTTS}{}}\label{app:confidence_ttts}
 
-This section is entirely dedicated to \TTTS.
+This section is entirely dedicated to \gls{ttts}.
 
 \subsection{Sufficient exploration of all arms}\label{app:confidence_ttts.exploration}
 
-We prove Lemma~\ref{lemma:sufficient_exploration} for \TTTS. To prove this lemma, we introduce the two following sets of indices for a given $L>0$: $\forall n\in\NN$ we define
+We prove Lemma~\ref{lemma:sufficient_exploration} for \gls{ttts}. To prove this lemma, we introduce the two following sets of indices for a given $L>0$: $\forall n\in\NN$ we define
 \[
     U_n^L \eqdef \{i: T_{n,i} < \sqrt{L}\},
 \]
 \[
     V_n^L \eqdef \{i: T_{n,i} < L^{3/4}\}.
 \]
-It is seemingly non trivial to manipulate directly \TTTS's candidate arms, we thus start by connecting \TTTS with \TTPS (top two probability sampling). \TTPS is another sampling rule presented by~\cite{russo2016ttts} for which the two candidate samples are defined as in Appendix~\ref{app:notation}, we recall them in the following.
+It is seemingly non trivial to manipulate directly \gls{ttts}'s candidate arms, we thus start by connecting \gls{ttts} with \TTPS (top two probability sampling). \TTPS is another sampling rule presented by~\cite{russo2016ttts} for which the two candidate samples are defined as in Appendix~\ref{app:notation}, we recall them in the following.
 \[
     J_n^{(1)} \eqdef \argmax_{j} a_{n,j}, J_n^{(2)} \eqdef \argmax_{j\neq J_n^{(1)}} a_{n,j}.
 \]
@@ -160,7 +160,7 @@ Next we show that there exists at least one arm in $V_n^L$ for whom the probabil
 The rest of this subsection is quite similar to that of~\cite{qin2017ttei}. Indeed, with the above lemma, we can show that the set of poorly explored arms $U_n^L$ is empty when $n$ is large enough.
 
 \begin{lemma}\label{lemma:poorly_explored_ttts}
-    Under \TTTS, there exists $L_0 = \text{Poly}(W_1,W_2)$ s.t. $\forall L > L_0$, $U_{\floor{KL}}^L = \emptyset$.
+    Under \gls{ttts}, there exists $L_0 = \text{Poly}(W_1,W_2)$ s.t. $\forall L > L_0$, $U_{\floor{KL}}^L = \emptyset$.
 \end{lemma}
 
 \begin{proof}
@@ -197,7 +197,7 @@ The rest of this subsection is quite similar to that of~\cite{qin2017ttei}. Inde
     By induction, for any $1 \leq k \leq K$, we have $|V_{\floor{kL}}^L| \leq K-k$, and finally if we take $L_0=\max(L_1,L_5,L_6)$, then $\forall L > L_0$, $U_{\floor{KL}}^L = \emptyset$.
 \end{proof}
 
-We can finally conclude the proof of Lemma~\ref{lemma:sufficient_exploration} for \TTTS.
+We can finally conclude the proof of Lemma~\ref{lemma:sufficient_exploration} for \gls{ttts}.
 
 \paragraph{Proof of Lemma~\ref{lemma:sufficient_exploration}}
 Let $N_1 = KL_0$ where $L_0 = \text{Poly}(W_1,W_2)$ is chosen according to Lemma~\ref{lemma:poorly_explored_ttts}. For all $n > N_1$, we let $L=n/K$, then by Lemma~\ref{lemma:poorly_explored_ttts}, we have $U_{\floor{KL}}^L = U_n^{n/K}$ is empty, which concludes the proof.
@@ -206,7 +206,7 @@ Let $N_1 = KL_0$ where $L_0 = \text{Poly}(W_1,W_2)$ is chosen according to Lemma
 
 \subsection{Concentration of the empirical means}\label{app:confidence_ttts.means}
 
-We prove Lemma~\ref{lemma:tracking_means} for \TTTS. As a corollary of the previous section, we can show the concentration of $\mu_{n,i}$ to $\mu_i$ for \TTTS\footnote{this proof is the same as Proposition 3 of~\cite{qin2017ttei}}.
+We prove Lemma~\ref{lemma:tracking_means} for \gls{ttts}. As a corollary of the previous section, we can show the concentration of $\mu_{n,i}$ to $\mu_i$ for \gls{ttts}\footnote{this proof is the same as Proposition 3 of~\cite{qin2017ttei}}.
 
 By Lemma~\ref{lemma:means}, we know that $\forall i\in\cA$ and $n\in\NN$,
 \[
@@ -227,12 +227,12 @@ Therefore, $\forall n \geq N_2 \eqdef \max\{N_1,N_2'\}$, we have
 
 \subsection{Measurement effort concentration of the optimal arm}\label{app:confidence_ttts.best_arm}
 
-In this section we show that the empirical arm draws proportion of the true best arm for \TTTS concentrates to $\beta$ when the total number of arm draws is sufficiently large. We prove Lemma~\ref{lemma:tracking_best} for \TTTS.
+In this section we show that the empirical arm draws proportion of the true best arm for \gls{ttts} concentrates to $\beta$ when the total number of arm draws is sufficiently large. We prove Lemma~\ref{lemma:tracking_best} for \gls{ttts}.
 
 The proof is established upon the following lemmas. First, we prove that the empirical best arm coincides with the true best arm when the total number of arm draws goes sufficiently large.
 
 \begin{lemma}\label{lemma:empirical_best}
-    Under \TTTS, there exists $M_1 = \text{Poly}(W_1,W_2)$ s.t. $\forall n > M_1$, we have $I_n^\star = I^\star = J_n^{(1)}$ and $\forall i \neq I^\star$,
+    Under \gls{ttts}, there exists $M_1 = \text{Poly}(W_1,W_2)$ s.t. $\forall n > M_1$, we have $I_n^\star = I^\star = J_n^{(1)}$ and $\forall i \neq I^\star$,
     \[
         a_{n,i} \leq \expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}}.
     \]
@@ -274,7 +274,7 @@ The proof is established upon the following lemmas. First, we prove that the emp
 Before we prove Lemma~\ref{lemma:tracking_best}, we first show that $\Psi_{n,I^\star}/n$ concentrates to $\beta$.
 
 \begin{lemma}\label{lemma:psi_best}
-    Under \TTTS, fix a constant $\epsilon>0$, there exists $M_3 = \text{Poly}(\epsilon,W_1,W_2)$ s.t. $\forall n > M_3$, we have
+    Under \gls{ttts}, fix a constant $\epsilon>0$, there exists $M_3 = \text{Poly}(\epsilon,W_1,W_2)$ s.t. $\forall n > M_3$, we have
     \[
         \left| \frac{\Psi_{n,I^\star}}{n}-\beta \right| \leq \epsilon.
     \]
@@ -379,13 +379,13 @@ Thus, if we take $N_3 \eqdef \max\{M_3',M_{12}\}$, then $\forall n > N_3$, we ha
 
 \subsection{Measurement effort concentration of other arms}\label{app:confidence_ttts.other_arms}
 
-In this section, we show that, for \TTTS, the empirical measurement effort concentration also holds for other arms than the true best arm. We prove Lemma~\ref{lemma:tracking_other} for \TTTS.
+In this section, we show that, for \gls{ttts}, the empirical measurement effort concentration also holds for other arms than the true best arm. We prove Lemma~\ref{lemma:tracking_other} for \gls{ttts}.
 
 %We first establish the following lemma that is a \emph{non-asymptotic} version of Lemma~\ref{lemma:over_allocation}. 
 We first show that if some arm is overly sampled at time $n$, then its probability of being picked is reduced exponentially.
 
 \begin{lemma}\label{lemma:over_allocation_finite_ttts} 
-    Under \TTTS, for every $\xi \in (0,1)$, there exists $S_1 = \text{Poly}(1/\xi,W_1,W_2)$ such that for all $n > S_1$, for all $i\neq I^\star$, 
+    Under \gls{ttts}, for every $\xi \in (0,1)$, there exists $S_1 = \text{Poly}(1/\xi,W_1,W_2)$ such that for all $n > S_1$, for all $i\neq I^\star$, 
     \[
         \frac{\Psi_{n,i}}{n} \geq \omega_{i}^\beta + \xi  \ \ \Rightarrow \ \ \psi_{n,i} \leq \expp{-\epsilon_0(\xi) n}\,,
     \]
@@ -450,7 +450,7 @@ where
 Next, starting from some known moment, no arm is overly allocated. More precisely, we show the following lemma.
 
 \begin{lemma}\label{lemma:psi_other_ttts}
-    Under \TTTS, for every $\xi$, there exists $S_4 = \text{Poly}(1/\xi,W_1,W_2)$ s.t. $\forall n > S_4$,
+    Under \gls{ttts}, for every $\xi$, there exists $S_4 = \text{Poly}(1/\xi,W_1,W_2)$ s.t. $\forall n > S_4$,
     \[
         \forall i \in \cA, \ \ \frac{\Psi_{n,i}}{n} \leq \omega_{i}^\beta + \xi.
     \]
@@ -480,7 +480,7 @@ Next, starting from some known moment, no arm is overly allocated. More precisel
     Therefore, for any $n > S_4 \eqdef \max\{S_1',S_5\}$, $\Psi_{n,i} \leq \omega_i^\beta + \xi$ holds for all $i\neq I^\star$. For $i = I^\star$, it is already proved for the optimal arm.
 \end{proof}
 
-We now prove Lemma~\ref{lemma:tracking_other} under \TTTS.
+We now prove Lemma~\ref{lemma:tracking_other} under \gls{ttts}.
 
 \paragraph{Proof of Lemma~\ref{lemma:tracking_other}} 
 

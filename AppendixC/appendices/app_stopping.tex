@@ -28,8 +28,8 @@ We show that they are all the same up to the choice of the exploration rate. Not
 	\label{tab:stopping_rules}
 \end{table}
 
-\paragraph{\LG and \LGC.}
-We first notice that using the same argument as the proves of Lemma~\ref{lem:lagrange_alternative} and Lemma~\ref{lem:complexity_bai}, the stopping rule of \LG and \LGC (and also the one of \GLUCB) can be rewritten as
+\paragraph{\LG{}.}
+We first notice that using the same argument as the proves of Lemma~\ref{lemma:lgc.lagrange_alternative} and Lemma~\ref{lem:complexity_bai}, the stopping rule of \LG and \LGC (and also the one of \GLUCB) can be rewritten as
 \[
 	\min_{i \neq i^\star(\hat{\theta}_{t})} \dfrac{\langle\hat\theta_t,a_{i}-a^\star(\hat\theta_t)\rangle^2}{2\normm{a_i - a^\star(\hat\theta_t)}_{{V_{N_t}^{-1}}}^2} \1\left\{a^\star(\hat\theta_t)^\top\hat\theta_t \geq a_i^\top\hat\theta_t\right\} > \beta(t,\delta)\,.
 \]

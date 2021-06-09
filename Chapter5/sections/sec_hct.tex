@@ -1,5 +1,5 @@
 % !TEX root = ../Chapter5.tex
-\section{\gls{hct}{} under Local Smoothness w.r.t. \texorpdfstring{$\cP$}{}}\label{sec:gpo.hct}
+\section{\HCT{} under Local Smoothness w.r.t. \texorpdfstring{$\cP$}{}}\label{sec:gpo.hct}
 
 Not let us turn our attention to finding a valid base algorithm for \gls{gpo}. The first idea is to refer to the original base algorithm of \gls{poo}, namely \gls{hoo}. 
 
@@ -7,7 +7,7 @@ Analyzing \gls{hoo}{} under Assumption~\ref{ass:gpo.local}, however, is not triv
 
 To control the regret due to these nodes,~\cite{bubeck2011pure} use global smoothness (weakly Lipschitz) assumption. Assumption~\ref{ass:gpo.local} is weaker, only local, and does not offer such comfort. If we want to control the regret due to these nodes without Lemma~3 of \citet{bubeck2011pure}, one possible way is to control the depth of the covering tree to ensure that we do not have too many of them. In particular, another algorithm known as \gls{hct} proposed by~\cite{azar2014online} implies a controlled depth of the tree which allows it to be analyzed under Assumption~\ref{ass:gpo.local} as opposed to \gls{hoo}{}. We now give a brief description of \gls{hct}{} and present a new analysis of it.
 
-\subsection{Description of \gls{hct}{}}
+\subsection{Description of \HCT{}}
 \begin{algorithm}[ht]
 \centering
 \caption{Algorithm of \HCT{}}
@@ -92,7 +92,7 @@ At each round $n$, the algorithm traverses the current covering tree along an \e
 	\tau_h(n) \triangleq \ceil{\frac{c^2\operatorname{log}(1/\tilde{\delta}(n^+))}{\nu^2}\rho^{-2h}}.
 \]
 
-\subsection{Analysis of \gls{hct} \textbf{under a local \emph{metricless} assumption}}\label{sec:gpo.analysis}
+\subsection{Analysis of \HCT{} \textbf{under a local \emph{metricless} assumption}}\label{sec:gpo.analysis}
 
 We now show that \gls{hct} is indeed a valid candidate underlying algorithm for \gls{gpo}. 
 
@@ -198,7 +198,7 @@ gives us the following cumulative regret for \gls{hct}: With probability $1-\del
 \]
 However, the analysis of \gls{poo} requires a bound on the expected regret of the underlying subroutine. For that purpose, we simply set $\delta \eqdef 1/N$ and that gives us the statement of Theorem~\ref{thm:gpo.hct}, and consequently Corollary~\ref{col}.
 
-\subsection{Upper bound on the simple regret of \gls{pct}{}}
+\subsection{Upper bound on the simple regret of \PCT{}}
 
 Building on our new analysis of the \HCT{} algorithm, we are able to provide theoretical guarantees for a new algorithm instance of \gls{poo}, namely the $\gls{poo}(\HCT)$ algorithm, as a side result. We refer to the new algorithm instance as \gls{pct}. More precisely we define $\gls{pct}(\delta)$ as \gls{poo} run on top of \HCT using confidence parameter~$\delta$.
 

@@ -23,7 +23,7 @@ It is clear that $D_n = \sum_{l=1}^{n-1} d_l$ and $\EE{d_n|\cF_{n-1}} = 0$. Inde
 \end{align*}
 The second last equality holds since $\PP{I_n=i|\cF_{n-1}}$ is $\cF_{n-1}$-measurable. Thus $D_n$ is a martingale, whose increment are 1 sub-Gaussian as $d_n \in [-1,1]$ for all $n$. 
 
-Applying Corollary 8 of~\cite{abbasi-yadkori2012}\footnote{but we could actually use several deviation inequalities that hold uniformly over time for martingales with sub-Gaussian increments}, it holds that, with probability larger than $1-\delta$, for all $n$,
+Applying Corollary 8 of~\cite{abbasi-yadkori2012}\footnote{We could actually use several deviation inequalities that hold uniformly over time for martingales with sub-Gaussian increments.}, it holds that, with probability larger than $1-\delta$, for all $n$,
 \[
     |D_n| \leq \sqrt{2\left(1+n\right)\ln\left(\frac{\sqrt{1+n}}{\delta}\right)}
 \]
@@ -52,7 +52,11 @@ Now taking a union bound over $i\in\cA$, we have $\forall x\geq 2$,
                  &\leq Ke^{-x^2/2}.
 \end{align*}
 
-The previous inequalities imply that $\forall i\in\cA$ and $\forall n\in\NN$, we have $|T_{n,i}-\Psi_{n,i}| \leq W_2\sqrt{(n+1)\log(e^2+n)}$ almost surely. Now it remains to show that $\forall \lambda > 0, \EE{e^{\lambda W_2}}<\infty$. Fix some $\lambda > 0$.
+The previous inequalities imply that $\forall i\in\cA$ and $\forall n\in\NN$, we have 
+\[
+    |T_{n,i}-\Psi_{n,i}| \leq W_2\sqrt{(n+1)\log(e^2+n)}
+\]
+almost surely. Now it remains to show that $\forall \lambda > 0, \EE{e^{\lambda W_2}}<\infty$. Fix some $\lambda > 0$.
 \begin{align*}
     \EE{e^{\lambda W_2}} &= \int_{x=1}^{\infty} \PP{e^{\lambda W_2}\geq x} \diff{x} = \int_{y=0}^{\infty} \PP{e^{\lambda W_2}\geq e^{2\lambda y}}2\lambda e^{2\lambda y} \diff{y} \\
                        &= 2\lambda \int_{y=0}^{2} \PP{W_2\geq 2y} e^{2\lambda y} \diff{y} + 2\lambda \int_{y=2}^{\infty} \PP{W_2\geq 2y} e^{2\lambda y} \diff{y} \\

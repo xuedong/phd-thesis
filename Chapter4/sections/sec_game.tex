@@ -27,8 +27,8 @@ We assume that $\exists M>0$, s.t. $\forall \btheta\in\Theta$, $\normm{\btheta} 
 
 In this section, besides the usual learner, we include an extra fictive player -- the nature -- and we thus introduce some specific notation of counts for this section.
 
-At each round $n$ the algorithm to be presented will play an arm $\hbx_n$ and choose (fictitiously) an answer $i_n\in\cI$. We denote by $N_n^{\bx,i} \eqdef\sum_{t=1}^n \ind_{\{(\hbx_n,i_n)=(\bx,i)\}}$ the number of times the pair $(\bx,i)\in\cX\times\cI$ is chosen up to and including time $n$, and by $N_n^\bx =\sum_{i\in\cI} N_n^{\bx,i}$ and $N_n^i =\sum_{\bx\in\cX} N_n^{\bx,i}$ the partial sums. The vectors of counts at time $n$ is denoted by $\bN_n \eqdef (N_n^\bx)_{\bx\in\cX}$
-and when it is clear from the context we will also denote by $\bN_n^{\bx} = (N_n^{\bx,i})_{i\in\cI}$ and $\bN_n^i = (N_n^{\bx,i})_{\bx\in\cX}$ the vectors of partial counts. Remind that in the case of BAI, $\cX=\cI$.
+At each round $n$ the algorithm to be presented will play an arm $\hbx_n$ and choose (fictitiously) an answer $i_n\in\cI$. We denote by $T_n^{\bx,i} \eqdef\sum_{t=1}^n \ind_{\{(\hbx_n,i_n)=(\bx,i)\}}$ the number of times the pair $(\bx,i)\in\cX\times\cI$ is chosen up to and including time $n$, and by $T_n^\bx =\sum_{i\in\cI} T_n^{\bx,i}$ and $T_n^i =\sum_{\bx\in\cX} T_n^{\bx,i}$ the partial sums\footnote{Note that if $i$ is the index of arm $\bx$, then $T_n^\bx$ is simply $T_{n,i}$ as defined in~\eqref{eq:mab.pulls}.}. The vectors of counts at time $n$ is denoted by $\bT_n \eqdef (T_n^\bx)_{\bx\in\cX}$
+and when it is clear from the context we will also denote by $\bT_n^{\bx} = (T_n^{\bx,i})_{i\in\cI}$ and $\bT_n^i = (T_n^{\bx,i})_{\bx\in\cX}$ the vectors of partial counts. Remind that in the case of BAI, $\cX=\cI$.
 
 %\paragraph{Regularized least square estimator.} We fix a regularization parameter $\eta > 0$. The regularized least square estimator for the parameter $\theta\in \mathcal M$ at time $t$ is
 %\[
@@ -49,7 +49,7 @@ The pseudo-code of \LG{} is provided in Algorithm~\ref{alg:lg}. We interpret eac
     \State {\bfseries Input:} Learners for each answer $(\cL^i_\bomega)_{i\in\cI}$, threshold $d$
     \For{n = 1 \ldots}
         \State \textit{// Stopping rule}
-        \If{{$\max_{i\in\cI}\inf_{\btheta'\in\neg i} \frac{1}{2}\normm{\hbtheta_{n-1}^\lambda-\btheta'}^2_{\bLambda_{\bN_{n-1}}}\geq d_{n-1,\delta}$}}
+        \If{{$\max_{i\in\cI}\inf_{\btheta'\in\neg i} \frac{1}{2}\normm{\hbtheta_{n-1}^\lambda-\btheta'}^2_{\bLambda_{\bT_{n-1}}}\geq d_{n-1,\delta}$}}
             \State \text{Stop} 
             \State {\bfseries Return} $J_n = \Istar(\hbtheta_{n-1}^\lambda)$
         \EndIf
@@ -63,7 +63,7 @@ The pseudo-code of \LG{} is provided in Algorithm~\ref{alg:lg}. We interpret eac
         \State \textit{// Feed optimistic gains}
         \State \text{Feed learner} $\cL_\bomega^{i_n}$ \texttt{with} $g_{n}(\bomega) = \sum_{\bx\in\cX}\omega_\bx U_n^{\bx,i_n}/2$
         \State \textit{// Track the weights}
-        \State \text{Pull} $\hbx_n \in \argmin_{\bx\in \cX} N_{n-1}^{\bx} - W_{n,\bx}$
+        \State \text{Pull} $\hbx_n \in \argmin_{\bx\in \cX} T_{n-1}^{\bx} - W_{n,\bx}$
    \EndFor
 \end{algorithmic}
 \end{algorithm}
@@ -93,13 +93,13 @@ The pseudo-code of \LG{} is provided in Algorithm~\ref{alg:lg}. We interpret eac
 % \end{algorithm}
 
 \paragraph{Stopping rule and decision rule.}
-We follow the same stopping rule and decision rule of Section~\ref{sec:lgc.bayesian}\footnote{It is easy to check that~\eqref{eq:lgc.lg_stopping} and~\eqref{eq:lgc.lg_decision}) are equivalent to~\eqref{eq:lgc.bayesian_stopping} and~\eqref{eq:lgc.bayesian_decision} respectively.}: \LG{} stops if a generalized likelihood ratio exceeds a threshold $d_{n,\delta}$. With the notation of this section, the stopping time can be written as
+We follow the same stopping rule and decision rule of Section~\ref{sec:lgc.bayesian}\footnote{It is easy to check that~\eqref{eq:lgc.lg_stopping} and~\eqref{eq:lgc.lg_decision} are equivalent to~\eqref{eq:lgc.bayesian_stopping} and~\eqref{eq:lgc.bayesian_decision} respectively.}: \LG{} stops if a generalized likelihood ratio exceeds a threshold $d_{n,\delta}$. With the notation of this section, the stopping time can be written as
 \begin{align}\label{eq:lgc.lg_stopping}
-    \max_{i\in \cI} \inf_{\btheta' \in \neg i}\frac{1}{2}\Vert \hbtheta_n^\lambda - \btheta' \Vert^2_{\bLambda_{\bN_n}} > d_{n,\delta}\,,
+    \max_{i\in \cI} \inf_{\btheta' \in \neg i}\frac{1}{2}\Vert \hbtheta_n^\lambda - \btheta' \Vert^2_{\bLambda_{\bT_n}} > d_{n,\delta}\,,
 \end{align}
 and the decision rule is 
 \begin{align}\label{eq:lgc.lg_decision}
-    J_n = \argmax_{i\in \cI} \inf_{\btheta' \in \neg i}\Vert \hbtheta_n^\lambda - \btheta' \Vert^2_{\bLambda_{\bN_n}}/2\,.
+    J_n = \argmax_{i\in \cI} \inf_{\btheta' \in \neg i}\Vert \hbtheta_n^\lambda - \btheta' \Vert^2_{\bLambda_{\bT_n}}/2\,.
 \end{align}
 
 Similarly to \TCC{}/\TTTS{} of Chapter~\ref{CHAP:T3C}, these stopping and decision rules ensure that the \LG{} is $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.lemmas}.
@@ -126,9 +126,9 @@ We now explain our sampling strategy to ensure that the stopping threshold is re
 \paragraph{Saddle-point computation.}
 Suppose in this paragraph, for simplicity, that the regression parameter $\btheta$ is known to the learner. By the definition of stopping rule and generalized likelihood ratio, as long as the algorithm does not stop, we have
 \begin{align*}
-    d_{n,\delta} \ge \inf_{\btheta'\in \neg \Istar(\btheta)} \sum_{\bx\in \cX} N_n^\bx \Vert \btheta - \btheta' \Vert^2_{\bx\bx\transpose}/2\,.
+    d_{n,\delta} \ge \inf_{\btheta'\in \neg \Istar(\btheta)} \sum_{\bx\in \cX} T_n^\bx \Vert \btheta - \btheta' \Vert^2_{\bx\bx\transpose}/2\,.
 \end{align*}
-Now, let $\bomega^\star(\btheta)$ be the optimal pulling proportions given $\btheta$. If we manage to have $\bN_n \approx n\bomega^\star(\btheta)$, then it follows $d_{n,\delta} \ge n T^\star(\btheta)^{-1}$ and, solving that equation would lead to the asymptotic optimality.
+Now, let $\bomega^\star(\btheta)$ be the optimal pulling proportions given $\btheta$. If we manage to have $\bT_n \approx n\bomega^\star(\btheta)$, then it follows $d_{n,\delta} \ge n T^\star(\btheta)^{-1}$ and, solving that equation would lead to the asymptotic optimality.
 
 % Since there is only one correct answer, the parameter $\btheta$ belongs to all sets $\neg i$ for $i\neq \Istar(\btheta)$. Hence
 % \begin{align*}
@@ -138,7 +138,7 @@ Now, let $\bomega^\star(\btheta)$ be the optimal pulling proportions given $\bth
 
 At each time step, \LG{} produces a guess $i_n$ for $\Istar(\btheta)$ and its analysis involves proving that the guess is wrong only finitely-many times in expectation.
 
-The sampling rule implements a lower-bound game between a learner, playing at each stage $n$ a pull-proportion/weight vector $\bomega_n$ in the probability simplex $\Sigma_K$, and nature, who computes at each stage a response $\btheta_n \in \neg i_n$. We additionally ensure that $N_n^\bx \approx \sum_{t=1}^n \omega_{t,\bx}$, where $\omega_{n,\bx}$ denotes the weight of $\bx$ at stage $n$. The goal of the sampling rule is to ensure a $\epsilon$-approximation of the saddle point of the lower-bound game.
+The sampling rule implements a lower-bound game between a learner, playing at each stage $n$ a pull-proportion/weight vector $\bomega_n$ in the probability simplex $\Sigma_K$, and nature, who computes at each stage a response $\btheta_n \in \neg i_n$. We additionally ensure that $T_n^\bx \approx \sum_{t=1}^n \omega_{t,\bx}$, where $\omega_{n,\bx}$ denotes the weight of $\bx$ at stage $n$. The goal of the sampling rule is to ensure a $\epsilon$-approximation of the saddle point of the lower-bound game.
 
 % Suppose that the sampling rule is such that at stage $t$, a $\varepsilon_t$-approximate saddle point is reached for the lower-bound game, see Lemma~\ref{lem:sion_convexify}. That is,
 % \begin{align*}
@@ -183,7 +183,7 @@ Other combinations of learners are possible, as long as the sum of their regrets
     U_n^{\bx,i} =\left\{
     \begin{array}{ll}
     \max_{\xi} & \min\big(\Vert \bxi - \btheta_n^i \Vert^2_{\bx\bx\transpose},4L^2M^2\big)\\
-    \text{s.t.} & \Vert \hbtheta_{n-1}^\lambda - \bxi \Vert^2_{\bLambda_{\bN_{n-1}}+\lambda I_d} \le 2h(n)
+    \text{s.t.} & \Vert \hbtheta_{n-1}^\lambda - \bxi \Vert^2_{\bLambda_{\bT_{n-1}}+\lambda I_d} \le 2h(n)
     \end{array}
     \right.\,,
 \end{align*}
@@ -199,9 +199,9 @@ Under the event that the true parameter verifies $\Vert \hbtheta_{n-1}^\lambda -
 
 \paragraph{Tracking.} In Algorithm~\ref{alg:lg}, the learner plays weight vectors in a simplex. Since the bandit procedure allows only to pull one arm at each stage, our algorithm needs a procedure to transcribe weights into pulls. This is what we call tracking, following~\citet{garivier2016tracknstop}. The choice of arm (or arm and answer) is
 \begin{align*}
-    \hbx_{n+1} \in \argmin_{\bx\in \cX } N_{n}^{\bx} - W_{n+1,\bx}\,.
+    \hbx_{n+1} \in \argmin_{\bx\in \cX } T_n^{\bx} - W_{n+1,\bx}\,.
 \end{align*}
-This procedure guarantees that for all $n\in\NN, \bx\in\cX$, we have $- \log (|\cX|) \le N_n^{\bx} - W_{n,\bx} \le 1$. This result is due to~\citet{degenne2020structure}.
+This procedure guarantees that for all $n\in\NN, \bx\in\cX$, we have $- \log (|\cX|) \le T_n^{\bx} - W_{n,\bx} \le 1$. This result is due to~\citet{degenne2020structure}.
 
 \begin{theorem}\label{thm:lgc.sample_complexity}
 \begin{leftbar}[theorembar]
@@ -231,11 +231,11 @@ We give some details about each individual algorithm implemented to ensure repro
 	\item For our algorithms \LG and \LGC, we implemented the version with the boundedness assumption.
 	\item For \LGapE We implemented the greedy version, that is, pull the arm 
 	\[
-	    \argmin_{\bx\in\cX} \normm{\bx_{i_n}-\bx_{j_n}}_{(\bLambda_{\bN_n}+\bx\bx\transpose)^{-1}}^2
+	    \argmin_{\bx\in\cX} \normm{\bx_{i_n}-\bx_{j_n}}_{(\bLambda_{\bT_n}+\bx\bx\transpose)^{-1}}^2
 	\]
 	with $i_t = \Istar(\hbtheta_n^\lambda)$ and 
 	\[
-	    j_n = \argmax_{j\neq i_n}(\bx_{j}-\bx^\star(\hbtheta_n^\lambda))\transpose\hbtheta_n^\lambda + \normm{\bx^\star(\hbtheta_n^\lambda) - \bx_{j_n}}_{\bLambda_{\bN_n}^{-1}} \sqrt{2d_{n,\delta}}\,.
+	    j_n = \argmax_{j\neq i_n}(\bx_{j}-\bx^\star(\hbtheta_n^\lambda))\transpose\hbtheta_n^\lambda + \normm{\bx^\star(\hbtheta_n^\lambda) - \bx_{j_n}}_{\bLambda_{\bT_n}^{-1}} \sqrt{2d_{n,\delta}}\,.
 	\]
 	Note that this version does not have a theoretical guarantee in the general case. However, as we stated in Section~\ref{sec:lgc.related_work}, the \GLUCB proposed by~\citet{zaki2019maxoverlap} is equivalent to this greedy version of \LGapE, and they provided an analysis for the 2-arm and 3-arm case. \LGapE is designed for $\epsilon$-best-arm identification, we set $\epsilon=0$ in our experiments to make sure that it outputs the optimal one.
 	\item For \XYS, we implemented the greedy incremental version for both $\gopt$-allocation and $\xyopt$-allocation, that allows us to avoid the step of computing optimal design. To implement the non-greedy version, readers are invited to look at next Section~\ref{sec:lgc.experiments.complexity} where we discuss in detail the computation of $\cX\cY$-optimal design.
