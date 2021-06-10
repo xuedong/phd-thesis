@@ -1,12 +1,18 @@
 %!TEX root = ../Chapter3.tex
 \section{Discussion}\label{sec:t3c.discussion}
 
-We have advocated the use of a Bayesian sampling rule for BAI. In particular, we proved that \TTTS and a computationally advantageous approach \TCC, are both $\beta$-optimal in the fixed-confidence setting, for Gaussian bandits. 
-%Our analysis applies to Gaussian bandits, but could be extended to more distributions for which posterior tails bounds are available. 
+We have advocated the use of a Bayesian sampling rule for BAI. In particular, we proved that \gls{ttts} and a computationally advantageous approach \TCC, are both $\beta$-optimal in the fixed-confidence setting, for Gaussian bandits. Our analysis applies to Gaussian bandits, but could be extended to more distributions for which posterior tails bounds are available.
+
 We further extended the Bayesian optimality properties established by \cite{russo2016ttts} to more practical choices of models and prior distributions. 
 
+For future work, it would also be meaningful to provide a fixed-budget analysis, in particular in some potential application scenario of \gls{ttts}. For example, pure exploration bandit algorithms are widely used in \emph{hyper-parameter optimization} for machine learning~\citep{hoffman2014bayesgap,li2017hyperband,shang2019dttts}.
 
-In order to be optimal, the sampling rules studied in this paper would need to use the oracle tuning $\beta^\star =\argmax_{\beta \in [0,1]} \Gamma_\beta^\star$, which is not feasible. In future work, we will investigate an efficient online tuning of~$\beta$ to circumvent this issue. We also plan to investigate the extension of \TCC to more general pure exploration problems, as an alternative to approaches recently proposed by~\citet{menard2019lma,degenne2019game}.
+Another important unsolved open question comes to the tuning of $\beta$. Indeed, if $\beta$ is set to $\beta^\star = \argmax_{\beta \in [0,1]} T_{\beta}^\star(\bmu)^{-1}$, a $\beta$-optimal strategy is also optimal. In practice of course $\beta^\star$ is unknown and so far \gls{ttts} cannot be asymptotically optimal without this knowledge. However, note that \cite{russo2016ttts} shows that $\Gamma^\star_{1/2} \geq \Gamma^{\star}/2$, which provides a near-optimal tuning of \gls{ttts}. Obviously, proposing an satisfying online tuning of $\beta$ (other than the one proposed in the \gls{ttts} paper) with provable fixed-confidence guarantees is another avenue for future work.
 
-Finally, it is also important to study Bayesian sampling rules in the fixed-budget setting which is more plausible in many application scenarios such as applying BAI for automated machine learning~\citep{hoffman2014bayesgap,li2017hyperband,shang2019dttts}.
-\vfil
+There is another line of research that leverages a game theoretic point of view on the pure exploration setting, that explores a statistic-computation trade-off (~\citealt{menard2019lma,degenne2019game}, see also Chapter~\ref{CHAP:LGC}). It is also interesting to investigate whether \gls{ts}-based exploration can replace the current (complicated) optimistic approach.
+
+%We also plan to investigate the extension of \TCC to more general pure exploration problems, as an alternative to approaches recently proposed by~\citet{menard2019lma,degenne2019game}.
+
+%Finally, it is also important to study Bayesian sampling rules in the fixed-budget setting which is more plausible in many application scenarios such as applying BAI for automated machine learning~\citep{hoffman2014bayesgap,li2017hyperband,shang2019dttts}.
+
+%Finally, it is also interesting to know whether there exist better sampling methods, that can accelerate the procedure of sampling the challenger.

@@ -14,7 +14,7 @@
 
 The problem of sequentially allocating resources to a defined set of actions (arms) based on successive \emph{partially observable} (see Definition~\ref{def:mab.mab} and Remark~\ref{remark:mab.partial} below) feedback refers to the MAB game in probability theory. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A sequential decision making problem comes up then when facing with several slot machines (multi-armed bandits).
 
-The study of MAB problems can date back to as early as 1933~\citep{thompson1933}, and was originally proposed to model sequential clinical trials. For example, researchers testing the efficacy of potential vaccines for a new coronavirus have to choose a vaccine (arm) from the following 4 options as shown in Fig.~\ref{fig:mab.covid} on each patient from an experimental group of $N$ person. For each patient $n\in[N]$, researchers receive a reward signal $r_n\in\{0,1\}$. $r_n=1$ indicates that the treatment is successful, otherwise the treatment is a failure. We thus assume that the efficacy of each vaccine follows some Bernoulli distribution that is unknown to the researchers.
+The study of MAB problems can date back to as early as 1933~\citep{thompson1933}, and was originally proposed to model sequential clinical trials. For example, researchers testing the efficacy of potential vaccines for a new coronavirus have to choose a vaccine (arm) from the following 4 options as shown in Fig.~\ref{fig:mab.covid} on each patient from an experimental group of $N$ person. For each patient $n\in[N]$, researchers receive a reward signal $r_n\in\{0,1\}$. $r_n=1$ indicates that the vaccine is effective, otherwise the vaccine fails. We thus assume that the efficacy of each vaccine follows some Bernoulli distribution that is unknown to the researchers.
 
 \begin{figure}[ht]
     \centering
@@ -25,9 +25,9 @@ The study of MAB problems can date back to as early as 1933~\citep{thompson1933}
 
 As stated in Chapter~\ref{CHAP:INTRO}, a common learning objective for stochastic MAB is to maximize the total reward obtained given a sequence of observations. In the previous example, researchers need to decide which vaccine to employ for each patient depending on the previous success rates with the purpose of maximizing the total success rate $\sum_{n=1}^N r_n$ at the end.
 
-However, due to the complex nature of medical treatment, it turns out that the MAB model is hardly applied in real clinical trials despite its primary purpose~\citep{reda2020drug}. Nevertheless, the model has been widely employed in many other applications recently, in particular online recommendation systems for example (see e.g.~\citealt{li2010contextual,zeng2016online}). Other application scenarios include...
+However, due to the complex nature of medical treatment, it turns out that the MAB model is hardly applied in real clinical trials despite its primary purpose~\citep{reda2020drug}. Nevertheless, the model has been widely employed in many other applications recently, in particular online recommender systems for example (see e.g.~\citealt{li2010contextual,zeng2016online}). Other application scenarios include...
 
-In this section, we go a little beyond the intuition and provide the formal definition of the model. We also recall some fundamental results for the sake of self-containedness. Of course, we do not intend to write a survey of MAB, for which the content is far too rich for this thesis. Interested lecturers can refer to~\cite{bubeck2012bandits,lattimore2018bandits} or~\cite{slivkins2019bandits} for further readings and more general results.
+In this section, we go a little beyond the intuition and provide the formal definition of the model. We also recall some fundamental results for the sake of self-containedness. Of course, we do not intend to write a survey of MAB, for which the content is far too rich for this thesis. Interested readers can refer to~\cite{bubeck2012bandits,lattimore2018bandits} or~\cite{slivkins2019bandits} for further readings and more general results.
 
 \subsection{Problem Formulation}\label{sec:mab.model.formulation}
 
@@ -56,6 +56,8 @@ From a mathematical point of view, a MAB model is a collection of $K$ \emph{unkn
 	Rewards of unchosen arms at time $n$ are not revealed, this partial feedback setting is a special case of the online learning with experts setting.
 \end{leftbar}
 \end{remark}
+
+The way that the learner chooses the arm to pull is sometimes called a \gls{sampling rule} or \emph{sampling strategy}. Clearly, the sampling rule should make use of the past observations as well as the past external randomness if present. A very simple way to understand this intuition is to consider a bandit model with two arms with $\mu_1=1, \mu_2=0$. Suppose that the rewards are deterministic. In this case, if we consider a naive sampling strategy that uniformly pull the two arms would yield an expected reward of $50$ after $100$ rounds. However, if we pull each of the two arms once at the beginning and then start exploiting the large one (since the rewards are deterministic), we can achieve a total reward of $99$ after $100$ rounds. Ignoring past observations is clearly not reasonable.
 
 In the rest of this manuscript, when $\nu_k$ are some common probability distributions, we can simply call our MAB model by the corresponding probability distribution name. For example, if the underlying reward distributions are Bernoulli (resp. Gaussian, exponential, Poisson, etc) distributions, then we can simply use Bernoulli bandits (resp. Gaussian bandits, exponential bandits, Poisson bandits, etc) to represent our bandit model. 
 
@@ -221,7 +223,7 @@ is the underlying bandit model associated to the given set of $K$ arms. In the r
 
 \begin{remark}
 \begin{leftbar}[remarkbar]\label{remark:mab.two_frameworks}
-Note that these two frameworks are very different in general and do not share transferable performance guarantees, lecturers can refer to~\cite{carpentier2016budget} for a detailed discussion on the topic.
+Note that these two frameworks are very different in general and do not share transferable performance guarantees, readers can refer to~\cite{carpentier2016budget} for a detailed discussion on the topic.
 \end{leftbar}
 \end{remark}
 
