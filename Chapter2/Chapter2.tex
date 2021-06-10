@@ -44,9 +44,9 @@ From a mathematical point of view, a MAB model is a collection of $K$ \emph{unkn
 \begin{leftbar}[defnbar]
 	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $N$. At each stage $n\in\NN$, the bandit game consists of the following steps:
 	\begin{itemize}
-		\item a vector of rewards $(r_{1,n} \sim \nu_1, \cdots, r_{K,n} \sim \nu_K)$ is generated,
+		\item a vector of rewards $(r_{n,1} \sim \nu_1, \cdots, r_{n,K} \sim \nu_K)$ is generated,
 		\item the learner picks an arm $I_n \in \{1,\cdots,K\}$, and
-		\item the learner observes the reward $r_n \eqdef r_{I_n, n}$.
+		\item the learner observes the reward $r_n \eqdef r_{n,I_n}$.
 	\end{itemize}
 \end{leftbar}
 \end{definition}
@@ -170,7 +170,7 @@ Recall that for the vanilla problem setup of BAI, we consider a finitely-armed b
 
 A BAI strategy or algorithm can be characterized by a triple $(I_n, J_n, \tau)$ at each time step, hence consists of three components: 
 \begin{itemize}
-    \item The first is a \gls{sampling rule}, which selects an arm $I_n\in[K]$. Recall that in a MAB problem, a vector of rewards $(r_{1,n},\cdots,r_{K,n})$ is generated for all arms independently from past observations at each round, but only $r_n = r_{I_n,n}$ is revealed to the learner. Note that $I_n$ is $\cF_{n-1}$-measurable, i.e., it can only depend on the past $n-1$ observations, and some exogenous randomness, materialized into $U_{n-1} \sim \cU([0,1])$;
+    \item The first is a \gls{sampling rule}, which selects an arm $I_n\in[K]$. Recall that in a MAB problem, a vector of rewards $(r_{n,1},\cdots,r_{n,K})$ is generated for all arms independently from past observations at each round, but only $r_n = r_{n,I_n}$ is revealed to the learner. Note that $I_n$ is $\cF_{n-1}$-measurable, i.e., it can only depend on the past $n-1$ observations, and some exogenous randomness, materialized into $U_{n-1} \sim \cU([0,1])$;
     \item The second component is a $\cF_{n}$-measurable \gls{decision rule} $J_n$, which returns a guess for the best arm;
     \item And thirdly, the \gls{stopping rule}~$\tau$, a stopping time with respect to $\left(\cF_{n}\right)_{n \in \mathbb{N}}$, decides when the exploration is over.
 \end{itemize}
@@ -185,9 +185,9 @@ In the fixed-budget setting, the learner tries to maximize the probability of re
 \begin{leftbar}[defnbar]
 	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, and a time horizon $N$. At each time step $n$, the learning process consists of the following actions:
 \begin{itemize}
-	\item a vector of rewards $(r_{1,n} \sim \nu_1, \cdots, r_{K,n} \sim \nu_K)$ is generated,
+	\item a vector of rewards $(r_{n,1} \sim \nu_1, \cdots, r_{n,K} \sim \nu_K)$ is generated,
 	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$,
+	\item the learner observes the reward $r_n \eqdef r_{n,I_n}$,
 	\item the learner stops when $n=N$, and
 	\item the learner outputs a guess for the best arm $J_N \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
 \end{itemize}
@@ -204,9 +204,9 @@ In the fixed-confidence setting, the learner is given a confidence level/risk $\
 \begin{leftbar}[defnbar]
 	We are given a set of $K$ arms $\{1,\cdots,K\}$ that follow $K$ unknown distributions $(\nu_k)_{1 \leq k \leq K}$, a confidence level $\delta$, and a stopping time $\tau$ w.r.t. the observations. At each time step $n$, the learning process consists of the following actions:
 \begin{itemize}
-	\item a vector of rewards $(r_{1,n} \sim \nu_1, \cdots, r_{K,n} \sim \nu_K)$ is generated,
+	\item a vector of rewards $(r_{n,1} \sim \nu_1, \cdots, r_{n,K} \sim \nu_K)$ is generated,
 	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$,
+	\item the learner observes the reward $r_n \eqdef r_{n,I_n}$,
 	\item the learner stops if $\PP{J_{\tau}\neq I^\star} \leq \delta$, where $I^\star$ is the optimal arm, and
 	\item the learner outputs a guess for the best arm $J_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
 \end{itemize}
@@ -331,9 +331,9 @@ The learning protocol of a general pure exploration problem is summarized in Def
 \begin{leftbar}[defnbar]
 	We are given a set of $K$ arms that is parameterized by a parameter vector $\bmu\in\Theta$. At each time step $n$, the learning process consists of the following actions:
 \begin{itemize}
-	\item a vector of rewards $(r_{1,n}, \cdots, r_{K,n})$ is generated,
+	\item a vector of rewards $(r_{n,1}, \cdots, r_{n,K})$ is generated,
 	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$ (possibly noisy),
+	\item the learner observes the reward $r_n \eqdef r_{n,I_n}$ (possibly noisy),
 	\item the learner stops according to the stopping rule $\tau$, and
 	\item the learner outputs a guess for the answer $J_\tau \in \cI$ (according to the decision rule) when they stop.
 \end{itemize}
@@ -362,9 +362,9 @@ where $\epsilon_n$ is the noise. The learning protocol of linear bandits BAI is 
 \begin{leftbar}[defnbar]
 	We are given a set of $K$ arms $\{\bx_1,\cdots,\bx_K\}\in\R^d$ that spans $\R^d$. At each time step $n$, the learning process consists of the following actions:
 \begin{itemize}
-	\item a vector of rewards $(r_{1,n} = \bx_1\transpose\btheta+\epsilon_{1,n}, \cdots, r_{K,n} = \bx_K\transpose\btheta+\epsilon_{K,n})$ is generated,
+	\item a vector of rewards $(r_{n,1} = \bx_1\transpose\btheta+\epsilon_{1,n}, \cdots, r_{n,K} = \bx_K\transpose\btheta+\epsilon_{K,n})$ is generated,
 	\item the learner picks an arm $I_n \in \{1,\cdots,K\}$ (according to the sampling rule),
-	\item the learner observes the reward $r_n \eqdef r_{I_n, n}$ with noise $\epsilon_n \eqdef \epsilon_{I_n,n}$,
+	\item the learner observes the reward $r_n \eqdef r_{n,I_n}$ with noise $\epsilon_n \eqdef \epsilon_{I_n,n}$,
 	\item the learner stops according to the stopping rule $\tau$, and
 	\item the learner outputs a guess for the best arm $J_\tau \in \{1,\cdots,K\}$ (according to the decision rule) when they stop.
 \end{itemize}

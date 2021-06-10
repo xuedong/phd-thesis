@@ -1,6 +1,9 @@
 \section{A Brief Survey of Automated Machine Learning}\label{sec:dttts.survey}
 
-We provide a full-stack pipeline for a machine learning procedure as displayed in Fig.~\ref{fig:automl} and a general taxonomy on different components of AutoML~\citep{hutter2019automl,zoller2019automl,he2019automl}. We pay particular attention to hyper-parameter optimization, neural architecture search and meta learning later in separate subsections.
+\gls{hpo} plays an important role in automating modern machine learning procedure. In this section, we give a brief introduction of \gls{automl} and we pay particular attention, of course, to \gls{hpo}. 
+
+We first provide a full-stack pipeline for an \gls{automl} procedure as displayed in Figure~\ref{fig:automl} followed by a general taxonomy on different components of \gls{automl}~\citep{hutter2019automl,zoller2019automl,he2019automl}. 
+%We pay particular attention to hyper-parameter optimization, neural architecture search and meta learning later in separate subsections.
 
 \begin{figure}[ht]
     \centering
@@ -12,105 +15,57 @@ We provide a full-stack pipeline for a machine learning procedure as displayed i
 
 \subsection{The AutoML taxonomy}\label{sec:dttts.survey.taxonomy}
 
-\paragraph{Data preparation}
+\paragraph{Data preparation.}
+The very first step of a machine learning pipeline consists of collecting and preparing clean data.
 
-\begin{itemize}
-    \item Data collection
-    \begin{itemize}
-        \item Web searching, however data could be ill-labeled or inaccurate, semi-supervised or self-labeling methods are required;
-        \item Data synthesis when not enough data available, mainly using data augmentation.
-    \end{itemize}
-    \item Data cleaning
-    \begin{itemize}
-        \item Standardization;
-        \item Scaling;
-	    \item Binarization of numerical (discrete or continuous) attributes;
-	    \item One-hot encoding for categorical attributes;
-	    \item Imputation (e.g. with mean values).
-    \end{itemize}
-    \item Feature engineering
-\end{itemize}
+Data collection often relies on web searching. However, data could be ill-labeled or inaccurate, thus semi-supervised or self-labeling methods are required. When not enough data are available, data synthesis is needed, mainly with the help of data augmentation.
 
-\paragraph{Feature engineering}
+On the other hand, data cleaning is more or less standardized. Typical tricks include normalization, scaling, binarization of numerical (discrete or continuous) attributes, one-hot encoding for categorical attributes, imputation (e.g. with mean values), etc.
 
-\begin{itemize}
-    \item Feature selection
-    \begin{itemize}
-        \item Subset generation, using some (random) search strategy (simulated annealing, genetic algorithms);
-        \item Subset evaluation with filter methods, wrapper methods or embedded methods (deep learning, decision trees, etc);
-        \item Subset validation.
-    \end{itemize}
-    \item Feature extraction (alters the features)
-    \begin{itemize}
-        \item Dimensionality reduction techniques like PCA, ICA, LDA, etc;
-        \item Autoencoder-based methods.
-    \end{itemize}
-    \item Feature construction
-    \begin{itemize}
-        \item Searching methods such as tree-based approaches, genetic algorithms;
-        \item Annotation-based approaches.
-    \end{itemize}
-\end{itemize}
+\paragraph{Feature engineering.}
+Once the data are collected and tidied, the next step is dealing with the features. Depending on the task, feature manipulation can contain three different aspects.
 
-\paragraph{Pipeline generation} 
-This is the most important part to be further detailed.
+Sometimes we need to reduce irrelevant or redundant features, thus builds a more compact feature subset. This is feature selection. A typical feature selection process starts with subset generation using some (random) search strategy like simulated annealing, genetic algorithms, etc; followed by subset evaluation with filter methods, wrapper methods or embedded methods such as deep neural networks, decision trees, etc; and finally ends up with a validation step.
 
-\begin{itemize}
-    \item FMS (full model selection) or CASH (combined algorithm and hyper-parameter optimization)
-    \begin{itemize}
-        \item Model/Algorithm selection;
-        \item HPO (hyper-parameter optimization).
-    \end{itemize}
-    \item NAS (neural architecture search)
-    \item Ensembling, since choosing one single full model maybe a waste
-    \item Metal learning
-\end{itemize}
+Another similar but not completely same trick is feature extraction. Feature extraction aims at extracting more informative features using dimensionality reduction techniques like \PCA, \ICA, \LDA, etc. Recent autoencoder-based methods can be used as well.
 
-\paragraph{Model evaluation or estimation}
+Finally, we can also construct new features from the raw data to enhance the robustness and generalizability of the model. Typical methods of feature construction include searching methods such as tree-based approaches, genetic algorithms; and annotation-based approaches.
 
-\begin{itemize}
-    \item Complete training (time and resource-consuming especially)
-    \item Multi-fidelity (low resolution, subset of data, not only for DL)
-    \item Early-stopping (mostly for DL)
-    \item Surrogate model (not only for DL)
-    \item Weight sharing (DL-specific)
-    \item Resource/budget-aware (computational cost is added to the loss)
-\end{itemize}
+\paragraph{Pipeline generation.} 
+The previous two parts are not the main focus of this chapter. We are more interested in the third step, namely pipeline generation. Indeed \gls{hpo} is one of the main research topics in this domain.
+
+The pipeline generation is sometimes modeled as a \gls{fms} or \gls{cash} problem, that is typically composed of a model/algorithm selection process and a \gls{hpo} process. We focus on \gls{hpo} in this thesis. It is worth noting, however, that many \gls{hpo} algorithms can also be applied on the full model selection problem as a whole.
+
+A particular instance of \gls{fms} or \gls{cash} is the \gls{nas} problem. \gls{nas} is specific to large modern neural-network models and has become a very hot topic recently (see e.g.~\citealt{elsken2018nas,zoph2018nas,kandasamy2018nas,liu2019darts}). \gls{nas} can also be regarded as a \gls{hpo} problem sometimes, but more often, we can make use of extra information from its inner structure. Anyhow, it is also out of the scope of this manuscript.
+
+\paragraph{Model evaluation and estimation.}
+Last but not least, a model evaluation is needed at the end. The classic way of evaluating a model is to wait until the completion of the training before assessing its performance on a validation set. Recent work (see e.g.~\citealt{li2017hyperband}) suggests that using a multi-fidelity estimation~\citep{huang2006multifidelity,wu2019multi-fidelity,peherstorfer2018multifidelity} can tremendously reduce the time and resource consumption. Multi-fidelity methods estimate the target function by low-resolution approximations (using only a subset of data for example).
+
+Other methods exist as well that aim at increasing the efficacy of model evaluation and estimation, such as early-stopping, surrogate model, weight sharing, etc. They are mostly specifically designed for \gls{dl} though.
     
-    
-\paragraph{Existing (open source) AutoML frameworks} 
-TPOT, AutoKeras, auto-sklearn, Transmogrif, MLBox
+%\paragraph{Existing (open source) AutoML frameworks} 
+%TPOT, AutoKeras, auto-sklearn, Transmogrif, MLBox
 
 \subsection{Hyper-parameter optimization}\label{sec:dttts.survey.hpo}
 
-\paragraph{Black-box optimization}
+We stress again that we only study \gls{hpo} in this chapter. In particular, we do not take care of the model evaluation part, but rather focus on designing efficient model selection algorithms. That being said, we always consider complete training in this thesis, and we do not restrict ourselves to \gls{dl}.
 
-\begin{itemize}
-    \item Model-free
-    \begin{itemize}
-        \item \Random, \Grid;
-        \item Population-based as \CMAES, more precisely genetic algorithms, evolutionary algorithms, evolutionary strategies, and particle swarm optimization: maintain a population, then improve this population by applying mutations or crossovers.
-    \end{itemize}
-    \item Model-based (in particular Bayesian optimization)
-    \begin{itemize}
-        \item Traditional Bayesian optimization with various surrogate models and acquisition functions, like \GPUCB, \PI, \EI with Gaussian processes and \SMAC with random forests; 
-        \item Atypical Bayesian optimization \TPE;
-        \item Thompson sampling-based \DTTTS.
-    \end{itemize}
-\end{itemize}
+Two naive but daily-used \gls{hpo} methods are \Grid and \Random. More sophisticated model-free methods address \gls{hpo} as a sequential resource allocation problem, by adaptively choosing the next hyper-parameter(s) to explore, based on the results obtained previously. For example, evolutionary optimization follows a process inspired by the biological concept of evolution, which repeatedly replaces the worst-performing hyper-parameter configurations from a randomly initialized population of configurations (see e.g.~\citealt{loshchilov2016cmaes}) for an example of using \CMAES for hyper-parameter tuning. A major drawback of evolutionary optimization is its lack of theoretical understanding.
 
-\paragraph{Gray-box optimization}
+Model-based approaches also exist. For example, Bayesian optimization is an approach that leverages the sequential nature of the setting. \gls{bo} depends on a prior belief for the target function, typically a Gaussian process. This prior distribution can be updated to a posterior given a sequence of observations. Several algorithms exploiting this posterior distribution to decide where to sample next have been given (see e.g.~\citealt{shahriari2016loop}, for a survey). \citet{snoek2012spearmint} and \citet{klein2017robo} provide Python packages called \Spearmint\ and \RoBO\ to perform hyper-parameter tuning with \gls{bo} methods. Similar packages are available for \PyTorch\ (\BoTorch\footnote{\url{https://botorch.org/}}) and \TensorFlow\ (\flow\ by~\citealt{knudde2017gpflowopt}). Among \gls{bo} algorithms, \TPE~\citep{bergstra2011tpe} and \SMAC~\citep{hutter2011smac} were specifically proposed for \gls{hpo}. A shortcoming of \gls{bo} is that most algorithms select where to sample next based on optimizing some \emph{acquisition function} computed from the posterior, e.g., the expected improvement~\citep{jones1998ei}. This auxiliary task cannot be solved analytically but needs to be performed itself by optimization procedures as \LBFGS that make the process slow. %although this function is usually more regular than the target function. 
 
-\begin{itemize}
-    \item Multi-fidelity Optimization
-    \begin{itemize}
-        \item Bandit-based algorithm \Hyperband, that introduces the concept of partial training;
-        \item `Auto-WEKA` appears to be the only paper that uses only one or a few of the cross-validation folds;
-        \item Bayesian optimization + partial training = \BOHB;
-        \item Learning curve.
-    \end{itemize}
-    \item Gradient-based
-\end{itemize}
+% \paragraph{Gray-box optimization}
+
+% \begin{itemize}
+%     \item Multi-fidelity Optimization
+%     \begin{itemize}
+%         \item Bandit-based algorithm \Hyperband, that introduces the concept of partial training;
+%         \item `Auto-WEKA` appears to be the only paper that uses only one or a few of the cross-validation folds;
+%         \item Bayesian optimization + partial training = \BOHB;
+%         \item Learning curve.
+%     \end{itemize}
+%     \item Gradient-based
+% \end{itemize}
 
 % - Current Benchmark (they are mostly designed for a continuous search space)
 %     - `Random Search`
@@ -120,33 +75,33 @@ TPOT, AutoKeras, auto-sklearn, Transmogrif, MLBox
 %     - `Hyperband`
 %     - `BOHB`
 
-\subsection{Meta learning}\label{sec:dttts.survey.meta}
+% \subsection{Meta learning}\label{sec:dttts.survey.meta}
 
-\subsection{Neural architecture search}\label{sec:dttts.survey.nas}
+% \subsection{Neural architecture search}\label{sec:dttts.survey.nas}
 
-\paragraph{Model generation}
+% \paragraph{Model generation}
 
-\begin{itemize}
-    \item Elemental operations
-    \begin{itemize}
-        \item Convolution;
-        \item Pooling (max-pooling, average-pooling, attention);
-        \item Concatenation;
-        \item Addition;
-        \item Skip connection (ResNet).
-    \end{itemize}
-    \item Model structures
-    \begin{itemize}
-        \item Entire structure;
-        \item Cell-based structure (normal cell or reduction cell like `NASNet`): internal cell design with human-designed operations;
-        \item Progressive structure;
-        \item Morphism-based structure.
-    \end{itemize}
-\end{itemize}
+% \begin{itemize}
+%     \item Elemental operations
+%     \begin{itemize}
+%         \item Convolution;
+%         \item Pooling (max-pooling, average-pooling, attention);
+%         \item Concatenation;
+%         \item Addition;
+%         \item Skip connection (ResNet).
+%     \end{itemize}
+%     \item Model structures
+%     \begin{itemize}
+%         \item Entire structure;
+%         \item Cell-based structure (normal cell or reduction cell like `NASNet`): internal cell design with human-designed operations;
+%         \item Progressive structure;
+%         \item Morphism-based structure.
+%     \end{itemize}
+% \end{itemize}
 
-\paragraph{Hyper-parameter Optimization}
+% \paragraph{Hyper-parameter Optimization}
 
-\begin{itemize}
-    \item Classical HPO methods
-    \item RL-based methods
-\end{itemize}
+% \begin{itemize}
+%     \item Classical HPO methods
+%     \item RL-based methods
+% \end{itemize}
