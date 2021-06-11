@@ -86,7 +86,7 @@ The previous vaccine example of Fig.~\ref{fig:mab.covid} with Bernoulli bandits 
 
 Unbounded reward distributions are obviously considered in the literature as well. An usual example of infinitely-supported reward distributions is Gaussian distribution. Therefore in the literature, we sometimes think of a more general parametric framework, namely the exponential family. The exponential family contains a large set of natural distributions as Bernoulli distributions and Gaussian distributions, hence covers a wide range of both bounded and unbounded rewards.
 
-In practice, we often further consider a specific sub-family of distributions that is the \gls{one-dimensional exponential family} or \gls{single-parameter exponential family}. Typical distributions in the one-dimensional exponential family include beta distributions, Bernoulli distributions, Gaussian distributions with \emph{known} variance, etc. Formally, given a random variable $X$ whose probability distribution belongs to the single-parameter exponential family, then its \gls{probability density function} (or \gls{probability mass function} if $X$ is discrete), depending only on one single parameter $\theta$, can be written as
+In practice, we often further consider a specific sub-family of distributions that is the \gls{one-dimensional exponential family} or \gls{single-parameter exponential family}. Typical distributions in the one-dimensional exponential family include Bernoulli distributions, Gaussian distributions with \emph{known} variance, etc. Formally, given a random variable $X$ whose probability distribution belongs to the single-parameter exponential family, then its \gls{probability density function} (or \gls{probability mass function} if $X$ is discrete), depending only on one single parameter $\theta$, can be written as
 \begin{align}\label{eq:mab.exponential}
     p_{X}(x \mid \theta ) = b(x) \exp \left[\eta (\theta ) \cdot T(x) + A(\theta )\right]\,,
 \end{align}
@@ -177,7 +177,7 @@ A BAI strategy or algorithm can be characterized by a triple $(I_n, J_n, \tau)$ 
     \item And thirdly, the \gls{stopping rule}~$\tau$, a stopping time with respect to $\left(\cF_{n}\right)_{n \in \mathbb{N}}$, decides when the exploration is over.
 \end{itemize}
 
-In general, there are two learning frameworks of BAI: (1) \gls{fixed-confidence setting}, first studied by~\citep{even-dar2003confidence} and (2) \gls{fixed-budget setting}, first proposed by~\citep{audibert2010budget}. We will see later that the two frameworks differ mostly in the stopping rule.
+In general, there are two learning frameworks of BAI: (1) \gls{fixed-confidence setting}, first studied by~\citep{even-dar2003confidence} and (2) \gls{fixed-budget setting}, first proposed by~\citep{audibert2010budget}.
 
 \paragraph{Fixed-budget setting.}
 
@@ -247,7 +247,7 @@ The fact that the two frameworks produce sampling rules that depend either on a 
 
 \subsection{Stopping rules}\label{sec:mab.bai.stopping}
 
-One can observe from Definition~\ref{def:mab.bai_confidence} and Definition~\ref{def:mab.bai_budget} that stopping rules are more important in fixed-confidence BAI, as for fixed-budget BAI the learner stops simply when the budget is exhausted.
+One can observe from Definition~\ref{def:mab.bai_confidence} and Definition~\ref{def:mab.bai_budget} that stopping rules are more sophisticated in fixed-confidence BAI, as for fixed-budget BAI the learner stops simply when the budget is exhausted even though the learner needs to know the budget in order to design the sampling rule.
 
 One of the most applied stopping rules is constructed upon the \gls{generalized likelihood ratio}. The stopping rule was first studied by~\cite{chernoff1959}, and has recently been reformulated by~\cite{garivier2016tracknstop}.
 
@@ -268,7 +268,7 @@ where we recall that $\mu_{n,i}$ is the empirical mean of arm $i$. It can be sho
 \[
     Z_{n,i,j} = T_{n,i}d(\mu_{n,i}, \mu_{n,i,j}) + T_{n,j}d(\mu_{n,j}, \mu_{n,i,j})\,.
 \]
-and also we have $Z_{n,i,j} = -Z_{n,j,i}$. The following stopping rule thus emerges naturally:
+and we also have $Z_{n,i,j} = -Z_{n,j,i}$. The quantity $d(a,b)$ denotes the KL-divergence between two probability distributions characterized respectively by $a$ and $b$ (see Appendix~\ref{app:maths.information.kl} for a reminder). The following stopping rule thus emerges naturally:
 \begin{align}\label{eq:mab.glr}
     \tau_\delta &\eqdef \inf \left\lbrace n \in \NN : \exists i \in \cX, \forall j \in \cX \setminus \{i\}, Z_{n,i,j} > d_{n,\delta} \right\rbrace\nonumber \\
     &= \inf \left\lbrace n \in \NN : \max_{i \in \cX} \min_{j \in \cX \setminus \{i\}} Z_{n,i,j} > d_{n,\delta} \right\rbrace\,,
@@ -293,7 +293,7 @@ We introduce first EBA which returns, according to its name, the arm with the la
 \end{leftbar}
 \end{definition}
 
-Another natural decision is to output the most pulled arm (see Definition~\ref{def:mab.mpa}). Intuitively, the true best arm should be played the most number of times.
+Another possible decision is to output the most pulled arm (see Definition~\ref{def:mab.mpa})\footnote{This decision rule is, however, more natural with a regret-minimizing strategy.}.
 
 \begin{definition}[most played arm decision rule]
 \begin{leftbar}[defnbar]\label{def:mab.mpa}
@@ -385,11 +385,11 @@ We mention several variants of BAI. Top-m identification~\citep{kalyanakrishnan2
 
 \section{Many-armed bandits}\label{sec:mab.continuum}
 
-Now we elaborate a bit on another important extension, for which a large number of arms are available. The arm space could be infinite, or even continuous so that it's not even possible to sample each arm once.
+Now we elaborate a bit on another important extension, for which a large number of arms are available. The arm space could be infinite, or even continuous so that it is not even possible to sample each arm once.
 
-Remember that there exists two general learning objectives in a bandit game: regret minimization and pure exploration (see e.g.~\citealt{kaufmann2017survey} for a survey). While regret minimization is also an interesting topic for many-armed bandits, our focus in this thesis sticks to optimization. As introduced in Chapter~\ref{CHAP:INTRO}, when the search space is infinite, it is also called \emph{global optimization}.
+Remember that there exists two general learning objectives in a bandit game: regret minimization and pure exploration (see e.g.~\citealt{kaufmann2017survey} for a survey). While regret minimization is also an interesting topic for many-armed bandits, our focus in this thesis is still on optimization. As introduced in Chapter~\ref{CHAP:INTRO}, when the search space is infinite, it is also called \emph{global optimization}.
 
-More precisely, we consider an (measurable) arm space $\cX$ that contains infinitely-many arms. The learning goal is to optimize an \emph{unknown} function $f: \cX \rightarrow \R$ based on $N$ noisy evaluations, that can be sequentially selected. Each arm $x$ is essentially a data point in the arm space $\cX$, and it gets its mean reward $f(x)$ through the reward function $f$, which is the target function to be optimized. At each round $n$, the learner chooses an arm $x_n \in \mathcal{X}$ and receives a reward $r_n$. We study the noisy setting in which the obtained reward is a noisy evaluation of $f$: $r_n \eqdef f(x_n) + \epsilon_n$, where $\epsilon_n$ is the noise. Note that in the context of GO, practitioners are often more interested by the fixed-budget setting as the target function is usually extremely costly to evaluate, hence only a considerably limited number of function evaluations are allowed. The learning protocol can thus be given as follow.
+More precisely, we consider a (measurable) arm space $\cX$ that contains infinitely-many arms. The learning goal is to optimize an \emph{unknown} function $f: \cX \rightarrow \R$ based on $N$ noisy evaluations, that can be sequentially selected. Each arm $x$ is essentially a data point in the arm space $\cX$, and it gets its mean reward $f(x)$ through the reward function $f$, which is the target function to be optimized. At each round $n$, the learner chooses an arm $x_n \in \mathcal{X}$ and receives a reward $r_n$. We study the noisy setting in which the obtained reward is a noisy evaluation of $f$: $r_n \eqdef f(x_n) + \epsilon_n$, where $\epsilon_n$ is the noise. Note that in the context of GO, practitioners are often more interested by the fixed-budget setting as the target function is usually extremely costly to evaluate, hence only a considerably limited number of function evaluations are allowed. The learning protocol can thus be given as follow.
 
 \begin{definition}[global optimization]\label{def:mab.go}
 \begin{leftbar}[defnbar]

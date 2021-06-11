@@ -1,7 +1,7 @@
 %!TEX root = ../Chapter4.tex
 \section{Related Work}\label{sec:lgc.related_work}
 
-We survey previous work on linear BAI. The major focus is put on sampling rules in this section. We stress that all the stopping rules employed in the linear BAI literature are equivalent up to the choice of their exploration rate (More discussion in Appendix~\ref{app:lgc.stopping}). As aforementioned, existing sampling rules are either based on \SE or \UGapE. Elimination-based sampling rules usually operate in phases and progressively discard sub-optimal directions. Gap-based sampling rules always play the most informative arm that reduces the uncertainty of the gaps between the empirical best arm and the others.
+We survey previous work on linear BAI. The major focus is put on sampling rules in this section. We stress that all the stopping rules employed in the linear BAI literature are equivalent up to the choice of their exploration rate (More discussion in Appendix~\ref{app:lgc.stopping}). As aforementioned, existing sampling rules for fixed-confidence linear BAI are either elimination-based or gap-based. Elimination-based sampling rules usually operate in phases and progressively discard sub-optimal directions. Gap-based sampling rules always play the most informative arm that reduces the uncertainty of the gaps between the empirical best arm and the others.
 
 \paragraph{\XYS and \XYA.} \citet{soare2014linear} first propose a static allocation design \XYS that aims at reducing the uncertainty of the gaps of all arms. More precisely, it requires to either solve the $\xyopt$-complexity or use a \emph{greedy} version that pulls the arm 
 \[
@@ -27,6 +27,6 @@ with $d_{n,\delta}$ the stopping rule threshold.
 On the other hand,~\citet{zaki2019maxoverlap} propose a new algorithm based on \LUCB. With a careful examination, we note that the sampling rule of \GLUCB is equivalent to that of the greedy \LGapE using the Sherman-Morrison formula. Later, \citet{kazerouni2019glb} provide a natural extension of \LGapE to the \emph{generalized linear bandits} setting, where the rewards depend on a strictly increasing \emph{inverse link function}. \GLGapE reduces to \LGapE when the inverse link function is the identity function.
 
 \paragraph{Summary.}
-It is worth noting that all the sampling rules presented here depend on $\delta$ (except \XYS), while we aim to design sampling rules that are $\delta$-free which is appealing for applications as argued by~\citet{jun2016atlucb}. Also all the guarantees in the literature are of the form $C\log(\delta) + O\big(\log(1/\delta)\big)$ for a constant $C$ that is strictly larger than $\Tstar(\theta)^{-1}$.
+It is worth noting that all the sampling rules presented here depend on $\delta$ (except \XYS), while we aim to design sampling rules that are $\delta$-free which is appealing for applications as argued by~\citet{jun2016atlucb}. Also all the guarantees in the literature are of the form $C\log(1/\delta) + O\big(\log(1/\delta)\big)$ for a constant $C$ that is strictly larger than $\Tstar(\theta)^{-1}$.
 
-In the next, we present a set of algorithms using different design patterns that aim to address linear bandits BAI, whilst trying to be asymptotically optimal.
+In the next, we present a set of algorithms using different design patterns that aim to address linear bandits BAI in a (near) optimal way.

@@ -2,7 +2,7 @@
 
 In this chapter, we view \gls{hpo} as a particular \gls{go} setting, for which the target function $f$ is a mapping from a hyper-parameter configuration to some measure of failure for the machine learning algorithm trained with these hyper-parameters. Formally, we aim at solving an optimization problem of the form 
 \[
-f^\star = \min \{f(\blambda):\blambda\in\Omega\}\,,
+f^\star = \min \left\{f(\blambda):\blambda\in\Omega\right\}\,,
 \]
 where $\blambda$ denotes a configuration of hyper-parameters chosen from a configuration space $\Omega$. A hyper-parameter optimizer is a sequential procedure, that at each round $n$, selects a configuration~$\blambda_n$ to evaluate using some sampling rule, after which a (costly and \emph{noisy}) evaluation of $f(\blambda_n)$ is observed. Besides, a hyper-parameter configuration $\hat{\blambda}^\star$ is recommended as a guess for a close-to-optimal configuration at the end. The hope is that $f(\hat{\blambda}^\star)$ is not far from $f^\star$.
 

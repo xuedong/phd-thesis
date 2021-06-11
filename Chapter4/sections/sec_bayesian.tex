@@ -1,13 +1,13 @@
 %!TEX root = ../Chapter4.tex
-\section{Bayesian Algorithms Extended to the Linear Case?}\label{sec:lgc.bayesian}
+\section{Bayesian Algorithms for the Linear Case}\label{sec:lgc.bayesian}
 
-The first line that we would like to discover is extensions of Bayesian algorithms from Chapter~\ref{CHAP:T3C}.
+We first investigate a natural extension of the Bayesian algorithms from Chapter~\ref{CHAP:T3C} to the linear setting.
 
 \subsection{Direct adaptation of \TTTS{} and \TCC{}}\label{sec:lgc.bayesian.t3c}
 
-We first consider two Bayesian sampling rules inspired by \TTTS{} and \TCC{} called \gls{lt3s} and \gls{lt3c} respectively. Both sampling rules make use of a prior distribution $\Pi_1$ over a set of parameters $\Theta$, that contains the unknown true regression parameter $\btheta$. Upon observing a sequence of payoffs $(r_1,,\ldots,r_{n-1})$, we update our beliefs over the regression parameter and obtain a posterior distribution $\Pi_{n}$ whose density w.r.t.\,the Lebesgue measure is denoted by $\pi_n$.
+We consider two Bayesian sampling rules inspired by \gls{ttts} and \gls{t3c} called \gls{lt3s} and \gls{lt3c} respectively. Both sampling rules make use of a prior distribution $\Pi_1$ over a set of parameters $\Theta$, that contains the unknown true regression parameter $\btheta$. Upon observing a sequence of payoffs $(r_1,,\ldots,r_{n-1})$, we update our beliefs over the regression parameter and obtain a posterior distribution $\Pi_{n}$ whose density w.r.t.\,the Lebesgue measure is denoted by $\pi_n$.
 
-Furthermore, we assume that $\btheta$ is sampled from $\cN(0,\kappa^2\1_d)$ with $\kappa^2$ to be precised below. The posterior distribution $\Pi_n$, given the sequence of sampled arms $\bX_n$, can be written as $\cN(\hat{\btheta}^\lambda_n,\hat{\bSigma}_n)$ %(see e.g.~\citealt{bishop2006prml}, Chapter 3 Section 3 for a detailed computation of the posterior)
+\gls{lt3s}/\gls{lt3c} differ from \gls{ttts}/\gls{t3c} in the choice of prior distribution and consequently the deduction of posterior distribution. Indeed, in the linear case, we assume that $\btheta$ is sampled from $\cN(0,\kappa^2\1_d)$ with $\kappa^2$ to be precised below. The posterior distribution $\Pi_n$, given the sequence of sampled arms $\bX_n$, can be written as $\cN(\hat{\btheta}^\lambda_n,\hat{\bSigma}_n)$ %(see e.g.~\citealt{bishop2006prml}, Chapter 3 Section 3 for a detailed computation of the posterior)
 with
 \begin{align}\label{eq:update_variance}
      (\hat{\bSigma}_n)^{-1} = \frac{1}{\kappa^2}\1_d + \frac{1}{\sigma^2}\sum_{t=1}^n \hat{\bx}_t\hat{\bx}_t\transpose \quad \text{and} \quad \hat{\btheta}^\lambda_n = \frac{1}{\sigma^2}\hat{\bSigma}_n \bb_{\bX_n}.
@@ -18,7 +18,7 @@ Combining \eqref{eq:update_variance} and \eqref{eq:update_mean}, we obtain $\kap
 
 \paragraph{Description of \LTCC{}.} We can also extend \TCC{}, the computational-lightweight variant of \TTTS{} to the linear case which we call \LTCC{}. Instead of re-sampling from the posterior until a different candidate appears, we define the challenger as the arm that has the lowest \emph{transportation cost} $W_n(I_n^{(1)},i)$ with respect to the first candidate (with ties broken uniformly at random). The transportation cost is defined as
 \begin{align}\label{def:transportation}
-    W_n(i,j) = \dfrac{(\bx_i\transpose\hat{\btheta}^\lambda_n-\bx_j\transpose\hat{\btheta}^\lambda_n)^2}{2\normm{\bx_i-\bx_j}_{\hat{\bSigma}_n}^2}\1\{\bx_j\transpose\hat{\btheta}^\lambda_n<\bx_i\transpose\hat{\btheta}^\lambda_n\}.
+    W_n(i,j) = \dfrac{(\bx_i\transpose\hat{\btheta}^\lambda_n-\bx_j\transpose\hat{\btheta}^\lambda_n)^2}{2\normm{\bx_i-\bx_j}_{\hat{\bSigma}_n}^2}\1\left\{\bx_j\transpose\hat{\btheta}^\lambda_n<\bx_i\transpose\hat{\btheta}^\lambda_n\right\}.
 \end{align}
 
 The pseudo-code of the two sampling rules are given in Algorithm~\ref{alg:lt3s_lt3c}.
@@ -76,7 +76,7 @@ This stopping rule is coupled with the decision rule
 
 \subsection{\LTCS{} and \LTCC{} can fail}\label{sec:lgc.bayesian.fail}
 
-\LTCS{} and \LTCC{} may not be good enough for the linear case actually. To understand that, we run some simulations with the two sampling rules on the problem instance of Section~\ref{sec:lgc.complexity.complexity} with $d=2, c=2$, and $\alpha=0.01$. Both algorithms appear to be alternating between sampling $\bx_1$ and the disturbing context $\bx_2$ and take very long time before stopping. Note that in this instance, it would be more informative to select $\bx_2$ a lot in order to lead how to discriminate between $\bx_1$ and $\bx_3$ (which is what our competitor \LGapE{} is doing). To explain why this happens, we display in Fig.~\ref{fig:instance} the confidence ellipsoid of the posterior after how many 10000 iterations of \LTCC{} as a blue dot region. We can see that the confidence region of the posterior is around the axe $x=2$, thus a vector sampled from the posterior will most of the time have a larger dot product with $\bx_1$ and arm $\bx_3$, and $\bx_2$ will seldom be chosen as the leader or the challenger. 
+\LTCS{} and \LTCC{} may not be optimal for the linear case actually. To understand that, we run some simulations with the two sampling rules on the problem instance of Section~\ref{sec:lgc.complexity.complexity} with $d=2, c=2$, and $\alpha=0.01$. Both algorithms appear to be alternating between sampling $\bx_1$ and the disturbing context $\bx_2$ and take very long time before stopping. Note that in this instance, it would be more informative to select $\bx_2$ a lot in order to lead how to discriminate between $\bx_1$ and $\bx_3$ (which is what our competitor \LGapE{} is doing). To explain why this happens, we display in Fig.~\ref{fig:instance} the confidence ellipsoid of the posterior after how many 10000 iterations of \LTCC{} as a blue dot region. We can see that the confidence region of the posterior is around the axe $x=2$, thus a vector sampled from the posterior will most of the time have a larger dot product with $\bx_1$ and arm $\bx_3$, and $\bx_2$ will seldom be chosen as the leader or the challenger. 
 
 \begin{figure}[ht]
     \centering

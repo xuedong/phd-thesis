@@ -7,13 +7,14 @@ Recall that as a Bayesian algorithm, \gls{ttts} uses a prior distribution $\Pi_0
 We consider Bernoulli bandit model in the rest of this chapter. Under Bernoulli bandit model, arm $i$ produces a reward $r_{n,i}=1$ with probability $\mu_i$, and $r_{n,i}=0$ with probability $1-\mu_i$ when sampled at round $n$. Given independent uniform prior for the mean of each arm, the posterior distribution on $\bmu$ is a product of $K$ Beta distributions: $\Pi_n = \bigotimes_{i=1}^{K} \texttt{Beta}(1+S_{n,i},N_{n,i}-S_{n,i}+1)$, where $N_{n,i}$ is the number of selections of arm $i$ until round $n$ and $S_{n,i}$ is the sum of rewards obtained from that arm. 
 %At each round $n$, \gls{ttts} chooses one arm from the following two candidates to evaluate: (1) it first samples a parameter ${\bm\theta}$ from $\Pi_{t-1}$, and the first candidate is defined as $I_n^{\,(1)} \eqdef \argmax_{i\in\cX} {\theta}_i$, (2) it repeatedly samples new ${\bm\theta}'$ until $I_n^{\,(2)} \eqdef \argmax_{i\in\cX} \theta_i'$ is different from $I_n^{\,(1)}$. \gls{ttts} depends on a parameter $\beta \in (0,1)$. In particular, the algorithm selects $I_n = I_n^{\,(1)}$ with probability $\beta$ and $I_n = I_n^{\,(2)}$ with probability $1-\beta$.
 
-\paragraph{Best of best-arm identification.}
+\paragraph{Why variants of \TTTS{}?}
+We further motivate experimentally in this section why we choose to build new algorithms upon \gls{ttts}.
 
-We further motivate experimentally why we choose to build new algorithms upon \gls{ttts} in this section. 
+We compare \gls{ttts} against some fixed-budget \gls{bai} algorithms as benchmark, including uniform allocation~\citep{bubeck2009pure}, \UCBE{} and \SR{}~\citep{audibert2010budget}, \UGapE~\citep{gabillon2012ugape}, \SHA{}, \TS{} with a MPA strategy of decision (see Section~\ref{sec:mab.bai.decision}), and one anytime algorithm \ATLUCB{}~\citep{jun2016atlucb}.
 
-We consider here some fixed-budget and anytime \gls{bai} algorithms, including uniform allocation~\citep{bubeck2009pure}, \UCBE{} and \SR{}~\citep{audibert2010budget}, \UGapE~\citep{gabillon2012ugape}, \SHA{}, \TS{} with a MPA strategy of decision (see Section~\ref{sec:mab.bai.decision}), \gls{ttts}{}, \ATLUCB{}~\citep{jun2016atlucb}.
+We use 8 problem instances proposed by~\cite{audibert2010budget}, all settings consider Bernoulli bandits, and we compare their trending \gls{simple regret} (see Definition~\ref{def:mab.simple_regret}) averaged on 1000 trials. The results are shown in Fig.~\ref{fig:bai}.
 
-We use 8 problem instances proposed by~\cite{audibert2010budget}, all settings consider Bernoulli bandits, and we compare their trending \emph{simple regret} averaged on 1000 trials. The results are shown in Fig.~\ref{fig:bai}.
+Note that contrary to Chapter~\ref{CHAP:T3C}, we are interested in the fixed-budget setting in this chapter, hence the present experimental study with simple regret as performance measure.
 
 \begin{itemize}
 	\item Setting 1: $\mathbf{\mu_1}=0.5, \mathbf{\mu_{2:20}}=0.4, \operatorname{budget}=2000$
@@ -60,7 +61,7 @@ We use 8 problem instances proposed by~\cite{audibert2010budget}, all settings c
     \centering\includegraphics[width=\textwidth]{Chapter6/img/bai/setting8.png}
     \caption{Problem 8}
   \end{subfigure}
-  \caption{Comparing different fixed-budget and anytime BAI algorithms.}
+  \caption{Simple regret as a function of allocation budget for various BAI algorithms.}
   \label{fig:bai}
 \end{figure}
 

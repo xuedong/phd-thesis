@@ -1,9 +1,9 @@
 %!TEX root = ../Chapter4.tex
 \section{Discussion}\label{sec:lgc.discussion}
 
-In this chapter, we designed the first practically usable asymptotically optimal sampling rules for the pure exploration game for finite-arm linear bandits. Should the boundedness assumption be necessary to have optimal algorithm remains an open question.
+In this chapter, we designed the first practically usable asymptotically optimal sampling rules for the pure exploration game for finite-arm linear bandits. Whether the boundedness assumption is necessary to obtain optimal algorithms remains an open question.
 
-Note that since then, several papers have achieved the asymptotic optimality~\citep{zaki2020linear,jedra2020linear,katz-samuels2020practical}. Particularly, \cite{jedra2020linear} and \cite{katz-samuels2020practical} also study the fixed-budget setting for linear bandits BAI. Later, \cite{yang2021linear} propose a minimax optimal algorithm for fixed-budget BAI.
+Note that since the publication of our work, several other asymptotically optimal algorithms have been proposed~\citep{zaki2020linear,jedra2020linear,katz-samuels2020practical}. Particularly, \cite{jedra2020linear} and \cite{katz-samuels2020practical} also study the fixed-budget setting for linear bandits BAI. Later, \cite{yang2021linear} propose a minimax optimal algorithm for fixed-budget BAI.
 
 More generally, however, the part of fixed-confidence pure exploration algorithms that needs an improvement the most is the stopping rule. While the one we used guarantees $\delta$-correctness, it is very conservative. Indeed, the experimental error rates of algorithms using that stopping rule are orders of magnitude below $\delta$. This means that the concentration inequality does not reflect the query we seek to answer. It quantifies deviations of the $d$-dimensional estimate in all directions (morally, along $2^d$ directions). However, for the usual BAI setting with $d$ arms in an orthogonal basis, it would be sufficient to control the deviation of that estimator in $d-1$ directions to make sure that $i^*(\theta) = i^*(\hat{\theta}_t)$.
 

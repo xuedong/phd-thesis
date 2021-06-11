@@ -62,7 +62,7 @@ The fixed-confidence optimality, as proved by~\cite{garivier2016tracknstop,russo
 
 It is easy to switch between the design matrix and the proportion vector. Indeed, given a sequence of sampled arms $\bX_n$, the corresponding proportion vector can be written as
 \[
-    \forall i\in [K], \quad \omega_{\bX_n,i} = \frac{T_{n+1,i}}{n},
+    \forall i\in [K], \quad \omega_{n+1,i} = \frac{T_{n+1,i}}{n},
 \]
 where recall that $T_{n,i} \eqdef \sum_{t=1}^{n-1} \1\{\hat{\bx_t} = i\}$ is the number of pulls of arm $i$ before round $n$. Therefore, the corresponding design matrix can be written as $\bA_{\bX_n}=n\bLambda_{\bomega_{\bX_n}}$.
 

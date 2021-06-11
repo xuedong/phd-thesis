@@ -32,14 +32,14 @@ Another similar but not completely same trick is feature extraction. Feature ext
 Finally, we can also construct new features from the raw data to enhance the robustness and generalizability of the model. Typical methods of feature construction include searching methods such as tree-based approaches, genetic algorithms; and annotation-based approaches.
 
 \paragraph{Pipeline generation.} 
-The previous two parts are not the main focus of this chapter. We are more interested in the third step, namely pipeline generation. Indeed \gls{hpo} is one of the main research topics in this domain.
+The previous two parts are not the focus of this chapter. We are more interested in the third step, namely pipeline generation. Indeed \gls{hpo} is one of the main research topics in this domain.
 
 The pipeline generation is sometimes modeled as a \gls{fms} or \gls{cash} problem, that is typically composed of a model/algorithm selection process and a \gls{hpo} process. We focus on \gls{hpo} in this thesis. It is worth noting, however, that many \gls{hpo} algorithms can also be applied on the full model selection problem as a whole.
 
 A particular instance of \gls{fms} or \gls{cash} is the \gls{nas} problem. \gls{nas} is specific to large modern neural-network models and has become a very hot topic recently (see e.g.~\citealt{elsken2018nas,zoph2018nas,kandasamy2018nas,liu2019darts}). \gls{nas} can also be regarded as a \gls{hpo} problem sometimes, but more often, we can make use of extra information from its inner structure. Anyhow, it is also out of the scope of this manuscript.
 
 \paragraph{Model evaluation and estimation.}
-Last but not least, a model evaluation is needed at the end. The classic way of evaluating a model is to wait until the completion of the training before assessing its performance on a validation set. Recent work (see e.g.~\citealt{li2017hyperband}) suggests that using a multi-fidelity estimation~\citep{huang2006multifidelity,wu2019multi-fidelity,peherstorfer2018multifidelity} can tremendously reduce the time and resource consumption. Multi-fidelity methods estimate the target function by low-resolution approximations (using only a subset of data for example).
+Last but not least, an evaluation of the model is needed at the end. The classic way of evaluating a model is to wait until the completion of the training before assessing its performance on a validation set. Recent work (see e.g.~\citealt{li2017hyperband}) suggests that using a multi-fidelity estimation~\citep{huang2006multifidelity,wu2019multi-fidelity,peherstorfer2018multifidelity} can tremendously reduce the time and resource consumption. Multi-fidelity methods estimate the target function by low-resolution approximations (using only a subset of data for example).
 
 Other methods exist as well that aim at increasing the efficacy of model evaluation and estimation, such as early-stopping, surrogate model, weight sharing, etc. They are mostly specifically designed for \gls{dl} though.
     
