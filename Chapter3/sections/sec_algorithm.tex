@@ -74,7 +74,7 @@ where
 \]
 for any $i,j$. One may notice that we actually recover the generalized likelihood ratio statistic stated in Section~\ref{sec:mab.bai.stopping}.
 
-Recall that we have closed-form expressions for the \texttt{KL}-divergence in some cases. In particular, in the Gaussian case, $d(\mu;\mu') = (\mu-\mu')^2/(2\sigma^2)$ while in the Bernoulli case $d(\mu;\mu') = \mu \ln (\mu/\mu') + (1-\mu)\ln (1-\mu)/(1-\mu')$.
+Recall that we have closed-form expressions for the \texttt{KL}-divergence in some cases: in the Gaussian case, $d(\mu;\mu') = (\mu-\mu')^2/(2\sigma^2)$ while in the Bernoulli case $d(\mu;\mu') = \mu \ln (\mu/\mu') + (1-\mu)\ln (1-\mu)/(1-\mu')$ (see Appendix~\ref{app:maths.information.kl}).
 %\begin{equation}\left\{\begin{array}{ccl}
 %W_n(i,j)\!\!\! &=& \!\!0 \ \text{ if } \ \mu_{n,j} \geq \mu_{n,i},\\
 %W_n(i,j)\!\!\! &=& \!\!T_{n,i} d\left(\mu_{n,i},\mu_{n,i,j}\right) + T_{n,j} d\left(\mu_{n,j},\mu_{n,i,j}\right) \text{ else.} 
@@ -96,18 +96,18 @@ The pseudo-code of \TTTS and \TCC are shown in Algorithm~\ref{alg:ttts_sampling_
    \State {\bfseries Input:} $\beta$ %(and the $W_n$ function for \textcolor{red}{\TCC})
    %\STATE {\bfseries Initialization:} $\forall \blambda\in\Omega, S_{\blambda}=0, F_{\blambda}=0$
    \For{$n \leftarrow 1,2,\cdots$}
-        \State \texttt{sample} $\btheta \sim \Pi_n$
+        \State \text{Sample} $\btheta \sim \Pi_n$
         \State $I^{(1)} \leftarrow \argmax_{i\in\cX}\theta_i$
-	    \State \texttt{sample} $b \sim \cB ern(\beta)$
+	    \State \text{Sample} $b \sim \cB ern(\beta)$
 	    \If{$b = 1$}
-	        \State \texttt{evaluate arm} $I^{(1)}$
+	        \State \text{Evaluate arm} $I^{(1)}$
 	    \Else
-	        \State \texttt{repeat sample} $\btheta' \sim \Pi_n$
+	        \State \text{Repeat sample} $\btheta' \sim \Pi_n$
             \State $I^{(2)} \leftarrow \argmax_{i\in\cX}\theta_i'$
-	        \State \texttt{until} $I^{(2)} \neq I^{(1)}$
-		    \State \texttt{evaluate arm} $I^{(2)}$
+	        \State \text{until} $I^{(2)} \neq I^{(1)}$
+		    \State \text{Evaluate arm} $I^{(2)}$
 	    \EndIf
-	    \State \texttt{update mean and variance}
+	    \State \text{Update mean and variance}
 	    \State $t = t+1$
    \EndFor
 \end{algorithmic}
@@ -122,16 +122,16 @@ The pseudo-code of \TTTS and \TCC are shown in Algorithm~\ref{alg:ttts_sampling_
    \State {\bfseries Input:} $\beta$ %(and the $W_n$ function for \textcolor{red}{\TCC})
    %\STATE {\bfseries Initialization:} $\forall \blambda\in\Omega, S_{\blambda}=0, F_{\blambda}=0$
    \For{$n \leftarrow 1,2,\cdots$}
-        \State \texttt{sample} $\btheta \sim \Pi_n$
+        \State \text{Sample} $\btheta \sim \Pi_n$
         \State $I^{(1)} \leftarrow \argmax_{i\in\cX}\theta_i$
-	    \State \texttt{sample} $b \sim \cB ern(\beta)$
+	    \State \text{Sample} $b \sim \cB ern(\beta)$
 	    \If{$b = 1$}
-	        \State \texttt{evaluate arm} $I^{(1)}$
+	        \State \text{Evaluate arm} $I^{(1)}$
 	    \Else
 	        \State \textcolor{red}{$I^{(2)} \leftarrow \argmin_{i\neq I^{(1)}}W_n(I^{(1)},i), $ cf.\,\eqref{def:Transportation}}
-		    \State \texttt{evaluate arm} $I^{(2)}$
+		    \State \text{Evaluate arm} $I^{(2)}$
 	    \EndIf
-	    \State \texttt{update mean and variance}
+	    \State \text{Update mean and variance}
 	    \State $t = t+1$
    \EndFor
 \end{algorithmic}
@@ -235,4 +235,4 @@ while for \TCC
     \psi_{n,i} = \beta a_{n,i} + (1-\beta) \sum_{j\neq i} a_{n,j}\frac{\1\{W_n(j,i)=\min_{k\neq j} W_n(j,k)\}}{\#\left|\argmin_{k\neq j } W_n(j,k)\right|}.
 \]
 
-Besides, we let $\Sigma_K = \{\bomega : \sum_{k=1}^K \omega_k = 1\}$ be the probability simplex of dimension $K$.
+Recall that $\Sigma_K = \{\bomega : \sum_{k=1}^K \omega_k = 1\}$ is the probability simplex of dimension $K$.

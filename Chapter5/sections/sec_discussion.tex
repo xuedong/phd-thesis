@@ -1,4 +1,8 @@
 % !TEX root = ../Chapter5.tex
 \section{Discussion}\label{sec:gpo.discussion}
 
-We studied \PCT, a new instantiation of \POO on top of \HCT. We proved that \HCT is a plausible subroutine for \POO by adapting the analysis of \HCT under a new assumption w.r.t.\,a fixed partitioning. We also proposed \GPO, a general framework for making any hierarchical bandit algorithm that only has a simple regret guarantee adaptive to unknown smoothness. However, whether it is possible to weaken the assumptions of \HOO in the same way as \HCT while keeping similar regret guarantees remains open.
+We proposed \gls{gpo}, a general framework for making any hierarchical bandit algorithm that only has a simple regret guarantee adaptive to unknown smoothness. This improves over the previous framework \gls{poo} that requires cumulative regret guarantee for its subroutine.
+
+Besides, we also studied \gls{pct}, a new implementation of \POO on top of \gls{hct}. We proved that \gls{hct} is a plausible subroutine for \POO by adapting the analysis of \gls{hct} under a new assumption w.r.t.\,a fixed partitioning, and is also a valid underlying subroutine for \gls{gpo} by consequence. However, whether it is possible to weaken the assumptions of \gls{hoo} in the same way as \gls{hct} while keeping similar regret guarantees remains open.
+
+A subsequent work~\citep{bartlett2019simple} further proposes new algorithms that adapts to the noise. However, tree-based algorithms are well-known to suffer from high-dimensional search spaces, which impedes quite a lot the using of hierarchical bandits in practice. An important but yet unsolved problem is thus to investigate how to be adaptive to the dimension. 

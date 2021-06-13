@@ -40,7 +40,7 @@ and we recall the definition of the favorable event
 Next, we prove that our favorable event holds with high probability.
 
 \begin{lemma} \label{lemma_event}
-With $c_1$ and $c$ defined in Section~\ref{proof:pre}, for any fixed round~$n$,
+With $c_1$ and $c$ defined in Section~\ref{sec:gpo.pre}, for any fixed round~$n$,
 \[
 \mathbb{P}\left[ \xi_n \right] \geq 1-\frac{4\delta}{3n^6}\cdot
 \]
@@ -74,7 +74,7 @@ R_N^{\gls{hct}} = \sum_{n=1}^N \Delta_n = \sum_{n=1}^N \Delta_n \bOne_{\xi_n} + 
 \]
 The failing confidence term $R_N^{\xi^c}$ is bounded by the following lemma.
 \begin{lemma} \label{lemma_failing}
-With $c_1$ and $c$ defined in Section~\ref{proof:pre}, when the favorable event does not hold, the regret of {\gls{hct}} is with probability $1-\delta/(5N^2)$ bounded as
+With $c_1$ and $c$ defined in Section~\ref{app:gpo.notation}, when the favorable event does not hold, the regret of {\gls{hct}} is with probability $1-\delta/(5N^2)$ bounded as
 \[
 R_N^{\xi^c} \leq \sqrt{N}.
 \]
@@ -177,6 +177,8 @@ which means that every selected node has a parent which is $(3\nu\rho^{h_n-1})$-
 
 \paragraph{Step 3: Bound on the cumulative regret.}
 We return to  term $\tilde{R}_N^{\xi}$ and split it into different depths. Let $1\leq \bar{H} \leq H(N)$ be a constant that we  fix later. We have
+\begingroup
+\allowdisplaybreaks
 \begin{align*}
     \tilde{R}_N^{\xi} &\eqdef \sum_{n=1}^N \Delta_{h_n,i_n} \bOne_{\xi_n} \\
                               &\leq \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{n=1}^N \Delta_{h,i} \bOne_{(h_n,i_n)=(h,i)} \bOne_{\xi_n} \\
@@ -185,61 +187,70 @@ We return to  term $\tilde{R}_N^{\xi}$ and split it into different depths. Let $
                               &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)}\sum_{s=1}^{\tau_h(\bar{n}_{h,i})} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} + \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{s=1}^{T_{h,i}(N)} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} \\
                               &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)}\int_{1}^{\tau_h(\bar{n}_{h,i})} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} \, \mathrm{d}s + \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\int_{1}^{T_{h,i}(N)} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} \, \mathrm{d}s \\
                               &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} 6c\sqrt{\tau_h(\bar{n}_{h,i})\log(2/\tilde{\delta}(\bar{n}_{h,i}))} + \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} 6c\sqrt{T_{h,i}(N)\log(2/\tilde{\delta}(\bar{n}_{h,i}))} \\
-                              &= 6c\left(\underbrace{\sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} \sqrt{\tau_h(\bar{n}_{h,i})\log(2/\tilde{\delta}(\bar{n}_{h,i}))}}_\text{(a)} + \underbrace{\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \sqrt{T_{h,i}(N)\log(2/\tilde{\delta}(\bar{n}_{h,i}))}}_\text{(b)}\right).
+                              &= 6c\left(\underbrace{\sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} \sqrt{\tau_h(\bar{n}_{h,i})\log(2/\tilde{\delta}(\bar{n}_{h,i}))}}_\text{(a)} + \underbrace{\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \sqrt{T_{h,i}(N)\log(2/\tilde{\delta}(\bar{n}_{h,i}))}}_\text{(b)}\right)\,.
 \end{align*}
+\endgroup
 We bound separately the terms (a) and (b). Since $\bar{n}_{h,i}\leq N$, we have
-\begin{equation*} %\label{eq15}
-\text{(a)} \leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} \sqrt{\tau_h(N)\log(2/\tilde{\delta}(N))} \leq \sum_{h=0}^{\bar{H}}|\mathcal{I}_h(N)| \sqrt{\tau_h(N)\log(2/\tilde{\delta}(N))}.
-\end{equation*}
+\begin{align*} %\label{eq15}
+    \text{(a)} &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} \sqrt{\tau_h(N)\log(2/\tilde{\delta}(N))}\\
+    &\leq \sum_{h=0}^{\bar{H}}|\mathcal{I}_h(N)| \sqrt{\tau_h(N)\log(2/\tilde{\delta}(N))}.
+\end{align*}
 Notice that the covering tree is $K$-ary and therefore $|\mathcal{I}_h(N)| \leq K|\mathcal{I}_{h-1}(N)|$. Recall that \gls{hct} only selects a node $(h_n,i_n)$ when its parent is $3\nu\rho^{h_n-1}$-optimal. Therefore, by definition of the near-optimality dimension,
 \begin{equation*} %\label{eq16}
 |\mathcal{I}_h(N)| \leq| K\mathcal{I}_{h-1}(N)| \leq KC\rho^{-d(h-1)},
 \end{equation*}
 where $d$ is the near-optimality dimension. As a result, for term (a), we obtain that
+\begingroup
+\allowdisplaybreaks
 \begin{align*}
     \text{(a)} & \leq \sum_{h=0}^{\bar{H}} KC\rho^{-d(h-1)} \sqrt{\tau_h(N)\log(2/\tilde{\delta}(N))} \\
                & = \sum_{h=0}^{\bar{H}} KC\rho^{-d(h-1)} \sqrt{\frac{c^2\log(2/\tilde{\delta}(N))}{\nu^2}\rho^{-2h}\log(2/\tilde{\delta}(N))} && \text{ineq.\,(\ref{eq1})} \\
                & = KC\rho^d \frac{c\log(2/\tilde{\delta}(N))}{\nu} \sum_{h=0}^{\bar{H}} \rho^{-h(d+1)}.
 \end{align*}
+\endgroup
 Consequently, we  bound (a) as
 \begin{equation} \label{eq17}
     \text{(a)} \leq KC\rho^d \frac{c\log\left(2/\tilde{\delta}(N)\right)}{\nu} \frac{\rho^{-\bar{H}(d+1)}}{1-\rho}\cdot
 \end{equation}
 We proceed to bound the second term (b). By the Cauchy-Schwarz inequality,
-\begin{equation*} %\label{eq18}
-\text{(b)} \leq \sqrt{\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \log\left(2/\tilde{\delta}\left(\bar{n}_{h,i}\right)\right)} \sqrt{\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} T_{h,i}(N)} \leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \log\left(2/\tilde{\delta}\left(\bar{n}_{h,i}\right)\right)},
-\end{equation*}
+\begin{align*} %\label{eq18}
+    \text{(b)} &\leq \sqrt{\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \log\left(2/\tilde{\delta}\left(\bar{n}_{h,i}\right)\right)} \sqrt{\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} T_{h,i}(N)}\\
+    &\leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \log\left(2/\tilde{\delta}\left(\bar{n}_{h,i}\right)\right)}\,,
+\end{align*}
 where we trivially bound the second square-root factor by the total number of pulls. Now consider the first square-root factor. Recall that the \gls{hct} algorithm only selects a node when $T_{h,i}(n)\geq\tau_h(n)$ for its parent. We therefore have $T_{h,i}(\tilde{n}_{h,i})\geq\tau_h(\tilde{n}_{h,i})$ and the following sequence of inequalities,
 %\vfil\newpage
+\begingroup
+\allowdisplaybreaks
 \begin{align*}
     N & = \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} T_{h,i}(N) \\
       &\geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} T_{h,i}(N) \\
       & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} T_{h,i}(\tilde{n}_{h,i}) && \text{$\tilde{n}_{h,i}$ well defined for $i\in\mathcal{I}_h^+(N)$} \\
       & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \tau_h(\tilde{n}_{h,i}) \\
       & \geq \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \tau_h(\tilde{n}_{h,i}) \\
-      & = \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{c^2\log(1/\tilde{\delta}(\tilde{n}_{h,i}^+)))}{\nu^2}\rho^{-2h}
-         \end{align*}
-      \begin{align*}
-       \sum_{h=\bar{H}}^{H(N)-1}&\sum_{i\in\mathcal{I}_h^+(N)} \frac{c^2\log(1/\tilde{\delta}(\tilde{n}_{h,i}^+)))}{\nu^2}\rho^{-2h}  \\
-       & \hspace{-0.8cm}  \geq \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{c^2\log(1/\tilde{\delta}(\tilde{n}_{h,i}^+)))}{\nu^2}\rho^{-2\bar{H}} \\
-      & \hspace{-0.8cm}= \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\tilde{n}_{h,i}^+))) \\
-      & \hspace{-0.8cm}= \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\left[\max(\bar{n}_{h+1,2i-1},\bar{n}_{h+1,2i})\right]^+)) && \text{since $\tilde{n}_{h,i}=\max(\bar{n}_{h+1,2i-1},\bar{n}_{h+1,2i})$} \\
-      & \hspace{-0.8cm}= \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\max(\bar{n}_{h+1,2i-1}^+,\bar{n}_{h+1,2i}^+))) && \text{$\forall n_1,n_2,\left[\max(n_1,n_2)\right]^+=\max(n_1^+,n_2^+)$} \\
-      & \hspace{-0.8cm}= \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \max(\log(1/\tilde{\delta}(\bar{n}_{h+1,2i-1}^+)),\log(1/\tilde{\delta}(\bar{n}_{h+1,2i}^+))) \\
+      & = \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{c^2\log(1/\tilde{\delta}(\tilde{n}_{h,i}^+)))}{\nu^2}\rho^{-2h}\\
+       & \geq \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{c^2\log(1/\tilde{\delta}(\tilde{n}_{h,i}^+)))}{\nu^2}\rho^{-2\bar{H}} \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\tilde{n}_{h,i}^+))) \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\left[\max(\bar{n}_{h+1,2i-1},\bar{n}_{h+1,2i})\right]^+)) && \text{since $\tilde{n}_{h,i}=\max(\bar{n}_{h+1,2i-1},\bar{n}_{h+1,2i})$} \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\max(\bar{n}_{h+1,2i-1}^+,\bar{n}_{h+1,2i}^+))) && \text{$\forall n_1,n_2,\left[\max(n_1,n_2)\right]^+=\max(n_1^+,n_2^+)$} \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \max(\log(1/\tilde{\delta}(\bar{n}_{h+1,2i-1}^+)),\log(1/\tilde{\delta}(\bar{n}_{h+1,2i}^+))) \\
       & \geq \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{\log(1/\tilde{\delta}(\bar{n}_{h+1,2i-1}^+))+\log(1/\tilde{\delta}(\bar{n}_{h+1,2i}^+))}{2} \\
-      &\hspace{-0.8cm} = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_{h-1}^+(n)} \frac{\log(1/\tilde{\delta}(\bar{n}_{h,2i-1}^+))+\log(1/\tilde{\delta}(\bar{n}_{h,2i}^+))}{2} && \text{change of variables} \\
-      &\hspace{-0.8cm} = \frac{c^2\rho^{-2\bar{H}}}{2\nu^2} \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\bar{n}_{h,i}^+)).
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_{h-1}^+(n)} \frac{\log(1/\tilde{\delta}(\bar{n}_{h,2i-1}^+))+\log(1/\tilde{\delta}(\bar{n}_{h,2i}^+))}{2} && \text{change of variables} \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{2\nu^2} \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\bar{n}_{h,i}^+)).
 \end{align*}
+\endgroup
 In the above derivation, the last equality relies on the fact that for any $h>0$, $\mathcal{I}_h^+(N)$ covers all the internal nodes at level $h$ and therefore its children cover $\mathcal{I}_{h+1}(N)$. We  thus obtain
 \begin{equation} \label{eq19}
 \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\bar{n}_{h,i}^+)) \leq \frac{2\nu^2\rho^{2\bar{H}}N}{c^2}\cdot
 \end{equation}
 On the other hand, we have
+\begingroup
+\allowdisplaybreaks
 \begin{align*}
     \text{(b)} &\leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \log(2/\tilde{\delta}(\bar{n}_{h,i}))}
                \leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} 2\log(1/\tilde{\delta}(\bar{n}_{h,i}))} \\
                &\leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} 2\log(1/\tilde{\delta}(\bar{n}_{h,i}^+))}, && \text{since $\bar{n}_{h,i}\leq\bar{n}_{h,i}^+$.}
 \end{align*}
+\endgroup
 By plugging (\ref{eq19}) into above expression, we get
 \begin{equation} \label{eq20}
     \text{(b)} \leq \frac{2\nu\rho^{\bar{H}}N}{c}\cdot

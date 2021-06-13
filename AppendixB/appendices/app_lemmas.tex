@@ -21,7 +21,7 @@ It is clear that $D_n = \sum_{l=1}^{n-1} d_l$ and $\EE{d_n|\cF_{n-1}} = 0$. Inde
                        &= \PP{I_n=i|\cF_{n-1}} - \EE{\PP{I_n=i|\cF_{n-1}}|\cF_{n-1}} \\
                        &= \PP{I_n=i|\cF_{n-1}} - \PP{I_n=i|\cF_{n-1}} = 0.
 \end{align*}
-The second last equality holds since $\PP{I_n=i|\cF_{n-1}}$ is $\cF_{n-1}$-measurable. Thus $D_n$ is a martingale, whose increment are 1 sub-Gaussian as $d_n \in [-1,1]$ for all $n$. 
+The second last equality holds since $\PP{I_n=i|\cF_{n-1}}$ is $\cF_{n-1}$-measurable. Thus $D_n$ is a martingale, whose increment are 1-sub-Gaussian as $d_n \in [-1,1]$ for all $n$. 
 
 Applying Corollary 8 of~\cite{abbasi-yadkori2012}\footnote{We could actually use several deviation inequalities that hold uniformly over time for martingales with sub-Gaussian increments.}, it holds that, with probability larger than $1-\delta$, for all $n$,
 \[

@@ -9,30 +9,44 @@
 
 $\cU([a,b])$ denotes a uniform distribution on the support $[a,b]$.
 
+$\Beta(\cdot,\cdot)$ denotes a Beta distribution.
+
 \subsection{One-dimensional exponential family}\label{app:maths.proba.exponential}
 
-$\cB eta(\cdot,\cdot)$ denotes a Beta distribution.
+\begin{align}
+    p_{X}(x \mid \theta ) = b(x) \exp \left[\eta (\theta ) \cdot T(x) + A(\theta )\right]\,.
+\end{align}
 
-$\cB ern(\cdot)$ denotes a Bernoulli distribution.
+In the whole thesis, we mainly used the following distributions from the one-dimensional exponential family.
 
-$\cB(\cdot)$ denotes a Binomial distribution.
-
-$\cN(\cdot,\cdot)$ denotes a normal distribution.
+\begin{itemize}
+    \item $\Ber(\cdot)$ denotes a Bernoulli distribution.
+    \item $\cB(\cdot)$ denotes a Binomial distribution.
+    \item $\cN(\cdot,\cdot)$ denotes a normal distribution. Note that only normal distributions with known variance are in the one-dimensional exponential family.
+\end{itemize}
 
 %\subsection{Gaussian process}\label{app:maths.proba.gp}
 
 \subsection{Sub-Gaussian distributions}\label{app:maths.proba.subgaussian}
 
-\begin{definition}[Sub-Gaussian]
-
+\begin{definition}[sub-Gaussian]
+\begin{leftbar}[defnbar]
+Let $X$ be a random variable defined over a probability space $(\Omega,\mathcal{F},\Ps)$. $X$ is sub-Gaussian if there exists a constant $a\geq 0$ such that for any $\lambda\in\R$, we have
+\[
+    \EE{\exp(\lambda X)} \leq \exp\left\{\frac{a^2\lambda^2}{2}\right\}\,.
+\]
+And $X$ is called $a$-sub-Gaussian.
+\end{leftbar}
 \end{definition}
 
-\begin{example}[Centered Gaussian is sub-Gaussian]
-	We are given a random variable $X \sim \cN(0,\sigma^2)$ with $\sigma^2$ denoting its variance. We show that $X$ is $\sigma$-sub-Gaussian. Indeed, we have $\forall \lambda\in\R$,
-	\begin{align*}
-		\EE{e^{\lambda X}} &\leq \\
-	\end{align*}
-\end{example}
+% \begin{example}[centered Gaussian is sub-Gaussian]
+% \begin{leftbar}[examplebar]
+% 	We are given a random variable $X \sim \cN(0,\sigma^2)$ with $\sigma^2$ denoting its variance. We show that $X$ is $\sigma$-sub-Gaussian. Indeed, we have $\forall \lambda\in\R$,
+% 	\begin{align*}
+% 		\EE{\exp(\lambda X)} &\leq \\
+% 	\end{align*}
+% \end{leftbar}
+% \end{example}
 
 \section{Concentration Inequalities}\label{app:maths.concentration}
 
@@ -123,6 +137,13 @@ A very important property of KL divergence is its non-negativity, which is estab
 
 \subsection{Two special cases: Gaussian and Bernoulli}\label{app:maths.information.examples}
 
+For probability distributions in the one-dimensional exponential family, we can simply represent the KL-divergence by their means. For example, if $\mu_1$ and $\mu_2$ are respectively the means of $\mathbb{P}$ and $\mathbb{Q}$, then we can write
+\[
+    KL(\mathbb{P};\mathbb{Q}) = d(\mu_1;\mu_2)\,.
+\]
+
+For some particular probability distributions, simple closed-form expressions can be deduced. In Example~\ref{ex:maths.kl_gaussian} and Example~\ref{ex:maths.kl_bernoulli}, we show the expressions for Gaussian and Bernoulli distributions.
+
 \begin{example}[KL-divergence between two Gaussian distributions]\label{ex:maths.kl_gaussian}
 \begin{leftbar}[examplebar]
 	We compute the KL divergence between two normal distributions $\mathbb{P}\sim\cN(\mu_1,\sigma_1)$ and $\mathbb{Q}\sim\cN(\mu_2,\sigma_2)$.
@@ -138,7 +159,7 @@ In particular, if $\sigma\eqdef\sigma_1=\sigma_2$, then the two distributions ar
 
 \begin{example}[KL divergence between two Bernoulli distributions]\label{ex:maths.kl_bernoulli}
 \begin{leftbar}[examplebar]
-    We compute the KL divergence between two Bernoulli distributions $\mathbb{P}\sim\cB ern(\mu_1)$ and $\mathbb{Q}\sim\cB ern(\mu_2)$, we denote by
+    We compute the KL divergence between two Bernoulli distributions $\mathbb{P}\sim\Ber(\mu_1)$ and $\mathbb{Q}\sim\Ber(\mu_2)$, we denote by
      \[
         kl(\mu_1;\mu_2) \eqdef KL(\mathbb{P} \lVert \mathbb{Q}) =  \mu_1 \ln \left( \frac{\mu_1}{\mu_2} \right) + (1-\mu_1) \ln  \left( \frac{1-\mu_1}{1-\mu_2} \right).
     \]

@@ -15,20 +15,22 @@ Among $\delta$-correct strategies, we seek the one with the smallest sample comp
 % For that purpose, we need to introduce two different notions of optimality, that we now formally define and contrast: (1) Bayesian $\beta$-optimality and (2) $\beta$-optimality in the fixed-confidence setting. Before that, we first present some necessary preliminary notions.
 
 
-\begin{definition}
+\begin{definition}\label{def:t3c.transportation}
 \begin{leftbar}[defnbar]
 Define for all $i\neq I^\star$
 \[
     C_i(\omega,\omega') \eqdef \min_{x\in \cI} \ \omega d(\mu_{I^\star};x) + \omega' d(\mu_i;x)\,,
 \]
-where $d(\mu,\mu')$ is the KL-divergence defined above and $\cI = \R$ in the Gaussian case and $\cI = [0,1]$ in the Bernoulli case. We define
+where $d(\mu,\mu')$ is the KL-divergence and $\cI = \R$ in the Gaussian case and $\cI = [0,1]$ in the Bernoulli case. We define
 \begin{eqnarray}
     T^\star(\bmu)^{-1} &\eqdef& \max_{\bomega \in \Sigma_K}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i)\,,\nonumber\\
     T_{\beta}^\star(\bmu)^{-1} &\eqdef& \max_{\substack{\bomega \in \Sigma_K\\\omega_{I^\star}=\beta}}\min_{i\neq I^\star} C_i(\omega_{I^\star},\omega_i)\,.\label{def:GammaBeta}\end{eqnarray}
 \end{leftbar}
 \end{definition}
 
-The quantity $C_i(\omega_{I^\star},\omega_i)$ can be interpreted as a ``transportation cost''\footnote{for which $W_n(I^\star,i)$ is an empirical counterpart} from the original bandit instance $\bm\mu$ to an alternative instance in which the mean of arm $i$ is larger than that of $I^\star$, when the proportion of samples allocated to each arm is given by the vector $\bomega \in \Sigma_K$. As shown by~\cite{russo2016ttts}, the $\bomega$ that maximizes \eqref{def:GammaBeta} is unique, which allows us to define the $\beta$-\emph{optimal allocation} $\bomega^\beta$ in the following proposition.
+Note that the $T^\star(\bmu)$ in Definition~\ref{def:t3c.transportation} is equivalent to the one defined in Definition~\ref{eq:mab.characteristic}\footnote{Readers can refer to Section 2.2 of~\cite{garivier2016tracknstop} for a proof.}.
+
+The quantity $C_i(\omega_{I^\star},\omega_i)$ can be interpreted as a ``transportation cost''\footnote{For which $W_n(I^\star,i)$ is an empirical counterpart.} from the original bandit instance $\bm\mu$ to an alternative instance in which the mean of arm $i$ is larger than that of $I^\star$, when the proportion of samples allocated to each arm is given by the vector $\bomega \in \Sigma_K$. As shown by~\cite{russo2016ttts}, the $\bomega$ that maximizes \eqref{def:GammaBeta} is unique, which allows us to define the $\beta$-\emph{optimal allocation} $\bomega^\beta$ in the following proposition.
 
 \begin{proposition}\label{prop:optim}
 \begin{leftbar}[propositionbar]
@@ -88,7 +90,9 @@ A fundamental ingredient of these proofs is to establish the convergence of the 
 \paragraph{\texorpdfstring{$\beta$}{}-optimality in the fixed-confidence setting.} In the fixed confidence setting, the performance of an algorithm is evaluated in terms of sample complexity. A lower bound given by \cite{garivier2016tracknstop} states that any $\delta$-correct strategy satisfies $\EE{\tau_\delta} \geq T^\star(\bmu) \ln \left({1}/(3\delta)\right)$. 
 
 Observe that $T^\star(\bmu)^{-1} = \max_{\beta \in [0,1]} T_{\beta}^\star(\bmu)^{-1}$. Using the same lower bound techniques, one can also prove that under any $\delta$-correct strategy satisfying $T_{n,I^\star}/n \rightarrow \beta$,
-\[\liminf_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \geq T_{\beta}^\star(\bmu).\]
+\[
+    \liminf_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \geq T_{\beta}^\star(\bmu)\,.
+\]
 This motivates the relaxed optimality notion that we introduce in this paper: A BAI strategy is called \emph{asymptotically $\beta$-optimal} if it satisfies 
 \[\frac{T_{n,I^\star}}{n}\rightarrow \beta \ \ \ \text{and} \ \ \ \limsup_{\delta \rightarrow 0}\frac{\EE{\tau_\delta}}{\ln(1/\delta)} \leq T_{\beta}^\star(\bmu).\]
 In the paper, we provide the first sample complexity analysis of a BAI algorithm based on \TTTS (with the stopping and recommendation rules described in Section~\ref{sec:t3c.algorithm}), establishing its asymptotic $\beta$-optimality.

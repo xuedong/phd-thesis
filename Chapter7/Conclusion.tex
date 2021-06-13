@@ -9,3 +9,31 @@
 	\newpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{General Discussion} 
+
+In this thesis, we studied the multi-armed bandit problem in an optimization fashion. In particular, we investigated three different settings of best-arm identification (in a broad sense). 
+
+We first studied \gls{bai} in its most general format using the Bayesian machinery. We answered to one open question raised by~\cite{russo2016ttts} on the sample complexity and further strengthened the reason of using Bayesian algorithms for \gls{bai}.
+
+We then studied the linear setting with the hope of extending previous Bayesian algorithms while keeping the same sample-complexity guarantee. Although the result was not satisfying, we managed to propose an alternative using a saddle-point approach.
+
+The third part consists of a rather different setting where we considered a continuous-armed space. We proposed a new general cross-validation scheme that is able to wrap up any hierarchical-bandit algorithms with a simple-regret guarantee.
+
+Finally, beyond the mostly theoretical contributions in the previous chapters, we also explored a more practical topic, namely hyper-parameter optimization. We managed to propose a dynamic and robust algorithm based on the Bayesian algorithms studied in the previous chapters.
+
+\section{Future Perspectives}
+
+\paragraph{Direct follow-ups of the previous research.} 
+A prominent follow-up is to further investigate whether both theoretically and practically efficient Bayesian algorithms exist for linear \gls{bai} (or even more general structure). As discussed in Chapter~\ref{CHAP:LGC}, our first attempts to extend \gls{ttts} to the linear setting leads to a dead end from a theoretical point of view, but still shows some promising experimental performance. It is therefore still interesting to put some efforts on the topic as Bayesian methods could probably avoid resolving complicated optimization problems that is required in most of the current existing state-of-the-art algorithms.
+
+On the other hand, as advocated for example by~\cite{locatelli2016thresholding}, the fixed-budget and fixed-confidence settings are drastically different. The theoretical behaviour of the Bayesian algorithms investigated in this thesis in the fixed-budget setting is therefore an interesting research line to follow up.
+
+\paragraph{Link to reinforcement learning.}
+It is worth elaborating a bit more on the link between linear bandits (or more general contextual bandits) and \gls{rl} in addition to the discussion in Section~\ref{sec:intro.context.rl}.
+
+Indeed, \gls{rl} extends upon contextual bandits by allowing for long-term consequences. More precisely, for contextual (linear) bandits, the actions only affect the current reward, whereas for \gls{rl}, they can also affect the future rewards through the evolution of the context.
+
+\paragraph{Best-policy identification.}
+
+A highly related topic of \gls{bai} is the problem of \gls{bpi} in \gls{mdp}s. Similar to \gls{bai}, the goal of \gls{bpi} is to devise learning algorithms that are able to return the best policy as early as possible. \cite{marjani2020bpi} adapt \Track to \gls{bpi} in discounted \gls{mdp}s, with the help of a generative model. It is interesting to see if our algorithms for linear bandits \gls{bai} can help design sound \gls{bpi} algorithms in a more general context (without generative model).

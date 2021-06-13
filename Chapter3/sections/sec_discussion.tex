@@ -1,11 +1,11 @@
 %!TEX root = ../Chapter3.tex
 \section{Discussion}\label{sec:t3c.discussion}
 
-We have advocated the use of a Bayesian sampling rule for BAI. In particular, we proved that \gls{ttts} and a computationally advantageous approach \TCC, are both $\beta$-optimal in the fixed-confidence setting, for Gaussian bandits. Our analysis applies to Gaussian bandits, but could be extended to more distributions for which posterior tails bounds are available.
+We have advocated the use of a Bayesian sampling rule for \gls{bai}. In particular, we proved that \gls{ttts} and a computationally advantageous approach \TCC, are both $\beta$-optimal in the fixed-confidence setting, for Gaussian bandits. Our analysis applies to Gaussian bandits, but could be extended to more distributions for which posterior tails bounds are available.
 
 We further extended the Bayesian optimality properties established by \cite{russo2016ttts} to more practical choices of models and prior distributions. 
 
-For future work, it would also be meaningful to provide a fixed-budget analysis, in particular in some potential application scenario of \gls{ttts}. For example, pure exploration bandit algorithms are widely used in \emph{hyper-parameter optimization} for machine learning~\citep{hoffman2014bayesgap,li2017hyperband,shang2019dttts}.
+For future work, it would also be meaningful to provide a fixed-budget analysis, in particular in some potential application scenario of \gls{ttts}. For example, pure-exploration bandit algorithms are widely used in \gls{hpo}~\citep{hoffman2014bayesgap,li2017hyperband} which is the topic of Chapter~\ref{CHAP:DTTTS}.
 
 Another important unsolved open question comes to the tuning of $\beta$. Indeed, if $\beta$ is set to $\beta^\star = \argmax_{\beta \in [0,1]} T_{\beta}^\star(\bmu)^{-1}$, a $\beta$-optimal strategy is also optimal. In practice of course $\beta^\star$ is unknown and so far \gls{ttts} cannot be asymptotically optimal without this knowledge. However, note that \cite{russo2016ttts} shows that $\Gamma^\star_{1/2} \geq \Gamma^{\star}/2$, which provides a near-optimal tuning of \gls{ttts}. Obviously, proposing an satisfying online tuning of $\beta$ (other than the one proposed in the \gls{ttts} paper) with provable fixed-confidence guarantees is another avenue for future work.
 

@@ -13,10 +13,16 @@ while minimizing the expected number of samples $\EE{\tau_\delta}$ that is requi
 In this section we extend the lower bound of \citet{garivier2016tracknstop}, to hold for \emph{pure exploration in finitely-armed linear bandit} problems.
 
 \paragraph{Alternative.}
-We first define the notion of \gls{alternative set} in a pure-exploration game. For any answer $i\in\cI$ we define the \emph{alternative set} of arm $i$, denoted by $\neg i$ the set of parameters where the answer $i$ is not correct, i.e.
+Recall the notion of \gls{alternative set} which is already defined in Section~\ref{sec:mab.performance.sample} for \gls{bai}. For the general pure-exploration problem, the definition is given below.
+
+\begin{definition}[alternative set (pure exploration)]
+\begin{leftbar}[defnbar]
+For any answer $i\in\cI$ we define the \emph{alternative set} of arm $i$, denoted by $\neg i$ the set of parameters where the answer $i$ is not correct, i.e.
 \[
     \neg i \eqdef \{\btheta\in\Theta:\ i\neq\Istar(\btheta)\}\,.
 \]
+\end{leftbar}
+\end{definition}
 
 %We also define, for any $w\in(\R^+)^A$, the design matrix \[\bLambda_{\bomega} \eqdef \sum_{a\in \cX} w^a a a^\top\,.\] Further, we define $\normm{x}_V\eqdef \sqrt{x^\top Vx}$ for $x\in\R^d$ and a symmetric positive matrix $V\in\R^{d\times d}$. Note that it is a norm only if $V$ is positive definite. We also denote by $\Sigma_K$ the probability simplex of dimension $K-1$ for all $K\ge 2$.
 

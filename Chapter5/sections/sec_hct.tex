@@ -143,8 +143,7 @@ Defining the mean reward $\mu_{h,i} \triangleq f(x_{h,i})$, we introduce a favor
 \]
 where $\cL_n$ is the set of all possible nodes in trees of maximum depth $H_{\max}(n)$.
 
-We split the regret into two parts depending on whether $\xi_n$ holds or not.
-In Appendix~\ref{proof:lemma_failing}, we prove that the failing confidence term is with high probability bounded by $\sqrt{n}$. In the case when  $\xi_n$ holds, we bound the regret in Appendix~\ref{proof:thm}
+We split the regret into two parts depending on whether $\xi_n$ holds or not. We prove in Appendix~\ref{proof:lemma_failing} that the failing confidence term is with high probability bounded by $\sqrt{n}$. In the case when $\xi_n$ holds, we bound the regret in Appendix~\ref{proof:thm}
 by treating separately the two parts, $\Delta_{h_n,i_n}$ and $\hat{\Delta}_n$, of the instantaneous regret $\Delta_n$,
 \[
 \Delta_n \eqdef f^\star - r_n = f^\star - f(x_{h_n,i_n}) + f(x_{h_n,i_n}) - r_n = \Delta_{h_n,i_n} + \hat{\Delta}_n.

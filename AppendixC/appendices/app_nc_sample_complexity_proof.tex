@@ -1,5 +1,5 @@
 %!TEX root = ../AppendixC.tex
-\section{Sample Complexity of \LG{}}\label{app:lgc.proof}
+\section{Sample Complexity of \texorpdfstring{\LG{}}{}}\label{app:lgc.proof}
 
 \subsection{Events}\label{app:lgc.proof_nc.events}
 We fix a constant $\alpha>2$ and define the event
@@ -107,7 +107,7 @@ which leads to, using Lemma~\ref{lem:inq_revert_sqrt},
 \label{eq:to_theta_nc}
 d_{t,\delta} + \sqrt{4 h(t) d_{t,\delta}} +4h(t) \geq \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2 \,.
 \end{equation}
-We now continue the proof by finding a lower bound for the right hand sum. Using the tracking property, see Lemma~\ref{lem:tracking}, to state that for all $a$, $- \log(A) \le T_t^{\bx} - W_t^{\bx}\le 1$, we get
+We now continue the proof by finding a lower bound for the right hand sum. Using a tracking property from~\cite{degenne2020structure} to state that for all $a$, $- \log(A) \le T_t^{\bx} - W_t^{\bx}\le 1$, we get
 \begin{align*}
 \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2
 &\ge \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
@@ -177,7 +177,7 @@ By definition of the best response $\tbtheta_s^i = \inf_{\btheta' \in \neg i} \V
 \end{align}
 Note that our algorithm computes $\tbtheta_s^{\istar}$ only when $w_s^{\istar} \neq 0$, i.e. only when $i_s = i^*$.
 
-We now introduce, see~\eqref{eq:def_ucb_br_general}, the upper confidence bounds
+We now introduce the upper confidence bounds
 \[
     U_s^{\bx,i} = \min\!\!\left(\max_\pm\! \left( \langle \hbtheta_{s-1} - \tbtheta^{i}_s), a\rangle \pm \sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{T_s}+\lambda I_d)^{-1} } \right)^2,4L^2M^2\right)\,.
 \]
@@ -215,7 +215,7 @@ Thus combining the previous inequality with \eqref{eq:only_istar} and Lemma~\ref
 \label{eq:to_UCB}
 d_{t,\delta} + 40 A\left(\sqrt{h(t)g(t) d_{t,\delta}}+ 2h(t)g(t)\right) \geq \frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{a,\istar}U_s^{a,\istar}\,.
 \end{equation}
-Now we control the regret of the learner $\cL_w^{\istar}$, thanks to the bound for \AH, see Lemma~\ref{lem:adahedge}, we have
+Now we control the regret of the learner $\cL_w^{\istar}$, thanks to the bound for \AH, see Lemma~\ref{lemma:lgc.adahedge}, we have
 \[
 \sup_{w\in\Sigma_K}\frac{1}{2}\sum_{s=1}^t\ind_{\{i_t = \istar\}}\sum_{\bx\in\cX} w^{\bx}U_s^{a,\istar} -\frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{a,\istar}U_s^{a,\istar} \leq C'\sqrt{T_t^i}\leq C'\sqrt{t}\,.
 \]
