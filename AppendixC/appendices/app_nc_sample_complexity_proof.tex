@@ -226,16 +226,16 @@ Then using this inequality in combination with the fact that the losses are opti
   \\
   &\geq \sup_{w\in\Sigma_K}\frac{1}{2}\sum_{s=1}^t\ind_{\{i_s = \istar\}}\sum_{\bx\in\cX} w^{\bx} \normm{\btheta -(\btheta'_s)^{\istar}}^2_{\bx\bx\transpose}
   \\
-  &= T^{\istar}_t \sup_{w\in\Sigma_K}\frac{1}{T^{i^*}_t}\sum_{s=1}^t\ind_{\{i_s = \istar\}}\frac{1}{2}\normm{\btheta -(\btheta')_s^{\istar}}^2_{\bLambda_{w}}
+  &= T_{t,\istar} \sup_{w\in\Sigma_K}\frac{1}{T^{i^*}_t}\sum_{s=1}^t\ind_{\{i_s = \istar\}}\frac{1}{2}\normm{\btheta -(\btheta')_s^{\istar}}^2_{\bLambda_{w}}
   \end{align*}
 Now remark that $\frac{1}{T^{i^\star}_t}\sum_{s=1}^t\ind_{\{i_s = \istar\}}\frac{1}{2}\normm{\btheta -(\btheta')_s^{\istar}}^2_{\bLambda_{w}}$ is the expectation under some distribution of $\frac{1}{2}\normm{\btheta -(\btheta')_s^{\istar}}^2_{\bLambda_{w}}$ .
 \begin{align*}
   d_{t,\delta} + 40 A\left(\sqrt{h(t)g(t) d_{t,\delta}}+ 2h(t)g(t)\right) +C'\sqrt{t}
-  &\geq T^{\istar}_t \inf_{q\in\cP(\neg \istar)} \sup_{w\in\Sigma_K}\frac{1}{2}\E_{\btheta'\sim q}\normm{\btheta -\btheta'}^2_{\bLambda_{w}}\\
- &=T^{\istar}_t \Tstar(\btheta)^{-1}\,,
+  &\geq T_{t,\istar} \inf_{q\in\cP(\neg \istar)} \sup_{w\in\Sigma_K}\frac{1}{2}\E_{\btheta'\sim q}\normm{\btheta -\btheta'}^2_{\bLambda_{w}}\\
+ &=T_{t,\istar} \Tstar(\btheta)^{-1}\,,
 \end{align*}
 where in the last line we use the theorem of Sion, see...%\todo{is that equality not proven somewhere else in the paper?}. 
-Note that the last inequality holds also if $T_{t,\istar} = 0$. It remains to show that $T^{\istar}_t = t- O(\sqrt{t})$.
+Note that the last inequality holds also if $T_{t,\istar} = 0$. It remains to show that $T_{t,\istar} = t- O(\sqrt{t})$.
 
 \subsection{When $i_s \neq \istar$.}
 
