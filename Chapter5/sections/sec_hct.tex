@@ -112,7 +112,7 @@ where $\alpha$ is a numerical constant and $C$ is the constant associated to $d(
 \end{restatable}
 
 As a consequence, according to Remark~\ref{remark:mab.simple}, we get the following simple-regret bound.
-\begin{corollary}\label{col}
+\begin{corollary}\label{cor:gpo.hct}
 \begin{leftbar}[corollarybar]
 The simple regret of \gls{hct} after $N$ function evaluations under Assumption~\ref{ass:gpo.local} satisfies
 \[
@@ -128,7 +128,7 @@ One may notice that to validate \gls{gpo}, we only need to bound the simple regr
 \end{remark}
 
 We now sketch the proof. The full proof is detailed in Appendix~\ref{app:gpo.hct}. As  mentioned above, \gls{hct} has a controlled depth. Indeed, given the threshold $\tau_h(n)$ required at depth $h$, in Section~\ref{proof:lemma_depth}, we prove that the depth of the covering tree is bounded as stated in the following lemma:
-\begin{restatable}{lemma}{restalemmadepth}\label{lemma_depth}
+\begin{restatable}{lemma}{restalemmadepth}\label{lemma:gpo.depth}
 \begin{leftbar}[lemmabar]
 The depth of the covering tree produced by \gls{hct} after $N$ function evaluations satisfies 
 \[
@@ -195,7 +195,7 @@ gives us the following cumulative regret for \gls{hct}: With probability $1-\del
 \[
 	R_N^{\gls{hct}(\nu,\rho)} \leq \cO\left( (\log(N/\delta))^{1/(d(\nu,C,\rho)+2)}N^{(d(\nu,C,\rho)+1)/(d(\nu,C,\rho)+2)} \right).
 \]
-However, the analysis of \gls{poo} requires a bound on the expected regret of the underlying subroutine. For that purpose, we simply set $\delta \eqdef 1/N$ and that gives us the statement of Theorem~\ref{thm:gpo.hct}, and consequently Corollary~\ref{col}.
+However, the analysis of \gls{poo} requires a bound on the expected regret of the underlying subroutine. For that purpose, we simply set $\delta \eqdef 1/N$ and that gives us the statement of Theorem~\ref{thm:gpo.hct}, and consequently Corollary~\ref{cor:gpo.hct}.
 
 \subsection{Upper bound on the simple regret of \PCT{}}
 
@@ -215,9 +215,9 @@ where $\beta$ is a constant independent of $\nu_{\max}$ and $\rho_{\max}$.\footn
 \end{leftbar}
 \end{theorem}
 
-By Corollary~\ref{col}, we know that the simple regret of \HCT after $N$ function evaluations run with $(\nu^\star,C^\star,\rho^\star)$ is of order $\cO\left( (\log N/N)^{1/(d(\nu^{\star},C^\star,\rho^{\star})+2)} \right)$. As a consequence, the performance of \gls{pct} is at most a $\sqrt{\log n}$ factor away from that of the best \HCT instance.
+By Corollary~\ref{cor:gpo.hct}, we know that the simple regret of \HCT after $N$ function evaluations run with $(\nu^\star,C^\star,\rho^\star)$ is of order $\cO\left( (\log N/N)^{1/(d(\nu^{\star},C^\star,\rho^{\star})+2)} \right)$. As a consequence, the performance of \gls{pct} is at most a $\sqrt{\log n}$ factor away from that of the best \HCT instance.
 
-Theorem~\ref{thm:gpo.pct} follows from Corollary~\ref{col} and Proposition~\ref{prop:WrapperPOO} below. This wrapper result highlights how cumulative regret guarantees for \emph{any} base algorithm translate into simple regret guarantees for the corresponding $\gls{poo}(\cA)$ algorithm. Its proof almost replicates the analysis of \gls{poo}{}(\HOO) by \cite{grill2015poo} and we provide it in Appendix~\ref{app:gpo.poo} for the sake of completeness.  
+Theorem~\ref{thm:gpo.pct} follows from Corollary~\ref{cor:gpo.hct} and Proposition~\ref{prop:WrapperPOO} below. This wrapper result highlights how cumulative regret guarantees for \emph{any} base algorithm translate into simple regret guarantees for the corresponding $\gls{poo}(\cA)$ algorithm. Its proof almost replicates the analysis of \gls{poo}{}(\HOO) by \cite{grill2015poo} and we provide it in Appendix~\ref{app:gpo.poo} for the sake of completeness.  
 
 \begin{proposition}\label{prop:WrapperPOO}
 \begin{leftbar}[propositionbar]

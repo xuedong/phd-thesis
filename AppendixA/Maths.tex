@@ -48,11 +48,69 @@ And $X$ is called $a$-sub-Gaussian.
 % \end{leftbar}
 % \end{example}
 
+\subsection{Martingales}\label{app:maths.proba.martingale}
+
 \section{Concentration Inequalities}\label{app:maths.concentration}
+
+Concentration inequalities are a omnipresent tool in \gls{mab} as they can serve as a way to bound the deviation of random variables with respect to some value (typically the expected value). In this section, we present two famous inequalities, that have been employed in this thesis.
 
 \subsection{Hoeffding's inequality}
 
+(Chernoff)-Hoeffding's inequality is probably the most known concentration inequality which is first studied by~\cite{hoeffding1963}. We state the Hoeffding's inequality for bounded random variables below.
+
+\begin{theorem}\label{thm:maths.hoeffding}
+\begin{leftbar}[theorembar]
+    Let $X_1, X_2, \cdots, X_n$ be a sequence of independent random variables bounded in the intervals $[a_i,b_i]$ for each $i\in[n]$ respectively, then the following inequalities hold
+    \[
+        \PP{\bar{X}-\EE{\bar{X}} \geq t} \leq \exp\left\{-\frac{2n^2t^2}{\sum_{i=1}^n(b_i-a_i)^2}\right\}\,,
+    \]
+    \[
+        \PP{\left|\bar{X}-\EE{\bar{X}}\right| \geq t} \leq 2\exp\left\{-\frac{2n^2t^2}{\sum_{i=1}^n(b_i-a_i)^2}\right\}\,,
+    \]
+    where $\bar(X)$ denotes the empirical mean of those random variables,
+    \[
+        \bar{X} \eqdef \frac{1}{n}(X_1+X_2+\cdots+X_n)\,.
+    \]
+\end{leftbar}
+\end{theorem}
+
+A generalization of the previous inequalities to sub-Gaussian random variables also exists. We do not provide details in this thesis, interested readers can refer to~\cite{vershynin2018}.
+
 \subsection{Azuma's inequality}
+
+Another important inequality that has been used in this thesis is Azuma-(Hoeffding)'s inequality~\citep{azuma1967}. The vanilla form of Azuma's inequality is stated as follow.
+
+\begin{theorem}\label{thm:maths.azuma}
+\begin{leftbar}[theorembar]
+    Let $(X_0, X_1, X_2, \cdots)$ be a sequence of random variables, and we assume that it forms a martingale (or a super-martingale). Suppose that for any $i\in\NN$,
+    \[
+        |X_i-X_{i-1}|\leq c_i \text{a.s.}\,,
+    \]
+    with $(c_i)_{i\in\NN}$ a sequence of constants. Then for any positive integer $n$ and any real $\epsilon$, the following inequality holds,
+    \[
+        \PP{X_n-X_0 \geq \epsilon} \leq \exp\left\{\frac{-\epsilon^2}{2\sum_{i=1}^n c_i^2}\right\}\,.
+    \]
+    Symmetrically, if the sequence form a sub-martingale, then the following inequality holds,
+    \[
+        \PP{X_n-X_0 \leq -\epsilon} \leq \exp\left\{\frac{-\epsilon^2}{2\sum_{i=1}^n c_i^2}\right\}\,.
+    \]
+\end{leftbar}
+\end{theorem}
+
+The two parts of Theorem~\ref{thm:maths.azuma} can be combined together using a union bound to obtain the following two-side bound.
+
+\begin{corollary}\label{cor:maths.azuma}
+\begin{leftbar}[corollarybar]
+    Let $(X_0, X_1, X_2, \cdots)$ be a martingale such that for any $i\in\NN$,
+    \[
+        |X_i-X_{i-1}|\leq c_i \text{a.s.}\,.
+    \]
+    Then we have
+    \[
+        \PP{X_n-X_0 \leq -\epsilon} \leq \exp\left\{\frac{-\epsilon^2}{2\sum_{i=1}^n c_i^2}\right\}\,.
+    \]
+\end{leftbar}
+\end{corollary}
 
 %\subsection{Bernstein's inequality}
 

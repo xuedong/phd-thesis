@@ -1,31 +1,42 @@
 % !TEX root = ../Chapter5.tex
 \section{Detailed regret analysis for \HCT{} under Assumption~\ref{ass:gpo.local}}\label{app:gpo.hct}
 
-\subsection{Maximum depth of the tree (proof of Lemma~\ref{lemma_depth})}\label{proof:lemma_depth}
+We begin our analysis by bounding the maximum depth of the trees constructed by \gls{hct}.
+
+\subsection{Maximum depth of the tree (proof of Lemma~\ref{lemma:gpo.depth})}\label{proof:lemma_depth}
 %\setcounter{scratchcounter}{\value{theorem}}\setcounter{theorem}{\the\numexpr\getrefnumber{lemma_depth}-1}
 \restalemmadepth*
 %\setcounter{theorem}{\the\numexpr\value{scratchcounter}}
 
 \begin{proof}
 The deepest tree that can be constructed by \gls{hct} is a linear one, where at each level one unique node is expanded. In such case,   $|\mathcal{I}_h^{+}(N)|=1$ and $|\mathcal{I}_h(N)|=K$ for all $h<H(N)$. Therefore, we have
-\begin{align*}
-    N & = \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} T_{h,i}(N) \\
-      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^{+}(N)} T_{h,i}(N) \\
-      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^{+}(N)} T_{h,i}(n_{h,i}) \\
-      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^{+}(N)} \tau_h(n_{h,i}) && \text{definition of } n_{h,i} \\
-      & \geq \sum_{h=0}^{H(N)-1}\frac{c^2}{\nu^2}\rho^{-2h} && \text{ineq.\,(\ref{eq1})} \\
-      & \geq \frac{(c\rho)^2}{\nu^2}\rho^{-2H(N)}H(N) && \text{since } h\leq H(N)-1 \\
-      & \geq \frac{(c\rho)^2}{\nu^2}\rho^{-2H(N)}.
-\end{align*}
+\begingroup
+\allowdisplaybreaks
+\begin{align}
+    N & = \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} T_{h,i}(N) \nonumber \\
+      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^{+}(N)} T_{h,i}(N) \nonumber \\
+      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^{+}(N)} T_{h,i}(n_{h,i}) \nonumber \\
+      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^{+}(N)} \tau_h(n_{h,i}) \label{eq:gpo.depth1} \\
+      & \geq \sum_{h=0}^{H(N)-1}\frac{c^2}{\nu^2}\rho^{-2h} \label{eq:gpo.depth2} \\
+      & \geq \frac{(c\rho)^2}{\nu^2}\rho^{-2H(N)}H(N) \label{eq:gpo.depth3} \\
+      & \geq \frac{(c\rho)^2}{\nu^2}\rho^{-2H(N)} \nonumber \,.
+\end{align}
+\endgroup
+In the previous reasoning, \eqref{eq:gpo.depth1} is based on the definition of $n_{h,i}$, \eqref{eq:gpo.depth2} is due to inequality~\eqref{eq:gpo.pre}, and~\eqref{eq:gpo.depth3} holds since $h\leq H(N)-1$.
+
 By solving this expression, we obtain
-\begin{align*}
-    H(N) & \leq \frac{1}{2}\log\left(                \frac{N\nu^2}{c^2\rho^2} \right)/\log(1/\rho) \\
+\begingroup
+\allowdisplaybreaks
+\begin{align}
+    H(N) & \leq \frac{1}{2}\log\left(\frac{N\nu^2}{c^2\rho^2} \right)/\log(1/\rho) \nonumber \\
          & \leq \frac{1}{2(1-\rho)}\log\left(
-    \frac{N\nu^2}{c^2\rho^2} \right) && \text{follows from } \log(1/\rho)\geq 1-\rho \\
+    \frac{N\nu^2}{c^2\rho^2} \right) \label{eq:gpo.depth4} \\
 	& \leq \ceil{\frac{1}{2(1-\rho)}\log\left(
-    \frac{N\nu^2}{c^2\rho^2} \right)} \\
-         & \eqdef H_{\max}(N).
-\end{align*}
+    \frac{N\nu^2}{c^2\rho^2} \right)} \nonumber \\
+         & \eqdef H_{\max}(N) \nonumber \,.
+\end{align}
+\endgroup
+where \eqref{eq:gpo.depth4} follows from $\log(1/\rho)\geq 1-\rho$.
 \end{proof}
 
 \subsection{High-probability event}\label{proof:lemma_event}
@@ -39,45 +50,52 @@ and we recall the definition of the favorable event
 \xi_n \triangleq \left\{ \forall (h,i)\in\mathcal{L}_n,  |\hat{\mu}_{h,i}(n) - \mu_{h,i}| \leq c\sqrt{\frac{\log(1/\tilde{\delta}(n))}{T_{h,i}(n)}} \right\}\!\cdot\]
 Next, we prove that our favorable event holds with high probability.
 
-\begin{lemma} \label{lemma_event}
+\begin{lemma}\label{lemma:gpo.event}
+\begin{leftbar}[lemmabar]
 With $c_1$ and $c$ defined in Section~\ref{sec:gpo.pre}, for any fixed round~$n$,
 \[
-\mathbb{P}\left[ \xi_n \right] \geq 1-\frac{4\delta}{3n^6}\cdot
+    \mathbb{P}\left[ \xi_n \right] \geq 1-\frac{4\delta}{3n^6}\,.
 \]
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
 Let $\hat{\mu}_{h,i,s}$ be the empirical mean reward of the first $s$ noisy evaluations of $f$ in $x_{h,i}$, we upper-bound the probability of the complementary event $\xi_n^c$ as
 
-\begin{align*}
+\begingroup
+\allowdisplaybreaks
+\begin{align}
     \mathbb{P}\left[ \xi_n^c \right]
-    & \leq \sum_{(h,i)\in\mathcal{L}_n}\sum_{s=1}^{n} \mathbb{P}\left[ |\hat{\mu}_{h,i,s} - \mu_{h,i}| \geq c\sqrt{\frac{\log(1/\tilde{\delta}(n))}{s}} \right] && \text{union bound} \\
-    & \leq \sum_{(h,i)\in\mathcal{L}_n}\sum_{s=1}^{n} 2\operatorname{exp}\left( -2c^2\log(1/\tilde{\delta}(n)) \right) && \text{Chernoff-Hoeffding inequality} \\
-    & = 2\operatorname{exp}\left( -2c^2\log(1/\tilde{\delta}(n)) \right) n|\mathcal{L}_n| \\
-    & = 2(\tilde{\delta}(n))^{2c^2}t|\mathcal{L}_n| \\
-    & \leq 2(\tilde{\delta}(n))^{2c^2}n 2^{H_{max}(n)+1} \\
-    & = 2(\tilde{\delta}(n))^{2c^2}n 2^{\ceil{\frac{1}{2(1-\rho)}\log\left(\frac{n\nu^2}{c^2\rho^2} \right)}+1} && \text{Lemma~\ref{lemma_depth}} \\
-    & \leq 8n(\tilde{\delta}(n))^{2c^2} \left( \frac{t\nu^2}{c^2\rho^2} \right)^{\frac{1}{2(1-\rho)}} \\
-    & \leq 8n\left(\frac{\delta}{n} (\rho/(3\nu))^{1/8})^{\frac{8}{1-\rho}}\right) \left( \frac{t\nu^2(1-\rho)}{4\rho^2}\right)^{\frac{1}{2(1-\rho)}} && \text{plugging in values of $c$ and $c_1$} \\
-    & = 8n\left(\frac{\delta}{n}\right)^{\frac{8}{1-\rho}} \left(\frac{\rho}{3\nu}\right)^{\frac{1}{1-\rho}} n^{\frac{1}{2(1-\rho)}} \left( \frac{\nu\sqrt{1-\rho}}{2\rho}\right)^{\frac{1}{1-\rho}} \\
-    & \leq \frac{4}{3} \delta n^{\frac{-2\rho-13}{2(1-\rho)}} \\
-    & \leq \frac{4\delta}{3n^6}\cdot
-\end{align*}
-
+    & \leq \sum_{(h,i)\in\mathcal{L}_n}\sum_{s=1}^{n} \mathbb{P}\left[ |\hat{\mu}_{h,i,s} - \mu_{h,i}| \geq c\sqrt{\frac{\log(1/\tilde{\delta}(n))}{s}} \right] \label{eq:gpo.event1} \\
+    & \leq \sum_{(h,i)\in\mathcal{L}_n}\sum_{s=1}^{n} 2\operatorname{exp}\left( -2c^2\log(1/\tilde{\delta}(n)) \right) \label{eq:gpo.event2} \\
+    & = 2\operatorname{exp}\left( -2c^2\log(1/\tilde{\delta}(n)) \right) n|\mathcal{L}_n| \nonumber \\
+    & = 2(\tilde{\delta}(n))^{2c^2}n|\mathcal{L}_n| \nonumber \\
+    & \leq 2(\tilde{\delta}(n))^{2c^2}n 2^{H_{max}(n)+1} \nonumber \\
+    & = 2(\tilde{\delta}(n))^{2c^2}n 2^{\ceil{\frac{1}{2(1-\rho)}\log\left(\frac{n\nu^2}{c^2\rho^2} \right)}+1} \label{eq:gpo.event3} \\
+    & \leq 8n(\tilde{\delta}(n))^{2c^2} \left( \frac{t\nu^2}{c^2\rho^2} \right)^{\frac{1}{2(1-\rho)}} \nonumber \\
+    & \leq 8n\left(\frac{\delta}{n} (\rho/(3\nu))^{1/8})^{\frac{8}{1-\rho}}\right) \left( \frac{n\nu^2(1-\rho)}{4\rho^2}\right)^{\frac{1}{2(1-\rho)}} \label{eq:gpo.event4} \\
+    & = 8n\left(\frac{\delta}{n}\right)^{\frac{8}{1-\rho}} \left(\frac{\rho}{3\nu}\right)^{\frac{1}{1-\rho}} n^{\frac{1}{2(1-\rho)}} \left( \frac{\nu\sqrt{1-\rho}}{2\rho}\right)^{\frac{1}{1-\rho}} \nonumber \\
+    & \leq \frac{4}{3} \delta n^{\frac{-2\rho-13}{2(1-\rho)}} \nonumber \\
+    & \leq \frac{4\delta}{3n^6} \nonumber \,.
+\end{align}
+\endgroup
+Here, \eqref{eq:gpo.event1} is derived using a union bound, and~\eqref{eq:gpo.event2} is due to the Hoeffding inequality (see Appendix~\ref{app:maths.concentration} for details). \eqref{eq:gpo.event3} is a result of Lemma~\ref{lemma:gpo.depth} and finally~\eqref{eq:gpo.event4} is obtained by plugging in values of $c$ and $c_1$.
 \end{proof}
 
 \subsection{Failing confidence bound}\label{proof:lemma_failing}
 
 We decompose the regret of \gls{hct} into two terms depending on whether $\xi_n$ holds. Let us define $\Delta_n \eqdef f^\star - r_n$. Then, we decompose the regret as
 \[
-R_N^{\gls{hct}} = \sum_{n=1}^N \Delta_n = \sum_{n=1}^N \Delta_n \bOne_{\xi_n} + \sum_{n=1}^N \Delta_n \bOne_{\xi_n^c} = R_N^{\xi} + R_N^{\xi^c}.
+    R_N^{\gls{hct}} = \sum_{n=1}^N \Delta_n = \sum_{n=1}^N \Delta_n \bOne_{\xi_n} + \sum_{n=1}^N \Delta_n \bOne_{\xi_n^c} = R_N^{\xi} + R_N^{\xi^c}\,.
 \]
 The failing confidence term $R_N^{\xi^c}$ is bounded by the following lemma.
-\begin{lemma} \label{lemma_failing}
+\begin{lemma}\label{lemma:gpo.failing}
+\begin{leftbar}[lemmabar]
 With $c_1$ and $c$ defined in Section~\ref{app:gpo.notation}, when the favorable event does not hold, the regret of {\gls{hct}} is with probability $1-\delta/(5N^2)$ bounded as
 \[
-R_N^{\xi^c} \leq \sqrt{N}.
+    R_N^{\xi^c} \leq \sqrt{N}\,.
 \]
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -86,15 +104,18 @@ We split the term into rounds from $1$ to $\sqrt{N}$ and the rest,
 R_N^{\xi^c} = \sum_{n=1}^N \Delta_n \bOne_{\xi_n^c} = \sum_{n=1}^{\sqrt{N}} \Delta_n \bOne_{\xi_n^c} + \sum_{n=\sqrt{N}+1}^N \Delta_n \bOne_{\xi_n^c}.
 \]
 The first term can be bounded trivially by $\sqrt{N}$ since $|\Delta_n|\leq 1$. Next, we show that the probability that the second term is non zero is bounded by $\delta/(5N^2)$.
-\begin{align*}
-    \mathbb{P}\left[ \sum_{n=\sqrt{N}+1}^N \Delta_n \bOne_{\xi_n^c} > 0 \right] & = \mathbb{P}\left[ \bigcup\limits_{n=\sqrt{N}+1}^N \xi_n^c \right]          \\
-            & \leq \sum_{n=\sqrt{N}+1}^N \mathbb{P}\left[ \xi_n^c \right] && \text{union bound} \\
-            & \leq \sum_{n=\sqrt{N}+1}^N \frac{\delta}{n^6} && \text{Lemma~\ref{lemma_event}} \\
-            & \leq \int_{\sqrt{N}}^{\infty} \frac{\delta}{n^6} \, \mathrm{d}n \\
-            & = \frac{\delta}{5N^{5/2}} \\
-            & \leq \frac{\delta}{5N^2}\cdot
-\end{align*}
-
+\begingroup
+\allowdisplaybreaks
+\begin{align}
+    \mathbb{P}\left[ \sum_{n=\sqrt{N}+1}^N \Delta_n \bOne_{\xi_n^c} > 0 \right] & = \mathbb{P}\left[ \bigcup\limits_{n=\sqrt{N}+1}^N \xi_n^c \right] \nonumber \\
+            & \leq \sum_{n=\sqrt{N}+1}^N \mathbb{P}\left[ \xi_n^c \right] \label{eq:gpo.failing1} \\
+            & \leq \sum_{n=\sqrt{N}+1}^N \frac{\delta}{n^6} \label{eq:gpo.failing2} \\
+            & \leq \int_{\sqrt{N}}^{\infty} \frac{\delta}{n^6} \, \mathrm{d}n \nonumber \\
+            & = \frac{\delta}{5N^{5/2}} \nonumber \\
+            & \leq \frac{\delta}{5N^2} \nonumber \,.
+\end{align}
+\endgroup
+In the previous reasoning, \eqref{eq:gpo.failing1} is achieved again by a simple union bound, and~\eqref{eq:gpo.failing2} can be obtained by Lemma~\ref{lemma:gpo.event}
 \end{proof}
 
 \subsection{Proof of Theorem~\ref{thm:gpo.hct}}\label{proof:thm}
@@ -139,24 +160,23 @@ where the last equality follows from the fact that the subroutine \texttt{OptTra
 \]
 Since the root, which is an optimal node, is in $P_n$, there exists at least one optimal node $(h^\star,i^\star)$ in path $P_n$. As a result, we have
 \begin{align}
-    B_{h^\star,i^\star}(n) & \leq U_{h_n,i_n}(n), \label{eq5} \\
-    B_{h^\star,i^\star}(n) & \leq U_{h_n^p,i_n^p}(n). \label{eq6}
+    B_{h^\star,i^\star}(n) & \leq U_{h_n,i_n}(n), \label{eq:gpo.bvalue1} \\
+    B_{h^\star,i^\star}(n) & \leq U_{h_n^p,i_n^p}(n). \label{eq:gpo.bvalue2}
 \end{align}
-We now expand (\ref{eq5}) on both sides under $\xi_n$. First, we have
+We now expand (\ref{eq:gpo.bvalue1}) on both sides under $\xi_n$. First, we have
 \begin{align}
-    U_{h_n,i_n}(n) & \eqdef \hat{\mu}_{h_n,i_n}(n) + \nu\rho^{h_n} +     c\sqrt{\frac{\log(1/\tilde{\delta}(n^+))}{T_{h_n,i_n}(n)}} %\\
-                   %&
-                   \leq f(x_{h_n,i_n}) + \nu\rho^{h_n} + 2c\sqrt{\frac{\log(1/\tilde{\delta}(n^+))}{T_{h_n,i_n}(n)}} \label{eq8}
+    U_{h_n,i_n}(n) & \eqdef \hat{\mu}_{h_n,i_n}(n) + \nu\rho^{h_n} +     c\sqrt{\frac{\log(1/\tilde{\delta}(n^+))}{T_{h_n,i_n}(n)}} \nonumber \\
+                   &\leq f(x_{h_n,i_n}) + \nu\rho^{h_n} + 2c\sqrt{\frac{\log(1/\tilde{\delta}(n^+))}{T_{h_n,i_n}(n)}} \label{eq:gpo.ucb}
 \end{align}
 and the same holds for the parent of the selected node,
-\begin{equation*} %\label{eq9}
-U_{h_n^p,i_n^p}(n) \leq f(x_{h_n^p,i_n^p}) +\nu\rho^{h_n^p} + 2c\sqrt{\frac{\log(1/\tilde{\delta}(n^+))}{T_{h_n^p,i_n^p}(n)}}\cdot
+\begin{equation*}
+    U_{h_n^p,i_n^p}(n) \leq f(x_{h_n^p,i_n^p}) +\nu\rho^{h_n^p} + 2c\sqrt{\frac{\log(1/\tilde{\delta}(n^+))}{T_{h_n^p,i_n^p}(n)}}\,.
 \end{equation*}
 By Lemma~\ref{lemma:gpo.upper}, we know that $U_{h^\star,i^\star}(n)$ is a valid upper bound on $f^\star$. If an optimal node $(h^\star,i^\star)$ is a leaf, then $B_{h^\star,i^\star}(n)=U_{h^\star,i^\star}(n)$ is also a valid upper bound on $f^\star$. Otherwise, there always exists a leaf which contains the maximum for which $(h^\star,i^\star)$ is its ancestor. Now, if we propagate the bound backward from this leaf to $(h^\star,i^\star)$ through (\ref{eq4}), we have that $B_{h^\star,i^\star}(n)$ is still a valid upper bound on $f^\star$. Thus for any optimal node $(h^\star,i^\star)$, at round~$n$ under $\xi_n$, we have
 \begin{equation} \label{eq10}
 B_{h^\star,i^\star}(n) \geq f^\star.
 \end{equation}
-We combine (\ref{eq10}) with (\ref{eq5}) and (\ref{eq8}) to obtain
+We combine (\ref{eq10}) with (\ref{eq:gpo.bvalue1}) and (\ref{eq:gpo.ucb}) to obtain
 \begin{equation*} %\label{eq11}
 \Delta_{h_n,i_n} \eqdef f^\star - f(x_{h_n,i_n}) \leq \nu\rho^{h_n} + 2c\sqrt{\frac{\log(1/\tilde{\delta}(n^+))}{T_{h_n,i_n}(n)}}\cdot
 \end{equation*}
@@ -165,8 +185,8 @@ The same result holds for its parent,
 \Delta_{h_n^p,i_n^p} \eqdef f^\star - f(x_{h_n^p,i_n^p}) \leq \nu\rho^{h_n^p} + 2c\sqrt{\frac{\log(1/\tilde{\delta}(n^+))}{T_{h_n^p,i_n^p}(n)}}\cdot
 \end{equation*}
 We now refine the two above expressions. The subroutine \texttt{OptTraverse} tells us that \gls{hct} only selects a node when $T_{h,i}(N)<\tau_h(n)$. Therefore, by definition of $\tau_{h_n}(n)$, we have
-\begin{equation} \label{eq13}
-\Delta_{h_n,i_n} \leq 3c\sqrt{\frac{\log(2/\tilde{\delta}(n))}{T_{h_n,i_n}(n)}}\cdot
+\begin{equation}\label{eq:gpo.delta}
+    \Delta_{h_n,i_n} \leq 3c\sqrt{\frac{\log(2/\tilde{\delta}(n))}{T_{h_n,i_n}(n)}}\cdot
 \end{equation}
 On the other hand,  \texttt{OptTraverse} tells us that $T_{h_n^p,i_n^p}(n)\geq\tau_{h_n^p}(n)$, thus
 \begin{equation*} %\label{eq14}
@@ -179,17 +199,21 @@ which means that every selected node has a parent which is $(3\nu\rho^{h_n-1})$-
 We return to  term $\tilde{R}_N^{\xi}$ and split it into different depths. Let $1\leq \bar{H} \leq H(N)$ be a constant that we  fix later. We have
 \begingroup
 \allowdisplaybreaks
-\begin{align*}
-    \tilde{R}_N^{\xi} &\eqdef \sum_{n=1}^N \Delta_{h_n,i_n} \bOne_{\xi_n} \\
-                              &\leq \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{n=1}^N \Delta_{h,i} \bOne_{(h_n,i_n)=(h,i)} \bOne_{\xi_n} \\
-                              &\leq \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{n=1}^N 3c\sqrt{\frac{\log(2/\tilde{\delta}(n))}{T_{h,i}(n)}} \bOne_{(h_n,i_n)=(h,i)} && \text{ineq.\,(\ref{eq13})} \\
-                              &= \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)}\sum_{n=1}^N 3c\sqrt{\frac{\log(2/\tilde{\delta}(n))}{T_{h,i}(n)}} \bOne_{(h_n,i_n)=(h,i)} + \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{n=1}^N 3c\sqrt{\frac{\log(2/\tilde{\delta}(n))}{T_{h,i}(n)}} \bOne_{(h_n,i_n)=(h,i)} \\
-                              &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)}\sum_{s=1}^{\tau_h(\bar{n}_{h,i})} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} + \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{s=1}^{T_{h,i}(N)} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} \\
-                              &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)}\int_{1}^{\tau_h(\bar{n}_{h,i})} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} \, \mathrm{d}s + \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\int_{1}^{T_{h,i}(N)} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} \, \mathrm{d}s \\
-                              &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} 6c\sqrt{\tau_h(\bar{n}_{h,i})\log(2/\tilde{\delta}(\bar{n}_{h,i}))} + \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} 6c\sqrt{T_{h,i}(N)\log(2/\tilde{\delta}(\bar{n}_{h,i}))} \\
-                              &= 6c\left(\underbrace{\sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} \sqrt{\tau_h(\bar{n}_{h,i})\log(2/\tilde{\delta}(\bar{n}_{h,i}))}}_\text{(a)} + \underbrace{\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \sqrt{T_{h,i}(N)\log(2/\tilde{\delta}(\bar{n}_{h,i}))}}_\text{(b)}\right)\,.
-\end{align*}
+\begin{align}
+    \tilde{R}_N^{\xi} &\eqdef \sum_{n=1}^N \Delta_{h_n,i_n} \bOne_{\xi_n} \nonumber \\
+                              &\leq \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{n=1}^N \Delta_{h,i} \bOne_{(h_n,i_n)=(h,i)} \bOne_{\xi_n} \nonumber \\
+                              &\leq \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{n=1}^N 3c\sqrt{\frac{\log(2/\tilde{\delta}(n))}{T_{h,i}(n)}} \bOne_{(h_n,i_n)=(h,i)} \label{eq:gpo.cumulative1} \\
+                              &= \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)}\sum_{n=1}^N 3c\sqrt{\frac{\log(2/\tilde{\delta}(n))}{T_{h,i}(n)}} \bOne_{(h_n,i_n)=(h,i)} \nonumber \\
+                              &+ \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{n=1}^N 3c\sqrt{\frac{\log(2/\tilde{\delta}(n))}{T_{h,i}(n)}} \bOne_{(h_n,i_n)=(h,i)} \nonumber \\
+                              &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)}\sum_{s=1}^{\tau_h(\bar{n}_{h,i})} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} + \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\sum_{s=1}^{T_{h,i}(N)} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} \nonumber \\
+                              &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)}\int_{1}^{\tau_h(\bar{n}_{h,i})} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} \, \mathrm{d}s \nonumber \\
+                              &+ \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)}\int_{1}^{T_{h,i}(N)} 3c\sqrt{\frac{\log(2/\tilde{\delta}(\bar{n}_{h,i}))}{s}} \, \mathrm{d}s \nonumber \\
+                              &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} 6c\sqrt{\tau_h(\bar{n}_{h,i})\log(2/\tilde{\delta}(\bar{n}_{h,i}))} + \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} 6c\sqrt{T_{h,i}(N)\log(2/\tilde{\delta}(\bar{n}_{h,i}))} \nonumber \\
+                              &= 6c\left(\underbrace{\sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} \sqrt{\tau_h(\bar{n}_{h,i})\log(2/\tilde{\delta}(\bar{n}_{h,i}))}}_\text{(a)} + \underbrace{\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \sqrt{T_{h,i}(N)\log(2/\tilde{\delta}(\bar{n}_{h,i}))}}_\text{(b)}\right) \nonumber \,.
+\end{align}
 \endgroup
+In particular, \eqref{eq:gpo.cumulative1} is due to inequality~\eqref{eq:gpo.delta}.
+
 We bound separately the terms (a) and (b). Since $\bar{n}_{h,i}\leq N$, we have
 \begin{align*} %\label{eq15}
     \text{(a)} &\leq \sum_{h=0}^{\bar{H}}\sum_{i\in\mathcal{I}_h(N)} \sqrt{\tau_h(N)\log(2/\tilde{\delta}(N))}\\
@@ -202,13 +226,13 @@ Notice that the covering tree is $K$-ary and therefore $|\mathcal{I}_h(N)| \leq 
 where $d$ is the near-optimality dimension. As a result, for term (a), we obtain that
 \begingroup
 \allowdisplaybreaks
-\begin{align*}
-    \text{(a)} & \leq \sum_{h=0}^{\bar{H}} KC\rho^{-d(h-1)} \sqrt{\tau_h(N)\log(2/\tilde{\delta}(N))} \\
-               & = \sum_{h=0}^{\bar{H}} KC\rho^{-d(h-1)} \sqrt{\frac{c^2\log(2/\tilde{\delta}(N))}{\nu^2}\rho^{-2h}\log(2/\tilde{\delta}(N))} && \text{ineq.\,(\ref{eq1})} \\
-               & = KC\rho^d \frac{c\log(2/\tilde{\delta}(N))}{\nu} \sum_{h=0}^{\bar{H}} \rho^{-h(d+1)}.
-\end{align*}
+\begin{align}
+    \text{(a)} & \leq \sum_{h=0}^{\bar{H}} KC\rho^{-d(h-1)} \sqrt{\tau_h(N)\log(2/\tilde{\delta}(N))} \nonumber \\
+               & = \sum_{h=0}^{\bar{H}} KC\rho^{-d(h-1)} \sqrt{\frac{c^2\log(2/\tilde{\delta}(N))}{\nu^2}\rho^{-2h}\log(2/\tilde{\delta}(N))} && \label{eq:gpo.term_a} \\
+               & = KC\rho^d \frac{c\log(2/\tilde{\delta}(N))}{\nu} \sum_{h=0}^{\bar{H}} \rho^{-h(d+1)} \nonumber \,.
+\end{align}
 \endgroup
-Consequently, we  bound (a) as
+where~\eqref{eq:gpo.term_a} is deduced from inequality~\eqref{eq:gpo.pre}. Consequently, we bound (a) as
 \begin{equation} \label{eq17}
     \text{(a)} \leq KC\rho^d \frac{c\log\left(2/\tilde{\delta}(N)\right)}{\nu} \frac{\rho^{-\bar{H}(d+1)}}{1-\rho}\cdot
 \end{equation}
@@ -221,24 +245,24 @@ where we trivially bound the second square-root factor by the total number of pu
 %\vfil\newpage
 \begingroup
 \allowdisplaybreaks
-\begin{align*}
-    N & = \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} T_{h,i}(N) \\
-      &\geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} T_{h,i}(N) \\
-      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} T_{h,i}(\tilde{n}_{h,i}) && \text{$\tilde{n}_{h,i}$ well defined for $i\in\mathcal{I}_h^+(N)$} \\
-      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \tau_h(\tilde{n}_{h,i}) \\
-      & \geq \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \tau_h(\tilde{n}_{h,i}) \\
-      & = \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{c^2\log(1/\tilde{\delta}(\tilde{n}_{h,i}^+)))}{\nu^2}\rho^{-2h}\\
-       & \geq \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{c^2\log(1/\tilde{\delta}(\tilde{n}_{h,i}^+)))}{\nu^2}\rho^{-2\bar{H}} \\
-      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\tilde{n}_{h,i}^+))) \\
-      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\left[\max(\bar{n}_{h+1,2i-1},\bar{n}_{h+1,2i})\right]^+)) && \text{since $\tilde{n}_{h,i}=\max(\bar{n}_{h+1,2i-1},\bar{n}_{h+1,2i})$} \\
-      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\max(\bar{n}_{h+1,2i-1}^+,\bar{n}_{h+1,2i}^+))) && \text{$\forall n_1,n_2,\left[\max(n_1,n_2)\right]^+=\max(n_1^+,n_2^+)$} \\
-      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \max(\log(1/\tilde{\delta}(\bar{n}_{h+1,2i-1}^+)),\log(1/\tilde{\delta}(\bar{n}_{h+1,2i}^+))) \\
-      & \geq \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{\log(1/\tilde{\delta}(\bar{n}_{h+1,2i-1}^+))+\log(1/\tilde{\delta}(\bar{n}_{h+1,2i}^+))}{2} \\
-      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_{h-1}^+(n)} \frac{\log(1/\tilde{\delta}(\bar{n}_{h,2i-1}^+))+\log(1/\tilde{\delta}(\bar{n}_{h,2i}^+))}{2} && \text{change of variables} \\
-      & = \frac{c^2\rho^{-2\bar{H}}}{2\nu^2} \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\bar{n}_{h,i}^+)).
-\end{align*}
+\begin{align}
+    N & = \sum_{h=0}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} T_{h,i}(N) \nonumber \\
+      &\geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} T_{h,i}(N) \nonumber \\
+      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} T_{h,i}(\tilde{n}_{h,i}) \label{eq:gpo.decomp1} \\
+      & \geq \sum_{h=0}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \tau_h(\tilde{n}_{h,i}) \nonumber \\
+      & \geq \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \tau_h(\tilde{n}_{h,i}) \nonumber \\
+      & = \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{c^2\log(1/\tilde{\delta}(\tilde{n}_{h,i}^+)))}{\nu^2}\rho^{-2h} \nonumber \\
+       & \geq \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{c^2\log(1/\tilde{\delta}(\tilde{n}_{h,i}^+)))}{\nu^2}\rho^{-2\bar{H}} \nonumber \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\tilde{n}_{h,i}^+))) \nonumber \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\left[\max(\bar{n}_{h+1,2i-1},\bar{n}_{h+1,2i})\right]^+)) \label{eq:gpo.decomp2} \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\max(\bar{n}_{h+1,2i-1}^+,\bar{n}_{h+1,2i}^+))) \label{eq:gpo.decomp3} \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \max(\log(1/\tilde{\delta}(\bar{n}_{h+1,2i-1}^+)),\log(1/\tilde{\delta}(\bar{n}_{h+1,2i}^+))) \nonumber \\
+      & \geq \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}}^{H(N)-1}\sum_{i\in\mathcal{I}_h^+(N)} \frac{\log(1/\tilde{\delta}(\bar{n}_{h+1,2i-1}^+))+\log(1/\tilde{\delta}(\bar{n}_{h+1,2i}^+))}{2} \nonumber \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{\nu^2} \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_{h-1}^+(n)} \frac{\log(1/\tilde{\delta}(\bar{n}_{h,2i-1}^+))+\log(1/\tilde{\delta}(\bar{n}_{h,2i}^+))}{2} \label{eq:gpo.decomp4} \\
+      & = \frac{c^2\rho^{-2\bar{H}}}{2\nu^2} \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\bar{n}_{h,i}^+)) \nonumber \,.
+\end{align}
 \endgroup
-In the above derivation, the last equality relies on the fact that for any $h>0$, $\mathcal{I}_h^+(N)$ covers all the internal nodes at level $h$ and therefore its children cover $\mathcal{I}_{h+1}(N)$. We  thus obtain
+Note that in~\eqref{eq:gpo.decomp1}, $\tilde{n}_{h,i}$ is well defined for $i\in\mathcal{I}_h^+(N)$. In the above derivation, \eqref{eq:gpo.decomp2} holds since $\tilde{n}_{h,i}=\max(\bar{n}_{h+1,2i-1},\bar{n}_{h+1,2i})$, and~\eqref{eq:gpo.decomp3} holds since $\forall n_1,n_2,\left[\max(n_1,n_2)\right]^+=\max(n_1^+,n_2^+)$. Besides,~\eqref{eq:gpo.decomp4} is simply due to a change of variables. Finally, the last equality relies on the fact that for any $h>0$, $\mathcal{I}_h^+(N)$ covers all the internal nodes at level $h$ and therefore its children cover $\mathcal{I}_{h+1}(N)$. We  thus obtain
 \begin{equation} \label{eq19}
 \sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h^+(N)} \log(1/\tilde{\delta}(\bar{n}_{h,i}^+)) \leq \frac{2\nu^2\rho^{2\bar{H}}N}{c^2}\cdot
 \end{equation}
@@ -246,12 +270,12 @@ On the other hand, we have
 \begingroup
 \allowdisplaybreaks
 \begin{align*}
-    \text{(b)} &\leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \log(2/\tilde{\delta}(\bar{n}_{h,i}))}
-               \leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} 2\log(1/\tilde{\delta}(\bar{n}_{h,i}))} \\
-               &\leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} 2\log(1/\tilde{\delta}(\bar{n}_{h,i}^+))}, && \text{since $\bar{n}_{h,i}\leq\bar{n}_{h,i}^+$.}
+    \text{(b)} &\leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} \log(2/\tilde{\delta}(\bar{n}_{h,i}))} \\
+               &\leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} 2\log(1/\tilde{\delta}(\bar{n}_{h,i}))} \\
+               &\leq \sqrt{n\sum_{h=\bar{H}+1}^{H(N)}\sum_{i\in\mathcal{I}_h(N)} 2\log(1/\tilde{\delta}(\bar{n}_{h,i}^+))}\,.
 \end{align*}
 \endgroup
-By plugging (\ref{eq19}) into above expression, we get
+The last seep holds in the above since $\bar{n}_{h,i}\leq\bar{n}_{h,i}^+$. By plugging (\ref{eq19}) into the expression above, we get
 \begin{equation} \label{eq20}
     \text{(b)} \leq \frac{2\nu\rho^{\bar{H}}N}{c}\cdot
 \end{equation}
@@ -267,7 +291,7 @@ which after being plugged into (\ref{eq21}) gives
 \begin{equation} \label{eq23}
     \tilde{R}_N^{\xi} \leq 24\nu \left( \frac{KC\rho^dc^2\log(2/\tilde{\delta}(N))}{2(1-\rho)\nu^2} \right)^{\frac{1}{d+2}}N^{\frac{d+1}{d+2}}.
 \end{equation}
-Finally, combining (\ref{eq23}), (\ref{eq3}), and Lemma~\ref{lemma_failing}, we obtain
+Finally, combining (\ref{eq23}), (\ref{eq3}), and Lemma~\ref{lemma:gpo.failing}, we obtain
 \begin{align*}
     R_N^{\gls{hct}} & \leq \sqrt{N} + \sqrt{2N\log(\frac{4N^2}{\delta}}) + 24\nu\left(\frac{2KC\rho^d}{(1-\rho)^2\nu^2}\right)^{\frac{1}{d+2}}\left(\log\left(\frac{2N}{\delta}\sqrt[8]{\frac{3\nu}{\rho}}\right)\right)^{\frac{1}{d+2}}N^{\frac{d+1}{d+2}} \\
                               & = \sqrt{N} + \sqrt{2N\log(\frac{4N^2}{\delta}}) + 3\left(\frac{2^{3d+7}\nu^d KC\rho^d}{(1-\rho)^{2}}\right)^{\frac{1}{d+2}}\left(\log\left(\frac{2N}{\delta}\sqrt[8]{\frac{3\nu}{\rho}}\right)\right)^{\frac{1}{d+2}}N^{\frac{d+1}{d+2}} \\

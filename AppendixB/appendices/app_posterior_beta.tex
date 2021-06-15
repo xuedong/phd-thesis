@@ -280,7 +280,8 @@ First, note that from Lemma~\ref{lemma:optimal_prop_istar_bernoulli} we know tha
 	\end{align*}
 	where the first inequality uses the Binomial trick again. Let
 	\begin{align*}
-	C &= \inf_{\frac{a-1}{a+b-1} \leq y \leq \frac{c-1}{c+d-1}} (a+b-1) kl\left(\frac{a-1}{a+b-1}; y\right) + (c+d-1) kl\left(\frac{c-1}{c+d-1} ; y\right)  = \inf_{\frac{a-1}{a+b-1} \leq y \leq \frac{c-1}{c+d-1}} C_{a,b}(y)+C_{c,d}(y),
+	C &= \inf_{\frac{a-1}{a+b-1} \leq y \leq \frac{c-1}{c+d-1}} (a+b-1) kl\left(\frac{a-1}{a+b-1}; y\right) + (c+d-1) kl\left(\frac{c-1}{c+d-1} ; y\right)  \\ 
+	&= \inf_{\frac{a-1}{a+b-1} \leq y \leq \frac{c-1}{c+d-1}} C_{a,b}(y)+C_{c,d}(y),
 	\end{align*}
 	then note that in particular we have
 	\begin{align*}
@@ -289,8 +290,8 @@ First, note that from Lemma~\ref{lemma:optimal_prop_istar_bernoulli} we know tha
 	\end{align*}
 	Then
 	\begin{align*}
-	B &\leq e^{-C} \int_{\frac{a-1}{a+b-1}}^{\frac{c-1}{c+d-1}} (a+b-1) \frac{\diff{}}{\diff{y}} kl (\frac{a-1}{a+b-1}; y) \diff{y}  + e^{-C}
-	= \left[ (a+b-1) kl\left(\frac{a-1}{a+b-1}; \frac{c-1}{c+d-1}\right)  + 1 \right] e^{-C}.
+	B &\leq e^{-C} \int_{\frac{a-1}{a+b-1}}^{\frac{c-1}{c+d-1}} (a+b-1) \frac{\diff{}}{\diff{y}} kl (\frac{a-1}{a+b-1}; y) \diff{y}  + e^{-C} \\
+	&= \left[ (a+b-1) kl\left(\frac{a-1}{a+b-1}; \frac{c-1}{c+d-1}\right)  + 1 \right] e^{-C}.
 	\end{align*}
 	Thus we have
 	\begin{align*}
