@@ -18,7 +18,8 @@
         $L$ & upper bound on the norms of the arms\\
         $\btheta$ & parameter in $\Theta$ \\
         $\hbx_n$ & arm pulled at time $n$ \\
-        $T_n^\bx = \sum_{t=1}^n \ind_{\{\hbx_t = \bx\}}$ & number of draws of arm $\bx$ at time $n$\\
+        $T_n^\bx = \sum_{t=1}^n \ind_{\{\hbx_t = \bx\}}$ & number of draws of arm $\bx$ up to time $n$\\
+        $T_{n,i}$ & number of draws of arm indexed $i$ up to time $n$\\
         $\bT_n =(T_n^\bx)_{\bx\in\cX}$ & vector of number of draws\\
         $T_n^{\bx,i} = \sum_{t=1}^n \ind_{\{\hbx_t = \bx, i_t = i\}}$ & number of draws of arm $\bx$ for a given answer $i$\\
         $\lambda$ & regularization parameter\\

@@ -17,7 +17,7 @@ For all $t \geq 1$
 We now prove that we can construct, on this event, upper confidence bounds on the loss given to the learners.
 \begin{lemma}
 \label{lem:confidence_bound_general_nc}
-On the event $\cE_t$, for all $(\bx,i)\in\cA\times\cI$ and $\btheta'\in\neg i$, for all $s\leq t$,
+On the event $\cE_t$, for all $(\bx,i)\in\cX\times\cI$ and $\btheta'\in\neg i$, for all $s\leq t$,
 \[
 \normm{\btheta-\btheta'}^2_{\bx\bx\transpose} \leq \min\left(\max_\pm \left( \langle \hbtheta_{s} - \btheta',\bx\rangle \pm \sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{T_s}+ \lambda I_d)^{-1}} \right)^2,4M^2\right)
 \]
@@ -37,7 +37,7 @@ Combining the two inequalities above allows us to conclude.
 We thus define the upper confidence $U_s^{\bx,i}$ on the coordinate $(\bx,i)$ of the loss at time $s\leq t$,
 \begin{equation}
 \label{eq:def_ucb_br_general_nc}
-U_s^{\bx,i} = \min\left(\max_\pm \left( \langle \hbtheta_{s-1} - \btheta',\bx\rangle \pm \sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{T_{s-1}}+ \lambda I_d)^{-1}} \right)^2,4M^2\right)\,.
+U_s^{\bx,i} = \min\left(\max_\pm \left( \langle \hbtheta_{s-1} - \btheta',\bx\rangle \pm \sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{\bT_{s-1}}+ \lambda I_d)^{-1}} \right)^2,4M^2\right)\,.
 \end{equation}
 The first step of our analysis is to restrict it to the event $\mathcal E_t$, as is done by \citet{garivier2016tracknstop,degenne2019game}.
 \begin{lemma}
@@ -53,10 +53,10 @@ Let $\mathcal E_t$ be an event and $T_0(\delta) \in \NN$ be such that for $t\ge 
 We need to prove that if $\mathcal E_t$ holds, there exists such a time $T_0(\delta)$.
 
 \subsection{Analysis under concentration}
-%\todo[inline]{ We prove that $d_{t,\delta} \geq T_t^{\istar} \Tstar(\btheta)^{-1}$ and that $T_t^i = O(\sqrt{t})$ ,for all $i\neq \istar$}
-In this section we assume that the event $\cE_t$ holds. And we set $\istar=\istar(\btheta)$ and define the following quantities
+%\todo[inline]{ We prove that $d_{t,\delta} \geq T_{t,\istar} \Tstar(\btheta)^{-1}$ and that $T_{t,i} = O(\sqrt{t})$ ,for all $i\neq \istar$}
+In this section we assume that the event $\cE_t$ holds. And we set $\istar=\Istar(\btheta)$ and define the following quantities
 \[
-w_t^i = \ind_{\{i_t = i\}}w_t \quad W_t^i = \sum_{s=1}^t w_s^i\quad T_t^i = \sum_{s=1}^t \ind{\{\hbx_t=\bx,i_t=i\}}\,.
+w_t^i = \ind_{\{i_t = i\}}w_t \quad W_t^i = \sum_{s=1}^t w_s^i\quad T_{t,i} = \sum_{s=1}^t \ind{\{\hbx_t=\bx,i_t=i\}}\,.
 \]
 %That algorithm starts stage $t$ by setting $i_t = i^*(\hbtheta_t)$.
 
@@ -66,101 +66,101 @@ If the algorithm does not stop at stage $t$
 we have
 \begin{align*}
 d_{t,\delta}
-\ge \frac{1}{2}\max_{i\in\cI} \inf_{\btheta'_i \in \neg i}\Vert \hat{\btheta}_t - \btheta'_i \Vert_{\bLambda_{T_t}}^2
-\geq  \frac{1}{2} \inf_{\btheta' \in \neg \istar(\btheta)}\Vert \hat{\btheta}_t - \btheta' \Vert_{\bLambda_{T_t}}^2
-%\ge \frac{1}{2}\sum_{i\in\cI} \inf_{\btheta'_i \in \neg i}\Vert \hat{\btheta}_t - \btheta'_i \Vert_{\bLambda_{T_t^i}}^2
+\ge \frac{1}{2}\max_{i\in\cI} \inf_{\btheta'_i \in \neg i}\Vert \hat{\btheta}_t - \btheta'_i \Vert_{\bLambda_{\bT_t}}^2
+\geq  \frac{1}{2} \inf_{\btheta' \in \neg \istar(\btheta)}\Vert \hat{\btheta}_t - \btheta' \Vert_{\bLambda_{\bT_t}}^2
+%\ge \frac{1}{2}\sum_{i\in\cI} \inf_{\btheta'_i \in \neg i}\Vert \hat{\btheta}_t - \btheta'_i \Vert_{\bLambda_{T_{t,i}}}^2
 \: ,
 \end{align*}
-Let $\btheta'_{i,w}(\btheta) \in \argmin_{\btheta' \in \neg i} \Vert \btheta - \btheta' \Vert_{\bLambda_{w}}$ , such that we have $d_{t,\delta} \ge \frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2$ . We first transform that norm into a sum over the rounds of divergences from $\hat{\btheta}_{s-1}$ (instead of $\hat{\btheta}_t$).
+Let $\btheta'_{i,w}(\btheta) \in \argmin_{\btheta' \in \neg i} \Vert \btheta - \btheta' \Vert_{\bLambda_{w}}$ , such that we have $d_{t,\delta} \ge \frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2$ . We first transform that norm into a sum over the rounds of divergences from $\hat{\btheta}_{s-1}$ (instead of $\hat{\btheta}_t$).
 
 \begin{lemma}\label{lem:nc_proof_to_online_formulation}
 If $\mathcal E_t$ holds, then an algorithm using C-Tracking ensures that
 \begin{align*}
-    &\frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2 + 20 A\left(\sqrt{h(t)g(t) \frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2}+ 2h(t)g(t)\right)\\
-    &\geq \frac{1}{2}\sum_{s=1}^t \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,T_t}(\hat{\btheta}_t)\Vert_{\bLambda_{\tw_s}}^2\,.
+    &\frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2 + 20 A\left(\sqrt{h(t)g(t) \frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2}+ 2h(t)g(t)\right)\\
+    &\geq \frac{1}{2}\sum_{s=1}^t \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t)\Vert_{\bLambda_{\tw_s}}^2\,.
 \end{align*}
 \end{lemma}
 \begin{proof}
 
 Using the triangular inequality,
 \begin{align*}
-\Vert \btheta - \hat{\btheta}_t \Vert_{\bLambda_{T_t}} + \Vert \hat{\btheta}_t - \btheta'_{\istar,T_t}(\hbtheta_t) \Vert_{\bLambda_{T_t}}
-\ge \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}
-%\ge \Vert \btheta - \btheta'_{i,T_t^i}(\btheta) \Vert_{\bLambda_{T_t^i}}
+\Vert \btheta - \hat{\btheta}_t \Vert_{\bLambda_{\bT_t}} + \Vert \hat{\btheta}_t - \btheta'_{\istar,\bT_t}(\hbtheta_t) \Vert_{\bLambda_{\bT_t}}
+\ge \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}
+%\ge \Vert \btheta - \btheta'_{i,T_{t,i}}(\btheta) \Vert_{\bLambda_{T_{t,i}}}
 \: .
 \end{align*}
 We obtain
 \begin{align*}
-\frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2
-&\ge \frac{1}{2} \left(\Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}} -\Vert \hat{\btheta}_t -\btheta \Vert_{\bLambda_{T_t}} \right)^2
+\frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2
+&\ge \frac{1}{2} \left(\Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}} -\Vert \hat{\btheta}_t -\btheta \Vert_{\bLambda_{\bT_t}} \right)^2
 \\
-&\ge \frac{1}{2}\Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2
-	-  \Vert \hat{\btheta}_t -\btheta \Vert_{\bLambda_{T_t}} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}
+&\ge \frac{1}{2}\Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2
+	-  \Vert \hat{\btheta}_t -\btheta \Vert_{\bLambda_{\bT_t}} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}
 \,.
 \end{align*}
-By definition of the event $\cE_t$ we know that $\frac{1}{2}\Vert \hat{\btheta}_t -\btheta \Vert_{\bLambda_{T_t}}^2 \leq h(t)$ where $h(t)$ is of order $O(\log(t))$. Thus we get
+By definition of the event $\cE_t$ we know that $\frac{1}{2}\Vert \hat{\btheta}_t -\btheta \Vert_{\bLambda_{\bT_t}}^2 \leq h(t)$ where $h(t)$ is of order $O(\log(t))$. Thus we get
 \begin{align*}
-\frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2 &\ge \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2 - \sqrt{4 h(t) \frac{1}{2}\Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2}\,,
+\frac{1}{2}\Vert \hat{\btheta}_t - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2 &\ge \frac{1}{2} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2 - \sqrt{4 h(t) \frac{1}{2}\Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2}\,,
 \end{align*}
 which leads to, using Lemma~\ref{lem:inq_revert_sqrt},
 \begin{equation}
 \label{eq:to_theta_nc}
-d_{t,\delta} + \sqrt{4 h(t) d_{t,\delta}} +4h(t) \geq \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2 \,.
+d_{t,\delta} + \sqrt{4 h(t) d_{t,\delta}} +4h(t) \geq \frac{1}{2} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2 \,.
 \end{equation}
 We now continue the proof by finding a lower bound for the right hand sum. Using a tracking property from~\cite{degenne2020structure} to state that for all $a$, $- \log(A) \le T_t^{\bx} - W_t^{\bx}\le 1$, we get
 \begin{align*}
-\frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2
-&\ge \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
-	- \frac{\log(A)}{2} \sum_{\bx\in\cX} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bx\bx\transpose}^2
+\frac{1}{2} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2
+&\ge \frac{1}{2} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
+	- \frac{\log(A)}{2} \sum_{\bx\in\cX} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bx\bx\transpose}^2
 \\
-&\ge \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
-	- \frac{\log(A)}{2} \sqrt{\sum_{\bx\in\cX} T_t^{\bx}\Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bx\bx\transpose}^2\sum_{a:T_t^\bx\ge 1} \frac{1}{T_t^\bx}   }
+&\ge \frac{1}{2} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
+	- \frac{\log(A)}{2} \sqrt{\sum_{\bx\in\cX} T_t^{\bx}\Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bx\bx\transpose}^2\sum_{a:T_t^\bx\ge 1} \frac{1}{T_t^\bx}   }
 \\
-&=   \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
-	- \frac{\log(A)}{2} \sqrt{\Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2\sum_{a:T_t^\bx\ge 1} \frac{1}{T_t^\bx}   }
+&=   \frac{1}{2} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
+	- \frac{\log(A)}{2} \sqrt{\Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2\sum_{a:T_t^\bx\ge 1} \frac{1}{T_t^\bx}   }
 \\
-&\ge \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
-	-\frac{\log(A)}{2} \sqrt{ A \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{T_t}}^2  }\,.
+&\ge \frac{1}{2} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
+	-\frac{\log(A)}{2} \sqrt{ A \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{\bT_t}}^2  }\,.
 \end{align*}
 %\todo[inline]{TODO: it seems that we introduce a $\sqrt{t}$ factor that should not be there when the $N$ are introduced and then lower bounded by 1.}
 Combining the last inequality with \eqref{eq:to_theta_nc} yields
 \begin{align*}
     &d_{t,\delta} + \sqrt{4 h(t) d_{t,\delta}} +4h(t)+\frac{\log(A)}{2} \sqrt{2 A}\sqrt{d_{t,\delta} + \sqrt{4 h(t) d_{t,\delta}} +4h(t)}\\
-    &\geq \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2\,.
+    &\geq \frac{1}{2} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2\,.
 \end{align*}
 Some simplifications, using the fact that $h(t)\geq 1 $, give us
 \begin{equation}
   \label{eq:to_tW_nc}
   d_{t,\delta}+6A\left( \sqrt{h(t)d_{t,\delta}}+2h(t)\right)
-  \geq  \frac{1}{2} \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2\,.
+  \geq  \frac{1}{2} \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2\,.
 \end{equation}
 We now go from $\btheta$ to each $\hat{\btheta}_s$ for $s \le t$ in the right hand term of the inequality above
 \begin{align}
-\frac{1}{2}\Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
-&=   \frac{1}{2} \sum_{s=1}^t  \Vert \btheta - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{w_s}}^2
+\frac{1}{2}\Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{W_t}}^2
+&=   \frac{1}{2} \sum_{s=1}^t  \Vert \btheta - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{w_s}}^2
 \nonumber\\
-&\ge \frac{1}{2} \sum_{s=1}^t \left(\Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,T_t}(\hat{\btheta}_t)\Vert_{\bLambda_{w_s}}^2 - 2\Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bLambda_{w_s}} \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{w_s}}\right)
+&\ge \frac{1}{2} \sum_{s=1}^t \left(\Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t)\Vert_{\bLambda_{w_s}}^2 - 2\Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bLambda_{w_s}} \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{w_s}}\right)
 \nonumber\\
-&\ge \frac{1}{2} \sum_{s=1}^t \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{w_s}}^2
+&\ge \frac{1}{2} \sum_{s=1}^t \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{w_s}}^2
 \nonumber\\
-&\ - \sqrt{\sum_{s=1}^t \Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bLambda_{w_s}}^2 \sum_{s=1}^t\Vert \hat{\btheta}_{s-1} -\btheta'_{\istar,T_t}(\hat{\btheta}_t) \Vert_{\bLambda_{w_s}}^2}
+&\ - \sqrt{\sum_{s=1}^t \Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bLambda_{w_s}}^2 \sum_{s=1}^t\Vert \hat{\btheta}_{s-1} -\btheta'_{\istar,\bT_t}(\hat{\btheta}_t) \Vert_{\bLambda_{w_s}}^2}
 \: .\label{eq:tempW_nc}
 \end{align}
 We need to upper bound the quantity $\sum_{s=1}^t  w_s^{\bx}\Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bx\bx\transpose}^2$. By definition of the event $\cE_t$ we have
 \begin{align*}
   \Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bx\bx\transpose}^2 &=  \langle \btheta - \hat{\btheta}_{s-1} ,\bx\rangle^2\\
-  &\leq\normm{ \btheta - \hat{\btheta}_{s-1}}_{\bLambda_{T_{s-1}}+\lambda I_d}^2 \normm{ a}_{(\bLambda_{T_{s-1}}+\lambda I_d)^{-1}}^2\\
-  &\leq 2 h(t) \normm{\bx}_{(\bLambda_{T_{s-1}}+\lambda I_d)^{-1}}^2\,.
+  &\leq\normm{ \btheta - \hat{\btheta}_{s-1}}_{\bLambda_{\bT_{s-1}}+\lambda I_d}^2 \normm{ a}_{(\bLambda_{\bT_{s-1}}+\lambda I_d)^{-1}}^2\\
+  &\leq 2 h(t) \normm{\bx}_{(\bLambda_{\bT_{s-1}}+\lambda I_d)^{-1}}^2\,.
 \end{align*}
 Thus thanks to Lemma~\ref{lem:computation_sum_w_a_N} we get
 \begin{align*}
-  \sum_{s=1}^t \sum_{\bx\in\cX} w_s^{\bx}\Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bx\bx\transpose}^2 \leq 2h(t)\sum_{s=1}^t \sum_{\bx\in\cX} \tw_s^{\bx} \normm{ \bx}_{(\bLambda_{T_{s-1}}+\lambda I_d)^{-1}}^2 \leq 2h(t)g(t)\,.
+  \sum_{s=1}^t \sum_{\bx\in\cX} w_s^{\bx}\Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bx\bx\transpose}^2 \leq 2h(t)\sum_{s=1}^t \sum_{\bx\in\cX} \tw_s^{\bx} \normm{ \bx}_{(\bLambda_{\bT_{s-1}}+\lambda I_d)^{-1}}^2 \leq 2h(t)g(t)\,.
 \end{align*}
 Going back to \eqref{eq:tempW_nc} in combination with \eqref{eq:to_tW_nc} and Lemma~\ref{lem:inq_revert_sqrt} leads to
 \begin{align}
 \label{eq:to_hteta_nc}
 d_{t,\delta} + 20 A\left(\sqrt{h(t)g(t) d_{t,\delta}}+ 2h(t)g(t)\right)   \geq
-\frac{1}{2}\sum_{s=1}^t \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,T_t}(\hat{\btheta}_t)\Vert_{\bLambda_{\tw_s}}^2\,.
+\frac{1}{2}\sum_{s=1}^t \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t)\Vert_{\bLambda_{\tw_s}}^2\,.
 \end{align}
 \end{proof}
 
@@ -168,12 +168,12 @@ d_{t,\delta} + 20 A\left(\sqrt{h(t)g(t) d_{t,\delta}}+ 2h(t)g(t)\right)   \geq
 Lemma~\ref{lem:nc_proof_to_online_formulation} introduces a sum of gains/losses on which our algorithms for pulling and for Nature interact.
 By definition of the best response $\tbtheta_s^i = \inf_{\btheta' \in \neg i} \Vert \hat{\btheta}_{s-1} - \btheta' \Vert_{\tw_s^i}^2$, we have
 \begin{align}
-\frac{1}{2}\sum_{s=1}^t  \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,T_t}(\hat{\btheta}_t)\Vert_{\bLambda_{\tw_s}}^2
+\frac{1}{2}\sum_{s=1}^t  \Vert \hat{\btheta}_{s-1} - \btheta'_{\istar,\bT_t}(\hat{\btheta}_t)\Vert_{\bLambda_{\tw_s}}^2
 &\ge \frac{1}{2} \inf_{\btheta' \in \neg \istar} \sum_s \Vert \hat{\btheta}_{s-1} - \btheta'\Vert_{\bLambda_{w_s^{\istar}}}^2
 \nonumber\\
 &\geq \frac{1}{2}\sum_{s=1}^t \inf_{\btheta' \in \neg \istar} \Vert \hat{\btheta}_{s-1} - \btheta'\Vert_{\bLambda_{w_s^{\istar}}}^2
 \nonumber\\
-&= \frac{1}{2}\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{a,\istar}\Vert \hat{\btheta}_{s-1} - \tbtheta_s^{\istar}\Vert_{\bx\bx\transpose}^2\label{eq:only_istar}
+&= \frac{1}{2}\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{\bx,\istar}\Vert \hat{\btheta}_{s-1} - \tbtheta_s^{\istar}\Vert_{\bx\bx\transpose}^2\label{eq:only_istar}
 \end{align}
 Note that our algorithm computes $\tbtheta_s^{\istar}$ only when $w_s^{\istar} \neq 0$, i.e. only when $i_s = i^*$.
 
@@ -185,26 +185,26 @@ We now introduce the upper confidence bounds
 \begin{lemma}
 The upper confidence bounds are such that, under $\mathcal E_t$,
 \begin{align*}
-    \frac{1}{2}\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{a,\istar}\Vert \hat{\btheta}_{s-1} - \tbtheta_s^{\istar}\Vert_{\bx\bx\transpose}^2\label{eq:only_istar}
-    &\ge \frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{a,\istar}U_s^{a,\istar} - h(t)g(t)\\ 
-    &-2\sqrt{ h(t) g(t)}  \sqrt{\frac{1}{2}\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{a,\istar}\Vert \hbtheta_{s-1} - \tbtheta_s^{\istar} \Vert_{\bx\bx\transpose}^2}
+    \frac{1}{2}\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{\bx,\istar}\Vert \hat{\btheta}_{s-1} - \tbtheta_s^{\istar}\Vert_{\bx\bx\transpose}^2\label{eq:only_istar}
+    &\ge \frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{\bx,\istar}U_s^{\bx,\istar} - h(t)g(t)\\ 
+    &-2\sqrt{ h(t) g(t)}  \sqrt{\frac{1}{2}\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{\bx,\istar}\Vert \hbtheta_{s-1} - \tbtheta_s^{\istar} \Vert_{\bx\bx\transpose}^2}
 \end{align*}
 \end{lemma}
 \begin{proof}
 \begin{align*}
 U_s^{\bx,i} -\Vert \hbtheta_{s-1} - \tbtheta_s^i\Vert_{\bx\bx\transpose}^2
-&\leq   \max_\pm \left( \langle \hbtheta_{s-1} - \btheta',\bx\rangle \pm \sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{T_{s-1}}+ \lambda I_d)^{-1}} \right)^2-\Vert \hbtheta_{s-1} - \tbtheta_s^i\Vert_{\bx\bx\transpose}^2\\
-&\leq  2h(t)\normm{\bx}^2_{(\bLambda_{T_{s-1}}+ \lambda I_d)^{-1}} + 2\sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{T_{s-1}}+ \lambda I_d)^{-1}}| \langle \hbtheta_{s-1} - \btheta',\bx\rangle|\,.\\
+&\leq   \max_\pm \left( \langle \hbtheta_{s-1} - \btheta',\bx\rangle \pm \sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{\bT_{s-1}}+ \lambda I_d)^{-1}} \right)^2-\Vert \hbtheta_{s-1} - \tbtheta_s^i\Vert_{\bx\bx\transpose}^2\\
+&\leq  2h(t)\normm{\bx}^2_{(\bLambda_{\bT_{s-1}}+ \lambda I_d)^{-1}} + 2\sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{\bT_{s-1}}+ \lambda I_d)^{-1}}| \langle \hbtheta_{s-1} - \btheta',\bx\rangle|\,.\\
 \end{align*}
 Hence summing over times and using the Cauchy-Schwarz inequality we obtain
 \begin{align*}
-&\frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{a,\istar}\left(U_s^{a,\istar} -\Vert \hat{\btheta}_{s-1} - (\btheta')_s^{\istar}\Vert_{\bx\bx\transpose}^2\right)
+&\frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{\bx,\istar}\left(U_s^{\bx,\istar} -\Vert \hat{\btheta}_{s-1} - (\btheta')_s^{\istar}\Vert_{\bx\bx\transpose}^2\right)
 \\
-&\le \sum_{s=1}^t \sum_{\bx\in\cX} w_s^{a,\istar}h(t)\normm{\bx}^2_{(\bLambda_{T_{s-1}}+ \lambda I_d)^{-1}} +w_s^{a,\istar} \sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{T_{s-1}}+ \lambda I_d)^{-1}}| \langle \hbtheta_{s-1} - \btheta',\bx\rangle|
+&\le \sum_{s=1}^t \sum_{\bx\in\cX} w_s^{\bx,\istar}h(t)\normm{\bx}^2_{(\bLambda_{\bT_{s-1}}+ \lambda I_d)^{-1}} +w_s^{\bx,\istar} \sqrt{2 h(t)} \normm{\bx}_{(\bLambda_{\bT_{s-1}}+ \lambda I_d)^{-1}}| \langle \hbtheta_{s-1} - \btheta',\bx\rangle|
 \\
-&\le  h(t) \sum_{\bx\in\cX} \sum_{s=1}^t w_s^{a,\istar}\normm{\bx}^2_{(\bLambda_{T_{s-1}}+ \lambda I_d)^{-1}}\\
-&+ \sqrt{2 h(t)} \sqrt{\sum_{\bx\in\cX} \sum_{s=1}^t w_s^{a,\istar}\normm{\bx}^2_{(\bLambda_{T_{s-1}}+ \lambda I_d)^{-1}}}  \sqrt{\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{a,\istar}\Vert \hbtheta_{s-1} - \tbtheta_s^{\istar} \Vert_{\bx\bx\transpose}^2} \\
-&\leq h(t)g(t) +2\sqrt{ h(t) g(t)}  \sqrt{\frac{1}{2}\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{a,\istar}\Vert \hbtheta_{s-1} - \tbtheta_s^{\istar} \Vert_{\bx\bx\transpose}^2}\,,
+&\le  h(t) \sum_{\bx\in\cX} \sum_{s=1}^t w_s^{\bx,\istar}\normm{\bx}^2_{(\bLambda_{\bT_{s-1}}+ \lambda I_d)^{-1}}\\
+&+ \sqrt{2 h(t)} \sqrt{\sum_{\bx\in\cX} \sum_{s=1}^t w_s^{\bx,\istar}\normm{\bx}^2_{(\bLambda_{\bT_{s-1}}+ \lambda I_d)^{-1}}}  \sqrt{\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{\bx,\istar}\Vert \hbtheta_{s-1} - \tbtheta_s^{\istar} \Vert_{\bx\bx\transpose}^2} \\
+&\leq h(t)g(t) +2\sqrt{ h(t) g(t)}  \sqrt{\frac{1}{2}\sum_{s=1}^t \sum_{\bx\in\cX} w_s^{\bx,\istar}\Vert \hbtheta_{s-1} - \tbtheta_s^{\istar} \Vert_{\bx\bx\transpose}^2}\,,
 % &\le 2 C_t \sum_s \sum_{i,\bx} w_s^{i,\bx} \bx\transpose \bLambda_{T_s^i}^{-1}a + 2\sqrt{2 C_t}\sqrt{\sum_s \sum_{i,\bx} w_s^{i,\bx}\bx\transpose \bLambda_{T_s^i}^{-1}a }\sqrt{\sum_s \sum_{i,\bx} w_s^{i,\bx}\Vert \hat{\btheta}_{s-1} - \btheta'_{s,i}\Vert_{\bx\bx\transpose}^2}
 \end{align*}
 where in the last inequality we used Lemma~\ref{lem:computation_sum_w_a_N}.
@@ -213,16 +213,16 @@ where in the last inequality we used Lemma~\ref{lem:computation_sum_w_a_N}.
 Thus combining the previous inequality with \eqref{eq:only_istar} and Lemma~\ref{lem:nc_proof_to_online_formulation} yields, with some simplifications,
 \begin{equation}
 \label{eq:to_UCB}
-d_{t,\delta} + 40 A\left(\sqrt{h(t)g(t) d_{t,\delta}}+ 2h(t)g(t)\right) \geq \frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{a,\istar}U_s^{a,\istar}\,.
+d_{t,\delta} + 40 A\left(\sqrt{h(t)g(t) d_{t,\delta}}+ 2h(t)g(t)\right) \geq \frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{\bx,\istar}U_s^{\bx,\istar}\,.
 \end{equation}
 Now we control the regret of the learner $\cL_w^{\istar}$, thanks to the bound for \AH, see Lemma~\ref{lemma:lgc.adahedge}, we have
 \[
-\sup_{w\in\Sigma_K}\frac{1}{2}\sum_{s=1}^t\ind_{\{i_t = \istar\}}\sum_{\bx\in\cX} w^{\bx}U_s^{a,\istar} -\frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{a,\istar}U_s^{a,\istar} \leq C'\sqrt{T_t^i}\leq C'\sqrt{t}\,.
+\sup_{w\in\Sigma_K}\frac{1}{2}\sum_{s=1}^t\ind_{\{i_t = \istar\}}\sum_{\bx\in\cX} w^{\bx}U_s^{\bx,\istar} -\frac{1}{2}\sum_{s=1}^t\sum_{\bx\in\cX} w_s^{\bx,\istar}U_s^{\bx,\istar} \leq C'\sqrt{T_{t,i}}\leq C'\sqrt{t}\,.
 \]
 Then using this inequality in combination with the fact that the losses are optimistic we obtain
 \begin{align*}
   d_{t,\delta} + 40 A\left(\sqrt{h(t)g(t) d_{t,\delta}}+ 2h(t)g(t)\right) +C'\sqrt{t}
-  &\geq \sup_{w\in\Sigma_K}\frac{1}{2}\sum_{s=1}^t\ind_{\{i_s = \istar\}}\sum_{\bx\in\cX} w^{\bx}U_s^{a,\istar}
+  &\geq \sup_{w\in\Sigma_K}\frac{1}{2}\sum_{s=1}^t\ind_{\{i_s = \istar\}}\sum_{\bx\in\cX} w^{\bx}U_s^{\bx,\istar}
   \\
   &\geq \sup_{w\in\Sigma_K}\frac{1}{2}\sum_{s=1}^t\ind_{\{i_s = \istar\}}\sum_{\bx\in\cX} w^{\bx} \normm{\btheta -(\btheta'_s)^{\istar}}^2_{\bx\bx\transpose}
   \\
@@ -235,12 +235,12 @@ Now remark that $\frac{1}{T^{i^\star}_t}\sum_{s=1}^t\ind_{\{i_s = \istar\}}\frac
  &=T^{\istar}_t \Tstar(\btheta)^{-1}\,,
 \end{align*}
 where in the last line we use the theorem of Sion, see...%\todo{is that equality not proven somewhere else in the paper?}. 
-Note that the last inequality holds also if $T_t^{\istar} = 0$. It remains to show that $T^{\istar}_t = t- O(\sqrt{t})$.
+Note that the last inequality holds also if $T_{t,\istar} = 0$. It remains to show that $T^{\istar}_t = t- O(\sqrt{t})$.
 
 \subsection{When $i_s \neq \istar$.}
 
 \begin{theorem}
-For $i\in\cI$ and $t\in \mathbb{N}$, let $T_t^i = \sum_{s=1}^t \mathbb{I}\{i_s=i\}$. Then under event $\mathcal E_t$,
+For $i\in\cI$ and $t\in \mathbb{N}$, let $T_{t,i} = \sum_{s=1}^t \mathbb{I}\{i_s=i\}$. Then under event $\mathcal E_t$,
 \begin{align*}
 T_t^*
 \ge t - \sqrt{t} - \frac{16}{\Delta_{\min}^2}\left((I-1)C'\sqrt{t} + (1 + \sqrt{I-1})^2 h(t)g(t)\right)
@@ -251,7 +251,7 @@ T_t^*
 Since $\btheta \in \neg i$ for all $i\neq i^*$, under $\mathcal E_t$%\todo{refer to where the first inequality is proven},
 \begin{align*}
 h(t)g(t)
-\ge \sum_{s=1}^t \sum_{\bx\in\cA} w_s^\bx \frac{1}{2}\Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bx\bx\transpose}^2
+\ge \sum_{s=1}^t \sum_{\bx\in\cX} w_s^\bx \frac{1}{2}\Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bx\bx\transpose}^2
 &\ge \sum_{s\le t, i_s\neq i^*} \sum_{\bx\in\cX} w_s^\bx \frac{1}{2}\Vert \btheta - \hat{\btheta}_{s-1} \Vert_{\bx\bx\transpose}^2
 \\
 &\ge \sum_{j \neq i^*} \inf_{\btheta'\in \neg j} \sum_{s = 1}^t \sum_{\bx\in\cX} w_s^{j,\bx} \frac{1}{2}\Vert \btheta' - \hat{\btheta}_{s-1} \Vert_{\bx\bx\transpose}^2
@@ -282,42 +282,63 @@ If $i^*(\hbtheta_s) \neq i^*(\btheta)$, then there exists an arm $\bx\in\cX$ suc
 \\
 \Rightarrow & | (\hbtheta_s - \btheta)\transpose \bx | + | (\hbtheta_s - \btheta)\transpose \bx^\star(\btheta) | \ge \Delta_{\min}
 \end{align*}
-Hence either $| (\hbtheta_s - \btheta)\transpose \bx | \ge \Delta_{\min}/2$ or $| (\hbtheta_s - \btheta)\transpose \bx^\star(\btheta) | \ge \Delta_{\min}/2$. Conclusion: there exists an arm $\bx'$ such that $| (\hbtheta_s - \btheta)\transpose \bx' | \ge \Delta_{\min}/2$.
+Hence either 
+\[
+    | (\hbtheta_s - \btheta)\transpose \bx | \ge \frac{\Delta_{\min}}{2}\,,
+\]
+or
+\[
+    | (\hbtheta_s - \btheta)\transpose \bx^\star(\btheta) | \ge \frac{\Delta_{\min}}{2}\,.
+\]
+By consequence, there exists an arm $\bx'$ such that 
+\[
+    | (\hbtheta_s - \btheta)\transpose \bx' | \ge \frac{\Delta_{\min}}{2}\,.
+\]
 
 With the Cauchy-Schwarz inequality, there exists $\bx\in\cX$ such that
 \[
-    \Delta_{\min}/2 \le \sqrt{\Vert \hbtheta_s - \btheta \Vert^2_{\bLambda_{T_s}} \bx\transpose \bLambda_{T_s}^{-1}\bx}\,.
+    \frac{\Delta_{\min}}{2} \le \sqrt{\Vert \hbtheta_s - \btheta \Vert^2_{\bLambda_{T_s}} \bx\transpose \bLambda_{T_s}^{-1}\bx}\,.
 \]
-Under the event $\mathcal E_t$ we obtain $\Delta_{\min}/2 \le \sqrt{2 h(s) \bx\transpose \bLambda_{T_s}^{-1}a} \le \sqrt{U_s^\bx}$ .
+Under the event $\mathcal E_t$ we obtain 
+\[
+    \frac{\Delta_{\min}}{2} \le \sqrt{2 h(s) \bx\transpose \bLambda_{T_s}^{-1}a} \le \sqrt{U_s^\bx}\,.
+\]
 \end{proof}
 
 \begin{lemma}
-If $2h(t)\bx\transpose\bLambda_{T_t}^{-1}\bx \ge x$, then $\sum_{s\le t} U_s^\bx \ge x \sum_{s\le t} h(s)/h(t)$.
+If we have 
+\[
+    2h(t)\bx\transpose\bLambda_{\bT_t}^{-1}\bx \ge x\,,
+\]
+then the following holds
+\[
+    \sum_{s\le t} U_s^\bx \ge x \sum_{s\le t} h(s)/h(t)\,.
+\]
 \end{lemma}
 
 For $i\neq i^*$, let $t'= \max\{s\le t, i_s = i\}$. Let $a'$ be an arm such that $2h(t')\bx\transpose \bLambda_{N_{t'}}^{-1}a \ge \Delta_{\min}^2/4$. Then
 \begin{align*}
-\max_{a\in \cA}\sum_{s\le t, i_s=i} U_s^\bx
-\ge \sum_{s\le t, i_s=i} U_s^{a'}
+\max_{\bx\in \cX}\sum_{s\le t, i_s=i} U_s^\bx
+\ge \sum_{s\le t, i_s=i} U_s^{\bx'}
 &\ge \frac{\Delta_{\min}^2}{4} \sum_{s\le t, i_s=i} h(s)/h(t)
 \\
 &\ge \frac{\Delta_{\min}^2}{4} \sum_{\sqrt{t} \le s\le t, i_s=i} h(s)/h(t)
 \\
 &\ge \frac{\Delta_{\min}^2}{4} \sum_{\sqrt{t} \le s\le t, i_s=i} \frac{1}{2}
 \\
-&= \frac{\Delta_{\min}^2}{8} (T_t^i - N_{\sqrt{t}}^i)
+&= \frac{\Delta_{\min}^2}{8} (T_{t,i} - N_{\sqrt{t}}^i)
 \end{align*}
 %\todo{check the lower bound by 1/2}
 
-We get that $\sum_{i\neq i^*}\max_{a\in \cA}\sum_{s\le t, i_s=i} U_s^\bx \ge \frac{\Delta_{\min}^2}{8} (t - T_t^* - \sqrt{t})$ .
+We get that $\sum_{i\neq i^*}\max_{\bx\in \cX}\sum_{s\le t, i_s=i} U_s^\bx \ge \frac{\Delta_{\min}^2}{8} (t - T_t^* - \sqrt{t})$ .
 
 \begin{align*}
-    h(t)g(t) &\ge \sum_{j\neq i^*} \left(\sqrt{\frac{1}{2}\max_{a\in \mathcal A} \sum_{s=1}^t \ind_{\{i_s=j\}} U_s^\bx - C'\sqrt{t}} - \sqrt{h(t)g(t)}\right)^2\\
-    &\ge \sum_{j\neq i^*} \left(\sqrt{\frac{\Delta_{\min}^2}{16} (T_t^j - N_{\sqrt{t}}^j) - C'\sqrt{t}} - \sqrt{h(t)g(t)}\right)^2\\
+    h(t)g(t) &\ge \sum_{j\neq i^*} \left(\sqrt{\frac{1}{2}\max_{\bx\in \mathcal A} \sum_{s=1}^t \ind_{\{i_s=j\}} U_s^\bx - C'\sqrt{t}} - \sqrt{h(t)g(t)}\right)^2\\
+    &\ge \sum_{j\neq i^*} \left(\sqrt{\frac{\Delta_{\min}^2}{16} (T_{t,j} - N_{\sqrt{t}}^j) - C'\sqrt{t}} - \sqrt{h(t)g(t)}\right)^2\\
     &= \frac{\Delta_{\min}^2}{16} (t - T_t^* - \sqrt{t} + N_{\sqrt{t}}^*) - (I-1)C'\sqrt{t}\\
-    &- 2\sqrt{h(t)g(t)}\sum_{j\neq i^*}\sqrt{\frac{\Delta_{\min}^2}{16} (T_t^j - N_{\sqrt{t}}^j) - C'\sqrt{t}} + (I-1)h(t)g(t)\\
+    &- 2\sqrt{h(t)g(t)}\sum_{j\neq i^*}\sqrt{\frac{\Delta_{\min}^2}{16} (T_{t,j} - N_{\sqrt{t}}^j) - C'\sqrt{t}} + (I-1)h(t)g(t)\\
     &\ge \frac{\Delta_{\min}^2}{16} (t - T_t^* - \sqrt{t} + N_{\sqrt{t}}^*) - (I-1)C'\sqrt{t}\\
-    &- 2\sqrt{(I-1) h(t)g(t)}\sqrt{\sum_{j\neq i^*}(\frac{\Delta_{\min}^2}{16} (T_t^j - N_{\sqrt{t}}^j) - C'\sqrt{t})} + (I-1)h(t)g(t)\\
+    &- 2\sqrt{(I-1) h(t)g(t)}\sqrt{\sum_{j\neq i^*}(\frac{\Delta_{\min}^2}{16} (T_{t,j} - N_{\sqrt{t}}^j) - C'\sqrt{t})} + (I-1)h(t)g(t)\\
     &= \frac{\Delta_{\min}^2}{16} (t - T_t^* - \sqrt{t} + N_{\sqrt{t}}^*) - (I-1)C'\sqrt{t}\\
     &- 2\sqrt{(I-1) h(t)g(t)}\sqrt{\frac{\Delta_{\min}^2}{16} (t - T_t^* - \sqrt{t} + N_{\sqrt{t}}^*) - (I-1)C'\sqrt{t})} + (I-1)h(t)g(t)\\
     &= \left( \sqrt{\frac{\Delta_{\min}^2}{16} (t - T_t^* - \sqrt{t} + N_{\sqrt{t}}^*) - (I-1)C'\sqrt{t})} - \sqrt{(I-1) h(t)g(t)} \right)^2\,.
