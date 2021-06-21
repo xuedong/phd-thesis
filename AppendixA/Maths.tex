@@ -7,22 +7,23 @@
 
 \section{Some Reminders on Probability}\label{app:maths.proba}
 
-$\cU([a,b])$ denotes a uniform distribution on the support $[a,b]$.
-
-$\Beta(\cdot,\cdot)$ denotes a Beta distribution.
+We recall some important probability tools in this section. For the record, in the main text of the thesis, $\cU([a,b])$ denotes a uniform distribution on the support $[a,b]$, and $\Beta(a,b)$ denotes a Beta distribution with shape parameters $a$ and $b$.
 
 \subsection{One-dimensional exponential family}\label{app:maths.proba.exponential}
+
+In the literature of bandits, we are often interested in the exponential family probability distributions. 
 
 \begin{definition}\label{def:maths.exponential}
 \begin{leftbar}[defnbar]
     Give a random variable $X$ parameterized by $\theta$, we say that it belongs to the one-dimensional exponential family if it can be written as
-\begin{align}
-    p_{X}(x \mid \theta ) = b(x) \exp \left[\eta (\theta ) \cdot T(x) + A(\theta )\right]\,.
-\end{align}
+    \begin{align}
+        p_{X}(x \mid \theta ) = b(x) \exp \left[\eta (\theta ) \cdot T(x) + A(\theta )\right]\,,
+    \end{align}
+    where $T(X)$ is the natural sufficient statistic, $\eta,A$ are known functions of $\theta$ and $b$ is a known function of $x$.
 \end{leftbar}
 \end{definition}
 
-In the whole thesis, we mainly used the following distributions from the one-dimensional exponential family.
+Note that the function $b$ must be non-negative. Besides, the support of $p_{X}(x \mid \theta )$ does not depend on $\theta$\footnote{This property can be used to exclude some parametric distributions from exponential family such as Pareto distributions.}. In the whole thesis, we mainly used the following distributions from the one-dimensional exponential family.
 
 \begin{itemize}
     \item $\Ber(\cdot)$ denotes a Bernoulli distribution.
@@ -54,6 +55,25 @@ And $X$ is called $a$-sub-Gaussian.
 % \end{example}
 
 \subsection{Martingales}\label{app:maths.proba.martingale}
+
+A martingale is a stochastic process for which the conditional expectation of its value at time $n+1$ is equal to its present value, regardless of all prior values. The formal definition of a \emph{discrete-time} martingale is given below.
+
+\begin{definition}\label{def:maths.martingale}
+\begin{leftbar}[defnbar]
+    a discrete-time martingale is a sequence of random variables $X_1, X_2, \cdots$ such that
+    \[
+        \forall n, \EE{X_n} < \infty \text{ and } \EE{X_{n+1}|X_1,X_2,\cdots,X_n} = X_n\,.
+    \]
+\end{leftbar}
+\end{definition}
+
+We can further define the notion of discrete-time submartingales (resp. supermartingales) as a sequence of \emph{integrable} random variables such that for any time $n$,
+\[
+    \EE{X_{n+1}|X_1,X_2,\cdots,X_n} \geq (\text{resp.} \leq) X_n\,.
+\]
+
+Martingale is the base of many concentration inequalities (see e.g. the next section) that found the bandit theory. 
+%Indeed, the conditional expectation of the next observation of a martingale does not depend on the past observations. This property 
 
 \section{Concentration Inequalities}\label{app:maths.concentration}
 

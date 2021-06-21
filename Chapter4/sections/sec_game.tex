@@ -1,7 +1,7 @@
 %!TEX root = ../Chapter4.tex
 \section{A Gamified Algorithm}\label{sec:lgc.game}
 
-The first attempt using Bayesian machinery does not end up with a satisfying output. In this section, we turn our thoughts to another idea and take inspiration from the \emph{zero-sum game} (see e.g.~\citealt{degenne2019pure}). We describe \LG{}, detailed in Algorithm~\ref{alg:lg}. As noted in the seminal work of \citet{chernoff1959}, the complexity $\Tstar(\btheta)^{-1}$ is the value of a fictitious zero-sum game between the learner choosing an optimal proportion of allocation of pulls $\bomega$ and a second player, the nature, that tries to fool the agent by responding with the most confusing alternative $\btheta'$ leading to an incorrect answer. \LG{} is an asymptotically optimal algorithm for linear bandits \gls{bai}. Note that the present algorithm is asymptotically optimal for the general pure exploration game, which is however not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for more details.
+The first attempt using Bayesian machinery does not end up with a satisfying output. In this section, we turn our thoughts to another idea and take inspiration from the \emph{zero-sum game} (see e.g.~\citealt{degenne2019pure}). We describe \gls{lg}, detailed in Algorithm~\ref{alg:lg}. As noted in the seminal work of \citet{chernoff1959}, the complexity $\Tstar(\btheta)^{-1}$ is the value of a fictitious zero-sum game between the learner choosing an optimal proportion of allocation of pulls $\bomega$ and a second player, the nature, that tries to fool the agent by responding with the most confusing alternative $\btheta'$ leading to an incorrect answer. \gls{lg} is an asymptotically optimal algorithm for linear bandits \gls{bai}. Note that the present algorithm is asymptotically optimal for the general pure exploration game, which is however not the main focus of this thesis. Lecturers can refer to~\cite{degenne2020game} for more details.
 
 In this section, we make the following extra assumption.
 \begin{assumption}\label{ass:lgc.bounded_parameter}
@@ -39,7 +39,7 @@ and when it is clear from the context we will also denote by $\bT_n^{\bx} = (T_n
 
 \subsection{The \LG{} algorithm}
 
-The pseudo-code of \LG{} is provided in Algorithm~\ref{alg:lg}. We explain how it works in detail in the next.
+The pseudo-code of \gls{lg} is provided in Algorithm~\ref{alg:lg}. We explain how it works in detail in the next.
 
 \begin{algorithm}[ht]
 \centering
@@ -93,7 +93,7 @@ The pseudo-code of \LG{} is provided in Algorithm~\ref{alg:lg}. We explain how i
 % \end{algorithm}
 
 \paragraph{Stopping rule and decision rule.}
-We follow the same stopping rule and decision rule as those of Section~\ref{sec:lgc.bayesian}\footnote{It is easy to check that~\eqref{eq:lgc.lg_stopping} and~\eqref{eq:lgc.lg_decision} are equivalent to~\eqref{eq:lgc.bayesian_stopping} and~\eqref{eq:lgc.bayesian_decision} respectively.}: \LG{} stops if a generalized likelihood ratio exceeds a threshold $d_{n,\delta}$. With the notation of this section, the stopping time can be written as
+We follow the same stopping rule and decision rule as those of Section~\ref{sec:lgc.bayesian}\footnote{It is easy to check that~\eqref{eq:lgc.lg_stopping} and~\eqref{eq:lgc.lg_decision} are equivalent to~\eqref{eq:lgc.bayesian_stopping} and~\eqref{eq:lgc.bayesian_decision} respectively.}: \gls{lg} stops if a generalized likelihood ratio exceeds a threshold $d_{n,\delta}$. With the notation of this section, the stopping time can be written as
 \begin{align}\label{eq:lgc.lg_stopping}
     \max_{i\in \cI} \inf_{\btheta' \in \neg i}\frac{1}{2}\Vert \hbtheta_n^\lambda - \btheta' \Vert^2_{\bLambda_{\bT_n}} > d_{n,\delta}\,,
 \end{align}
@@ -102,7 +102,7 @@ and the decision rule is
     J_n = \argmax_{i\in \cI} \inf_{\btheta' \in \neg i}\Vert \hbtheta_n^\lambda - \btheta' \Vert^2_{\bLambda_{\bT_n}}/2\,.
 \end{align}
 
-Similarly to \TCC{}/\TTTS{} of Chapter~\ref{CHAP:T3C}, these stopping and decision rules ensure that the \LG{} is $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.lemmas}.
+Similarly to \TCC{}/\TTTS{} of Chapter~\ref{CHAP:T3C}, these stopping and decision rules ensure that the \gls{lg} is $\delta$-correct regardless of the sampling rule used, see lemma below\footnote{The fact that $\tau_\delta <+\infty$ is a consequence of our analysis, see Appendix~\ref{app:lgc.proof}.} proved in Appendix~\ref{app:lgc.lemmas}.
 
 \begin{lemma}\label{lemma:lgc.pac}
 \begin{leftbar}[lemmabar]
@@ -136,7 +136,7 @@ Now, let $\bomega^\star(\btheta)$ be the optimal pulling proportions given $\bth
 % \\&\geq \inf_{\tlambda_t\in \prod_i (\neg i)}\frac{1}{2}\sum_{(a,i)\in \cA\times\cI}\!\!\!\!\! N_t^{a,i} \Vert \theta - \tlambda^i \Vert^2_{a a^\top}.
 % \end{align*} Introducing the sum removes the dependence in the unknown $i^*(\theta)$. \LGC then uses an agent playing weights w in $\Sigma_{\cA\cI}$. 
 
-At each time step, \LG{} produces a guess $i_n$ for $\Istar(\btheta)$ and its analysis involves proving that the guess is wrong only finitely-many times in expectation.
+At each time step, \gls{lg} produces a guess $i_n$ for $\Istar(\btheta)$ and its analysis involves proving that the guess is wrong only finitely-many times in expectation.
 
 The sampling rule implements a lower-bound game between a learner, playing at each stage $n$ a pull-proportion/weight vector $\bomega_n$ in the probability simplex $\Sigma_K$, and nature, who computes at each stage a response $\btheta_n \in \neg i_n$. We additionally ensure that $T_n^\bx \approx \sum_{t=1}^n \omega_{t,\bx}$, where $\omega_{n,\bx}$ denotes the weight of $\bx$ at stage $n$. The goal of the sampling rule is to ensure a $\epsilon$-approximation of the saddle point of the lower-bound game.
 
@@ -158,7 +158,7 @@ The sampling rule implements a lower-bound game between a learner, playing at ea
 % \end{align*}
 % Solving that equation, we get asymptotically the wanted $t\lesssim T^\star(\theta) \log(1/\delta)$.
 
-To achieve that, we implement the saddle-point algorithm by using \AH for the learner -- a regret-minimizing algorithm of the exponential family -- and using best-response for the nature, which plays after the agent. Precisely \LG{} uses $|\cI|$ ($=K$ for \gls{bai}) learners $\cL_\bomega^i$, one for each possible guess of $\Istar(\btheta)$ with the gains. For $i\in\cI$, the learner $\cL_\bomega^i$ is an \AH on the probability simplex $\Sigma_K$ with the gains (when the guess is $i$)
+To achieve that, we implement the saddle-point algorithm by using \AH for the learner -- a regret-minimizing algorithm of the exponential family -- and using best-response for the nature, which plays after the agent. Precisely \gls{lg} uses $|\cI|$ ($=K$ for \gls{bai}) learners $\cL_\bomega^i$, one for each possible guess of $\Istar(\btheta)$ with the gains. For $i\in\cI$, the learner $\cL_\bomega^i$ is an \AH on the probability simplex $\Sigma_K$ with the gains (when the guess is $i$)
 \[
     g_n^\btheta(\bomega) = \frac{1}{2} \sum_{\bx\in\cX}  \omega_{\bx} \Vert \btheta - \btheta_n^i \Vert^2_{\bx \bx\transpose}\,.
 \]
@@ -205,7 +205,7 @@ This procedure guarantees that for all $n\in\NN, \bx\in\cX$, we have $- \log (|\
 
 \begin{theorem}\label{thm:lgc.sample_complexity}
 \begin{leftbar}[theorembar]
-For a regularization parameter\footnote{This condition is a simple technical trick to simplify the analysis. An $\lambda$ independent of $K$,$L$,$M$ will lead to the same results up to minor adaptations of the proof.} $\lambda \geq 2(1+\log(K))KL^2+M^2$, for the threshold $d_{n,\delta}$ given by~\eqref{eq:def_beta}, for an exploration function $h(n)=d_{n,1/n^3}$, \LG{} is $\delta$-correct and asymptotically optimal. That is, it verifies for all $\btheta\in \Theta$,
+For a regularization parameter\footnote{This condition is a simple technical trick to simplify the analysis. An $\lambda$ independent of $K$,$L$,$M$ will lead to the same results up to minor adaptations of the proof.} $\lambda \geq 2(1+\log(K))KL^2+M^2$, for the threshold $d_{n,\delta}$ given by~\eqref{eq:def_beta}, for an exploration function $h(n)=d_{n,1/n^3}$, \gls{lg} is $\delta$-correct and asymptotically optimal. That is, it verifies for all $\btheta\in \Theta$,
 \begin{align*}
     \limsup_{\delta\to 0}\frac{\mathbb{E}_\btheta[\tau_\delta]}{ \log 1/\delta} \le \Tstar(\btheta) \,.
 \end{align*}
@@ -222,7 +222,7 @@ In Section~\ref{sec:lgc.complexity.examples} we show that adding a bound constra
 
 \subsection{Experiments}\label{sec:lgc.game.experiments}
 
-We provide experimental illustrations of \LG{}. In addition to our algorithms, we also implement the following algorithms, all using the same stopping rule (more discussion given in Appendix~\ref{app:lgc.stopping}): uniform sampling, the greedy version of \XYS (including $\gopt$-allocation and $\xyopt$-allocation), \XYA, and the greedy version of \LGapE. We skip \GLUCB/\GLGapE since they are more or less equivalent to \LGapE in the scope of this paper.
+We provide experimental illustrations of \gls{lg}. In addition to our algorithms, we also implement the following algorithms, all using the same stopping rule (more discussion given in Appendix~\ref{app:lgc.stopping}): uniform sampling, the greedy version of \XYS (including $\gopt$-allocation and $\xyopt$-allocation), \XYA, and the greedy version of \LGapE. We skip \GLUCB/\GLGapE since they are more or less equivalent to \LGapE in the scope of this paper.
 
 \paragraph{Implementation details.}
 We give some details about each individual algorithm implemented to ensure reproducibility.
@@ -289,7 +289,7 @@ The posterior mean vector and covariance matrix can then be easily expressed in 
 
 Sampling rules for classical \gls{bai} without any adaptation may not work for the linear case. This can be understood, again, on the well-studied hard instance mentioned in Section~\ref{sec:lgc.complexity.complexity}, which encapsulates the difficulty of \gls{bai} in a linear bandit, and thus is the first instance on which we test our algorithms.
 
-As already argued by~\citet{soare2014linear}, an efficient sampling rule for this problem instance would rather pull $\bx_2$ in order to reduce the uncertainty in the direction $\bx_1-\bx_{d+1}$. Naive application of classical \gls{bai} algorithms cannot deal with that situation naturally. We further use a simple set of experiments to justify that intuition. We run \LG{} (along with \LGC{}) and the one of~\citet{degenne2019game} that we call \texttt{DKM} over the problem instance whence $d=2, c=2, \delta=0.01$ and $\alpha=0.1$. We show the number of pulls for each arm averaged over 100 replications of experiments in Table~\ref{table:pulls}. We see that, indeed, \texttt{DKM} pulls too much $\bx_3$, while our \LG{} focuses mostly on $\bx_2$.
+As already argued by~\citet{soare2014linear}, an efficient sampling rule for this problem instance would rather pull $\bx_2$ in order to reduce the uncertainty in the direction $\bx_1-\bx_{d+1}$. Naive application of classical \gls{bai} algorithms cannot deal with that situation naturally. We further use a simple set of experiments to justify that intuition. We run \gls{lg} (along with \LGC{}) and the one of~\citet{degenne2019game} that we call \texttt{DKM} over the problem instance whence $d=2, c=2, \delta=0.01$ and $\alpha=0.1$. We show the number of pulls for each arm averaged over 100 replications of experiments in Table~\ref{table:pulls}. We see that, indeed, \texttt{DKM} pulls too much $\bx_3$, while our \gls{lg} focuses mostly on $\bx_2$.
 
 \begin{table}[ht]\centering
 %\def\arraystretch{1.2}

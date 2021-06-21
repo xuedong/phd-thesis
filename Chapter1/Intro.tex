@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%									Chapitre 1											%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{An Overview of the Thesis}\label{CHAP:INTRO}
+\chapter{Introduction}\label{CHAP:INTRO}
 	\citationChap{
-	The thing about quotes on the internet is that you can not confirm their validity
+	The thing about quotes on the internet is that you can not confirm their validity.
 	}{Abraham Lincoln}
 	\minitoc
 	\newpage
@@ -16,19 +16,32 @@
 
 The purpose of this thesis is to provide a summary of the main research line of my PhD work carried out in between October 2017 and March 2021. During my PhD, I was hosted at the Inria Lille-Nord Europe (France) research center, in the SequeL team (now becomes Scool team). I was fortunate to be advised by Dr. Michal Valko, and also co-supervised by Dr. Emilie Kaufmann. The research thematic of SequeL lies in sequential decision making problems, to which all my contributions are devoted. In particular, this document mainly investigates sequential decision making in optimization problems.
 
+\paragraph{Timeline of the thesis.} 
+%The PhD started even before when I was writing my master's thesis, also under the supervision of Emilie and Michal. 
+In the very beginning, the research was motivated by designing efficient hyper-parameter tuning algorithms (Chapter~\ref{CHAP:DTTTS}). The starting point was to compare hierarchical bandits approaches (Chapter~\ref{CHAP:GPO}) with traditional Bayesian optimization algorithms. I could observe, however, that hierarchical bandits algorithms often suffer from the curse of dimensionality, and also do not necessarily show superior performance to their Bayesian competitors. 
+
+At the same time, a great work on the topic, namely \Hyperband{}~\citep{li2017hyperband}, was published. Based on a simple best-arm identification (see Chapter~\ref{CHAP:MAB} for a formal definition) algorithm \SHA{}~\citep{bubeck2009pure}, \Hyperband{} achieved both decent practical performances and nice theoretical guarantees. I thus turned my attention to the study of best-arm identification in the purpose of exploring further the potential of best-arm identification for hyper-parameter tuning. This effort then led to a dynamic algorithm \DTTTS{} for hyper-parameter optimization (Chapter~\ref{CHAP:DTTTS}). \DTTTS{} is constructed upon a Bayesian best-arm identification algorithm \TTTS{} proposed by~\cite{russo2016ttts}. In the hope of providing an analysis of \DTTTS{}, which turns out to be sophisticated, I took a step back to revisit \TTTS{} and managed to bring new theoretical insights about Bayesian best-arm identification (Chapter~\ref{CHAP:T3C}). Although the new insights still didn't shed light on the analysis of \DTTTS{}, they opened new way to other variants of best-arm identification. In particular, I then studied best-arm identification with linear payoffs (Chapter~\ref{CHAP:LGC}).
+
+The structure of this thesis does not necessarily follow the previous timeline. Indeed, the present manuscript rather follows a scientific logic, in the sense that we go through from the simplest setting to more complicated ones. 
+%The purpose of the timeline is simply to tell a story about the development of the PhD.
+
+In this first chapter, I will introduce the different problem settings studied in this thesis from a high-level perspective. I will focus on motivating the settings and also summarizing my contributions to each of them.
+
 \section{Context of the Thesis}\label{sec:intro.context}
 	
 \subsection{What do we study and why?}\label{sec:intro.context.what}
 
-Imagine that we dispose a simulator for some complex numerical task. Being considered as a black box, we can only get useful information by calling the simulator with different inputs. The goal is to find an input that optimizes the performance of the simulator. In the context of this thesis, we model such a scene as the so-called \gls{sequential optimization}\footnote{We thus do not consider parallelization in this thesis.} problem where a learner sequentially feeds inputs to an environment (the simulator in the previous example) and from which they receive (deterministic or stochastic) feedback/payoffs/rewards/observations\footnote{Those terms can be interchangeably employed.}. After a certain period of trial, the learner shall be able to output a guess for the optimal input. Under some circumstances, a single interaction with the environment could be extremely costly. It is therefore of great interest to carefully choose the input at each time step based on past observations.
+Imagine that we have access to a simulator that models the behaviour of some complex numerical task. Being considered as a black box, we can only get useful information by running the simulator with different inputs. For example, the process of inferring the 3D structure of a protein from its amino-acid sequence can be regarded as such a complex task, that can be modelled by a simulator. The inputs of the simulator are the amino-acid sequences and the outputs are the predicted 3D structures. A popular family of methods seek to optimize a suitable energy function -- produced by the simulator -- that describes the relation between the structure of a protein and its amino-acid sequence. These methods are of interest because they are able to build protein structures without prior knowledge on solved structures (see e.g.~\citealt{zhang2008}).
+
+In the context of this thesis, we model such a scenario as the so-called \gls{sequential optimization}\footnote{We thus do not consider parallelization in this thesis.} problem where a learner sequentially feeds inputs to an environment (the simulator in the previous example) and from which they receive (deterministic or stochastic) feedback/payoffs/rewards/observations\footnote{Those terms can be interchangeably employed.}. The learner needs to output a guess for the optimal input after a number of trials. Under some circumstances, a single interaction with the environment could be extremely costly. For instance, in the example of protein structure prediction, vast computational resources are required if the simulator is given a very large protein (with long amino-acid sequences). It is therefore of great interest to carefully choose the input at each time step based on past observations to reduce the number of simulations.
 
 Sequential optimization in a stochastic environment is an active research topic in both applied mathematics and computer science communities. For example, the planning problem in a \gls{mdp}, upon which the recent breakthrough of game intelligence of Go~\citep{silver2016alphago} is constructed, is closely related to sequential optimization. Precisely, given the current state of the game, the game intelligence is designed to maximize a certain value function, whose (noisy) observations can be obtained by exploring well-chosen trajectories.
 
-Another example, which is also one important driving force that motivates this thesis originally, is \gls{hpo} of machine learning classifiers. Modern machine learning algorithms often contain many nuisance parameters that cannot be learned through the learning process, but instead, need to be manually specified. Tuning those so-called \gls{hyper-parameters} is often considered as the most tedious part in a data science task. It is hence appealing to design \gls{hpo} algorithms that automates the process of choosing those hyper-parameters. \gls{hpo} can be viewed as a \gls{bbo} problem where function evaluations are supposed to be very expensive. Typically, a function evaluation in \gls{hpo} involves running the primary machine learning algorithm to completion on a large and high-dimensional dataset, which often takes a considerable amount of time or resources.
+Another example, which is also one important driving force that motivates this thesis, is \gls{hpo} of machine learning classifiers. Modern machine learning algorithms often contain many parameters that cannot be learned through the learning process, but instead, need to be manually specified. Tuning those so-called \gls{hyper-parameters} is often considered as a tedious part in a machine leanrning task. It is hence appealing to design \gls{hpo} algorithms that automates the process of choosing those hyper-parameters. \gls{hpo} can be viewed as a \gls{bbo} problem where function evaluations are supposed to be very expensive. Typically, a function evaluation in \gls{hpo} involves running the primary machine learning algorithm to completion on a large and high-dimensional dataset, which often takes a considerable amount of time or resources.
 
 Besides, sequential optimization can also serve as an abstraction of numerous real-world problems. To name a few of them, we can think of (risk-averse) portfolio selection problems in finance~\citep{ziemba2010}, designing effective treatment allocation strategies in medicine~\citep{durand2018contextual}, free-energy minimization in chemical engineering or protein structure prediction~\citep{floudas2000}, metamodelling for engineering design optimization~\citep{wang2007}, parameter estimation (inverse problem) of nonlinear dynamic biochemical pathways~\citep{moles2003}, mesh distortion in material science~\citep{charpagne2019ebsd}, and way more. 
 
-Mathematically speaking, an environment is simply a target function to be optimized. This function can be \textbf{discrete or continuous}. In this thesis, we are in particular interested in optimization of functions for which \textbf{none (or few)} regularity assumptions are made, and only \textbf{noisy (or stochastic)} function evaluations (interactions with the environment) can be observed.
+To summarize, an environment can simply be regarded as a target function to be optimized. This function can be \textbf{discrete or continuous}. In this thesis, we are in particular interested in optimization of functions for which \textbf{none (or few)} regularity assumptions are made, and only \textbf{noisy (or stochastic)} function evaluations (interactions with the environment) can be observed.
 
 %Le problème de planification dans un Processus de Décision Markovien (MDP pour Markov Decision Process, [1]), pouvant modéliser la gestion de ressources dans un système de type smart grids ou encore le contrôle d'un robot, et celui de la construction d'intelligences artificielles pour des jeux, sont très liés à celui de l'optimisation séquentielle puisqu'ils reviennent à déterminer l'action qui dans un état donné maximise une fonction valeur, dont on peut obtenir des réalisations bruitées en explorant des trajectoires bien choisies.
 
@@ -36,7 +49,7 @@ Mathematically speaking, an environment is simply a target function to be optimi
 
 \subsection{How do we approach the problem?}\label{sec:intro.context.how}
 
-Sequential optimization problem has been widely inspired by the literature of \gls{mab}. The original \gls{mab} problem is first studied by~\cite{thompson1933}, and can be described in the following way: A learner is given a \emph{finite} set of $K$ arms and a time horizon $N$. Pulling an arm leads to a stochastic reward that follows some \emph{unknown} distribution underpin that arm. At each time step, the learner can choose to pull one of the arms and observes a reward sampled from its corresponding underlying distribution.
+The main tool that we use to address the sequential optimization problem in this thesis is \gls{mab}. The original \gls{mab} problem is first studied by~\cite{thompson1933}, and can be described in the following way: A learner is given a \emph{finite} set of $K$ arms and a time horizon $N$. Pulling an arm leads to a stochastic reward that follows some \emph{unknown} distribution underpin that arm. At each time step, the learner can choose to pull one of the arms and observes a reward sampled from its corresponding underlying distribution.
 
 % \begin{remark}\label{remark:partial}
 % \begin{leftbar}[remarkbar]
@@ -44,22 +57,18 @@ Sequential optimization problem has been widely inspired by the literature of \g
 % \end{leftbar}
 % \end{remark}
 
-In its original form, the objective of a \gls{mab} learner is to maximize the total rewards in the long run. A natural observation is that, the learner is required to simultaneously acquire new information for potential future well-being (exploration), and optimize the current decision based on past observations (exploitation). Such phenomena is stated as the \gls{exploration-exploitation dilemma}, and is present in many real-world tasks. The \gls{mab} model is thus popular among different communities as it trades off exploration and exploitation naturally.
+In his seminal work,~\cite{robbins1952} defines the objective of a \gls{mab} learner as maximizing the total rewards in the long run. An observation is that the learner is required to simultaneously acquire new information for potential future well-being (exploration), and optimize the current decision based on past observations (exploitation). Such phenomena is stated as the \gls{exploration-exploitation dilemma}, and is present in many real-world tasks. The \gls{mab} model is thus popular among different communities as \gls{mab} algorithms trade-off between exploration and exploitation.
 %The usual performance criterion of the learner is measured by the total loss of the chosen arm at each time step w.r.t the best arm, namely the \emph{cumulative regret}. Typical good learners like \UCB~\citep{auer2002ucb} trade off between exploration and exploitation. 
 
-However, exploitation does not necessarily provide meaningful incentives in some real applications. Typically, in the previous working examples presented in Section~\ref{sec:intro.context.what}, we do not really care about the potential losses incurred during the whole learning phase. Indeed, we only aim at finding the (near-)optimum of the target function quickly. In this context, it is more natural to assess the learner in an optimization fashion. This setting, often named as \gls{bai}, is thus more closely related to what we are to investigate in this thesis.
+However, exploitation does not necessarily provide meaningful incentives in some real applications. Typically, in the previous working examples presented in Section~\ref{sec:intro.context.what}, we do not really care about the potential losses incurred during the whole learning phase. Indeed, we only aim at finding the (near-)optimum of the target function quickly. In this context, it is more natural to assess the learner in an optimization fashion. This setting, often named as \gls{bai}, is thus more closely related to what we are to investigate in this thesis. \gls{bai} has been firstly studied by~\cite{even-dar2003confidence} and~\cite{bubeck2009pure} in two different frameworks that we introduce in detail in Chapter~\ref{CHAP:MAB}.
 
-\begin{remark}
-\begin{leftbar}[remarkbar]\label{remark:intro.pure}
-More generally, we talk about \gls{pure exploration} problems~\citep{bubeck2011pure} instead of \gls{bai}, where the learner is supposed to gain as much information about the bandit model regardless of rewards. \gls{bai} is merely a particular instance of pure exploration, for which the learning objective is to find the optimal arm. Other learning objectives also exist, like finding arms that surpass some pre-defined threshold (see e.g.~\citealt{locatelli2016thresholding}). However, we mostly focus on \gls{bai} in this thesis since it is sufficiently representative.
-\end{leftbar}
-\end{remark}
+More generally, we talk about \gls{pure exploration} problems~\citep{bubeck2011pure} instead of \gls{bai}, where the learner is supposed to gain as much information about the bandit model regardless of rewards. \gls{bai} is merely a particular instance of pure exploration, for which the learning objective is to find the optimal arm. Other learning objectives also exist such as finding arms that surpass some pre-defined threshold (see e.g.~\citealt{locatelli2016thresholding}). However, we mostly focus on \gls{bai} in this thesis since it has a wide range of applications.
 
 \subsection{From multi-armed bandits to reinforcement learning}\label{sec:intro.context.rl}
 
-The \gls{mab} model is popular from another perspective as it is part of the more general \gls{rl} framework. In \gls{rl}, a learner is characterized by its current state and interacts with the environment by taking different actions. Each action leads to a reward from the environment as well as a change of states. Formal definition and general results of \gls{rl} are beyond the scope of this thesis, lecturers can refer to~\cite{sutton1998,bertsekas2011approximate} for surveys. 
+The \gls{mab} model is popular from another perspective as some bandit problems are part of the more general \gls{rl} framework. In \gls{rl}, the environment is characterized by its current state and the learner interacts with the environment by taking different actions. Each action leads to a reward from the environment as well as a change of states. Formal definition and general results of \gls{rl} are beyond the scope of this thesis, readers can refer to~\cite{sutton1998,bertsekas2011approximate} for surveys. 
 
-Modern \gls{rl} combined with \gls{dl} has marked a handful of exciting breakthroughs including AlphaGo~\citep{silver2016alphago}, AlphaStar, AlphaFold, etc. However, a big gap still exists in understanding the huge success of Deep \gls{rl}. \gls{mab}, as a strongly theoretically-grounded statistical model, can potentially serve as a first step towards filling that gap in \gls{rl} research. More precisely, \gls{mab} is sometimes considered as the simplest form of \gls{rl} as \gls{mab} learners do not incur any change of states (see Fig.~\ref{fig:intro.comparison}). We shall discuss a little more the link between \gls{mab} and \gls{rl} later in the general conclusion Chapter~\ref{CHAP:CONCLUSION} as contextual \gls{mab} (\gls{mab} with side information) -- a variant of the vanilla \gls{mab} model -- describes eventually better how \gls{mab} is related to \gls{rl}.
+Modern \gls{rl} combined with \gls{dl} has marked a handful of exciting breakthroughs including AlphaGo~\citep{silver2016alphago}, AlphaStar~\citep{vinyals2019alphastar}, etc. However, a big gap still exists in understanding the huge success of Deep \gls{rl}. \gls{mab}, as a strongly theoretically-grounded statistical model, can potentially serve as a first step towards filling that gap in Deep \gls{rl} research. More precisely, \gls{mab} is sometimes considered as the simplest form of \gls{rl} as \gls{mab} learners do not incur any change of states (see Fig.~\ref{fig:intro.comparison}). We shall discuss a little more the link between \gls{mab} and \gls{rl} later in the general conclusion Chapter~\ref{CHAP:CONCLUSION} as contextual \gls{mab} (\gls{mab} with side information) -- a variant of the vanilla \gls{mab} model -- describes eventually better how \gls{mab} is related to \gls{rl}.
 
 \begin{figure}[ht]
     \centering
@@ -71,13 +80,15 @@ Modern \gls{rl} combined with \gls{dl} has marked a handful of exciting breakthr
 
 \section{Multi-Armed Bandits and Optimization}\label{sec:intro.mab}
     
-This thesis tries to address sequential optimization problems under stochastic environments from a bandit point of view. A stochastic environment refers to an environment from which stochastic feedback are acquired when an input is queried from the search/action space\footnote{Those terms can be interchangeably employed.} $\mathcal{X}$. Formally, and without loss of generality, we aim to maximize\footnote{Minimization is obviously the same problem.} a target function $f:\mathcal{X}\rightarrow\mathbb{R}$, i.e. find 
+This thesis addresses sequential optimization problems under stochastic environments from a bandit point of view. A stochastic environment refers to an environment from which stochastic feedback are acquired when an input is queried from the search/action space\footnote{Those terms can be interchangeably employed.} $\mathcal{X}$. Formally, and without loss of generality, we aim to maximize\footnote{Minimization is obviously the same problem.} a target function $f:\mathcal{X}\rightarrow\mathbb{R}$, i.e. find 
 \begin{equation}\label{eq:optim}
     \argmax_{x\in\cX} f(x)
 \end{equation}
-based on a sequence of function values of $f$. Obviously without any prior information on the target function and/or the search space $\cX$, it is just a find-a-needle-in-a-haystack mission. This thesis studies several particular instances of \eqref{eq:optim} with various search spaces and/or different (regularity) assumptions on the target function though, and brings both novel theoretical and practical insights. 
+based on a sequence of function values of $f$. Obviously without any prior information on the target function and/or the search space $\cX$, it is just a find-a-needle-in-a-haystack mission. This thesis studies several particular instances of \eqref{eq:optim} with various search spaces and/or different (regularity) assumptions on the target function, and brings both novel theoretical and practical insights. 
 
-Before jumping into details, we provide a brief overview of different settings investigated in this thesis in this section. More thorough discussion on the problem formulation, in particular how do we assess the performance of algorithms under different settings is given in Chapter~\ref{CHAP:MAB}.
+In the rest of this section, I provide a high-level overview of different settings investigated in this thesis along with a summary of my contributions to each setting.
+
+More thorough discussion on the problem formulation, in particular how do we assess the performance of algorithms under different settings is given in an introductory Chapter~\ref{CHAP:MAB} about the \gls{mab} model. The purpose of this introductory chapter is to present the \gls{mab} problem in a more formal way. We first recall some basic notions as well as some fundamental results for stochastic \gls{mab}. We then focus on how different best-arm identification/global optimization settings are formulated from a bandit point of view.
 
 %In its simplest form where the action space $\mathcal{X}$ is finite, the problem can be modeled as a \emph{stochastic multi-armed bandit}. The term \emph{bandit} is named, by analogy, after slot machines (or one-armed bandits) in a casino. A \emph{sequential decision making} problem comes up then when facing with several slot machines (multi-armed bandits). Concretely, a stochastic bandit is a collection of $K$ actions (also called arms) $\mathcal{X} = \{x_1,\ldots,x_K\}$. Each time the learner chooses one action $x_{a_t}\in\mathcal{X}$ which is then fed to the environment. The environment generates a reward $r_{a_t,t}=r_t$ which is assumed to be drawn from an unknown $[0,1]$-valued distribution $\nu_{a_t}$ and is revealed to the learner.
 
@@ -90,28 +101,31 @@ The first setting of interest consists of a finite and one-dimensional search sp
 \begin{align}\label{eq:optim_bai}
     \argmax_{k\in[K]} \mu_k\,
 \end{align}
-given some stopping condition. This is the best-arm identification for stochastic multi-armed bandits. Several learning objectives exist for a general \gls{bai} problem, among which we are in particular interested in the setting of which the goal is to identify the best arm with high confidence based on a minimum of function evaluations. This is the \gls{fixed-confidence setting} for whom the formal definition, along with those for other learning objectives, are provided and discussed later in Chapter~\ref{CHAP:MAB}.
+given some stopping condition. This is the best-arm identification for stochastic multi-armed bandits. Several learning objectives exist for a \gls{bai} problem, among which we are in particular interested in the setting of which the goal is to identify the best arm with high confidence based on a minimum of function evaluations. This is the \gls{fixed-confidence setting} for whom the formal definition, along with those for other learning objectives, are provided and discussed later in Chapter~\ref{CHAP:MAB}.
 
-Existing methods for \gls{bai} for stochastic \gls{mab} often requires construction of complicated confidence intervals of the mean estimates. We opt for Bayesian machinery to address this problem in this thesis, which is based on the famous \gls{ts} (\citealt{thompson1933}, see also~\citealt{russo2018} for a tutorial). \gls{ts} is a Bayesian algorithm well known for the classical reward maximization objective, for which it is now seen as a major competitor to the popular \UCB{}-typed approaches~\citep{auer2002ucb}. A natural question to ask is whether Bayesian methods can be also a good competitor to classical \gls{bai} approaches constructed upon complicated confidence intervals. However, it is well known that straight application of \gls{ts} cannot yield optimal performance for \gls{bai} both in a practical and theoretical point of view. More precisely, it cannot achieve an asymptotic \gls{sample complexity} that matches the lower bound provided by~\cite{garivier2016tracknstop}. Such property is called \gls{asymptotic optimality} that we shall give formal definition later in Chapter~\ref{CHAP:MAB}. An adaptation such as \TTTS{} proposed by~\cite{russo2016ttts} is needed: by choosing between two different candidate arms in each round, it enforces the exploration of sub-optimal arms, which would be under-sampled by vanilla \gls{ts} due to its objective of maximizing rewards. 
+Existing methods for \gls{bai} for stochastic \gls{mab} often requires construction of complicated confidence intervals of the mean estimates. We opt for Bayesian machinery to address this problem in this thesis, which is based on the famous \gls{ts} (\citealt{thompson1933}, see also~\citealt{russo2018} for a tutorial). \gls{ts} is a Bayesian algorithm well known for the classical reward maximization objective, for which it is now seen as a major competitor to the popular \UCB{}-typed approaches~\citep{auer2002ucb}. A natural question to ask is whether Bayesian methods can be also a good competitor to classical \gls{bai} approaches constructed upon confidence intervals. However, it is well known that direct use of \gls{ts} cannot yield optimal performance for \gls{bai} both in a practical and theoretical point of view. More precisely, it cannot achieve an asymptotic \gls{sample complexity} that matches the lower bound provided by~\cite{garivier2016tracknstop}. Such property is called \gls{asymptotic optimality} that we shall give formal definition later in Chapter~\ref{CHAP:MAB}. An adaptation such as \TTTS{} proposed by~\cite{russo2016ttts} is needed: by choosing between two different candidate arms in each round, it enforces the exploration of sub-optimal arms, which would be under-sampled by vanilla \gls{ts} due to its objective of maximizing rewards. 
 
-In this thesis, we revisit \TTTS{} both in theory and in practice, trying to provide new insights on its convergence and complexity, and also improve its computational performance.
+In Chapter~\ref{CHAP:T3C}, we revisit \TTTS{}, and provide new theoretical understandings on its sample complexity. More precisely, we show that \TTTS{} achieves asymptotic optimality on the sample complexity which then answers to one open question of~\cite{russo2016ttts}. We further propose a computational improvement \TCC{} of \TTTS{}, whilst keeping the same guarantees. Besides, we also provide some new results on the posterior convergence of \TTTS{}.
 
 \subsection{Extension to best-arm identification for linear bandits}\label{sec:intro.mab.linear}
 
-Beyond the previous vanilla setting of \gls{bai}, a very natural and widely studied extension is to take a finite set of $K$ arms/contexts/features\footnote{Those terms can be interchangeably employed in the context of this thesis.} $\cX=\{\bx_1,\bx_2,\cdots,\bx_K\}\subset\R^d$ as the search space. The reward of each arm under this circumstance is assumed to depend linearly on a \gls{regression parameter} $\btheta$. The target function $f$ therefore can be considered as a mapping from each arm $\bx$ to its linear combination with $\btheta$, and is thus called linear bandits. Precisely, the learner seeks to find
+Beyond the previous vanilla setting of \gls{bai}, a widely studied extension is to take a finite set of $K$ arms/contexts/features\footnote{Those terms can be interchangeably employed in the context of this thesis.} $\cX=\{\bx_1,\bx_2,\cdots,\bx_K\}\subset\R^d$ as the search space. The reward of each arm under this circumstance is assumed to depend linearly on a \gls{regression parameter} $\btheta$. The target function $f$ therefore can be considered as a mapping from each arm $\bx$ to its linear combination with $\btheta$, and is thus called linear bandits. Precisely, the learner seeks to find
 \begin{align}\label{eq:optim_linbai}
     \argmax_{k\in[K]} \btheta^\top\bx_k\,.
 \end{align}
-The parameter $\btheta$ is of course \emph{unknown} to the learner. This linear contextual setting describes better some real-world scenarios like advertising placement optimization, and therefore often attracts great attention.
+The parameter $\btheta$ is of course \emph{unknown} to the learner. This (linear) contextual setting describes better some real-world scenarios. A typical example is advertising placement optimization in which a website seeks to identify the best-performing ad display design. In such applications, user features can be used as side information (context) to help the design of exploration (see e.g.~\citealt{li2010contextual}).
 
-Again, we are interested in the fixed-confidence setting. Previous algorithms on this topic only achieve loose sample complexity bound which is linked to the \gls{G-optimality} of experimental design theory (see e.g.~\citealt{pukelsheim2006optimal}). We conjecture that G-optimality does not describe best the complexity of linear bandits \gls{bai}, and therefore try to opt for other more appropriate complexities.
+Again, like for vanilla \gls{bai}, we are interested in the fixed-confidence setting. Previous algorithms on this topic only achieve loose sample complexity bound which is linked to the \gls{G-optimality} of experimental design theory (see e.g.~\citealt{pukelsheim2006optimal}). We conjecture that G-optimality does not describe best the complexity of linear bandits \gls{bai}, and therefore try to opt for other more appropriate complexities.
 
-One natural research line is then to design asymptotically optimal algorithm. A simple adaptation of \Track~\citep{garivier2016tracknstop} to the linear setting is very likely to be asymptotically optimal, but remains computationally unfavorable. We thus also seek to design computational friendly algorithms. In this thesis, we investigate both Bayesian approach and confidence interval-based algorithms. In particular, we study whether extensions of \TTTS{} can be asymptotically optimal.
+One natural research line is then to design asymptotically optimal algorithm. A simple adaptation of \Track~\citep{garivier2016tracknstop} to the linear setting is shown to be asymptotically optimal~\citep{jedra2020linear}, but remains computationally unfavorable. We thus also seek to design computational friendly algorithms. 
+%In this thesis, we investigate both Bayesian approach and confidence interval-based algorithms. In particular, we study whether extensions of \TTTS{} can be asymptotically optimal.
 %Unfortunately, they do not seem to be (asymptotically) optimal (work not published yet). Therefore, knowing whether one can find an *optimal* Bayesian approach remains an open problem.
+
+In Chapter~\ref{CHAP:LGC}, we propose a new complexity notion for linear bandits \gls{bai}, and provide a comprehensive comparison of existing complexities. We then investigate both Bayesian approaches and confidence interval-based algorithms. In particular, we propose several different extensions of \TTTS{} and \TCC{} to the linear setting. Unfortunately, we show empirically that they are not asymptotically optimal. In the meantime, we develop a saddle-point approach that leads to an optimal algorithm \LG{}.
 
 \subsection{Infinitely-armed bandits and black-box optimization}\label{sec:intro.mab.bbo}
 
-Finally, a more general problem is to consider an infinite (probably uncountable) measurable space $\mathcal{X}$, and each arm $x\in\mathcal{X}$ gets its mean reward $f(x)$ through the reward function $f$. We thus recover~\eqref{eq:optim}:
+Finally, a more general problem is to consider an infinite or continuous space $\cX$, and each arm $x\in\mathcal{X}$ gets its mean reward $f(x)$ through the reward function $f$. We thus recover~\eqref{eq:optim}:
 \[
     \argmax_{x\in\cX} f(x)\,.
 \]
@@ -119,43 +133,28 @@ This is the \gls{go} or \gls{bbo} problem. Sometimes we can also refer to \gls{z
 
 We study the noisy setting in this thesis. Typical approaches to address \gls{go} include \gls{bo} (see e.g.~\citealt{brochu2010bayesian}), evolutionary algorithms and hierarchical bandits (see e.g.~\citealt{bubeck2010x}). In this thesis, we focus on hierarchical bandits algorithms. In the literature of bandits, we often refer to \gls{infinitely-armed bandits} or more precisely \gls{continuum-armed bandits}.
 
-Obviously, we can only expect for a \emph{near-optimal} solution under continuum-armed bandits. We thus opt for another performance measure, namely the \gls{simple regret}, which is the difference between the true optimal function value and the function value of our final guess. Simple regret differs from \gls{cumulative regret} which serves as the performance measure for reward maximization. Formal definitions are provided later in Chapter~\ref{CHAP:MAB}.
+Obviously, we can only expect a \emph{near-optimal} solution under continuum-armed bandits. We thus opt for another performance measure, namely the \gls{simple regret}, which is the difference between the true optimal function value and the function value of our final guess. The formal definition is provided later in Chapter~\ref{CHAP:MAB}.
+%Simple regret differs from \gls{cumulative regret} which serves as the performance measure for reward maximization. 
 
-In this thesis, we explore the possibility of designing parameter-free hierarchical-bandit algorithms with minimum (smoothness) assumptions.
+In Chapter~\ref{CHAP:GPO}, we explore the possibility of designing parameter-free hierarchical-bandit algorithms with minimum (smoothness) assumptions and are adaptive to the smoothness. To this end, we use a cross-validation scheme and construct an algorithm called \GPO{}. \GPO{} is a meta-algorithm that can use any hierarchical bandit algorithms as subroutine. In particular, \GPO{} almost achieves the same simple regret guarantee as its subroutine. As a side result, we also show that \HCT{} is a valid underlying algorithm for \GPO{} as well as for \POO{} proposed by~\cite{grill2015poo}. 
 
 %In a recent work of ours, we provide a general wrapper for hierarchical bandit algorithms that only have guarantees for their simple regret~\cite{shang2019adaptive}. We show that with a cross-validation scheme, any hierarchical bandit algorithm with simple regret guarantees can be plugged into our meta-algorithm with only a tiny increase in the resulting simple regret.
 
 \subsection{Hyper-parameter optimization}\label{sec:intro.mab.hpo}
 
-Finally, we turn our attention to a more practical question: hyper-parameter optimization. As introduced in Section~\ref{sec:intro.context.what}, efficient hyper-parameter tuning could be of great importance for machine learning practitioners. As is stated, \gls{hpo} can be naturally modelled as a sequential optimization problem.
+Finally, we deal with a more practical question: hyper-parameter optimization. As introduced in Section~\ref{sec:intro.context.what}, efficient hyper-parameter tuning could be of great importance for machine learning practitioners. As is stated, \gls{hpo} can be naturally modelled as a sequential optimization problem.
 
 The search space of \gls{hpo} can be both discrete (categorical variables, integer-valued variables, etc) and continuous (real-valued variables). It is natural to ask if hierarchical-bandit algorithms are able to achieve competitive performances for \gls{hpo} against classical BO algorithms.
 
 Additionally, inspired by a recent \gls{bai}-based algorithm \Hyperband~\citep{li2017hyperband}, we seek to propose other \gls{bai}-based algorithms for \gls{hpo}. Indeed, \Hyperband is constructed upon an elimination-based \gls{bai} algorithm and achieves state-of-the-art performances compared to previous methods. We, on the other hand, are interested in whether Bayesian algorithms like \TTTS{} can also be adapted to tackle \gls{hpo} problems. Note that \TTTS{} is only designed for \gls{finitely-armed bandits}, an appropriate workaround is hence needed.
 
-\section{A Summary of the PhD}\label{sec:intro.contributions}
+In Chapter~\ref{CHAP:DTTTS}, we design a robust and dynamic algorithm \DTTTS{} based on \TTTS{}, and show that such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization. We also discuss a major drawback of \DTTTS{}, and propose a fix in the same chapter.
 
-The entire thesis is dedicated to one single problem -- sequential bandit optimization -- only with different settings, although the full journey of my PhD also includes other aspects of \gls{mab} such as its fairness and safety as well as more general work on \gls{rl}. We restrict ourselves to the sequential optimization problem in this manuscript as it is the main research line that has been motivating me so far.
+\section{Publications of the PhD}\label{sec:intro.contributions}
 
-The purpose of this section is to provide a summary of the contributions included in this thesis, but also list all the other work I have participated to just for the record.
+The entire thesis is dedicated to one single problem -- sequential bandit optimization -- only with different settings, although the full journey of my PhD also includes other work that are less relevant to optimization. I restrict myself to the sequential optimization problem in this manuscript as it is the main research line that has been motivating me so far.
 
-\subsection{Summary of the contributions in this thesis}\label{sec:intro.contributions.summary}
-
-We can summarize the contributions presented in this thesis as listed below.
-
-\begin{itemize}[label=\ding{43}]
-    \item We revisit a Bayesian \gls{bai} algorithm \TTTS{}, and provide new theoretical understandings on its posterior convergence~\citep{shang2020t3c}.
-    \item We also show that \TTTS{} achieves asymptotic optimality on the sample complexity~\citep{shang2020t3c}.
-    \item We further propose a computational improvement \TCC of \TTTS{}, whilst keeping the same guarantees~\citep{shang2020t3c}.
-    \item We propose a new complexity notion for linear bandits \gls{bai}, and provide a comprehensive comparison of existing complexities~\citep{degenne2020game}.
-    \item We propose several different extensions of \TTTS{} and \TCC to the linear setting. Unfortunately, we show empirically that they are not asymptotically optimal. In the meantime, \cite{degenne2020game} develop a saddle-point approach that leads to an optimal algorithm \LG{}.
-    \item We propose a general wrapper \GPO for continuum-armed bandit algorithms using a cross-validation scheme. In particular, \GPO covers all hierarchical bandit algorithms with simple regret guarantees~\citep{shang2019adaptive}.
-    \item As a side result of~\cite{shang2019adaptive}, we also show that \HCT is a valid underlying algorithm for \GPO as well as \POO by~\cite{grill2015poo}.
-    \item We design a robust and dynamic algorithm \DTTTS based on \TTTS{}, and show that such Bayesian-flavored algorithms can be good candidates for applications like hyper-parameter optimization~\citep{shang2019dttts}.
-    \item We provide some further understandings of \DTTTS in a sequel work~\citep{shang2020dttts}.
-\end{itemize}
-
-\subsection{List of publications and other work}\label{sec:intro.contributions.list}
+The purpose of this section is to provide a summary of the publications that I have participated to just for the record.
 
 \paragraph{List of papers (peer-reviewed publications or preprints) included in this thesis.}
 
@@ -185,21 +184,21 @@ The list below presents other work that are not included in this thesis since th
     \item rlberry - A reinforcement learning library for research and education. Github Repository, 2021.~\citep{rlberry2021}
 \end{itemize}
 
-\section{Organization of the Thesis}\label{sec:intro.organization}
+% \section{Organization of the Thesis}\label{sec:intro.organization}
 
-We conclude the introduction by providing an outline of the main text of the thesis. 
+% We conclude the introduction by providing an outline of the main text of the thesis. 
 
-We start by an introductory Chapter~\ref{CHAP:MAB} about the \gls{mab} model. The purpose of this chapter is to present the \gls{mab} problem in a more formal way. We first recall some basic notions as well as some fundamental results for stochastic \gls{mab}. We then focus on how different best-arm identification/global optimization settings previously mentioned in Section~\ref{sec:intro.mab} are formulated from a bandit point of view.
+% We start by an introductory Chapter~\ref{CHAP:MAB} about the \gls{mab} model. The purpose of this chapter is to present the \gls{mab} problem in a more formal way. We first recall some basic notions as well as some fundamental results for stochastic \gls{mab}. We then focus on how different best-arm identification/global optimization settings previously mentioned in Section~\ref{sec:intro.mab} are formulated from a bandit point of view.
 
-Chapter~\ref{CHAP:T3C} is dedicated to the problem of stochastic best-arm identification, where we study in particular Bayesian approaches. This chapter is based on the results presented by~\cite{shang2020t3c}.
+% Chapter~\ref{CHAP:T3C} is dedicated to the problem of stochastic best-arm identification, where we study in particular Bayesian approaches. This chapter is based on the results presented by~\cite{shang2020t3c}.
 
-Chapter~\ref{CHAP:LGC} studies best-arm identification for linear bandits. We first investigate the problem from a Bayesian point of view based on some unpublished work. Besides, we also present some general results of linear bandits \gls{bai}~\citep{degenne2020game}. 
+% Chapter~\ref{CHAP:LGC} studies best-arm identification for linear bandits. We first investigate the problem from a Bayesian point of view based on some unpublished work. Besides, we also present some general results of linear bandits \gls{bai}~\citep{degenne2020game}. 
 
-Chapter~\ref{CHAP:GPO} is dedicated to continuum-armed bandits. This chapter is mainly based on the results presented by~\cite{shang2019adaptive}.
+% Chapter~\ref{CHAP:GPO} is dedicated to continuum-armed bandits. This chapter is mainly based on the results presented by~\cite{shang2019adaptive}.
 
-We talk about one important application of previous problem settings in Chapter~\ref{CHAP:DTTTS}, namely \gls{automl}. We focus especially on hyper-parameter optimization. This chapter is partly based on the results by~\cite{shang2019dttts,shang2020dttts}, but also includes some additional discussion.
+% We talk about one important application of previous problem settings in Chapter~\ref{CHAP:DTTTS}, namely \gls{automl}. We focus especially on hyper-parameter optimization. This chapter is partly based on the results by~\cite{shang2019dttts,shang2020dttts}, but also includes some additional discussion.
 
-Finally, we conclude the present manuscript by some general discussions as well as some future perspectives in Chapter~\ref{CHAP:CONCLUSION}.
+% Finally, we conclude the present manuscript by some general discussions as well as some future perspectives in Chapter~\ref{CHAP:CONCLUSION}.
 
 % \newpage
 % \bibliographystyle{plain}

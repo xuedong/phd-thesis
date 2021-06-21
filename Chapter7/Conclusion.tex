@@ -3,8 +3,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{General Conclusion and Perspectives}\label{CHAP:CONCLUSION}
 	\citationChap{
-	blabla
-	}{}
+	\begin{CJK*}{UTF8}{gbsn}
+	将来现在将来，与现在有意义，才与将来会有意义。
+    \end{CJK*}
+	}{\begin{CJK*}{UTF8}{gbsn}
+	鲁迅
+    \end{CJK*}}
 	\minitoc
 	\newpage
 
@@ -12,28 +16,42 @@
 
 \section{General Discussion} 
 
-In this thesis, we studied the multi-armed bandit problem in an optimization fashion. In particular, we investigated three different settings of best-arm identification (in a broad sense). 
+In this thesis, we studied the multi-armed bandit problem in an optimization fashion. In particular, we investigated three different settings of best-arm identification (in a broad sense) in the first three chapters. 
 
-We first studied \gls{bai} in its most general format using the Bayesian machinery. We answered to one open question raised by~\cite{russo2016ttts} on the sample complexity and further strengthened the reason of using Bayesian algorithms for \gls{bai}.
+We first studied \gls{bai} in its simplest formulation (Chapter~\ref{CHAP:T3C}), that is bandits with scalar payoffs. We treated the problem with some Bayesian machinery and answered to one open question raised by~\cite{russo2016ttts} on the sample complexity. By showing the ($\beta$)-asymptotic optimality of \gls{ttts} and providing a computationally faster alternative \gls{t3c}, we further advocated the use of Bayesian algorithms for \gls{bai}.
 
-We then studied the linear setting with the hope of extending previous Bayesian algorithms while keeping the same sample-complexity guarantee. Although the result was not satisfying, we managed to propose an alternative using a saddle-point approach.
+In the next chapter (Chapter~\ref{CHAP:LGC}), we studied the linear setting with the hope of extending previous Bayesian algorithms while keeping the same sample-complexity guarantee. We argued that previous notion of complexities for linear bandits \gls{bai} did not allow us to achieve the asymptotic optimality. Although the result was not satisfying regarding the Bayesian extensions, we managed to propose an alternative \gls{lg} using a saddle-point approach that is asymptotically optimal whilst remaining computationally-friendly.
 
-The third part consists of a rather different setting where we considered a continuous-armed space. We proposed a new general cross-validation scheme that is able to wrap up any hierarchical-bandit algorithms with a simple-regret guarantee.
+The third part (Chapter~\ref{CHAP:GPO}) consists of a rather different setting where we aimed to optimize a target function over a continuous-armed space with minimum regularity assumptions. We were interested in designing algorithms that are adaptive to the smoothness. Taking inspiration from \gls{poo}, we proposed a new general cross-validation scheme \gls{gpo}. Compared to \gls{poo} that is only able to encapsulate hierarchical-bandit algorithms with a cumulative-regret guarantee, \gls{gpo} is able to encapsulate algorithms with simple-regret guarantees.
 
-Finally, beyond the mostly theoretical contributions in the previous chapters, we also explored a more practical topic, namely hyper-parameter optimization. We managed to propose a dynamic and robust algorithm based on the Bayesian algorithms studied in the previous chapters.
+The first chapters mostly came up with strongly theoretically grounded algorithms in the context of different sequential optimization settings, while in Chapter~\ref{CHAP:DTTTS} we also explored a more practical topic, namely hyper-parameter optimization. Existing methods often require to fix an \emph{ad hoc} number of configurations to test, while we managed to propose a dynamic algorithm \gls{dttts} that do not need such a workaround. It is worth noting that \gls{dttts} can also simply serve as a heuristic for \gls{infinitely-armed bandits}, but without any theoretical guarantees. Analysis of \gls{dttts} appears to be difficult due to its dynamic nature, and is left for future work.
 
 \section{Future Perspectives}
 
 \paragraph{Direct follow-ups of the previous research.} 
-A prominent follow-up is to further investigate whether both theoretically and practically efficient Bayesian algorithms exist for linear \gls{bai} (or even more general structure). As discussed in Chapter~\ref{CHAP:LGC}, our first attempts to extend \gls{ttts} to the linear setting leads to a dead end from a theoretical point of view, but still shows some promising experimental performance. It is therefore still interesting to put some efforts on the topic as Bayesian methods could probably avoid resolving complicated optimization problems that is required in most of the current existing state-of-the-art algorithms.
+A prominent follow-up is to further investigate whether both theoretically and practically efficient Bayesian algorithms exist for linear \gls{bai} (or even more general structure). As discussed in Chapter~\ref{CHAP:LGC}, our first attempts to extend \gls{ttts} to the linear setting leads to a dead end from a theoretical point of view, but still shows some promising experimental performance. I think it is worth putting some efforts on the topic as Bayesian methods could probably avoid resolving complicated optimization problems that is required in most of the current existing state-of-the-art algorithms.
 
-On the other hand, as advocated for example by~\cite{locatelli2016thresholding}, the fixed-budget and fixed-confidence settings are drastically different. The theoretical behaviour of the Bayesian algorithms investigated in this thesis in the fixed-budget setting is therefore an interesting research line to follow up.
+On the other hand, as advocated for example by~\cite{locatelli2016thresholding}, the fixed-budget and fixed-confidence settings are drastically different. In the future, I would like to put more focus on the fixed-budget setting, and ideally propose finite-time analysis for \gls{ttts}.
+
+\paragraph{Further investigation on hyper-parameter tuning.}
+Even if the motivation of this thesis was to design efficient \gls{hpo} algorithms, the present thesis does not explore the topic very deeply. A main reason is that I find it hard to propose new \emph{task-agnostic} algorithms that improve over existing methods significantly. Indeed, the most important contribution of \Hyperband{} is to introduce a more clever evaluation mode that allocates more resources to more promising configurations. This trick has given way to a considerable improvement over previous methods, in particular on tasks using large \gls{dl} models. Since \Hyperband{}, however, with a lot of recent work trying to advance the state-of-the-art (see Section~\ref{sec:dttts.survey}), no real breakthrough has been achieved in the field.
+
+In my opinion, the future (or even ongoing) trend of the domain would be to focus on designing more efficient task-specific algorithms. Specific methods could eventually achieve better performance on specific tasks than more general approaches. To some extent, the recent progress on \gls{nas} is one running example to support this intuition as \gls{rl} methods have been successfully applied on \gls{nas} (see e.g.~\citealt{zoph2017}).
+
+A future direction that attracts me a lot is thus to explore the potential of \gls{hpo} techniques in different industrial applications. For example, one important business need of companies dealing with microchips is the compiler optimization. The methodology will thus be a bit different: we need to design algorithms based on the task itself rather than proposing a general algorithm and testing it on different tasks.
+
+On the other hand, sample-efficient \gls{hpo} remains an active research field since there is not only neural networks that need automated hyper-parameter tuning. Indeed, in many data science challenges with real-world datasets, classical machine learning methods (in particular ensemble methods like \XG{}) often dominate. Bandit-inspired \gls{hpo} methods can still be plausible candidates for those tasks and I am very interested in discovering further in this direction.
 
 \paragraph{Link to reinforcement learning.}
-It is worth elaborating a bit more on the link between linear bandits (or more general contextual bandits) and \gls{rl} in addition to the discussion in Section~\ref{sec:intro.context.rl}.
+Beyond \gls{mab}, I would also like to work more on \gls{rl} in the future, whether it is about the theoretical foundation or finding real applications of \gls{rl}. \gls{rl} is a richer and more challenging domain than \gls{mab}, yet has strong links with \gls{mab}, in particular linear bandits. Indeed, \gls{rl} extends upon contextual bandits by allowing for long-term consequences. More precisely, for contextual (linear) bandits, the actions only affect the current reward, whereas for \gls{rl}, they can also affect the future rewards through the evolution of the context.
 
-Indeed, \gls{rl} extends upon contextual bandits by allowing for long-term consequences. More precisely, for contextual (linear) bandits, the actions only affect the current reward, whereas for \gls{rl}, they can also affect the future rewards through the evolution of the context.
+%It is worth elaborating a bit more on the link between linear bandits (or more general contextual bandits) and \gls{rl} in addition to the discussion in Section~\ref{sec:intro.context.rl}. 
 
-\paragraph{Best-policy identification.}
+One possible topic that I would like to investigate -- a topic that is also highly related to \gls{bai} -- is the problem of \gls{bpi} in \gls{mdp}s. Similar to \gls{bai}, the goal of \gls{bpi} is to devise learning algorithms that are able to return the best policy as early as possible. \cite{marjani2020bpi} adapt \Track to \gls{bpi} in discounted \gls{mdp}s, with the help of a generative model. It is interesting to see if our algorithms for linear bandits \gls{bai} can help design sound \gls{bpi} algorithms in a more general context (without generative model).
 
-A highly related topic of \gls{bai} is the problem of \gls{bpi} in \gls{mdp}s. Similar to \gls{bai}, the goal of \gls{bpi} is to devise learning algorithms that are able to return the best policy as early as possible. \cite{marjani2020bpi} adapt \Track to \gls{bpi} in discounted \gls{mdp}s, with the help of a generative model. It is interesting to see if our algorithms for linear bandits \gls{bai} can help design sound \gls{bpi} algorithms in a more general context (without generative model).
+In the long term, I will be interested in filling the gap between \gls{rl} theory and practical usable \gls{rl}. For example, a large number of recent theoretical \gls{rl} work has adopted a linear function approximation assumption first studied by~\cite{jin2019linear} to various \gls{rl} problem settings. This assumption is interesting from a theoretical point of view, but remains quite unrealistic in practice. It would be interesting to find a more realistic assumption while keeping (or improving) the current guarantees.
+
+\paragraph{Societal impact.}
+Last but not least, there is an emerging attention that has been paid on the societal impact recently. I value also a lot these societal factors or constraints that should be leveraged in the current machine learning research. I am particularly interested in safety which is often required in many real business projects, and also fairness that plays an crucial role in empowering the inclusion.
+
+Some of my recently finished or on-going projects focus on some of those aspects (in particular, safety for linear bandits and a novel bandit setting designed upon fairness considerations) and it is something that I definitely want to take into account in my future work.

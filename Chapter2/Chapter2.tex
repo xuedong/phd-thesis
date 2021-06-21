@@ -3,8 +3,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Stochastic Multi-Armed Bandits}\label{CHAP:MAB}
 	\citationChap{
-	blabla
-	}{}
+	Por que somos bandidos.
+	}{Pablo Escobar}
 	\minitoc
 	\newpage
 
@@ -358,7 +358,7 @@ In practice, EBA is often used in the literature. A more detailed discussion of 
 
 \section{Extensions of Best-Arm Identification}\label{sec:mab.extensions}
 
-For real-world applications, sometimes specific need should be met when applying \gls{bai}. The problem formulation needs to be adapted with potentially additional assumptions. Furthermore, as stated in Remark~\ref{remark:intro.pure}, \gls{bai} can be studied within a more general context of pure exploration. The purpose of this section is thus to provide a brief overview of commonly studied extensions of \gls{bai} as well as other pure exploration problems. We pay particular attention to \gls{bai} for linear bandits as it is the main topic of Chapter~\ref{CHAP:LGC}.
+For real-world applications, sometimes specific need should be met when applying \gls{bai}. The problem formulation needs to be adapted with potentially additional assumptions. Furthermore, as stated in Section~\ref{sec:intro.context.how}, \gls{bai} can be studied within a more general context of pure exploration. The purpose of this section is thus to provide a brief overview of commonly studied extensions of \gls{bai} as well as other pure exploration problems. We pay particular attention to \gls{bai} for linear bandits as it is the main topic of Chapter~\ref{CHAP:LGC}.
 
 \subsection{Pure-exploration game}\label{sec:mab.extensions.pure}
 
@@ -420,7 +420,9 @@ where $\epsilon_n$ is the noise. The learning protocol of linear bandits \gls{ba
 
 \subsection{Other variants of best-arm identification}\label{sec:mab.extensions.other}
 
-Apart from linear bandits, many other variants mentioned in Section~\ref{sec:mab.model} can be studied in the context of \gls{bai} as well. To name a few of them, we can think of \gls{bai} for combinatorial bandits~\citep{chen2021combinatorial}, \gls{bai} for adversarial bandits~\citep{abbasi-yadkori2018best}. We can also refer to other variants like Top-m identification where instead of finding a single best arm, we aim to find the top-m best arm (see e.g.~\citealt{kalyanakrishnan2010,reda2021topm}).
+Linear bandits is merely a particular case of contextual bandits where the rewards are determined by an arbitrary function applied on the arm rather than its inner product with a regression parameter. \gls{bai} for general contextual bandits is much more intricate than linear bandits \gls{bai}: for example, the sample complexity lower bound of~\cite{garivier2016tracknstop}, that we discuss later in Section~\ref{sec:mab.performance.sample}, has an explicit formula for linear bandits \gls{bai} (see Chapter~\ref{CHAP:LGC}), but not for contextual bandits \gls{bai}. A relatively simpler setting, namely \gls{generalized linear bandits}, has been studied by~\cite{aziz2021contextual,kazerouni2019glb}. To the best of my knowledge, \gls{bai} for general contextual bandits is only studied by~\cite{deshmukh2019bai} in the context of \gls{simple regret} that we define later in Section~\ref{sec:mab.performance.simple}.
+
+Besides, many other variants mentioned in Section~\ref{sec:mab.model} can be studied in the context of \gls{bai} as well. To name a few of them, we can think of \gls{bai} for combinatorial bandits~\citep{chen2021combinatorial}, \gls{bai} for adversarial bandits~\citep{abbasi-yadkori2018best}. We can also refer to other variants like Top-m identification where instead of finding a single best arm, we aim to find the top-m best arm (see e.g.~\citealt{kalyanakrishnan2010,reda2021topm}).
 
 \section{Many-armed bandits}\label{sec:mab.continuum}
 
