@@ -20,6 +20,18 @@
 \newcommand{\matlab}{\textsc{Matlab}\texttrademark\xspace}
 
 
+%% Dedication
+\newenvironment{dedication}
+  {\clearpage           % we want a new page
+   \thispagestyle{empty}% no header and footer
+   \vspace*{\stretch{1}}% some space at the top 
+   \itshape             % the text is in italics
+   \raggedleft          % flush to the right margin
+  }
+  {\par % end the paragraph
+   \vspace{\stretch{3}} % space at bottom is three times that at the top
+   \clearpage           % finish off the page
+  }
 
 %% Figures centrées, et en position 'here, top, bottom or page'
 \newenvironment{figureth}{%
