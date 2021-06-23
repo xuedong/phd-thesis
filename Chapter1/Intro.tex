@@ -109,7 +109,7 @@ In Chapter~\ref{CHAP:T3C}, we revisit \TTTS{}, and provide new theoretical under
 
 \subsection{Extension to best-arm identification for linear bandits}\label{sec:intro.mab.linear}
 
-Beyond the previous vanilla setting of \gls{bai}, a widely studied extension is to take a finite set of $K$ arms/contexts/features\footnote{Those terms can be interchangeably employed in the context of this thesis.} $\cX=\{\bx_1,\bx_2,\cdots,\bx_K\}\subset\R^d$ as the search space. The reward of each arm under this circumstance is assumed to depend linearly on a \gls{regression parameter} $\btheta$. The target function $f$ therefore can be considered as a mapping from each arm $\bx$ to its linear combination with $\btheta$, and is thus called linear bandits. Precisely, the learner seeks to find
+Beyond the previous vanilla setting of \gls{bai}, a widely studied extension is to take a finite set of $K$ arms/contexts/features\footnote{Those terms can be interchangeably employed in the context of this thesis.} $\cX=\{\bx_1,\bx_2,\cdots,\bx_K\}\subset\R^d$ as the search space. The reward of each arm under this circumstance is assumed to depend linearly on a \gls{regression parameter} $\btheta\in\R^d$. The target function $f$ therefore can be considered as a mapping from each arm $\bx$ to its linear combination with $\btheta$, and is thus called linear bandits. Precisely, the learner seeks to find
 \begin{align}\label{eq:optim_linbai}
     \argmax_{k\in[K]} \btheta^\top\bx_k\,.
 \end{align}
