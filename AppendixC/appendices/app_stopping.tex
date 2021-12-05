@@ -36,7 +36,7 @@ We first notice that using the same argument as the proves of Lemma~\ref{lemma:l
 Now we compare it with other stopping rules.
 
 \paragraph{\LG{} $\Rightarrow$ \XYS{}.}
-If \LG{} stops at time $t$, then for $a = \bx^\star(\hbtheta_n^\lambda)$, we have
+If \LG{} stops at time $t$, then for $\bx = \bx^\star(\hbtheta_n^\lambda)$, we have
 \[
     \forall \bx'\neq \bx, \normm{\bx-\bx'}_{\bLambda_{\bT_n}^{-1}}\sqrt{2d_{n,\delta}}\leq \langle\hbtheta_n^\lambda,\bx-\bx'\rangle\,,
 \]
@@ -47,7 +47,7 @@ Suppose that \XYS{} stops at time $t$ under its stopping rule, then
 \[
 \exists \bx\in\cX, \forall \bx'\neq \bx, \normm{\bx-\bx'}_{\bLambda_{\bT_n}^{-1}}\sqrt{2d_{n,\delta}}\leq \langle\hbtheta_n^\lambda,\bx-\bx'\rangle\,.
 \]
-It is clear that if such $a$ exists, then it can only be the empirical best arm $\bx^\star(\hbtheta_n^\lambda)$. Thus,
+It is clear that if such $\bx$ exists, then it can only be the empirical best arm $\bx^\star(\hbtheta_n^\lambda)$. Thus,
 \[
     \forall \bx'\neq \bx^\star(\hbtheta_n^\lambda), \normm{\bx^\star(\hbtheta_n^\lambda)-\bx'}_{\bLambda_{\bT_n}^{-1}}\sqrt{2d_{n,\delta}}\leq\langle\hbtheta_n^\lambda,\bx^\star(\hbtheta_n^\lambda)-\bx'\rangle\,,
 \]

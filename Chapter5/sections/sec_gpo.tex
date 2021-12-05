@@ -51,7 +51,7 @@ The $\gls{gpo}(\cA)$ algorithm, whose pseudo-code is shown in Algorithm~\ref{alg
 \label{alg:gpo}
 \begin{algorithmic}[1]
     \State {\bfseries Input:} base algorithm $\cA$, budget $n$, $\rho_{\max}, \nu_{\max}$, $K$
-    \State {\bfseries Initialization:} $D_{\max} \gets \ln K/\ln\left( 1/\rho_{\max}\right)$, number of function evaluations $N \gets 0$, current number of \HCT instances $M \gets 1$, $\mathcal{S} \gets \{(\nu_{\max},\rho_{\max})\}$
+    \State {\bfseries Initialization:} $D_{\max} \gets \ln K/\ln\left( 1/\rho_{\max}\right)$, number of function evaluations $N \gets 0$, current number of instances of $\cA$ $M \gets 1$, $\mathcal{S} \gets \{(\nu_{\max},\rho_{\max})\}$
 
     \State \text{Compute} $M = \lceil (1/2)D_{\max}\ln((M/2)/\ln(M/2))\rceil$ (the number of instances)
     \For{$i\gets 1, \dots, M$}

@@ -23,22 +23,26 @@ therefore it suffices to establish the convergence of $\overline{\psi}_{n,i} = \
 \paragraph{Step 1: \TTTS draws all arms infinitely often and satisfies $T_{n,I^\star}/n \rightarrow \beta$.} More precisely, we prove the following lemma. 
 
 \begin{lemma}\label{lemma:optimal_prop_istar_gaussian}
-	Under \TTTS, it holds almost surely that
+\begin{leftbar}[lemmabar]
+	Under \gls{ttts}, it holds almost surely that
 	\begin{enumerate}
 	    \item for all $i \in \cA$, $\lim_{n\rightarrow \infty} T_{n,i} = \infty.$
 	    \item $a_{n,I^\star} \rightarrow 1.$
 	    \item $T_{n,I^\star}/n \rightarrow \beta$.
 	\end{enumerate}
+\end{leftbar}
 \end{lemma}
 
 \begin{proof} Our first ingredient is a lemma showing the implications of finite measurement, and consistency when all arms are sampled infinitely often. Its proof follows standard posterior concentration arguments and is given in Appendix~\ref{app:posterior_gaussian.aux}.
 
-\begin{lemma}[Consistency and implications of finite measurement]\label{lemma:consistency_gaussian}\ \\
+\begin{lemma}\label{lemma:consistency_gaussian}
+\begin{leftbar}[lemmabar][Consistency and implications of finite measurement]
 	Denote with $\overline{\mathcal{I}}$ the arms that are sampled only a finite amount of times:
 	\begin{align*}
-	\overline{\mathcal{I}} = \{ i \in \{ 1, \ldots, k \} : \forall n, T_{n,i} < \infty \}.
+	\overline{\mathcal{I}} = \{ i \in \{ 1, \ldots, k \} : \forall n, T_{n,i} < \infty \}\,.
 	\end{align*}
 	If $\overline{\mathcal{I}}$ is empty, $a_{n,i}$ converges almost surely to $1$ when $i = I^\star$ and to $0$ when $i \neq I^\star$. If $\overline{\mathcal{I}}$ is non-empty, then for every $i \in \overline{\mathcal{I}}$, we have $\liminf_{n \rightarrow \infty} a_{n,i} > 0$ a.s.
+\end{leftbar}
 \end{lemma}
 
 	First we show that $\sum_{n \in \mathbb{N}} T_{n,j} = \infty$ for each arm $j$. Suppose otherwise. Let $\overline{\mathcal{I}}$ again be the set of arms to which only finite measurement effort is allocated. Under \TTTS, we have
@@ -53,11 +57,13 @@ therefore it suffices to establish the convergence of $\overline{\psi}_{n,i} = \
 \paragraph{Step 2:  Controlling the over-allocation of sub-optimal arms.}
 The convergence of $T_{n,I^\star}/n$ to $\beta$ leads to following interesting consequence, expressed in Lemma~\ref{lemma:over_allocation}: if an arm is sampled more often than its optimal proportion, the posterior probability of this arm to be optimal is reduced compared to that of other sub-optimal arms.
 
-\begin{lemma}[Over-allocation implies negligible probability]\label{lemma:over_allocation}\footnote{analogue of Lemma 13 of \cite{russo2016ttts}}
+\begin{lemma}\label{lemma:over_allocation}
+\begin{leftbar}[lemmabar][Over-allocation implies negligible probability]\footnote{Analogue of Lemma 13 of \cite{russo2016ttts}.}
 Fix any $\xi > 0$ and $j \neq I^\star$. With probability 1, under any allocation rule, if $T_{n,I^\star}/n \rightarrow \beta$, there exist $\xi' > 0$ and a sequence $\epsilon_n$ with $\epsilon_n \rightarrow 0$ such that for any $n \in \mathbb{N}$, 
 	\begin{align*}
 	\frac{T_{n,j}}{n} \geq \omega_j^\beta + \xi \Rightarrow \frac{a_{n,j}}{\max_{i \neq I^\star} a_{n,i}} \leq e^{-n (\xi' + \epsilon_n)}.
 	\end{align*}
+\end{leftbar}
 \end{lemma}
 
 %\todo[inline]{This proof uses repeatedly the consistency Lemma~\ref{lemma:optimal_prop_istar_gaussian} without mentioning it}
@@ -112,22 +118,24 @@ Fix any $\xi > 0$ and $j \neq I^\star$. With probability 1, under any allocation
 
 \paragraph{Step 3: $\overline{\psi}_{n,i}$ converges to $\omega_i^\beta$ for all arms.} To establish the convergence of the allocation effort of all arms, we rely on the same sufficient condition used in the analysis of \cite{russo2016ttts}, that we recall below. 
 
-\begin{lemma}[Sufficient condition for optimality]\label{lemma:sufficient_optimality}\footnote{Lemma 12 of \cite{russo2016ttts}}
+\begin{lemma}\label{lemma:sufficient_optimality}
+\begin{leftbar}[lemmabar][Sufficient condition for optimality]\footnote{Lemma 12 of \cite{russo2016ttts}.}
 Consider any adaptive allocation rule. If we have
 	\begin{align}\label{eq:sufficient condition for optimality}
 		&\overline{\psi}_{n, I^\star} \rightarrow \beta, \quad \text{ and } \quad
 		\sum_{n \in \mathbb{N}} \psi_{n,j} \bm{1} \left\lbrace \overline{\psi}_{n,j} \geq \omega_j^\beta + \xi \right\rbrace < \infty, \quad \forall j \neq I^\star, \xi > 0,
 	\end{align}
 then $\overline{\psi}_{n} \rightarrow \psi^\beta$.
+\end{leftbar}
 \end{lemma}
 
 First, note that from Lemma~\ref{lemma:optimal_prop_istar_gaussian} we know that $T_{n,I^\star}/n \rightarrow \beta$, an by Lemma~\ref{lemma:link} this implies $\overline{\psi}_{n, I^\star} \rightarrow \beta$, hence we can use Lemma~\ref{lemma:sufficient_optimality} to prove convergence to the optimal proportions. Thus, we now show that \eqref{eq:sufficient condition for optimality} holds under \TTTS. Recall that $J_n^{(1)} = \argmax_{j} a_{n,j}$ and $J_n^{(2)} = \argmax_{j\neq J_n^{(1)}} a_{n,j}$. Since $a_{n,I^\star} \rightarrow 1$ by Lemma~\ref{lemma:optimal_prop_istar_gaussian}, there is some finite time $\tau$ after which for all $n > \tau$, $J_n^{(1)} = I^\star$. Under \TTTS, 
 	\begin{align*}
-	\psi_{n,i} =a_{n,i} \left( \beta  + (1-\beta) \sum_{j \neq i} \frac{a_{n,j}}{1-a_{n,j}} \right)
-	           \leq a_{n,i} \beta  + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{1-a_{n,J_n^{(1)}}}
-	           \leq  a_{n,i} \beta + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{a_{n,J_n^{(2)}}}\\
-	           \leq a_{n,i}\beta  + a_{n,i} (1-\beta) \frac{1}{a_{n,J_n^{(2)}}}
-	           \leq \frac{a_{n,i}}{a_{n,J_n^{(2)}}},
+	\psi_{n,i} &= a_{n,i} \left( \beta  + (1-\beta) \sum_{j \neq i} \frac{a_{n,j}}{1-a_{n,j}} \right) \\
+	           &\leq a_{n,i} \beta  + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{1-a_{n,J_n^{(1)}}} \\
+	           &\leq  a_{n,i} \beta + a_{n,i} (1-\beta) \frac{\sum_{j \neq i} a_{n,j}}{a_{n,J_n^{(2)}}} \\
+	           &\leq a_{n,i}\beta  + a_{n,i} (1-\beta) \frac{1}{a_{n,J_n^{(2)}}} \\
+	           &\leq \frac{a_{n,i}}{a_{n,J_n^{(2)}}}\,,
 	\end{align*}
 where we use the fact that for $j \neq J_n^{(1)}$, we have $a_{n,J_n^{(1)}} \geq a_{n,j}$ and $a_{n,J_n^{(2)}} \leq 1- a_{n,J_n^{(1)}}$. For $n \geq \tau$ this means that $\psi_{n, i} \leq a_{n,i} / \max_{j \neq I^\star} a_{n,i}$ for any $i \neq I^\star$.
 	

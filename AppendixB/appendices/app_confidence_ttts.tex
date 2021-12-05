@@ -18,12 +18,14 @@ It is seemingly non trivial to manipulate directly \gls{ttts}'s candidate arms, 
 Lemma~\ref{lemma:sufficient_exploration} is proved via the following sequence of lemmas.
 
 \begin{lemma}\label{lemma:link_ttps}
+\begin{leftbar}[lemmabar]
     There exists $L_1 = \text{Poly}(W_1)$ s.t. if $L > L_1$, for all $n$, $U_n^L \neq \emptyset$ implies $J_n^{(1)} \in V_n^L$ or $J_n^{(2)} \in V_n^L$.
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
     If $J_n^{(1)} \in V_n^L$, then the proof is finished. Now we assume that $J_n^{(1)} \in \bar{V_n^L}$, and we prove that $J_n^{(2)} \in V_n^L$.
-    \paragraph{Step 1} According to Lemma~\ref{lemma:means}, there exists $L_2 = \text{Poly}(W_1)$ s.t. $\forall L > L_2, \forall i \in \bar{U_n^L}$,
+    \paragraph{Step 1.} According to Lemma~\ref{lemma:means}, there exists $L_2 = \text{Poly}(W_1)$ s.t. $\forall L > L_2, \forall i \in \bar{U_n^L}$,
     \begin{align*}
         |\mu_{n,i} - \mu_{i}| &\leq \sigma W_1 \sqrt{\frac{\log(e+T_{n,i})}{1+T_{n,i}}}\\
                               &\leq \sigma W_1 \sqrt{\frac{\log(e+\sqrt{L})}{1+\sqrt{L}}}\\
@@ -31,7 +33,7 @@ Lemma~\ref{lemma:sufficient_exploration} is proved via the following sequence of
     \end{align*}
     The second inequality holds since $x\mapsto \frac{\log(e+x)}{1+x}$ is a decreasing function. The third inequality holds for a large $L>L_2$ with $L_2 = \ldots$.
     
-    \paragraph{Step 2} We now assume that $L > L_2$, and we define 
+    \paragraph{Step 2.} We now assume that $L > L_2$, and we define 
     \[
         \bar{J_n^\star} \eqdef \argmax_{j\in\bar{U_n^L}} \mu_{n,j} = \argmax_{j\in\bar{U_n^L}} \mu_j.
     \]
@@ -72,7 +74,7 @@ Lemma~\ref{lemma:sufficient_exploration} is proved via the following sequence of
     \]
     which contradicts the definition of $J_n^{(1)}$. We now assume that $L > L_3$, thus $J_n^{(1)}=\bar{J_n^\star}$.
     
-    \paragraph{Step 3} We finally show that for $L$ large enough, $J_n^{(2)} \in V_n^L$. First note that $\forall j \in \bar{V_n^L}$, we have
+    \paragraph{Step 3.} We finally show that for $L$ large enough, $J_n^{(2)} \in V_n^L$. First note that $\forall j \in \bar{V_n^L}$, we have
     \begin{equation}
                 a_{n,j} \leq \Pi_{n}\left[\theta_j \geq \theta_{\bar{J_n^{\star}}}\right] \leq \expp{-\frac{L^{3/4}\Delta_{\text{min}}^2}{16\sigma^2}}. \label{eq:upper_bound_anj_explo}
     \end{equation}
@@ -133,10 +135,12 @@ Lemma~\ref{lemma:sufficient_exploration} is proved via the following sequence of
 Next we show that there exists at least one arm in $V_n^L$ for whom the probability of being pulled is large enough. More precisely, we prove the following lemma.
 
 \begin{lemma}\label{lemma:psi_min_ttts}
+\begin{leftbar}[lemmabar]
     There exists $L_1 = \text{Poly}(W_1)$ s.t. for $L > L_1$ and for all $n$ s.t. $U_n^L \neq \emptyset$, then there exists $J_n \in V_n^L$ s.t.
     \[
         \psi_{n,J_n} \geq \frac{\min(\beta,1-\beta)}{K^2} \eqdef \psi_{\min}.
     \]
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -160,7 +164,9 @@ Next we show that there exists at least one arm in $V_n^L$ for whom the probabil
 The rest of this subsection is quite similar to that of~\cite{qin2017ttei}. Indeed, with the above lemma, we can show that the set of poorly explored arms $U_n^L$ is empty when $n$ is large enough.
 
 \begin{lemma}\label{lemma:poorly_explored_ttts}
+\begin{leftbar}[lemmabar]
     Under \gls{ttts}, there exists $L_0 = \text{Poly}(W_1,W_2)$ s.t. $\forall L > L_0$, $U_{\floor{KL}}^L = \emptyset$.
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -232,10 +238,12 @@ In this section we show that the empirical arm draws proportion of the true best
 The proof is established upon the following lemmas. First, we prove that the empirical best arm coincides with the true best arm when the total number of arm draws goes sufficiently large.
 
 \begin{lemma}\label{lemma:empirical_best}
+\begin{leftbar}[lemmabar]
     Under \gls{ttts}, there exists $M_1 = \text{Poly}(W_1,W_2)$ s.t. $\forall n > M_1$, we have $I_n^\star = I^\star = J_n^{(1)}$ and $\forall i \neq I^\star$,
     \[
         a_{n,i} \leq \expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}}.
     \]
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -274,10 +282,12 @@ The proof is established upon the following lemmas. First, we prove that the emp
 Before we prove Lemma~\ref{lemma:tracking_best}, we first show that $\Psi_{n,I^\star}/n$ concentrates to $\beta$.
 
 \begin{lemma}\label{lemma:psi_best}
+\begin{leftbar}[lemmabar]
     Under \gls{ttts}, fix a constant $\epsilon>0$, there exists $M_3 = \text{Poly}(\epsilon,W_1,W_2)$ s.t. $\forall n > M_3$, we have
     \[
         \left| \frac{\Psi_{n,I^\star}}{n}-\beta \right| \leq \epsilon.
     \]
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -291,7 +301,7 @@ Before we prove Lemma~\ref{lemma:tracking_best}, we first show that $\Psi_{n,I^\
     \]
     We proceed the proof with the following two steps.
     
-    \paragraph{Step 1} We first lower bound $\Psi_{n,I^\star}$ for a given $\epsilon$. Take $M_4 > M_1'$ that we decide later, we have $\forall n > M_4$,
+    \paragraph{Step 1.} We first lower bound $\Psi_{n,I^\star}$ for a given $\epsilon$. Take $M_4 > M_1'$ that we decide later, we have $\forall n > M_4$,
     \begin{align*}
         \frac{\Psi_{n,I^\star}}{n} &= \frac{1}{n}\sum_{l=1}^{n}\psi_{l,I^\star} = \frac{1}{n}\sum_{l=I^\star}^{M_4}\psi_{l,I^\star} + \frac{1}{n}\sum_{l=M_4+1}^{n}\psi_{l,I^\star}\\
                              &\geq \frac{1}{n}\sum_{l=M_4+1}^{n}\psi_{l,I^\star} \geq \frac{1}{n}\sum_{l=M_4+1}^{n} a_{l,I^\star}\beta\\
@@ -314,7 +324,7 @@ Before we prove Lemma~\ref{lemma:tracking_best}, we first show that $\Psi_{n,I^\
         \frac{\Psi_{n,I^\star}}{n} \geq \beta - \epsilon.
     \]
     
-    \paragraph{Step 2} On the other hand, we can also upper bound $\Psi_{n,I^\star}$. We have $\forall n > M_3$,
+    \paragraph{Step 2.} On the other hand, we can also upper bound $\Psi_{n,I^\star}$. We have $\forall n > M_3$,
     \begin{align*}
         \frac{\Psi_{n,I^\star}}{n} &= \frac{1}{n}\sum_{l=1}^{n}\psi_{l,I^\star}\\
                              &= \frac{1}{n}\sum_{l=1}^{n}a_{l,I^\star}\left( \beta + (1-\beta)\sum_{j\neq I^\star}\frac{a_{l,j}}{1-a_{l,j}} \right)\\
@@ -345,7 +355,7 @@ Before we prove Lemma~\ref{lemma:tracking_best}, we first show that $\Psi_{n,I^\
         \frac{\Psi_{n,I^\star}}{n} \leq \beta + \epsilon.
     \]
     
-    \paragraph{Conclusion} Finally, combining the two steps and define $M_3 \eqdef \max\{M_4,M_7\}$, we have $\forall n > M_3$,
+    \paragraph{Conclusion.} Finally, combining the two steps and define $M_3 \eqdef \max\{M_4,M_7\}$, we have $\forall n > M_3$,
     \[
         \left|\frac{\Psi_{n,I^\star}}{n}-\beta\right| \leq \epsilon.
     \]
@@ -384,12 +394,14 @@ In this section, we show that, for \gls{ttts}, the empirical measurement effort 
 %We first establish the following lemma that is a \emph{non-asymptotic} version of Lemma~\ref{lemma:over_allocation}. 
 We first show that if some arm is overly sampled at time $n$, then its probability of being picked is reduced exponentially.
 
-\begin{lemma}\label{lemma:over_allocation_finite_ttts} 
+\begin{lemma}\label{lemma:over_allocation_finite_ttts}
+\begin{leftbar}[lemmabar]
     Under \gls{ttts}, for every $\xi \in (0,1)$, there exists $S_1 = \text{Poly}(1/\xi,W_1,W_2)$ such that for all $n > S_1$, for all $i\neq I^\star$, 
     \[
         \frac{\Psi_{n,i}}{n} \geq \omega_{i}^\beta + \xi  \ \ \Rightarrow \ \ \psi_{n,i} \leq \expp{-\epsilon_0(\xi) n}\,,
     \]
     where $\epsilon_0$ is defined in~\eqref{eq:def_epsilon0} below.
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -450,10 +462,12 @@ where
 Next, starting from some known moment, no arm is overly allocated. More precisely, we show the following lemma.
 
 \begin{lemma}\label{lemma:psi_other_ttts}
+\begin{leftbar}[lemmabar]
     Under \gls{ttts}, for every $\xi$, there exists $S_4 = \text{Poly}(1/\xi,W_1,W_2)$ s.t. $\forall n > S_4$,
     \[
         \forall i \in \cA, \ \ \frac{\Psi_{n,i}}{n} \leq \omega_{i}^\beta + \xi.
     \]
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}

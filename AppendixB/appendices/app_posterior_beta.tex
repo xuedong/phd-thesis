@@ -18,6 +18,7 @@ We can bound Binomial tails with Sanov's inequality:
 where the last inequalities hold when $k \geq nx$.
 
 \begin{lemma}\label{lemma:binomial_tail}
+\begin{leftbar}[lemmabar]
 Let $X \sim \cB eta(a, b)$ and $Y\sim \cB eta(c, d)$ with $0 < \frac{a-1}{a+b-1} < \frac{c-1}{c+d-1}$. Then we have $\PP{X > Y} \leq D e^{-C}$ where
 \[
     C = \inf_{\frac{a-1}{a+b-1} \leq y \leq \frac{c-1}{c+d-1}} C_{a,b}(y)+C_{c,d}(y),
@@ -26,9 +27,12 @@ and
 \[
     D = 3 + \min \left( C_{a,b}\left(\frac{c-1}{c+d-1}\right), C_{c,d}\left(\frac{a-1}{a+b-1}\right) \right)\,.
 \]
+\end{leftbar}
 \end{lemma}
 Note that this lemma is the Bernoulli version of Lemma~\ref{lemma:gaussiantails}.
-\begin{restatable}{theorem}{restatebernoullilowerbound}\label{thm:bernoulli_lower_bound}
+
+\begin{restatable}{theorem}{restatebernoullilowerbound}
+\begin{leftbar}[theorembar]\label{thm:bernoulli_lower_bound}
 	Consider the Beta-Bernoulli setting. For $\beta \in (0,1)$, under any allocation rule satisfying 
 	$T_{n, I^\star} / n \rightarrow \omega_{I^\star}^\beta$,
 	\begin{align*}
@@ -38,13 +42,14 @@ Note that this lemma is the Bernoulli version of Lemma~\ref{lemma:gaussiantails}
 	\begin{align*}
 		\lim_{n \rightarrow \infty} - \frac{1}{n} \log(1 - a_{n,I^\star}) = \Gamma_{\beta}^\star.
 	\end{align*}
+\end{leftbar}
 \end{restatable}
 
 \begin{proof}
 	Denote again with $\overline{\cI}$ again the set of arms sampled only finitely many times. For $\overline{\cI}$ empty, we thus have $\mu_{\infty, i} \triangleq \lim_{n \rightarrow \infty} \mu_{n,i} = \mu_i$. The posterior variance is
 	\begin{align*}
-	\sigma_{n,i}^2 &= \frac{\alpha_{n,i}\beta_{n,i}}{(\alpha_{n,i}+ \beta_{n,i})^2 (\alpha_{n,i} + \beta_{n,i} + 1)}
-	= \frac{(1 + \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}}) (1 + T_{n,i} - \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}})  }{ (2 + T_{n,i})^2 (2 + T_{n,i} +1)}.
+	\sigma_{n,i}^2 &= \frac{\alpha_{n,i}\beta_{n,i}}{(\alpha_{n,i}+ \beta_{n,i})^2 (\alpha_{n,i} + \beta_{n,i} + 1)} \\
+	&= \frac{(1 + \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}}) (1 + T_{n,i} - \sum_{\ell=1}^{n-1} \1{\{ I_{\ell} = i \}} Y_{\ell,I_{\ell}})  }{ (2 + T_{n,i})^2 (2 + T_{n,i} +1)}.
 	\end{align*}
 	We see that when $\overline{\cI}$ is empty, we have $\sigma_{\infty, i}^2 \triangleq \lim_{n \rightarrow \infty} \sigma_{n,i}^2 = 0$, i.e., the posterior is concentrated. 
 	
@@ -176,23 +181,27 @@ Therefore, it suffices to show convergence for $\overline{\psi}_{n,i} = \Psi_{n,
 \paragraph{Step 1: \TTTS draws all arms infinitely often and satisfies $T_{n,I^\star}/n \rightarrow \beta$.} We prove the following lemma. 
 	
 \begin{lemma}\label{lemma:optimal_prop_istar_bernoulli}
+\begin{leftbar}[lemmabar]
 	Under \TTTS, it holds almost surely that
 	\begin{enumerate}
 		\item for all $i \in \cA$, $\lim_{n\rightarrow \infty} T_{n,i} = \infty.$
 		\item $a_{n,I^\star} \rightarrow 1.$
 		\item $\frac{T_{n,I^\star}}{n} \rightarrow \beta$.
 	\end{enumerate}
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
 First, we give a lemma showing the implications of finite measurement, and consistency when all arms are sampled infinitely often, which provides a proof for $2.$ The proof of this lemma follows from the proof of Theorem~\ref{thm:bernoulli_lower_bound}, and is given in Appendix~\ref{app:posterior_beta.aux}. 
 
-\begin{lemma}[Consistency and implications of finite measurement]\label{lemma:consistency_bernoulli}\ \\
+\begin{lemma}\label{lemma:consistency_bernoulli}
+\begin{leftbar}[lemmabar][Consistency and implications of finite measurement]
 	Denote with $\overline{\mathcal{I}}$ the arms that are sampled only a finite amount of times:
 	\begin{align*}
 	\overline{\mathcal{I}} = \{ i \in \{ 1, \ldots, k \} : \forall n, T_{n,i} < \infty \}.
 	\end{align*}
 	If $\overline{\mathcal{I}}$ is empty, $a_{n,i}$ converges almost surely to $1$ when $i = I^\star$ and to $0$ when $i \neq I^\star$. If $\overline{\mathcal{I}}$ is non-empty, then for every $i \in \overline{\mathcal{I}}$, we have $\liminf_{n \rightarrow \infty} a_{n,i} > 0$ a.s.
+\end{leftbar}
 \end{lemma}
 
 Now we can show $1.$ of Lemma~\ref{lemma:optimal_prop_istar_bernoulli}: we show that under \TTTS, for each $j \in A$, we have $\sum_{n \in \NN} T_{n,j} = \infty$. The proof is exactly equal to the proof for Gaussian arms. 
@@ -210,11 +219,13 @@ Lastly we prove point $3.$ of Lemma~\ref{lemma:optimal_prop_istar_bernoulli}. Fo
 \paragraph{Step 2: Controlling the over-allocation of sub-optimal arms.}
 Following the proof for the Gaussian case again, we can establish a consequence of the convergence of $T_{n,I^\star} / n$ to $\beta$ : if an arm is sampled more often than its optimal proportion, the posterior probability of this arm to be optimal is reduced compared to that of other sub-optimal arms. We can prove this by using ingredients from the proof of the lower bound in Theorem~\ref{thm:bernoulli_lower_bound}.
 
-\begin{lemma}[Over-allocation implies negligible probability]\label{lemma:over_allocation_bernoulli}\footnote{analogue of Lemma 13 of \cite{russo2016ttts}}\ \\
+\begin{lemma}\label{lemma:over_allocation_bernoulli}
+\begin{leftbar}[lemmabar][Over-allocation implies negligible probability]\footnote{analogue of Lemma 13 of \cite{russo2016ttts}}
 	Fix any $\xi > 0$ and $j \neq I^\star$. With probability 1, under any allocation rule, if $T_{n,I^\star}/n \rightarrow \beta$, there exist $\xi' > 0$ and a sequence $\epsilon_n$ with $\epsilon_n \rightarrow 0$ such that for any $n \in \mathbb{N}$, 
 	\begin{align*}
 	\frac{T_{n,j}}{n} \geq \omega_j^\beta + \xi \implies \frac{a_{n,j}}{\max_{i \neq I^\star} a_{n,i}} \leq e^{-n (\xi' + \epsilon_n)}.
 	\end{align*}
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -240,13 +251,15 @@ We know that $C_{j} \left(\beta, \omega_j^\beta \right)$ is strictly increasing 
 
 \paragraph{Step 3: $\overline{\psi}_{n,i}$ converges to $\omega_i^\beta$ for all arms.} To establish the convergence of the allocation effort of all arms, we rely on the same sufficient condition used in the analysis of~\cite{russo2016ttts}, restated above in Lemma~\ref{lemma:sufficient_optimality}, and we will restate it here again for convenience.
 	
-\begin{lemma}[Sufficient condition for optimality]\ \\
+\begin{lemma}
+\begin{leftbar}[lemmabar][Sufficient condition for optimality]
 	Consider any adaptive allocation rule. If 
 		\begin{align}
 		&\overline{\psi}_{n, I^\star} \rightarrow \beta, \,\,\, \text{ and } \,\,\,
 		\sum_{n \in \mathbb{N}} \psi_{n,j} \bm{1} \left\lbrace \overline{\psi}_{n,j} \geq \omega_j^\beta + \xi \right\rbrace < \infty, \,\, \forall j \neq I^\star, \xi > 0,
 		\end{align}
 	then $\overline{\psi}_{n} \rightarrow \psi^\beta$.
+\end{leftbar}
 \end{lemma}
 
 First, note that from Lemma~\ref{lemma:optimal_prop_istar_bernoulli} we know that $\frac{T_{n,I^\star}}{n} \rightarrow \beta$, and by Lemma~\ref{lemma:link} this implies $\overline{\psi}_{n, I^\star} \rightarrow \beta$, hence we can use the lemma above to prove convergence to the optimal proportions. This proof is already given in Step~3 of the proof for the Gaussian case, and since it does not depend on the specifics of the Gaussian case, except for invoking Lemma~\ref{lemma:consistency_gaussian} (consistency), which for the Bernoulli case we replace by Lemma~\ref{lemma:consistency_bernoulli}, it gives a proof for the Bernoulli case as well. We conclude that \eqref{eq:sufficient condition for optimality} holds, and the convergence to the optimal proportions follows by Lemma~\ref{lemma:sufficient_optimality}.

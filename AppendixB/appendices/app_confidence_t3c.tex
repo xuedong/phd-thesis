@@ -18,7 +18,9 @@ For \TCC however, we investigate the following two indices,
 Lemma~\ref{lemma:sufficient_exploration} is proved via the following sequence of lemmas.
 
 \begin{lemma}\label{lemma:link_t3c}
+\begin{leftbar}[lemmabar]
     There exists $L_1 = \text{Poly}(W_1)$ s.t. if $L > L_1$, for all $n$, $U_n^L \neq \emptyset$ implies $J_n^{(1)} \in V_n^L$ or $\tilde{J_n^{(2)}} \in V_n^L$.
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -76,10 +78,12 @@ Lemma~\ref{lemma:sufficient_exploration} is proved via the following sequence of
 Next we show that there exists at least one arm in $V_n^L$ for whom the probability of being pulled is large enough. More precisely, we prove the following lemma.
 
 \begin{lemma}\label{lemma:psi_min_t3c}
+\begin{leftbar}[lemmabar]
     There exists $L_1 = \text{Poly}(W_1)$ s.t. for $L > L_1$ and for all $n$ s.t. $U_n^L \neq \emptyset$, then there exists $J_n \in V_n^L$ s.t.
     \[
         \psi_{n,J_n} \geq \frac{\min(\beta,1-\beta)}{K^2} \eqdef \psi_{\min}.
     \]
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -107,7 +111,9 @@ Next we show that there exists at least one arm in $V_n^L$ for whom the probabil
 The rest of this subsection is exactly the same to that of \TTTS. Indeed, with the above lemma, we can show that the set of poorly explored arms $U_n^L$ is empty when $n$ is large enough.
 
 \begin{lemma}\label{lemma:poorly_explored_t3c}
+\begin{leftbar}[lemmabar]
     Under \TCC, there exists $L_0 = \text{Poly}(W_1,W_2)$ s.t. $\forall L > L_0$, $U_{\floor{KL}}^L = \emptyset$.
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -133,11 +139,13 @@ In this section, we show that, for \TCC, the empirical measurement effort concen
 
 We again establish first an over-allocation implies negligible probability result as follow.
 
-\begin{lemma}\label{lemma:over_allocation_finite_t3c} 
+\begin{lemma}\label{lemma:over_allocation_finite_t3c}
+\begin{leftbar}[lemmabar]
     Under \TCC, for every $\xi \leq \epsilon_0$ with $\epsilon_0$ problem dependent, there exists $S_1 = \text{Poly}(1/\xi,W_1,W_2)$ such that for all $n > S_1$, for all $i\neq I^\star$, 
     \[
         \frac{\Psi_{n,i}}{n} \geq \omega_{i}^\beta + 2\xi  \ \ \Rightarrow \ \ \psi_{n,i} \leq (K-1)\expp{-\frac{\Delta_{\text{min}}^2}{16\sigma^2}\sqrt{\frac{n}{K}}}\,.
     \]
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
@@ -191,10 +199,12 @@ We again establish first an over-allocation implies negligible probability resul
 The rest of this subsection almost coincides with that of \TTTS. We first show that, starting from some known moment, no arm is overly allocated. More precisely, we show the following lemma.
 
 \begin{lemma}\label{lemma:psi_other_t3c}
+\begin{leftbar}[lemmabar]
     Under \TCC, for every $\xi$, there exists $S_4 = \text{Poly}(1/\xi,W_1,W_2)$ s.t. $\forall n > S_4$,
     \[
         \forall i \in \cA, \ \ \frac{\Psi_{n,i}}{n} \leq \omega_{i}^\beta + 2\xi.
     \]
+\end{leftbar}
 \end{lemma}
 
 \begin{proof}
